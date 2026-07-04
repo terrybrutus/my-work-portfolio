@@ -13,6 +13,14 @@ import { Projects } from "@/pages/Projects";
 import { Studio } from "@/pages/Studio";
 import { useEffect, useState } from "react";
 
+const fallbackReviewSkills = [
+  "Enablement Strategy",
+  "Learning Experience Design",
+  "AI Workflow Design",
+  "Workflow Prototyping",
+  "Measurement Planning",
+];
+
 export default function App() {
   const [activeProject, setActiveProject] = useState<string | null>(null);
   const [routeState, setRouteState] = useState(() => getRouteState());
@@ -93,6 +101,7 @@ export default function App() {
           description={view?.summary ?? laneProfile.reviewerTakeaway}
           projectIds={projectIds}
           proofIds={view?.proofIds}
+          skillIds={view?.skillIds ?? fallbackReviewSkills}
         />
         <About />
         <Contact />

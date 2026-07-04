@@ -18,6 +18,7 @@ type ProjectsProps = {
   description?: string;
   projectIds?: string[];
   proofIds?: string[];
+  skillIds?: string[];
 };
 
 export function Projects({
@@ -28,6 +29,7 @@ export function Projects({
   description = "A focused collection of enablement systems, learning experiences, AI workflows, and product-minded prototypes.",
   projectIds,
   proofIds,
+  skillIds,
 }: ProjectsProps) {
   const scrollTo = useSmoothScroll();
   const visibleProjects =
@@ -63,6 +65,15 @@ export function Projects({
           <p className="text-muted-foreground max-w-xl text-base leading-relaxed">
             {description}
           </p>
+          {skillIds && skillIds.length > 0 ? (
+            <div className="mt-2 flex max-w-3xl flex-wrap gap-2">
+              {skillIds.slice(0, 8).map((skill) => (
+                <Badge key={skill} variant="secondary">
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+          ) : null}
         </motion.div>
 
         <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -122,6 +133,18 @@ export function Projects({
                   <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
                     {project.shortDescription}
                   </p>
+                  <div className="flex flex-wrap gap-2">
+                    {getProofPoints(project.proofIds)
+                      .slice(0, 2)
+                      .map((proofPoint) => (
+                        <span
+                          key={proofPoint.id}
+                          className="bg-muted text-muted-foreground rounded-full px-2.5 py-1 text-xs font-medium"
+                        >
+                          {proofPoint.value} {proofPoint.label}
+                        </span>
+                      ))}
+                  </div>
                   <span className="text-primary group-hover:text-primary/80 mt-1 inline-flex items-center gap-1.5 text-sm font-medium transition-smooth">
                     View
                     <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
@@ -230,6 +253,11 @@ function ProjectDetail({
         </div>
 
         <div className="flex flex-wrap gap-2">
+          {getProofPoints(project.proofIds).map((proofPoint) => (
+            <Badge key={proofPoint.id} variant="outline">
+              {proofPoint.value} {proofPoint.label}
+            </Badge>
+          ))}
           {project.tags.map((tag) => (
             <Badge key={tag} variant="secondary">
               {tag}

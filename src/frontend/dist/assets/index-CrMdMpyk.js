@@ -41753,7 +41753,8 @@ function Projects({
   title = "Work",
   description = "A focused collection of enablement systems, learning experiences, AI workflows, and product-minded prototypes.",
   projectIds,
-  proofIds
+  proofIds,
+  skillIds
 }) {
   const scrollTo = useSmoothScroll();
   const visibleProjects = projectIds && projectIds.length > 0 ? projectIds.map((id2) => projects.find((project) => project.id === id2)).filter((project) => Boolean(project)) : projects;
@@ -41775,7 +41776,8 @@ function Projects({
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: eyebrow }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl", children: title }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground max-w-xl text-base leading-relaxed", children: description })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground max-w-xl text-base leading-relaxed", children: description }),
+              skillIds && skillIds.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 flex max-w-3xl flex-wrap gap-2", children: skillIds.slice(0, 8).map((skill) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", children: skill }, skill)) }) : null
             ]
           }
         ),
@@ -41824,6 +41826,18 @@ function Projects({
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display text-foreground text-xl font-semibold leading-snug", children: project.title }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground line-clamp-2 text-sm leading-relaxed", children: project.shortDescription }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: getProofPoints(project.proofIds).slice(0, 2).map((proofPoint) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "span",
+                      {
+                        className: "bg-muted text-muted-foreground rounded-full px-2.5 py-1 text-xs font-medium",
+                        children: [
+                          proofPoint.value,
+                          " ",
+                          proofPoint.label
+                        ]
+                      },
+                      proofPoint.id
+                    )) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-primary group-hover:text-primary/80 mt-1 inline-flex items-center gap-1.5 text-sm font-medium transition-smooth", children: [
                       "View",
                       /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "size-4 transition-transform group-hover:translate-x-1" })
@@ -41908,7 +41922,14 @@ function ProjectDetail({
               /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "text-muted-foreground mt-2 space-y-2 text-sm leading-relaxed", children: project.outcomes.map((outcome) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: outcome }, outcome)) })
             ] })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: project.tags.map((tag) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", children: tag }, tag)) })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap gap-2", children: [
+            getProofPoints(project.proofIds).map((proofPoint) => /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { variant: "outline", children: [
+              proofPoint.value,
+              " ",
+              proofPoint.label
+            ] }, proofPoint.id)),
+            project.tags.map((tag) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", children: tag }, tag))
+          ] })
         ] })
       ]
     }
@@ -42328,6 +42349,13 @@ function ReportList({ title, items }) {
     /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "text-muted-foreground mt-3 space-y-2 text-sm leading-relaxed", children: items.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: item }, item)) })
   ] });
 }
+const fallbackReviewSkills = [
+  "Enablement Strategy",
+  "Learning Experience Design",
+  "AI Workflow Design",
+  "Workflow Prototyping",
+  "Measurement Planning"
+];
 function App() {
   const [activeProject, setActiveProject] = reactExports.useState(null);
   const [routeState, setRouteState] = reactExports.useState(() => getRouteState());
@@ -42391,7 +42419,8 @@ function App() {
           title: (view == null ? void 0 : view.headline) ?? laneProfile.headline,
           description: (view == null ? void 0 : view.summary) ?? laneProfile.reviewerTakeaway,
           projectIds,
-          proofIds: view == null ? void 0 : view.proofIds
+          proofIds: view == null ? void 0 : view.proofIds,
+          skillIds: (view == null ? void 0 : view.skillIds) ?? fallbackReviewSkills
         }
       ),
       /* @__PURE__ */ jsxRuntimeExports.jsx(About, {}),
