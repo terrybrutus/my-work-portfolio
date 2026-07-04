@@ -2,10 +2,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  type Lane,
   type Project,
   acceptedEvidenceTypes,
   brainSources,
   getProjectById,
+  laneProfiles,
+  projects,
+  proofPoints,
 } from "@/data/projects";
 import {
   type IntakeSource,
@@ -97,6 +101,10 @@ export function Studio() {
         )
         .slice(0, 6),
     [mediaAlignment],
+  );
+  const coverageRows = useMemo(
+    () => getCoverageRows(analysis.lanes, intakeSources),
+    [analysis.lanes, intakeSources],
   );
 
   const handleSave = async () => {
@@ -370,6 +378,68 @@ export function Studio() {
                     </p>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
+              <div className="mb-5">
+                <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+                  Coverage matrix
+                </p>
+                <h2 className="font-display mt-1 text-2xl font-semibold">
+                  Evidence strength by lane
+                </h2>
+                <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                  Use this to spot where the current role context is already
+                  supported and where another artifact would make the portfolio
+                  sharper.
+                </p>
+              </div>
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {coverageRows.map((row) => (
+                  <div
+                    key={row.lane}
+                    className="border-border rounded-lg border p-4"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-foreground text-sm font-semibold">
+                          {row.lane}
+                        </p>
+                        <p className="text-muted-foreground mt-1 text-xs">
+                          {row.reason}
+                        </p>
+                      </div>
+                      <Badge
+                        variant={
+                          row.level === "Strong" ? "default" : "secondary"
+                        }
+                      >
+                        {row.level}
+                      </Badge>
+                    </div>
+                    <div className="text-muted-foreground mt-4 grid grid-cols-3 gap-2 text-xs">
+                      <div>
+                        <p className="text-foreground font-semibold">
+                          {row.projectCount}
+                        </p>
+                        <p>Projects</p>
+                      </div>
+                      <div>
+                        <p className="text-foreground font-semibold">
+                          {row.proofCount}
+                        </p>
+                        <p>Proof</p>
+                      </div>
+                      <div>
+                        <p className="text-foreground font-semibold">
+                          {row.sourceCount}
+                        </p>
+                        <p>Sources</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -895,4 +965,42 @@ function formatFileSize(bytes: number) {
   }
 
   return `${(kilobytes / 1024).toFixed(1)} MB`;
+}
+
+function getCoverageRows(activeLanes: Lane[], intakeSources: IntakeSource[]) {
+  return laneProfiles.map(({ lane }) => {
+    const projectCount = projects.filter((project) =>
+      project.lanes.includes(lane),
+    ).length;
+    const proofCount = proofPoints.filter((proofPoint) =>
+      proofPoint.lanes.includes(lane),
+    ).length;
+    const staticSourceCount = brainSources.filter((source) =>
+      source.linkedProjectIds.some((projectId) =>
+        getProjectById(projectId)?.lanes.includes(lane),
+      ),
+    ).length;
+    const intakeSourceCount = intakeSources.filter((source) =>
+      source.lanes.includes(lane),
+    ).length;
+    const sourceCount = staticSourceCount + intakeSourceCount;
+    const score =
+      projectCount * 2 +
+      proofCount * 2 +
+      sourceCount +
+      (activeLanes.includes(lane) ? 3 : 0);
+    const level = score >= 13 ? "Strong" : score >= 8 ? "Moderate" : "Thin";
+    const reason = activeLanes.includes(lane)
+      ? "Matched to this role context."
+      : "Available for broader portfolio use.";
+
+    return {
+      lane,
+      level,
+      projectCount,
+      proofCount,
+      sourceCount,
+      reason,
+    };
+  });
 }

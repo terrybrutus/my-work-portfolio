@@ -42013,6 +42013,10 @@ function Studio() {
     ).slice(0, 6),
     [mediaAlignment]
   );
+  const coverageRows = reactExports.useMemo(
+    () => getCoverageRows(analysis.lanes, intakeSources),
+    [analysis.lanes, intakeSources]
+  );
   const handleSave = async () => {
     const view = createReviewerView(context, label);
     setViews(saveReviewerView(view));
@@ -42237,6 +42241,49 @@ function Studio() {
               ] })
             ] })
           ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Coverage matrix" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display mt-1 text-2xl font-semibold", children: "Evidence strength by lane" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: "Use this to spot where the current role context is already supported and where another artifact would make the portfolio sharper." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-3 md:grid-cols-2 xl:grid-cols-3", children: coverageRows.map((row) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "border-border rounded-lg border p-4",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: row.lane }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 text-xs", children: row.reason })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Badge,
+                    {
+                      variant: row.level === "Strong" ? "default" : "secondary",
+                      children: row.level
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-muted-foreground mt-4 grid grid-cols-3 gap-2 text-xs", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground font-semibold", children: row.projectCount }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Projects" })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground font-semibold", children: row.proofCount }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Proof" })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground font-semibold", children: row.sourceCount }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Sources" })
+                  ] })
+                ] })
+              ]
+            },
+            row.lane
+          )) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-5 flex items-center justify-between gap-4", children: [
@@ -42569,6 +42616,39 @@ function formatFileSize(bytes) {
     return `${kilobytes.toFixed(1)} KB`;
   }
   return `${(kilobytes / 1024).toFixed(1)} MB`;
+}
+function getCoverageRows(activeLanes, intakeSources) {
+  return laneProfiles.map(({ lane }) => {
+    const projectCount = projects.filter(
+      (project) => project.lanes.includes(lane)
+    ).length;
+    const proofCount = proofPoints.filter(
+      (proofPoint) => proofPoint.lanes.includes(lane)
+    ).length;
+    const staticSourceCount = brainSources.filter(
+      (source) => source.linkedProjectIds.some(
+        (projectId) => {
+          var _a2;
+          return (_a2 = getProjectById(projectId)) == null ? void 0 : _a2.lanes.includes(lane);
+        }
+      )
+    ).length;
+    const intakeSourceCount = intakeSources.filter(
+      (source) => source.lanes.includes(lane)
+    ).length;
+    const sourceCount = staticSourceCount + intakeSourceCount;
+    const score = projectCount * 2 + proofCount * 2 + sourceCount + (activeLanes.includes(lane) ? 3 : 0);
+    const level = score >= 13 ? "Strong" : score >= 8 ? "Moderate" : "Thin";
+    const reason = activeLanes.includes(lane) ? "Matched to this role context." : "Available for broader portfolio use.";
+    return {
+      lane,
+      level,
+      projectCount,
+      proofCount,
+      sourceCount,
+      reason
+    };
+  });
 }
 const fallbackReviewSkills = [
   "Enablement Strategy",
