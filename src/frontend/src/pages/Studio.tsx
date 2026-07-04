@@ -84,6 +84,20 @@ export function Studio() {
       ),
     [intakeSources, report.projectMatches],
   );
+  const evidenceRequests = useMemo(
+    () =>
+      mediaAlignment
+        .flatMap((item) =>
+          item.missing.slice(0, 2).map((need) => ({
+            id: `${item.project.id}-${need}`,
+            project: item.project,
+            need,
+            sourceType: inferSourceType(need),
+          })),
+        )
+        .slice(0, 6),
+    [mediaAlignment],
+  );
 
   const handleSave = async () => {
     const view = createReviewerView(context, label);
@@ -128,6 +142,21 @@ export function Studio() {
     setSourceFile(null);
     setSourceStatus(
       `${source.title} added. Status: ${source.status}. Matched ${source.projectIds.length} project signals.`,
+    );
+  };
+
+  const handleUseEvidenceRequest = (request: {
+    project: Project;
+    need: string;
+    sourceType: string;
+  }) => {
+    setSourceTitle(`${request.project.title}: ${request.need}`);
+    setSourceType(request.sourceType);
+    setSourceText(
+      `Needed for ${request.project.title}: ${request.need}. Add context, file notes, link details, or cleanup notes here.`,
+    );
+    setSourceStatus(
+      "Source form prefilled. Add a file, link, or notes, then save it to the workspace.",
     );
   };
 
@@ -526,6 +555,60 @@ export function Studio() {
               </div>
             </div>
 
+            <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+                    Evidence requests
+                  </p>
+                  <h2 className="font-display text-2xl font-semibold">
+                    What to add next
+                  </h2>
+                </div>
+                <div className="rounded-full bg-primary/10 p-3 text-primary">
+                  <FilePlus2 className="size-5" />
+                </div>
+              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                These are the highest-value missing artifacts for the current
+                role context. Use them to choose screenshots, clips, notes, or
+                cleanup work that actually supports the review path.
+              </p>
+
+              {evidenceRequests.length === 0 ? (
+                <p className="text-muted-foreground mt-4 text-sm">
+                  No open artifact requests for the current project set.
+                </p>
+              ) : (
+                <div className="mt-5 grid gap-4 md:grid-cols-2">
+                  {evidenceRequests.map((request) => (
+                    <div
+                      key={request.id}
+                      className="border-border rounded-lg border p-4"
+                    >
+                      <p className="text-foreground text-sm font-semibold">
+                        {request.project.title}
+                      </p>
+                      <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                        {request.need}
+                      </p>
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <Badge variant="secondary">{request.sourceType}</Badge>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleUseEvidenceRequest(request)}
+                        >
+                          <FilePlus2 className="size-4" />
+                          Prefill source
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="grid gap-6 md:grid-cols-2">
               <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
                 <p className="text-primary mb-4 text-sm font-semibold uppercase tracking-wider">
@@ -703,4 +786,26 @@ function ReportList({ title, items }: { title: string; items: string[] }) {
       </ul>
     </div>
   );
+}
+
+function inferSourceType(need: string) {
+  const normalized = need.toLowerCase();
+
+  if (normalized.includes("gif") || normalized.includes("demo")) {
+    return "Demo clip";
+  }
+
+  if (normalized.includes("screenshot") || normalized.includes("screen")) {
+    return "Screenshot";
+  }
+
+  if (normalized.includes("checklist") || normalized.includes("sample")) {
+    return "Artifact sample";
+  }
+
+  if (normalized.includes("diagram") || normalized.includes("map")) {
+    return "Diagram";
+  }
+
+  return "Project artifact";
 }

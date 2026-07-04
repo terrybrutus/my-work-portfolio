@@ -42002,6 +42002,17 @@ function Studio() {
     ),
     [intakeSources, report.projectMatches]
   );
+  const evidenceRequests = reactExports.useMemo(
+    () => mediaAlignment.flatMap(
+      (item) => item.missing.slice(0, 2).map((need) => ({
+        id: `${item.project.id}-${need}`,
+        project: item.project,
+        need,
+        sourceType: inferSourceType(need)
+      }))
+    ).slice(0, 6),
+    [mediaAlignment]
+  );
   const handleSave = async () => {
     const view = createReviewerView(context, label);
     setViews(saveReviewerView(view));
@@ -42040,6 +42051,16 @@ function Studio() {
     setSourceFile(null);
     setSourceStatus(
       `${source.title} added. Status: ${source.status}. Matched ${source.projectIds.length} project signals.`
+    );
+  };
+  const handleUseEvidenceRequest = (request2) => {
+    setSourceTitle(`${request2.project.title}: ${request2.need}`);
+    setSourceType(request2.sourceType);
+    setSourceText(
+      `Needed for ${request2.project.title}: ${request2.need}. Add context, file notes, link details, or cleanup notes here.`
+    );
+    setSourceStatus(
+      "Source form prefilled. Add a file, link, or notes, then save it to the workspace."
     );
   };
   const currentOrigin = window.location.origin;
@@ -42330,6 +42351,42 @@ function Studio() {
             item.project.id
           )) })
         ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-5 flex items-center justify-between gap-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Evidence requests" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-2xl font-semibold", children: "What to add next" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-primary/10 p-3 text-primary", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FilePlus2, { className: "size-5" }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm leading-relaxed", children: "These are the highest-value missing artifacts for the current role context. Use them to choose screenshots, clips, notes, or cleanup work that actually supports the review path." }),
+          evidenceRequests.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-4 text-sm", children: "No open artifact requests for the current project set." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-5 grid gap-4 md:grid-cols-2", children: evidenceRequests.map((request2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "border-border rounded-lg border p-4",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: request2.project.title }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: request2.need }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3 flex flex-wrap items-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", children: request2.sourceType }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    Button,
+                    {
+                      size: "sm",
+                      variant: "outline",
+                      onClick: () => handleUseEvidenceRequest(request2),
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(FilePlus2, { className: "size-4" }),
+                        "Prefill source"
+                      ]
+                    }
+                  )
+                ] })
+              ]
+            },
+            request2.id
+          )) })
+        ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-6 md:grid-cols-2", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary mb-4 text-sm font-semibold uppercase tracking-wider", children: "Source matches" }),
@@ -42430,6 +42487,22 @@ function ReportList({ title, items }) {
     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: title }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "text-muted-foreground mt-3 space-y-2 text-sm leading-relaxed", children: items.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: item }, item)) })
   ] });
+}
+function inferSourceType(need) {
+  const normalized = need.toLowerCase();
+  if (normalized.includes("gif") || normalized.includes("demo")) {
+    return "Demo clip";
+  }
+  if (normalized.includes("screenshot") || normalized.includes("screen")) {
+    return "Screenshot";
+  }
+  if (normalized.includes("checklist") || normalized.includes("sample")) {
+    return "Artifact sample";
+  }
+  if (normalized.includes("diagram") || normalized.includes("map")) {
+    return "Diagram";
+  }
+  return "Project artifact";
 }
 const fallbackReviewSkills = [
   "Enablement Strategy",
