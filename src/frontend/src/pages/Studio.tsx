@@ -168,6 +168,43 @@ export function Studio() {
     );
   };
 
+  const handleSourceFileChange = async (file: File | null) => {
+    setSourceFile(file);
+
+    if (!file) {
+      return;
+    }
+
+    if (!sourceTitle.trim()) {
+      setSourceTitle(file.name.replace(/\.[^.]+$/, ""));
+    }
+
+    const inferredType = inferFileSourceType(file);
+    setSourceType(inferredType);
+
+    if (!isReadableTextFile(file)) {
+      setSourceStatus(
+        `${file.name} attached. Add notes or a link so the workspace can match it cleanly.`,
+      );
+      return;
+    }
+
+    try {
+      const text = await readFileAsText(file);
+      const trimmedText = text.trim();
+      setSourceText((currentText) =>
+        currentText.trim() ? currentText : trimmedText.slice(0, 12_000),
+      );
+      setSourceStatus(
+        `${file.name} read into notes. Review the text, then save it to the workspace.`,
+      );
+    } catch {
+      setSourceStatus(
+        `${file.name} attached, but the text could not be read. Paste the important notes manually.`,
+      );
+    }
+  };
+
   const currentOrigin = window.location.origin;
 
   return (
@@ -279,10 +316,17 @@ export function Studio() {
                     type="file"
                     className="hidden"
                     onChange={(event) =>
-                      setSourceFile(event.target.files?.[0] ?? null)
+                      void handleSourceFileChange(
+                        event.target.files?.[0] ?? null,
+                      )
                     }
                   />
                 </label>
+                <p className="text-muted-foreground text-xs leading-relaxed">
+                  Text, Markdown, CSV, and JSON files can auto-fill notes.
+                  Documents, decks, screenshots, and videos are tracked for
+                  cleanup or media review.
+                </p>
                 <Textarea
                   value={sourceText}
                   onChange={(event) => setSourceText(event.target.value)}
@@ -1002,5 +1046,52 @@ function getCoverageRows(activeLanes: Lane[], intakeSources: IntakeSource[]) {
       sourceCount,
       reason,
     };
+  });
+}
+
+function isReadableTextFile(file: File) {
+  const name = file.name.toLowerCase();
+  return (
+    file.type.startsWith("text/") ||
+    name.endsWith(".txt") ||
+    name.endsWith(".md") ||
+    name.endsWith(".csv") ||
+    name.endsWith(".json")
+  );
+}
+
+function inferFileSourceType(file: File) {
+  const name = file.name.toLowerCase();
+  const type = file.type.toLowerCase();
+
+  if (type.startsWith("image/")) {
+    return "Screenshot";
+  }
+
+  if (type.startsWith("video/") || name.endsWith(".gif")) {
+    return "Demo clip";
+  }
+
+  if (name.endsWith(".pdf") || name.endsWith(".docx")) {
+    return "Document";
+  }
+
+  if (name.endsWith(".pptx")) {
+    return "Deck";
+  }
+
+  if (isReadableTextFile(file)) {
+    return "Source notes";
+  }
+
+  return "Project artifact";
+}
+
+function readFileAsText(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ""));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsText(file);
   });
 }

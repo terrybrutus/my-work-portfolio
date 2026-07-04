@@ -27978,7 +27978,7 @@ const acceptedEvidenceTypes = [
     use: "Resume versions, case-study artifacts, job aids, decks, storyboards"
   },
   {
-    extension: ".txt / .md / .csv",
+    extension: ".txt / .md / .csv / .json",
     use: "Raw notes, transcripts, metrics, project logs, structured source text"
   },
   {
@@ -42067,6 +42067,37 @@ function Studio() {
       "Source form prefilled. Add a file, link, or notes, then save it to the workspace."
     );
   };
+  const handleSourceFileChange = async (file) => {
+    setSourceFile(file);
+    if (!file) {
+      return;
+    }
+    if (!sourceTitle.trim()) {
+      setSourceTitle(file.name.replace(/\.[^.]+$/, ""));
+    }
+    const inferredType = inferFileSourceType(file);
+    setSourceType(inferredType);
+    if (!isReadableTextFile(file)) {
+      setSourceStatus(
+        `${file.name} attached. Add notes or a link so the workspace can match it cleanly.`
+      );
+      return;
+    }
+    try {
+      const text = await readFileAsText(file);
+      const trimmedText = text.trim();
+      setSourceText(
+        (currentText) => currentText.trim() ? currentText : trimmedText.slice(0, 12e3)
+      );
+      setSourceStatus(
+        `${file.name} read into notes. Review the text, then save it to the workspace.`
+      );
+    } catch {
+      setSourceStatus(
+        `${file.name} attached, but the text could not be read. Paste the important notes manually.`
+      );
+    }
+  };
   const currentOrigin = window.location.origin;
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-background py-16 md:py-20", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-10 max-w-3xl", children: [
@@ -42175,11 +42206,14 @@ function Studio() {
                   className: "hidden",
                   onChange: (event) => {
                     var _a2;
-                    return setSourceFile(((_a2 = event.target.files) == null ? void 0 : _a2[0]) ?? null);
+                    return void handleSourceFileChange(
+                      ((_a2 = event.target.files) == null ? void 0 : _a2[0]) ?? null
+                    );
                   }
                 }
               )
             ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs leading-relaxed", children: "Text, Markdown, CSV, and JSON files can auto-fill notes. Documents, decks, screenshots, and videos are tracked for cleanup or media review." }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               Textarea,
               {
@@ -42648,6 +42682,38 @@ function getCoverageRows(activeLanes, intakeSources) {
       sourceCount,
       reason
     };
+  });
+}
+function isReadableTextFile(file) {
+  const name = file.name.toLowerCase();
+  return file.type.startsWith("text/") || name.endsWith(".txt") || name.endsWith(".md") || name.endsWith(".csv") || name.endsWith(".json");
+}
+function inferFileSourceType(file) {
+  const name = file.name.toLowerCase();
+  const type = file.type.toLowerCase();
+  if (type.startsWith("image/")) {
+    return "Screenshot";
+  }
+  if (type.startsWith("video/") || name.endsWith(".gif")) {
+    return "Demo clip";
+  }
+  if (name.endsWith(".pdf") || name.endsWith(".docx")) {
+    return "Document";
+  }
+  if (name.endsWith(".pptx")) {
+    return "Deck";
+  }
+  if (isReadableTextFile(file)) {
+    return "Source notes";
+  }
+  return "Project artifact";
+}
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ""));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsText(file);
   });
 }
 const fallbackReviewSkills = [

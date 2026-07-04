@@ -527,7 +527,7 @@ export const acceptedEvidenceTypes: AcceptedEvidenceType[] = [
     use: "Resume versions, case-study artifacts, job aids, decks, storyboards",
   },
   {
-    extension: ".txt / .md / .csv",
+    extension: ".txt / .md / .csv / .json",
     use: "Raw notes, transcripts, metrics, project logs, structured source text",
   },
   {
