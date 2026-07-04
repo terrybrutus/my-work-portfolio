@@ -224,6 +224,16 @@ export function Studio() {
   };
 
   const currentOrigin = window.location.origin;
+  const latestView = views[0];
+  const latestLink = latestView
+    ? `${currentOrigin}/work/${latestView.slug}`
+    : "";
+
+  const handleCopyLatestLink = async () => {
+    if (!latestLink) return;
+    await navigator.clipboard.writeText(latestLink);
+    setSaveStatus("Review path copied.");
+  };
 
   return (
     <section className="bg-background py-16 md:py-20">
@@ -281,6 +291,32 @@ export function Studio() {
             </Button>
             {saveStatus ? (
               <p className="text-muted-foreground mt-3 text-sm">{saveStatus}</p>
+            ) : null}
+            {latestView ? (
+              <div className="border-border bg-muted/40 mt-4 rounded-lg border p-4">
+                <p className="text-foreground text-sm font-semibold">
+                  Latest review path
+                </p>
+                <p className="text-muted-foreground mt-1 break-all text-xs">
+                  {latestLink}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={`/work/${latestView.slug}`}>
+                      <Link2 className="size-4" />
+                      Open
+                    </a>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => void handleCopyLatestLink()}
+                  >
+                    <Clipboard className="size-4" />
+                    Copy
+                  </Button>
+                </div>
+              </div>
             ) : null}
             <Button
               className="mt-3 w-full"

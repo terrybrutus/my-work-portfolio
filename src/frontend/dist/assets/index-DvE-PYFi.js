@@ -31347,6 +31347,13 @@ function Studio() {
     }
   };
   const currentOrigin = window.location.origin;
+  const latestView = views[0];
+  const latestLink = latestView ? `${currentOrigin}/work/${latestView.slug}` : "";
+  const handleCopyLatestLink = async () => {
+    if (!latestLink) return;
+    await navigator.clipboard.writeText(latestLink);
+    setSaveStatus("Review path copied.");
+  };
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-background py-16 md:py-20", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-10 max-w-3xl", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", className: "mb-4", children: "Portfolio Studio" }),
@@ -31395,6 +31402,28 @@ function Studio() {
           }
         ),
         saveStatus ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-3 text-sm", children: saveStatus }) : null,
+        latestView ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-muted/40 mt-4 rounded-lg border p-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Latest review path" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 break-all text-xs", children: latestLink }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3 flex flex-wrap gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { size: "sm", variant: "outline", asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: `/work/${latestView.slug}`, children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Link2, { className: "size-4" }),
+              "Open"
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Button,
+              {
+                size: "sm",
+                variant: "outline",
+                onClick: () => void handleCopyLatestLink(),
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Clipboard, { className: "size-4" }),
+                  "Copy"
+                ]
+              }
+            )
+          ] })
+        ] }) : null,
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           Button,
           {
