@@ -14066,6 +14066,8 @@ const laneProfiles = [
     lane: "Enablement",
     headline: "Enablement systems for clearer execution.",
     reviewerTakeaway: "Strong fit for onboarding, manager support, stakeholder alignment, role readiness, and practical performance support.",
+    proofNarrative: "The emphasis here is operating clarity: how Terry turns messy role expectations, stakeholder needs, and learning moments into systems people can actually use.",
+    evidenceFocus: ["Role readiness", "Manager support", "Adoption signals"],
     keywords: [
       "enablement",
       "onboarding",
@@ -14082,6 +14084,12 @@ const laneProfiles = [
     lane: "AI Operations",
     headline: "AI-assisted workflows with human quality gates.",
     reviewerTakeaway: "Strong fit for AI adoption, content operations, process automation, QA, and repeatable production systems.",
+    proofNarrative: "The emphasis here is practical AI adoption: faster workflows, clear quality gates, and human review where judgment still matters.",
+    evidenceFocus: [
+      "Workflow acceleration",
+      "Quality control",
+      "Human-in-the-loop review"
+    ],
     keywords: [
       "ai",
       "automation",
@@ -14098,6 +14106,12 @@ const laneProfiles = [
     lane: "Learning Experience",
     headline: "Learning products that turn complexity into practice.",
     reviewerTakeaway: "Strong fit for instructional design, simulations, curriculum, course design, facilitation, and learner-centered systems.",
+    proofNarrative: "The emphasis here is learning that moves past content delivery and into practice, feedback, and real workplace decision-making.",
+    evidenceFocus: [
+      "Scenario design",
+      "Instructional systems",
+      "Practice-centered learning"
+    ],
     keywords: [
       "learning",
       "instructional",
@@ -14114,6 +14128,12 @@ const laneProfiles = [
     lane: "Technical Product",
     headline: "Workflow tools built around evidence and adoption.",
     reviewerTakeaway: "Strong fit for prototypes, workflow platforms, dashboards, technical translation, user flows, and product-adjacent systems work.",
+    proofNarrative: "The emphasis here is product-minded execution: turning ambiguous workflow problems into usable tools, clear states, and inspectable evidence.",
+    evidenceFocus: [
+      "Working prototypes",
+      "Workflow states",
+      "Evidence-backed iteration"
+    ],
     keywords: [
       "product",
       "platform",
@@ -14130,6 +14150,8 @@ const laneProfiles = [
     lane: "Sales Enablement",
     headline: "Sales readiness tied to field execution.",
     reviewerTakeaway: "Strong fit for GTM readiness, seller onboarding, field messaging, manager coaching, and adoption support.",
+    proofNarrative: "The emphasis here is field readiness: translating operating expectations into seller support, manager touchpoints, and repeatable adoption paths.",
+    evidenceFocus: ["Seller readiness", "Field messaging", "Manager coaching"],
     keywords: [
       "sales",
       "seller",
@@ -14146,6 +14168,12 @@ const laneProfiles = [
     lane: "Compliance",
     headline: "Learning systems that are easier to complete and defend.",
     reviewerTakeaway: "Strong fit for regulated training, accessibility, governance, audit evidence, required learning, and documentation-heavy environments.",
+    proofNarrative: "The emphasis here is defensible learning infrastructure: required training that is easier to complete, track, explain, and improve.",
+    evidenceFocus: [
+      "Audit evidence",
+      "Access constraints",
+      "Governance support"
+    ],
     keywords: [
       "compliance",
       "audit",
@@ -32111,7 +32139,8 @@ function ReviewFitNotes({
         laneProfile.lane.toLowerCase(),
         " work."
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-4 text-base leading-relaxed", children: "The examples above emphasize practical systems, clear handoffs, measurable proof, and work that moves from idea to usable execution." })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-4 text-base leading-relaxed", children: laneProfile.proofNarrative }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-5 flex flex-wrap gap-2", children: laneProfile.evidenceFocus.map((focus2) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: focus2 }, focus2)) })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 md:grid-cols-3", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card rounded-xl border p-5 shadow-elevated", children: [

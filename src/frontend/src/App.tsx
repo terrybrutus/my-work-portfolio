@@ -186,10 +186,15 @@ function ReviewFitNotes({
               A focused read on {laneProfile.lane.toLowerCase()} work.
             </h2>
             <p className="text-muted-foreground mt-4 text-base leading-relaxed">
-              The examples above emphasize practical systems, clear handoffs,
-              measurable proof, and work that moves from idea to usable
-              execution.
+              {laneProfile.proofNarrative}
             </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {laneProfile.evidenceFocus.map((focus) => (
+                <Badge key={focus} variant="outline">
+                  {focus}
+                </Badge>
+              ))}
+            </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
