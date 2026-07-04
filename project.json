@@ -1,0 +1,17 @@
+{
+  "overview": "A simple single-page work portfolio showcasing projects, an about section, and a contact form.",
+  "features": [
+    "Sticky header with smooth-scroll navigation",
+    "Hero section with name and intro",
+    "Projects grid with detail views",
+    "About section with skills",
+    "Contact form with confirmation"
+  ],
+  "category": "portfolio",
+  "tags": [
+    "portfolio",
+    "showcase",
+    "single-page"
+  ],
+  "last_updated": "2026-07-04T15:54:46.259Z"
+}

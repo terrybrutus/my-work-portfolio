@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/assets/fonts/SpaceGrotesk.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 300 700;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("/assets/fonts/Figtree.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 300 700;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/assets/fonts/GeistMono.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 100 900;
+}
+
+@layer base {
+  :root {
+    --font-display: "Space Grotesk";
+    --font-body: "Figtree";
+    --font-mono: "Geist Mono";
+    --radius: 0.5rem;
+
+    --background: 0.98 0.008 75;
+    --foreground: 0.18 0.012 260;
+    --card: 1.0 0.0 0;
+    --card-foreground: 0.18 0.012 260;
+    --popover: 1.0 0.0 0;
+    --popover-foreground: 0.18 0.012 260;
+
+    --primary: 0.45 0.16 240;
+    --primary-foreground: 0.98 0.005 240;
+
+    --secondary: 0.95 0.01 75;
+    --secondary-foreground: 0.25 0.012 260;
+    --muted: 0.95 0.012 75;
+    --muted-foreground: 0.5 0.012 260;
+
+    --accent: 0.6 0.13 195;
+    --accent-foreground: 0.98 0.005 195;
+
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0.005 25;
+
+    --success: 0.55 0.16 150;
+    --warning: 0.72 0.15 85;
+
+    --border: 0.9 0.01 75;
+    --input: 0.9 0.01 75;
+    --ring: 0.45 0.16 240;
+
+    --chart-1: 0.45 0.16 240;
+    --chart-2: 0.6 0.13 195;
+    --chart-3: 0.55 0.16 150;
+    --chart-4: 0.72 0.15 85;
+    --chart-5: 0.55 0.22 25;
+
+    --sidebar: 0.97 0.01 75;
+    --sidebar-foreground: 0.18 0.012 260;
+    --sidebar-primary: 0.45 0.16 240;
+    --sidebar-primary-foreground: 0.98 0.005 240;
+    --sidebar-accent: 0.95 0.012 75;
+    --sidebar-accent-foreground: 0.25 0.012 260;
+    --sidebar-border: 0.9 0.01 75;
+    --sidebar-ring: 0.45 0.16 240;
+
+    --gradient-subtle: linear-gradient(
+      135deg,
+      oklch(0.98 0.008 75) 0%,
+      oklch(0.95 0.012 195) 100%
+    );
+    --gradient-primary: linear-gradient(
+      135deg,
+      oklch(0.45 0.16 240) 0%,
+      oklch(0.5 0.15 220) 100%
+    );
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 0.145 0.014 260;
+    --foreground: 0.95 0.01 260;
+    --card: 0.18 0.014 260;
+    --card-foreground: 0.95 0.01 260;
+    --popover: 0.18 0.014 260;
+    --popover-foreground: 0.95 0.01 260;
+
+    --primary: 0.7 0.15 220;
+    --primary-foreground: 0.145 0.014 260;
+
+    --secondary: 0.22 0.02 260;
+    --secondary-foreground: 0.85 0.01 260;
+    --muted: 0.22 0.02 260;
+    --muted-foreground: 0.55 0.01 260;
+
+    --accent: 0.7 0.13 195;
+    --accent-foreground: 0.145 0.014 260;
+
+    --destructive: 0.55 0.2 25;
+    --destructive-foreground: 0.95 0.01 25;
+
+    --success: 0.65 0.16 150;
+    --warning: 0.72 0.15 85;
+
+    --border: 0.28 0.02 260;
+    --input: 0.28 0.02 260;
+    --ring: 0.7 0.15 220;
+
+    --chart-1: 0.7 0.15 220;
+    --chart-2: 0.7 0.13 195;
+    --chart-3: 0.65 0.16 150;
+    --chart-4: 0.72 0.15 85;
+    --chart-5: 0.6 0.22 25;
+
+    --sidebar: 0.18 0.014 260;
+    --sidebar-foreground: 0.95 0.01 260;
+    --sidebar-primary: 0.7 0.15 220;
+    --sidebar-primary-foreground: 0.145 0.014 260;
+    --sidebar-accent: 0.22 0.02 260;
+    --sidebar-accent-foreground: 0.85 0.01 260;
+    --sidebar-border: 0.28 0.02 260;
+    --sidebar-ring: 0.7 0.15 220;
+
+    --gradient-subtle: linear-gradient(
+      135deg,
+      oklch(0.145 0.014 260) 0%,
+      oklch(0.18 0.02 195) 100%
+    );
+    --gradient-primary: linear-gradient(
+      135deg,
+      oklch(0.7 0.15 220) 0%,
+      oklch(0.65 0.15 200) 100%
+    );
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+}
+
+@layer utilities {
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+  .bg-gradient-subtle {
+    background-image: var(--gradient-subtle);
+  }
+  .bg-gradient-primary {
+    background-image: var(--gradient-primary);
+  }
+  .text-gradient-primary {
+    background-image: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
