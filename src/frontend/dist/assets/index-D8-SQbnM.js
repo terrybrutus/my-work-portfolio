@@ -17,7 +17,7 @@ var __privateWrapper = (obj, member, setter, getter) => ({
     return __privateGet(obj, member, getter);
   }
 });
-var _disableTimeVerification, _agent, _dbName, _storeName, _dbPromise, _IndexedDBExpirableStore_instances, getDb_fn, openDb_fn, openRequest_fn, prune_fn, _entries, _InMemoryExpirableStore_instances, prune_fn2, _rawKey, _derKey, _a, _currentInterval, _randomizationFactor, _multiplier, _maxInterval, _startTime, _maxElapsedTime, _maxIterations, _date, _count, _rootKeyPromise, _shouldFetchRootKey, _timeDiffMsecs, _hasSyncedTime, _syncTimePromise, _shouldSyncTime, _identity, _fetch, _fetchOptions, _callOptions, _credentials, _retryTimes, _backoffStrategy, _maxIngressExpiryInMinutes, _subnetNodeKeyExpirableStore, _HttpAgent_instances, maxIngressExpiryInMs_get, _queryPipeline, _updatePipeline, _subnetKeysFetching, _verifyQuerySignatures, handleV4SyncResponse_fn, handleV2Rejection_fn, requestAndRetryQuery_fn, requestAndRetry_fn, _verifyQueryResponse, readStateInner_fn, setTimeDiffMsecs_fn, asyncGuard_fn, rootKeyGuard_fn, syncTimeGuard_fn, doFetchSubnetKeys_fn, _focused, _cleanup, _setup, _b, _provider, _providerCalled, _c, _online, _cleanup2, _setup2, _d, _gcTimeout, _e, _queryType, _initialState, _revertState, _cache, _client, _retryer, _defaultOptions, _abortSignalConsumed, _Query_instances, isInitialPausedFetch_fn, dispatch_fn, _f, _client2, _observers, _mutationCache, _retryer2, _Mutation_instances, dispatch_fn2, _g, _mutations, _scopes, _mutationId, _h, _queries, _i, _queryCache, _mutationCache2, _defaultOptions2, _queryDefaults, _mutationDefaults, _mountCount, _unsubscribeFocus, _unsubscribeOnline, _j, _rawKey2, _derKey2, _publicKey, _privateKey, _inner, _delegation, _inner2, _attributes, _signer, _options, _channel, _establishingChannel, _scheduledChannelClosure, _pendingRequestCount, _Signer_instances, rpc_fn, applyTransforms_fn, _options2, _status, _HeartbeatClient_instances, establish_fn, maintain_fn, receiveStatusResponse_fn, sendStatusRequest_fn, _options3, _closeListeners, _options4, _closed, _pendingQueue, _instance, _callbacks, _idleTimeout, _timeoutID, _resetTimer, _options5, _identity2, _chain, _storage, _signer2, _options6, _initPromise, _AuthClient_instances, resolveNonce_fn, init_fn, hydrate_fn, registerDefaultIdleCallback_fn;
+var _disableTimeVerification, _agent, _dbName, _storeName, _dbPromise, _IndexedDBExpirableStore_instances, getDb_fn, openDb_fn, openRequest_fn, prune_fn, _entries, _InMemoryExpirableStore_instances, prune_fn2, _rawKey, _derKey, _a, _currentInterval, _randomizationFactor, _multiplier, _maxInterval, _startTime, _maxElapsedTime, _maxIterations, _date, _count, _rootKeyPromise, _shouldFetchRootKey, _timeDiffMsecs, _hasSyncedTime, _syncTimePromise, _shouldSyncTime, _identity, _fetch, _fetchOptions, _callOptions, _credentials, _retryTimes, _backoffStrategy, _maxIngressExpiryInMinutes, _subnetNodeKeyExpirableStore, _HttpAgent_instances, maxIngressExpiryInMs_get, _queryPipeline, _updatePipeline, _subnetKeysFetching, _verifyQuerySignatures, handleV4SyncResponse_fn, handleV2Rejection_fn, requestAndRetryQuery_fn, requestAndRetry_fn, _verifyQueryResponse, readStateInner_fn, setTimeDiffMsecs_fn, asyncGuard_fn, rootKeyGuard_fn, syncTimeGuard_fn, doFetchSubnetKeys_fn, _focused, _cleanup, _setup, _b, _provider, _providerCalled, _c, _online, _cleanup2, _setup2, _d, _gcTimeout, _e, _initialState, _revertState, _cache, _client, _retryer, _defaultOptions, _abortSignalConsumed, _Query_instances, isInitialPausedFetch_fn, dispatch_fn, _f, _client2, _observers, _mutationCache, _retryer2, _Mutation_instances, dispatch_fn2, _g, _mutations, _scopes, _mutationId, _h, _queries, _i, _queryCache, _mutationCache2, _defaultOptions2, _queryDefaults, _mutationDefaults, _mountCount, _unsubscribeFocus, _unsubscribeOnline, _j, _rawKey2, _derKey2, _publicKey, _privateKey, _inner, _delegation, _inner2, _attributes, _signer, _options, _channel, _establishingChannel, _scheduledChannelClosure, _pendingRequestCount, _Signer_instances, rpc_fn, applyTransforms_fn, _options2, _status, _HeartbeatClient_instances, establish_fn, maintain_fn, receiveStatusResponse_fn, sendStatusRequest_fn, _options3, _closeListeners, _options4, _closed, _pendingQueue, _instance, _callbacks, _idleTimeout, _timeoutID, _resetTimer, _options5, _identity2, _chain, _storage, _signer2, _options6, _initPromise, _AuthClient_instances, resolveNonce_fn, init_fn, hydrate_fn, registerDefaultIdleCallback_fn;
 function _mergeNamespaces(n, m2) {
   for (var i = 0; i < m2.length; i++) {
     const e = m2[i];
@@ -169,7 +169,7 @@ function base32Decode(input) {
   let skip = 0;
   let byte = 0;
   const output = new Uint8Array(input.length * 4 / 3 | 0);
-  let o2 = 0;
+  let o = 0;
   function decodeChar(char) {
     let val = lookupTable[char.toLowerCase()];
     if (val === void 0) {
@@ -179,7 +179,7 @@ function base32Decode(input) {
     byte |= val >>> skip;
     skip += 5;
     if (skip >= 8) {
-      output[o2++] = byte;
+      output[o++] = byte;
       skip -= 8;
       if (skip > 0) {
         byte = val << 5 - skip & 255;
@@ -191,7 +191,7 @@ function base32Decode(input) {
   for (const c2 of input) {
     decodeChar(c2);
   }
-  return output.slice(0, o2);
+  return output.slice(0, o);
 }
 const lookUpTable = new Uint32Array([
   0,
@@ -738,17 +738,17 @@ const SHA512_IV = /* @__PURE__ */ Uint32Array.from([
 ]);
 const U32_MASK64 = /* @__PURE__ */ BigInt(2 ** 32 - 1);
 const _32n = /* @__PURE__ */ BigInt(32);
-function fromBig(n, le2 = false) {
-  if (le2)
+function fromBig(n, le = false) {
+  if (le)
     return { h: Number(n & U32_MASK64), l: Number(n >> _32n & U32_MASK64) };
   return { h: Number(n >> _32n & U32_MASK64) | 0, l: Number(n & U32_MASK64) | 0 };
 }
-function split(lst, le2 = false) {
+function split(lst, le = false) {
   const len = lst.length;
   let Ah = new Uint32Array(len);
   let Al = new Uint32Array(len);
   for (let i = 0; i < len; i++) {
-    const { h: h2, l: l2 } = fromBig(lst[i], le2);
+    const { h: h2, l: l2 } = fromBig(lst[i], le);
     [Ah[i], Al[i]] = [h2, l2];
   }
   return [Ah, Al];
@@ -2339,7 +2339,7 @@ class TypeTable {
   }
 }
 class Visitor {
-  visitType(_t2, _data) {
+  visitType(_t, _data) {
     throw new Error("Not implemented");
   }
   visitPrimitive(t, data) {
@@ -2400,7 +2400,7 @@ class Visitor {
   visitVariant(t, _fields, data) {
     return this.visitConstruct(t, data);
   }
-  visitRec(_t2, ty, data) {
+  visitRec(_t, ty, data) {
     return this.visitConstruct(ty, data);
   }
   visitFunc(t, data) {
@@ -2509,7 +2509,7 @@ class UnknownClass extends Type {
   static [Symbol.hasInstance](instance) {
     return instance.typeName === IdlTypeName.UnknownClass;
   }
-  checkType(_t2) {
+  checkType(_t) {
     throw new Error("Method not implemented for unknown.");
   }
   accept(v2, d2) {
@@ -4429,7 +4429,7 @@ function B(t) {
     case c.UnsignedInteger:
       return h(n);
     case c.NegativeInteger:
-      return M$1(n);
+      return M(n);
     case c.ByteString:
       return $(n);
     case c.TextString:
@@ -4439,7 +4439,7 @@ function B(t) {
     case c.Map:
       return j(n);
     case c.Tag:
-      return v$1(n);
+      return v(n);
     case c.Simple:
       return b(n);
   }
@@ -4455,16 +4455,16 @@ function N() {
 function p(t, e) {
   const n = h(t);
   if (n === 1 / 0) {
-    const o2 = [];
+    const o = [];
     let i = B();
     for (; i !== R; )
-      o2.push(i), i = B();
-    return o2;
+      o.push(i), i = B();
+    return o;
   }
   const s = new Array(n);
-  for (let o2 = 0; o2 < n; o2++) {
+  for (let o = 0; o < n; o++) {
     const i = B();
-    s[o2] = i;
+    s[o] = i;
   }
   return s;
 }
@@ -4486,14 +4486,14 @@ function b(t) {
 function j(t, e) {
   const n = h(t), s = {};
   if (n === 1 / 0) {
-    let [o2, i] = N();
-    for (; o2 !== c.Simple && i !== u.Break; ) {
+    let [o, i] = N();
+    for (; o !== c.Simple && i !== u.Break; ) {
       const A = F(i), I = B();
-      s[A] = I, [o2, i] = N();
+      s[A] = I, [o, i] = N();
     }
     return s;
   }
-  for (let o2 = 0; o2 < n; o2++) {
+  for (let o = 0; o < n; o++) {
     const [i, A] = N();
     if (i !== c.TextString)
       throw new w("Map keys must be text strings");
@@ -4520,7 +4520,7 @@ function h(t) {
       throw new w(`Unsupported integer info: ${t.toString(2)}`);
   }
 }
-function M$1(t) {
+function M(t) {
   const e = h(t);
   return typeof e == "number" ? -1 - e : -1n - e;
 }
@@ -4535,7 +4535,7 @@ function F(t) {
   const e = $(t);
   return q.decode(e);
 }
-function v$1(t, e) {
+function v(t, e) {
   const n = h(t);
   if (n === L)
     return B();
@@ -4546,7 +4546,7 @@ class x extends Error {
     super(e), this.name = "SerializationError";
   }
 }
-const C = 2 * 1024, V = 100, tt$1 = new TextEncoder();
+const C = 2 * 1024, V = 100, tt = new TextEncoder();
 function y(t) {
   return t << 5;
 }
@@ -4674,7 +4674,7 @@ function ot(t) {
   t >= 0 ? it(t) : st(t);
 }
 function z(t) {
-  T(c.TextString, tt$1.encode(t));
+  T(c.TextString, tt.encode(t));
 }
 function m(t) {
   T(c.ByteString, t);
@@ -6229,7 +6229,7 @@ function pprefix(hasEvenY) {
 function SWUFpSqrtRatio(Fp3, Z2) {
   const q2 = Fp3.ORDER;
   let l2 = _0n$4;
-  for (let o2 = q2 - _1n$5; o2 % _2n$5 === _0n$4; o2 /= _2n$5)
+  for (let o = q2 - _1n$5; o % _2n$5 === _0n$4; o /= _2n$5)
     l2 += _1n$5;
   const c1 = l2;
   const _2n_pow_c1_1 = _2n$5 << c1 - _1n$5 - _1n$5;
@@ -11457,8 +11457,8 @@ function timeUntilStale(updatedAt, staleTime) {
 function resolveStaleTime(staleTime, query) {
   return typeof staleTime === "function" ? staleTime(query) : staleTime;
 }
-function resolveQueryBoolean(option, query) {
-  return typeof option === "function" ? option(query) : option;
+function resolveEnabled(enabled, query) {
+  return typeof enabled === "function" ? enabled(query) : enabled;
 }
 function matchQuery(filters, query) {
   const {
@@ -11581,11 +11581,11 @@ function replaceEqualDeep(a2, b2, depth = 0) {
 function isPlainArray(value) {
   return Array.isArray(value) && value.length === Object.keys(value).length;
 }
-function isPlainObject(o2) {
-  if (!hasObjectPrototype(o2)) {
+function isPlainObject(o) {
+  if (!hasObjectPrototype(o)) {
     return false;
   }
-  const ctor = o2.constructor;
+  const ctor = o.constructor;
   if (ctor === void 0) {
     return true;
   }
@@ -11596,13 +11596,13 @@ function isPlainObject(o2) {
   if (!prot.hasOwnProperty("isPrototypeOf")) {
     return false;
   }
-  if (Object.getPrototypeOf(o2) !== Object.prototype) {
+  if (Object.getPrototypeOf(o) !== Object.prototype) {
     return false;
   }
   return true;
 }
-function hasObjectPrototype(o2) {
-  return Object.prototype.toString.call(o2) === "[object Object]";
+function hasObjectPrototype(o) {
+  return Object.prototype.toString.call(o) === "[object Object]";
 }
 function sleep(timeout2) {
   return new Promise((resolve) => {
@@ -11978,120 +11978,16 @@ var Removable = (_e = class {
     );
   }
   clearGcTimeout() {
-    if (__privateGet(this, _gcTimeout) !== void 0) {
+    if (__privateGet(this, _gcTimeout)) {
       timeoutManager.clearTimeout(__privateGet(this, _gcTimeout));
       __privateSet(this, _gcTimeout, void 0);
     }
   }
 }, _gcTimeout = new WeakMap(), _e);
-function infiniteQueryBehavior(pages) {
-  return {
-    onFetch: (context, query) => {
-      var _a2, _b2, _c2, _d2, _e2;
-      const options = context.options;
-      const direction = (_c2 = (_b2 = (_a2 = context.fetchOptions) == null ? void 0 : _a2.meta) == null ? void 0 : _b2.fetchMore) == null ? void 0 : _c2.direction;
-      const oldPages = ((_d2 = context.state.data) == null ? void 0 : _d2.pages) || [];
-      const oldPageParams = ((_e2 = context.state.data) == null ? void 0 : _e2.pageParams) || [];
-      let result = { pages: [], pageParams: [] };
-      let currentPage = 0;
-      const fetchFn = async () => {
-        let cancelled = false;
-        const addSignalProperty = (object) => {
-          addConsumeAwareSignal(
-            object,
-            () => context.signal,
-            () => cancelled = true
-          );
-        };
-        const queryFn = ensureQueryFn(context.options, context.fetchOptions);
-        const fetchPage = async (data, param, previous) => {
-          if (cancelled) {
-            return Promise.reject(context.signal.reason);
-          }
-          if (param == null && data.pages.length) {
-            return Promise.resolve(data);
-          }
-          const createQueryFnContext = () => {
-            const queryFnContext2 = {
-              client: context.client,
-              queryKey: context.queryKey,
-              pageParam: param,
-              direction: previous ? "backward" : "forward",
-              meta: context.options.meta
-            };
-            addSignalProperty(queryFnContext2);
-            return queryFnContext2;
-          };
-          const queryFnContext = createQueryFnContext();
-          const page = await queryFn(queryFnContext);
-          const { maxPages } = context.options;
-          const addTo = previous ? addToStart : addToEnd;
-          return {
-            pages: addTo(data.pages, page, maxPages),
-            pageParams: addTo(data.pageParams, param, maxPages)
-          };
-        };
-        if (direction && oldPages.length) {
-          const previous = direction === "backward";
-          const pageParamFn = previous ? getPreviousPageParam : getNextPageParam;
-          const oldData = {
-            pages: oldPages,
-            pageParams: oldPageParams
-          };
-          const param = pageParamFn(options, oldData);
-          result = await fetchPage(oldData, param, previous);
-        } else {
-          const remainingPages = pages ?? oldPages.length;
-          do {
-            const param = currentPage === 0 ? oldPageParams[0] ?? options.initialPageParam : getNextPageParam(options, result);
-            if (currentPage > 0 && param == null) {
-              break;
-            }
-            result = await fetchPage(result, param);
-            currentPage++;
-          } while (currentPage < remainingPages);
-        }
-        return result;
-      };
-      if (context.options.persister) {
-        context.fetchFn = () => {
-          var _a3, _b3;
-          return (_b3 = (_a3 = context.options).persister) == null ? void 0 : _b3.call(
-            _a3,
-            fetchFn,
-            {
-              client: context.client,
-              queryKey: context.queryKey,
-              meta: context.options.meta,
-              signal: context.signal
-            },
-            query
-          );
-        };
-      } else {
-        context.fetchFn = fetchFn;
-      }
-    }
-  };
-}
-function getNextPageParam(options, { pages, pageParams }) {
-  const lastIndex = pages.length - 1;
-  return pages.length > 0 ? options.getNextPageParam(
-    pages[lastIndex],
-    pages,
-    pageParams[lastIndex],
-    pageParams
-  ) : void 0;
-}
-function getPreviousPageParam(options, { pages, pageParams }) {
-  var _a2;
-  return pages.length > 0 ? (_a2 = options.getPreviousPageParam) == null ? void 0 : _a2.call(options, pages[0], pages, pageParams[0], pageParams) : void 0;
-}
 var Query = (_f = class extends Removable {
   constructor(config) {
     super();
     __privateAdd(this, _Query_instances);
-    __privateAdd(this, _queryType);
     __privateAdd(this, _initialState);
     __privateAdd(this, _revertState);
     __privateAdd(this, _cache);
@@ -12114,18 +12010,12 @@ var Query = (_f = class extends Removable {
   get meta() {
     return this.options.meta;
   }
-  get queryType() {
-    return __privateGet(this, _queryType);
-  }
   get promise() {
     var _a2;
     return (_a2 = __privateGet(this, _retryer)) == null ? void 0 : _a2.promise;
   }
   setOptions(options) {
     this.options = { ...__privateGet(this, _defaultOptions), ...options };
-    if (options == null ? void 0 : options._type) {
-      __privateSet(this, _queryType, options._type);
-    }
     this.updateGcTime(this.options.gcTime);
     if (this.state && this.state.data === void 0) {
       const defaultState = getDefaultState$1(this.options);
@@ -12152,8 +12042,8 @@ var Query = (_f = class extends Removable {
     });
     return data;
   }
-  setState(state) {
-    __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "setState", state });
+  setState(state, setStateOptions) {
+    __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "setState", state, setStateOptions });
   }
   cancel(options) {
     var _a2, _b2;
@@ -12174,7 +12064,7 @@ var Query = (_f = class extends Removable {
   }
   isActive() {
     return this.observers.some(
-      (observer2) => resolveQueryBoolean(observer2.options.enabled, this) !== false
+      (observer2) => resolveEnabled(observer2.options.enabled, this) !== false
     );
   }
   isDisabled() {
@@ -12258,7 +12148,7 @@ var Query = (_f = class extends Removable {
     }
   }
   async fetch(options, fetchOptions) {
-    var _a2, _b2, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j2, _k;
+    var _a2, _b2, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j2, _k, _l;
     if (this.state.fetchStatus !== "idle" && // If the promise in the retryer is already rejected, we have to definitely
     // re-start the fetch; there is a chance that the query is still in a
     // pending state when that happens
@@ -12324,13 +12214,10 @@ var Query = (_f = class extends Removable {
       return context2;
     };
     const context = createFetchContext();
-    const behavior = __privateGet(this, _queryType) === "infinite" ? infiniteQueryBehavior(
-      this.options.pages
-    ) : this.options.behavior;
-    behavior == null ? void 0 : behavior.onFetch(context, this);
+    (_b2 = this.options.behavior) == null ? void 0 : _b2.onFetch(context, this);
     __privateSet(this, _revertState, this.state);
-    if (this.state.fetchStatus === "idle" || this.state.fetchMeta !== ((_b2 = context.fetchOptions) == null ? void 0 : _b2.meta)) {
-      __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "fetch", meta: (_c2 = context.fetchOptions) == null ? void 0 : _c2.meta });
+    if (this.state.fetchStatus === "idle" || this.state.fetchMeta !== ((_c2 = context.fetchOptions) == null ? void 0 : _c2.meta)) {
+      __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "fetch", meta: (_d2 = context.fetchOptions) == null ? void 0 : _d2.meta });
     }
     __privateSet(this, _retryer, createRetryer({
       initialPromise: fetchOptions == null ? void 0 : fetchOptions.initialPromise,
@@ -12365,9 +12252,9 @@ var Query = (_f = class extends Removable {
         throw new Error(`${this.queryHash} data is undefined`);
       }
       this.setData(data);
-      (_e2 = (_d2 = __privateGet(this, _cache).config).onSuccess) == null ? void 0 : _e2.call(_d2, data, this);
-      (_g2 = (_f2 = __privateGet(this, _cache).config).onSettled) == null ? void 0 : _g2.call(
-        _f2,
+      (_f2 = (_e2 = __privateGet(this, _cache).config).onSuccess) == null ? void 0 : _f2.call(_e2, data, this);
+      (_h2 = (_g2 = __privateGet(this, _cache).config).onSettled) == null ? void 0 : _h2.call(
+        _g2,
         data,
         this.state.error,
         this
@@ -12388,13 +12275,13 @@ var Query = (_f = class extends Removable {
         type: "error",
         error
       });
-      (_i2 = (_h2 = __privateGet(this, _cache).config).onError) == null ? void 0 : _i2.call(
-        _h2,
+      (_j2 = (_i2 = __privateGet(this, _cache).config).onError) == null ? void 0 : _j2.call(
+        _i2,
         error,
         this
       );
-      (_k = (_j2 = __privateGet(this, _cache).config).onSettled) == null ? void 0 : _k.call(
-        _j2,
+      (_l = (_k = __privateGet(this, _cache).config).onSettled) == null ? void 0 : _l.call(
+        _k,
         this.state.data,
         error,
         this
@@ -12404,7 +12291,7 @@ var Query = (_f = class extends Removable {
       this.scheduleGc();
     }
   }
-}, _queryType = new WeakMap(), _initialState = new WeakMap(), _revertState = new WeakMap(), _cache = new WeakMap(), _client = new WeakMap(), _retryer = new WeakMap(), _defaultOptions = new WeakMap(), _abortSignalConsumed = new WeakMap(), _Query_instances = new WeakSet(), isInitialPausedFetch_fn = function() {
+}, _initialState = new WeakMap(), _revertState = new WeakMap(), _cache = new WeakMap(), _client = new WeakMap(), _retryer = new WeakMap(), _defaultOptions = new WeakMap(), _abortSignalConsumed = new WeakMap(), _Query_instances = new WeakSet(), isInitialPausedFetch_fn = function() {
   return this.state.fetchStatus === "paused" && this.state.status === "pending";
 }, dispatch_fn = function(action) {
   const reducer = (state) => {
@@ -12517,6 +12404,109 @@ function getDefaultState$1(options) {
     status: hasData ? "success" : "pending",
     fetchStatus: "idle"
   };
+}
+function infiniteQueryBehavior(pages) {
+  return {
+    onFetch: (context, query) => {
+      var _a2, _b2, _c2, _d2, _e2;
+      const options = context.options;
+      const direction = (_c2 = (_b2 = (_a2 = context.fetchOptions) == null ? void 0 : _a2.meta) == null ? void 0 : _b2.fetchMore) == null ? void 0 : _c2.direction;
+      const oldPages = ((_d2 = context.state.data) == null ? void 0 : _d2.pages) || [];
+      const oldPageParams = ((_e2 = context.state.data) == null ? void 0 : _e2.pageParams) || [];
+      let result = { pages: [], pageParams: [] };
+      let currentPage = 0;
+      const fetchFn = async () => {
+        let cancelled = false;
+        const addSignalProperty = (object) => {
+          addConsumeAwareSignal(
+            object,
+            () => context.signal,
+            () => cancelled = true
+          );
+        };
+        const queryFn = ensureQueryFn(context.options, context.fetchOptions);
+        const fetchPage = async (data, param, previous) => {
+          if (cancelled) {
+            return Promise.reject();
+          }
+          if (param == null && data.pages.length) {
+            return Promise.resolve(data);
+          }
+          const createQueryFnContext = () => {
+            const queryFnContext2 = {
+              client: context.client,
+              queryKey: context.queryKey,
+              pageParam: param,
+              direction: previous ? "backward" : "forward",
+              meta: context.options.meta
+            };
+            addSignalProperty(queryFnContext2);
+            return queryFnContext2;
+          };
+          const queryFnContext = createQueryFnContext();
+          const page = await queryFn(queryFnContext);
+          const { maxPages } = context.options;
+          const addTo = previous ? addToStart : addToEnd;
+          return {
+            pages: addTo(data.pages, page, maxPages),
+            pageParams: addTo(data.pageParams, param, maxPages)
+          };
+        };
+        if (direction && oldPages.length) {
+          const previous = direction === "backward";
+          const pageParamFn = previous ? getPreviousPageParam : getNextPageParam;
+          const oldData = {
+            pages: oldPages,
+            pageParams: oldPageParams
+          };
+          const param = pageParamFn(options, oldData);
+          result = await fetchPage(oldData, param, previous);
+        } else {
+          const remainingPages = pages ?? oldPages.length;
+          do {
+            const param = currentPage === 0 ? oldPageParams[0] ?? options.initialPageParam : getNextPageParam(options, result);
+            if (currentPage > 0 && param == null) {
+              break;
+            }
+            result = await fetchPage(result, param);
+            currentPage++;
+          } while (currentPage < remainingPages);
+        }
+        return result;
+      };
+      if (context.options.persister) {
+        context.fetchFn = () => {
+          var _a3, _b3;
+          return (_b3 = (_a3 = context.options).persister) == null ? void 0 : _b3.call(
+            _a3,
+            fetchFn,
+            {
+              client: context.client,
+              queryKey: context.queryKey,
+              meta: context.options.meta,
+              signal: context.signal
+            },
+            query
+          );
+        };
+      } else {
+        context.fetchFn = fetchFn;
+      }
+    }
+  };
+}
+function getNextPageParam(options, { pages, pageParams }) {
+  const lastIndex = pages.length - 1;
+  return pages.length > 0 ? options.getNextPageParam(
+    pages[lastIndex],
+    pages,
+    pageParams[lastIndex],
+    pageParams
+  ) : void 0;
+}
+function getPreviousPageParam(options, { pages, pageParams }) {
+  var _a2;
+  return pages.length > 0 ? (_a2 = options.getPreviousPageParam) == null ? void 0 : _a2.call(options, pages[0], pages, pageParams[0], pageParams) : void 0;
 }
 var Mutation = (_g = class extends Removable {
   constructor(config) {
@@ -13188,14 +13178,14 @@ var QueryClient = (_j = class {
     return this.fetchQuery(options).then(noop$7).catch(noop$7);
   }
   fetchInfiniteQuery(options) {
-    options._type = "infinite";
+    options.behavior = infiniteQueryBehavior(options.pages);
     return this.fetchQuery(options);
   }
   prefetchInfiniteQuery(options) {
     return this.fetchInfiniteQuery(options).then(noop$7).catch(noop$7);
   }
   ensureInfiniteQueryData(options) {
-    options._type = "infinite";
+    options.behavior = infiniteQueryBehavior(options.pages);
     return this.ensureQueryData(options);
   }
   resumePausedMutations() {
@@ -13728,15 +13718,15 @@ react_production.useSyncExternalStore = function(subscribe, getSnapshot, getServ
 react_production.useTransition = function() {
   return ReactSharedInternals$2.H.useTransition();
 };
-react_production.version = "19.1.8";
+react_production.version = "19.1.5";
 {
   react.exports = react_production;
 }
 var reactExports = react.exports;
-const o = /* @__PURE__ */ getDefaultExportFromCjs(reactExports);
+const index$1 = /* @__PURE__ */ getDefaultExportFromCjs(reactExports);
 const React$2 = /* @__PURE__ */ _mergeNamespaces({
   __proto__: null,
-  default: o
+  default: index$1
 }, [reactExports]);
 var QueryClientContext = reactExports.createContext(
   void 0
@@ -16071,7 +16061,7 @@ var scheduler_production = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-(function(exports) {
+(function(exports$1) {
   function push2(heap, node) {
     var index2 = heap.length;
     heap.push(node);
@@ -16105,15 +16095,15 @@ var scheduler_production = {};
     var diff = a2.sortIndex - b2.sortIndex;
     return 0 !== diff ? diff : a2.id - b2.id;
   }
-  exports.unstable_now = void 0;
+  exports$1.unstable_now = void 0;
   if ("object" === typeof performance && "function" === typeof performance.now) {
     var localPerformance = performance;
-    exports.unstable_now = function() {
+    exports$1.unstable_now = function() {
       return localPerformance.now();
     };
   } else {
     var localDate = Date, initialTime = localDate.now();
-    exports.unstable_now = function() {
+    exports$1.unstable_now = function() {
       return localDate.now() - initialTime;
     };
   }
@@ -16140,12 +16130,12 @@ var scheduler_production = {};
   }
   var isMessageLoopRunning = false, taskTimeoutID = -1, frameInterval = 5, startTime = -1;
   function shouldYieldToHost() {
-    return needsPaint ? true : exports.unstable_now() - startTime < frameInterval ? false : true;
+    return needsPaint ? true : exports$1.unstable_now() - startTime < frameInterval ? false : true;
   }
   function performWorkUntilDeadline() {
     needsPaint = false;
     if (isMessageLoopRunning) {
-      var currentTime = exports.unstable_now();
+      var currentTime = exports$1.unstable_now();
       startTime = currentTime;
       var hasMoreWork = true;
       try {
@@ -16165,7 +16155,7 @@ var scheduler_production = {};
                   var continuationCallback = callback(
                     currentTask.expirationTime <= currentTime
                   );
-                  currentTime = exports.unstable_now();
+                  currentTime = exports$1.unstable_now();
                   if ("function" === typeof continuationCallback) {
                     currentTask.callback = continuationCallback;
                     advanceTimers(currentTime);
@@ -16215,27 +16205,27 @@ var scheduler_production = {};
     };
   function requestHostTimeout(callback, ms) {
     taskTimeoutID = localSetTimeout(function() {
-      callback(exports.unstable_now());
+      callback(exports$1.unstable_now());
     }, ms);
   }
-  exports.unstable_IdlePriority = 5;
-  exports.unstable_ImmediatePriority = 1;
-  exports.unstable_LowPriority = 4;
-  exports.unstable_NormalPriority = 3;
-  exports.unstable_Profiling = null;
-  exports.unstable_UserBlockingPriority = 2;
-  exports.unstable_cancelCallback = function(task) {
+  exports$1.unstable_IdlePriority = 5;
+  exports$1.unstable_ImmediatePriority = 1;
+  exports$1.unstable_LowPriority = 4;
+  exports$1.unstable_NormalPriority = 3;
+  exports$1.unstable_Profiling = null;
+  exports$1.unstable_UserBlockingPriority = 2;
+  exports$1.unstable_cancelCallback = function(task) {
     task.callback = null;
   };
-  exports.unstable_forceFrameRate = function(fps) {
+  exports$1.unstable_forceFrameRate = function(fps) {
     0 > fps || 125 < fps ? console.error(
       "forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported"
     ) : frameInterval = 0 < fps ? Math.floor(1e3 / fps) : 5;
   };
-  exports.unstable_getCurrentPriorityLevel = function() {
+  exports$1.unstable_getCurrentPriorityLevel = function() {
     return currentPriorityLevel;
   };
-  exports.unstable_next = function(eventHandler) {
+  exports$1.unstable_next = function(eventHandler) {
     switch (currentPriorityLevel) {
       case 1:
       case 2:
@@ -16253,10 +16243,10 @@ var scheduler_production = {};
       currentPriorityLevel = previousPriorityLevel;
     }
   };
-  exports.unstable_requestPaint = function() {
+  exports$1.unstable_requestPaint = function() {
     needsPaint = true;
   };
-  exports.unstable_runWithPriority = function(priorityLevel, eventHandler) {
+  exports$1.unstable_runWithPriority = function(priorityLevel, eventHandler) {
     switch (priorityLevel) {
       case 1:
       case 2:
@@ -16275,8 +16265,8 @@ var scheduler_production = {};
       currentPriorityLevel = previousPriorityLevel;
     }
   };
-  exports.unstable_scheduleCallback = function(priorityLevel, callback, options) {
-    var currentTime = exports.unstable_now();
+  exports$1.unstable_scheduleCallback = function(priorityLevel, callback, options) {
+    var currentTime = exports$1.unstable_now();
     "object" === typeof options && null !== options ? (options = options.delay, options = "number" === typeof options && 0 < options ? currentTime + options : currentTime) : options = currentTime;
     switch (priorityLevel) {
       case 1:
@@ -16306,8 +16296,8 @@ var scheduler_production = {};
     options > currentTime ? (priorityLevel.sortIndex = options, push2(timerQueue, priorityLevel), null === peek(taskQueue) && priorityLevel === peek(timerQueue) && (isHostTimeoutScheduled ? (localClearTimeout(taskTimeoutID), taskTimeoutID = -1) : isHostTimeoutScheduled = true, requestHostTimeout(handleTimeout, options - currentTime))) : (priorityLevel.sortIndex = timeout2, push2(taskQueue, priorityLevel), isHostCallbackScheduled || isPerformingWork || (isHostCallbackScheduled = true, isMessageLoopRunning || (isMessageLoopRunning = true, schedulePerformWorkUntilDeadline())));
     return priorityLevel;
   };
-  exports.unstable_shouldYield = shouldYieldToHost;
-  exports.unstable_wrapCallback = function(callback) {
+  exports$1.unstable_shouldYield = shouldYieldToHost;
+  exports$1.unstable_wrapCallback = function(callback) {
     var parentPriorityLevel = currentPriorityLevel;
     return function() {
       var previousPriorityLevel = currentPriorityLevel;
@@ -16475,7 +16465,7 @@ reactDom_production.useFormState = function(action, initialState, permalink) {
 reactDom_production.useFormStatus = function() {
   return ReactSharedInternals$1.H.useHostTransitionStatus();
 };
-reactDom_production.version = "19.1.8";
+reactDom_production.version = "19.1.5";
 function checkDCE$1() {
   if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") {
     return;
@@ -16491,7 +16481,7 @@ function checkDCE$1() {
   reactDom.exports = reactDom_production;
 }
 var reactDomExports = reactDom.exports;
-const vt = /* @__PURE__ */ getDefaultExportFromCjs(reactDomExports);
+const ReactDOM$2 = /* @__PURE__ */ getDefaultExportFromCjs(reactDomExports);
 /**
  * @license React
  * react-dom-client.production.js
@@ -27456,12 +27446,12 @@ ReactDOMHydrationRoot.prototype.unstable_scheduleHydration = function(target) {
   }
 };
 var isomorphicReactPackageVersion$jscomp$inline_1785 = React.version;
-if ("19.1.8" !== isomorphicReactPackageVersion$jscomp$inline_1785)
+if ("19.1.5" !== isomorphicReactPackageVersion$jscomp$inline_1785)
   throw Error(
     formatProdErrorMessage(
       527,
       isomorphicReactPackageVersion$jscomp$inline_1785,
-      "19.1.8"
+      "19.1.5"
     )
   );
 ReactDOMSharedInternals.findDOMNode = function(componentOrElement) {
@@ -27479,10 +27469,10 @@ ReactDOMSharedInternals.findDOMNode = function(componentOrElement) {
 };
 var internals$jscomp$inline_2256 = {
   bundleType: 0,
-  version: "19.1.8",
+  version: "19.1.5",
   rendererPackageName: "react-dom",
   currentDispatcherRef: ReactSharedInternals,
-  reconcilerVersion: "19.1.8"
+  reconcilerVersion: "19.1.5"
 };
 if ("undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__) {
   var hook$jscomp$inline_2257 = __REACT_DEVTOOLS_GLOBAL_HOOK__;
@@ -27549,7 +27539,7 @@ reactDomClient_production.hydrateRoot = function(container, initialChildren, opt
   listenToAllSupportedEvents(container);
   return new ReactDOMHydrationRoot(initialChildren);
 };
-reactDomClient_production.version = "19.1.8";
+reactDomClient_production.version = "19.1.5";
 function checkDCE() {
   if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") {
     return;
@@ -27566,71 +27556,431 @@ function checkDCE() {
 }
 var clientExports = client.exports;
 const ReactDOM = /* @__PURE__ */ getDefaultExportFromCjs(clientExports);
+const profile = {
+  name: "Terry Brutus",
+  title: "Enablement Systems and Learning Experience Builder",
+  email: "terrbrutus@gmail.com",
+  linkedIn: "https://www.linkedin.com/in/terrybrutus",
+  github: "https://github.com/terrybrutus",
+  headline: "I build practical enablement systems for teams that need clearer execution.",
+  shortSummary: "I connect instructional systems design, AI workflow design, and product-minded execution so complex work becomes easier to learn, run, and measure."
+};
+const laneProfiles = [
+  {
+    lane: "Enablement",
+    headline: "Enablement systems for clearer execution.",
+    reviewerTakeaway: "Strong fit for onboarding, manager support, stakeholder alignment, role readiness, and practical performance support.",
+    keywords: [
+      "enablement",
+      "onboarding",
+      "readiness",
+      "adoption",
+      "stakeholder",
+      "manager",
+      "talent",
+      "performance",
+      "change"
+    ]
+  },
+  {
+    lane: "AI Operations",
+    headline: "AI-assisted workflows with human quality gates.",
+    reviewerTakeaway: "Strong fit for AI adoption, content operations, process automation, QA, and repeatable production systems.",
+    keywords: [
+      "ai",
+      "automation",
+      "llm",
+      "workflow",
+      "operations",
+      "rag",
+      "prompt",
+      "qa",
+      "process"
+    ]
+  },
+  {
+    lane: "Learning Experience",
+    headline: "Learning products that turn complexity into practice.",
+    reviewerTakeaway: "Strong fit for instructional design, simulations, curriculum, course design, facilitation, and learner-centered systems.",
+    keywords: [
+      "learning",
+      "instructional",
+      "training",
+      "curriculum",
+      "course",
+      "facilitation",
+      "lxd",
+      "elearning",
+      "storyboard"
+    ]
+  },
+  {
+    lane: "Technical Product",
+    headline: "Workflow tools built around evidence and adoption.",
+    reviewerTakeaway: "Strong fit for prototypes, workflow platforms, dashboards, technical translation, user flows, and product-adjacent systems work.",
+    keywords: [
+      "product",
+      "platform",
+      "dashboard",
+      "prototype",
+      "technical",
+      "systems",
+      "tool",
+      "ux",
+      "data"
+    ]
+  },
+  {
+    lane: "Sales Enablement",
+    headline: "Sales readiness tied to field execution.",
+    reviewerTakeaway: "Strong fit for GTM readiness, seller onboarding, field messaging, manager coaching, and adoption support.",
+    keywords: [
+      "sales",
+      "seller",
+      "revenue",
+      "gtm",
+      "field",
+      "crm",
+      "customer",
+      "messaging",
+      "coaching"
+    ]
+  },
+  {
+    lane: "Compliance",
+    headline: "Learning systems that are easier to complete and defend.",
+    reviewerTakeaway: "Strong fit for regulated training, accessibility, governance, audit evidence, required learning, and documentation-heavy environments.",
+    keywords: [
+      "compliance",
+      "audit",
+      "accessibility",
+      "508",
+      "wcag",
+      "governance",
+      "policy",
+      "regulated",
+      "security"
+    ]
+  }
+];
+const proofPoints = [
+  {
+    id: "defense-workforce",
+    label: "Defense workforce supported",
+    value: "158,000",
+    detail: "Supported learning and talent-development systems for a large defense acquisition audience.",
+    lanes: ["Enablement", "Compliance"]
+  },
+  {
+    id: "army-lms",
+    label: "Army LMS platform scale",
+    value: "1.2M+ users",
+    detail: "Worked in a technical simulation and LMS environment with enterprise-scale deployment expectations.",
+    lanes: ["Learning Experience", "Compliance", "Technical Product"]
+  },
+  {
+    id: "asset-cycle",
+    label: "Asset cycle improvement",
+    value: "1.5 hrs to 9.5 min",
+    detail: "Reduced repeated talent-content processing with AI-assisted analysis, scripting, and QA standards.",
+    lanes: ["AI Operations", "Enablement"]
+  },
+  {
+    id: "audit-cost",
+    label: "Audit cost reduction",
+    value: "90%",
+    detail: "Used structured review logic to reduce manual audit burden while keeping human review in the loop.",
+    lanes: ["AI Operations", "Compliance"]
+  },
+  {
+    id: "market-lots",
+    label: "Market lots standardized",
+    value: "76,000",
+    detail: "Designed scalable enablement touchpoints for a distributed selling-community environment.",
+    lanes: ["Sales Enablement", "Enablement"]
+  },
+  {
+    id: "municipal-coverage",
+    label: "Municipal coverage",
+    value: "1,750+ employees",
+    detail: "Built mobile-first compliance support for a workforce without formal LMS infrastructure.",
+    lanes: ["Compliance", "Learning Experience"]
+  },
+  {
+    id: "release-depth",
+    label: "Product iteration depth",
+    value: "77+ releases",
+    detail: "Used rapid AI-assisted build cycles and GitHub-connected workflows to move ideas into working tools.",
+    lanes: ["Technical Product", "AI Operations"]
+  },
+  {
+    id: "feature-set",
+    label: "Workflow feature set",
+    value: "50+ features",
+    detail: "Built workflow features around visibility, handoffs, readiness, and delivery governance.",
+    lanes: ["Technical Product", "Enablement"]
+  }
+];
 const projects = [
   {
-    id: "tide-analytics",
-    title: "Tide Analytics Dashboard",
-    category: "Product Design",
+    id: "ai-talent-content-pipeline",
+    title: "AI Talent Content Pipeline",
+    category: "AI Operations",
+    year: "2026",
+    thumbnail: "/assets/portfolio/ai-content-pipeline.png",
+    image: "/assets/portfolio/ai-content-pipeline.png",
+    shortDescription: "A repeatable AI-assisted content operations system with source review, scripting, QA, and human approval.",
+    fullDescription: "A practical production system for high-volume talent-development assets. The work combined source analysis, NotebookLM-style review, scripting, and quality gates so AI accelerated repeated work without removing expert judgment.",
+    problem: "High-volume learning assets needed faster review, cleaner metadata, and repeatable compliance alignment.",
+    actions: [
+      "Converted repeated review steps into a structured AI-assisted workflow.",
+      "Documented quality standards so outputs could be checked consistently.",
+      "Kept human review gates in place for decisions that required judgment."
+    ],
+    outcomes: [
+      "Reduced per-deliverable processing from 1.5 hours to 9.5 minutes.",
+      "Created a repeatable foundation for future talent-content production.",
+      "Balanced speed with traceable QA instead of treating AI as a black box."
+    ],
+    tags: ["AI Workflow", "Talent Enablement", "QA"],
+    lanes: ["AI Operations", "Enablement", "Compliance"],
+    proofIds: ["asset-cycle", "audit-cost"],
+    mediaNeeds: [
+      "Redacted workflow screenshot",
+      "Before/after timing visual",
+      "Sample QA checklist"
+    ],
+    sourceNote: "Current resume, internal workflow notes, and project records."
+  },
+  {
+    id: "workflow-management-platform",
+    title: "Workflow Management Platform",
+    category: "Technical Product",
+    year: "2026",
+    thumbnail: "/assets/portfolio/workflow-platform.png",
+    image: "/assets/portfolio/workflow-platform.png",
+    shortDescription: "A custom workflow layer for status visibility, stakeholder handoffs, content readiness, and delivery governance.",
+    fullDescription: "A product-minded operating layer for content and enablement work. The platform organizes intake, build, review, readiness, and delivery signals so stakeholders can see what is moving, blocked, or ready to ship.",
+    problem: "Manual tracking made it hard to see ownership, review status, handoffs, and readiness.",
+    actions: [
+      "Mapped production states around intake, build, review, ready, and measure.",
+      "Designed views for ownership, blockers, and delivery readiness.",
+      "Used AI-assisted prototyping to move faster from need to usable release."
+    ],
+    outcomes: [
+      "Improved visibility across a multi-project operating model.",
+      "Reduced tracking friction by making status and ownership explicit.",
+      "Demonstrated product thinking through working software, not just slides."
+    ],
+    tags: ["Workflow Design", "React", "Delivery Systems"],
+    lanes: ["Technical Product", "Enablement", "AI Operations"],
+    proofIds: ["release-depth", "feature-set"],
+    mediaNeeds: [
+      "Actual app screenshot",
+      "Redacted status board",
+      "Before/after tracking diagram"
+    ],
+    sourceNote: "GitHub repositories and shipped workflow experiments."
+  },
+  {
+    id: "enterprise-onboarding-journey",
+    title: "Enterprise Onboarding and Readiness Journey",
+    category: "Enablement",
+    year: "2025",
+    thumbnail: "/assets/portfolio/readiness-journey.png",
+    image: "/assets/portfolio/readiness-journey.png",
+    shortDescription: "A distributed enablement architecture for role readiness, onboarding, and field execution.",
+    fullDescription: "A scalable readiness model for a distributed selling-community environment. The work connected lifecycle moments, role expectations, manager support, and field execution into a clearer path for enablement delivery.",
+    problem: "A distributed sales ecosystem needed clearer readiness paths across roles, communities, and employee lifecycle moments.",
+    actions: [
+      "Mapped employee lifecycle moments into a practical enablement journey.",
+      "Aligned learning touchpoints to role expectations and operating rhythm.",
+      "Created a more scalable foundation for field-facing support."
+    ],
+    outcomes: [
+      "Standardized enablement delivery across 76,000 market lots.",
+      "Supported clearer learning paths for 400+ selling communities."
+    ],
+    tags: ["Onboarding", "Sales Readiness", "Journey Mapping"],
+    lanes: ["Sales Enablement", "Enablement", "Learning Experience"],
+    proofIds: ["market-lots"],
+    mediaNeeds: [
+      "Redacted journey map",
+      "Onboarding architecture artifact",
+      "Manager-support sample"
+    ],
+    sourceNote: "Resume, LinkedIn history, and enterprise enablement notes."
+  },
+  {
+    id: "compliance-enablement-ecosystem",
+    title: "Mobile-First Compliance Enablement Ecosystem",
+    category: "Compliance",
     year: "2024",
-    thumbnail: "/assets/generated/project-1.dim_800x600.png",
-    image: "/assets/generated/project-1.dim_800x600.png",
-    shortDescription: "A real-time analytics platform that turns raw event streams into clear, actionable insight for product teams.",
-    fullDescription: "Tide is a real-time analytics platform built for product teams who need to understand user behavior without waiting on data engineers. I led the end-to-end product design — from the information architecture of the event model to the visual language of the dashboard. The interface prioritizes legibility: large typographic hierarchy, calm color use, and a layout that scales from a single chart to a full grid of metrics. The result is a tool that feels less like a database and more like a conversation with your data.",
-    tags: ["UX Research", "Data Viz", "Design System"]
+    thumbnail: "/assets/portfolio/compliance-ecosystem.png",
+    image: "/assets/portfolio/compliance-ecosystem.png",
+    shortDescription: "A low-code, mobile-first learning system for required training in a workforce without formal LMS infrastructure.",
+    fullDescription: "A constraints-based compliance learning ecosystem designed for practical access, evidence, and completion. The work focused on making required learning easier to reach, complete, and defend for a distributed workforce.",
+    problem: "A municipal workforce needed audit-ready training coverage without traditional LMS infrastructure.",
+    actions: [
+      "Designed mobile-first access patterns for required learning.",
+      "Balanced audit evidence, usability, and low-code deployment constraints.",
+      "Organized content around completion, tracking, and practical support."
+    ],
+    outcomes: [
+      "Supported audit-ready coverage for 1,750+ employees.",
+      "Demonstrated practical learning design under real infrastructure limits."
+    ],
+    tags: ["Compliance", "Mobile-First", "Audit Evidence"],
+    lanes: ["Compliance", "Learning Experience", "Enablement"],
+    proofIds: ["municipal-coverage"],
+    mediaNeeds: [
+      "Mobile screen preview",
+      "Tracking artifact",
+      "Redacted audit evidence"
+    ],
+    sourceNote: "Legacy instructional design site and project notes."
   },
   {
-    id: "harbor-mobile",
-    title: "Harbor Mobile Banking",
-    category: "Mobile App",
-    year: "2023",
-    thumbnail: "/assets/generated/project-2.dim_800x600.png",
-    image: "/assets/generated/project-2.dim_800x600.png",
-    shortDescription: "A calm, human-centered mobile banking experience designed to reduce financial anxiety for first-time savers.",
-    fullDescription: "Harbor is a mobile banking app aimed at first-time savers who feel overwhelmed by traditional finance tools. The design language is deliberately quiet — soft motion, generous spacing, and a single confident accent color reserved for the most important actions. I designed the onboarding flow, the savings goal journey, and the recurring transfer experience. Usability testing showed a 40% reduction in task-completion time compared to the previous app, and qualitative feedback centered on the app feeling 'calm' and 'trustworthy'.",
-    tags: ["Mobile", "Fintech", "Prototyping"]
+    id: "phishing-red-flags",
+    title: "Spot the Red Flags Interaction",
+    category: "Learning Experience",
+    year: "2024",
+    thumbnail: "/assets/portfolio/ai-content-pipeline.png",
+    image: "/assets/portfolio/ai-content-pipeline.png",
+    shortDescription: "A compact security-awareness interaction built around active judgment instead of passive compliance reading.",
+    fullDescription: "A scenario-based learning interaction that asks learners to identify suspicious sender, link, attachment, and urgency cues. The point is simple: practice the decision, do not just read the policy.",
+    problem: "Security topics can become passive compliance content when learners do not practice realistic judgment.",
+    actions: [
+      "Turned phishing recognition into a short visual decision activity.",
+      "Focused feedback around realistic red-flag categories.",
+      "Kept the experience small enough for workplace performance support."
+    ],
+    outcomes: [
+      "Converted a compliance topic into active judgment practice.",
+      "Created a reusable pattern for short scenario-based security learning."
+    ],
+    tags: ["Scenario Design", "Security Awareness", "eLearning"],
+    lanes: ["Learning Experience", "Compliance", "Technical Product"],
+    proofIds: ["municipal-coverage", "army-lms"],
+    mediaNeeds: [
+      "Direct interaction screenshot",
+      "Short click-through GIF",
+      "Clean exported course screen"
+    ],
+    sourceNote: "Legacy TerryLXD and instructional design portfolio artifacts."
   },
   {
-    id: "atelier-identity",
-    title: "Atelier Brand Identity",
-    category: "Brand Design",
-    year: "2023",
-    thumbnail: "/assets/generated/project-3.dim_800x600.png",
-    image: "/assets/generated/project-3.dim_800x600.png",
-    shortDescription: "A complete visual identity for an independent architecture studio, from wordmark to stationery system.",
-    fullDescription: "Atelier is an independent architecture studio working on residential and small civic projects. They needed an identity that felt grounded and precise without being cold. I developed the wordmark, a flexible grid system for layouts, and a stationery set that scales from business cards to project proposals. The palette is restrained — a deep ink, a warm paper, and a single accent — letting the studio's own architectural photography carry the visual weight. The system is documented in a brand book that the studio now uses internally.",
-    tags: ["Identity", "Typography", "Print"]
-  },
-  {
-    id: "meadow-illustration",
-    title: "Meadow Editorial Illustration",
-    category: "Illustration",
-    year: "2022",
-    thumbnail: "/assets/generated/project-4.dim_800x600.png",
-    image: "/assets/generated/project-4.dim_800x600.png",
-    shortDescription: "A series of editorial illustrations exploring the quiet rhythms of rural life across four seasons.",
-    fullDescription: "Meadow is a personal illustration series commissioned by an independent culture magazine. Across four pieces — one for each season — I explored the quiet rhythms of rural life: the slow thaw of spring, the long light of summer, the harvest gold of autumn, and the still blue of winter. The illustrations use a limited palette of warm cream, peach, gold, and ocean blue, with flowing organic shapes that echo the landscape without depicting it literally. The series ran as the magazine's cover art for a full year.",
-    tags: ["Illustration", "Editorial", "Color"]
+    id: "career-city",
+    title: "Career City",
+    category: "Learning Product",
+    year: "2026",
+    thumbnail: "/assets/portfolio/workflow-platform.png",
+    image: "/assets/portfolio/workflow-platform.png",
+    shortDescription: "A gameful career-development prototype that turns growth paths into an explorable learning product.",
+    fullDescription: "An interactive career-development concept that frames career growth as a navigable city. It shows how learning strategy, product thinking, and AI-assisted build workflows can come together in a usable prototype.",
+    problem: "Career growth can feel abstract when people need to compare paths, practice choices, and decide what to do next.",
+    actions: [
+      "Designed a gameful flow around exploration and decision-making.",
+      "Used AI-assisted build workflows to move from idea to prototype.",
+      "Framed learning strategy as an interactive product instead of a static course."
+    ],
+    outcomes: [
+      "Shows product thinking, learning strategy, and AI-enabled build capability together.",
+      "Demonstrates how career navigation can become a practical learning product."
+    ],
+    tags: ["Gameful Learning", "React", "Career Development"],
+    lanes: ["Learning Experience", "Technical Product", "AI Operations"],
+    proofIds: ["release-depth"],
+    mediaNeeds: ["Actual app screenshot", "Gameplay GIF", "Demo link"],
+    sourceNote: "GitHub repo and app prototype.",
+    repo: "https://github.com/terrybrutus/career-city"
   }
 ];
 const skills = [
-  "Product Design",
-  "Typography",
-  "Design Systems",
-  "Prototyping",
-  "Illustration"
+  "Enablement Strategy",
+  "Learning Experience Design",
+  "Instructional Systems Design",
+  "AI Workflow Design",
+  "Sales Readiness",
+  "Compliance Learning",
+  "Workflow Prototyping",
+  "Stakeholder Alignment",
+  "Manager Support",
+  "Measurement Planning"
+];
+const humanHighlights = [
+  {
+    label: "Former Division I athlete",
+    detail: "Played basketball at Ole Miss, which still shapes how I think about preparation, feedback, standards, and team execution."
+  },
+  {
+    label: "Maker mindset",
+    detail: "Sewing and making clothes sharpen the same instincts I use in systems work: fit, iteration, detail, and craft."
+  },
+  {
+    label: "Competitive outlet",
+    detail: "Pickleball keeps the quick-read, adjust-fast part of my brain active without turning every problem into a playbook."
+  }
+];
+const brainSources = [
+  {
+    id: "latest-resume",
+    title: "Current resume",
+    type: "Resume",
+    status: "needs cleanup",
+    linkedProjectIds: [
+      "ai-talent-content-pipeline",
+      "workflow-management-platform",
+      "enterprise-onboarding-journey"
+    ],
+    note: "Best source for current positioning, scale, and metrics. Copy should stay concise."
+  },
+  {
+    id: "linkedin-profile",
+    title: "LinkedIn profile export",
+    type: "LinkedIn",
+    status: "needs cleanup",
+    linkedProjectIds: [
+      "enterprise-onboarding-journey",
+      "phishing-red-flags",
+      "compliance-enablement-ecosystem"
+    ],
+    note: "Useful background, but public copy should be slimmer and less verbose."
+  },
+  {
+    id: "legacy-isd-site",
+    title: "Instructional Design by Terry",
+    type: "Old website",
+    status: "needs artifact",
+    linkedProjectIds: ["phishing-red-flags", "compliance-enablement-ecosystem"],
+    note: "Good older ISD proof. Needs cleaner media crops and updated framing."
+  },
+  {
+    id: "github-repos",
+    title: "GitHub projects",
+    type: "Repository evidence",
+    status: "ready",
+    linkedProjectIds: ["workflow-management-platform", "career-city"],
+    note: "Useful proof of shipped prototypes, AI-assisted build workflows, and technical credibility."
+  }
 ];
 const socialLinks = [
-  { label: "Dribbble", href: "https://dribbble.com" },
-  { label: "Behance", href: "https://behance.net" },
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "GitHub", href: "https://github.com" }
+  { label: "LinkedIn", href: profile.linkedIn },
+  { label: "GitHub", href: profile.github },
+  { label: "Email", href: `mailto:${profile.email}` }
 ];
 const navLinks = [
-  { label: "Hero", id: "hero" },
-  { label: "Projects", id: "projects" },
-  { label: "About", id: "about" },
-  { label: "Contact", id: "contact" }
+  { label: "Home", id: "hero", route: "/" },
+  { label: "Work", id: "projects", route: "/work" },
+  { label: "About", id: "about", route: "/" },
+  { label: "Contact", id: "contact", route: "/" }
 ];
+function getProofPoints(ids) {
+  return ids.map((id2) => proofPoints.find((proofPoint) => proofPoint.id === id2)).filter((proofPoint) => Boolean(proofPoint));
+}
+function getLaneProfile(lane) {
+  return laneProfiles.find((laneProfile) => laneProfile.lane === lane) ?? laneProfiles[0];
+}
 function useSmoothScroll() {
   return reactExports.useCallback((id2) => {
     const el = document.getElementById(id2);
@@ -27644,11 +27994,22 @@ function useSmoothScroll() {
 function Footer() {
   const scrollTo = useSmoothScroll();
   const year = (/* @__PURE__ */ new Date()).getFullYear();
+  const handleNav = (route, id2) => {
+    if (route === "/work") {
+      window.history.pushState({}, "", "/work");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+      window.requestAnimationFrame(() => scrollTo("projects"));
+      return;
+    }
+    window.history.pushState({}, "", "/");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    window.requestAnimationFrame(() => scrollTo(id2));
+  };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("footer", { className: "bg-muted/50 border-border border-t", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container flex flex-col gap-8 py-12 md:flex-row md:items-start md:justify-between", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-sm", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display text-foreground text-lg font-bold tracking-tight", children: "My Work Portfolio" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: "A selection of recent work in product design, brand identity, and editorial illustration." })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display text-foreground text-lg font-bold tracking-tight", children: profile.name }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: "Enablement systems, learning experiences, and practical AI workflows for teams that need clearer execution." })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Quick links" }),
@@ -27656,7 +28017,7 @@ function Footer() {
           "button",
           {
             type: "button",
-            onClick: () => scrollTo(link.id),
+            onClick: () => handleNav(link.route, link.id),
             "data-ocid": `footer.link.${link.id}`,
             className: "text-muted-foreground hover:text-primary w-fit text-sm transition-smooth",
             children: link.label
@@ -27669,26 +28030,15 @@ function Footer() {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-xs", children: [
         "© ",
         year,
-        ". Built with love using",
         " ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "a",
-          {
-            href: `https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(
-              typeof window !== "undefined" ? window.location.hostname : "portfolio"
-            )}`,
-            target: "_blank",
-            rel: "noreferrer",
-            className: "text-primary hover:underline",
-            children: "caffeine.ai"
-          }
-        )
+        profile.name,
+        ". Built with Caffeine."
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs", children: "All rights reserved." })
     ] }) })
   ] });
 }
-function setRef$1(ref, value) {
+function setRef(ref, value) {
   if (typeof ref === "function") {
     return ref(value);
   } else if (ref !== null && ref !== void 0) {
@@ -27699,7 +28049,7 @@ function composeRefs(...refs) {
   return (node) => {
     let hasCleanup = false;
     const cleanups = refs.map((ref) => {
-      const cleanup = setRef$1(ref, node);
+      const cleanup = setRef(ref, node);
       if (!hasCleanup && typeof cleanup == "function") {
         hasCleanup = true;
       }
@@ -27712,7 +28062,7 @@ function composeRefs(...refs) {
           if (typeof cleanup == "function") {
             cleanup();
           } else {
-            setRef$1(refs[i], null);
+            setRef(refs[i], null);
           }
         }
       };
@@ -27722,72 +28072,67 @@ function composeRefs(...refs) {
 function useComposedRefs(...refs) {
   return reactExports.useCallback(composeRefs(...refs), refs);
 }
+var REACT_LAZY_TYPE = Symbol.for("react.lazy");
+var use = React$2[" use ".trim().toString()];
+function isPromiseLike(value) {
+  return typeof value === "object" && value !== null && "then" in value;
+}
+function isLazyComponent(element) {
+  return element != null && typeof element === "object" && "$$typeof" in element && element.$$typeof === REACT_LAZY_TYPE && "_payload" in element && isPromiseLike(element._payload);
+}
 // @__NO_SIDE_EFFECTS__
-function createSlot(ownerName) {
+function createSlot$1(ownerName) {
+  const SlotClone = /* @__PURE__ */ createSlotClone$1(ownerName);
   const Slot2 = reactExports.forwardRef((props, forwardedRef) => {
     let { children, ...slotProps } = props;
-    let slottableElement = null;
-    let hasSlottable = false;
-    const newChildren = [];
     if (isLazyComponent(children) && typeof use === "function") {
       children = use(children._payload);
     }
-    reactExports.Children.forEach(children, (maybeSlottable) => {
-      var _a2;
-      if (isSlottable(maybeSlottable)) {
-        hasSlottable = true;
-        const slottable = maybeSlottable;
-        let child = "child" in slottable.props ? slottable.props.child : slottable.props.children;
-        if (isLazyComponent(child) && typeof use === "function") {
-          child = use(child._payload);
+    const childrenArray = reactExports.Children.toArray(children);
+    const slottable = childrenArray.find(isSlottable$1);
+    if (slottable) {
+      const newElement = slottable.props.children;
+      const newChildren = childrenArray.map((child) => {
+        if (child === slottable) {
+          if (reactExports.Children.count(newElement) > 1) return reactExports.Children.only(null);
+          return reactExports.isValidElement(newElement) ? newElement.props.children : null;
+        } else {
+          return child;
         }
-        slottableElement = getSlottableElementFromSlottable(slottable, child);
-        newChildren.push((_a2 = slottableElement == null ? void 0 : slottableElement.props) == null ? void 0 : _a2.children);
-      } else {
-        newChildren.push(maybeSlottable);
-      }
-    });
-    if (slottableElement) {
-      slottableElement = reactExports.cloneElement(slottableElement, void 0, newChildren);
-    } else if (
-      // A `Slottable` was found but it didn't resolve to a single element (e.g.
-      // it wrapped multiple elements, text, or a render-prop `child` that
-      // wasn't an element). Don't fall back to treating the `Slottable` wrapper
-      // itself as the slot target — throw a descriptive error below instead.
-      !hasSlottable && reactExports.Children.count(children) === 1 && reactExports.isValidElement(children)
-    ) {
-      slottableElement = children;
+      });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: reactExports.isValidElement(newElement) ? reactExports.cloneElement(newElement, void 0, newChildren) : null });
     }
-    const slottableElementRef = slottableElement ? getElementRef$1(slottableElement) : void 0;
-    const composedRef = useComposedRefs(forwardedRef, slottableElementRef);
-    if (!slottableElement) {
-      if (children || children === 0) {
-        throw new Error(
-          hasSlottable ? createSlottableError(ownerName) : createSlotError(ownerName)
-        );
-      }
-      return children;
-    }
-    const mergedProps = mergeProps(slotProps, slottableElement.props ?? {});
-    if (slottableElement.type !== reactExports.Fragment) {
-      mergedProps.ref = forwardedRef ? composedRef : slottableElementRef;
-    }
-    return reactExports.cloneElement(slottableElement, mergedProps);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
   });
   Slot2.displayName = `${ownerName}.Slot`;
   return Slot2;
 }
-var Slot$1 = /* @__PURE__ */ createSlot("Slot");
-var SLOTTABLE_IDENTIFIER = Symbol.for("radix.slottable");
-var getSlottableElementFromSlottable = (slottable, child) => {
-  if ("child" in slottable.props) {
-    const child2 = slottable.props.child;
-    if (!reactExports.isValidElement(child2)) return null;
-    return reactExports.cloneElement(child2, void 0, slottable.props.children(child2.props.children));
-  }
-  return reactExports.isValidElement(child) ? child : null;
-};
-function mergeProps(slotProps, childProps) {
+var Slot$1 = /* @__PURE__ */ createSlot$1("Slot");
+// @__NO_SIDE_EFFECTS__
+function createSlotClone$1(ownerName) {
+  const SlotClone = reactExports.forwardRef((props, forwardedRef) => {
+    let { children, ...slotProps } = props;
+    if (isLazyComponent(children) && typeof use === "function") {
+      children = use(children._payload);
+    }
+    if (reactExports.isValidElement(children)) {
+      const childrenRef = getElementRef$2(children);
+      const props2 = mergeProps$1(slotProps, children.props);
+      if (children.type !== reactExports.Fragment) {
+        props2.ref = forwardedRef ? composeRefs(forwardedRef, childrenRef) : childrenRef;
+      }
+      return reactExports.cloneElement(children, props2);
+    }
+    return reactExports.Children.count(children) > 1 ? reactExports.Children.only(null) : null;
+  });
+  SlotClone.displayName = `${ownerName}.SlotClone`;
+  return SlotClone;
+}
+var SLOTTABLE_IDENTIFIER$1 = Symbol("radix.slottable");
+function isSlottable$1(child) {
+  return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER$1;
+}
+function mergeProps$1(slotProps, childProps) {
   const overrideProps = { ...childProps };
   for (const propName in childProps) {
     const slotPropValue = slotProps[propName];
@@ -27811,7 +28156,7 @@ function mergeProps(slotProps, childProps) {
   }
   return { ...slotProps, ...overrideProps };
 }
-function getElementRef$1(element) {
+function getElementRef$2(element) {
   var _a2, _b2;
   let getter = (_a2 = Object.getOwnPropertyDescriptor(element.props, "ref")) == null ? void 0 : _a2.get;
   let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
@@ -27825,34 +28170,17 @@ function getElementRef$1(element) {
   }
   return element.props.ref || element.ref;
 }
-function isSlottable(child) {
-  return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
-}
-var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-function isLazyComponent(element) {
-  return element != null && typeof element === "object" && "$$typeof" in element && element.$$typeof === REACT_LAZY_TYPE && "_payload" in element && isPromiseLike(element._payload);
-}
-function isPromiseLike(value) {
-  return typeof value === "object" && value !== null && "then" in value;
-}
-var createSlotError = (ownerName) => {
-  return `${ownerName} failed to slot onto its children. Expected a single React element child or \`Slottable\`.`;
-};
-var createSlottableError = (ownerName) => {
-  return `${ownerName} failed to slot onto its \`Slottable\`. Expected \`Slottable\` to receive a single React element child.`;
-};
-var use = React$2[" use ".trim().toString()];
 function r(e) {
   var t, f2, n = "";
   if ("string" == typeof e || "number" == typeof e) n += e;
   else if ("object" == typeof e) if (Array.isArray(e)) {
-    var o2 = e.length;
-    for (t = 0; t < o2; t++) e[t] && (f2 = r(e[t])) && (n && (n += " "), n += f2);
+    var o = e.length;
+    for (t = 0; t < o; t++) e[t] && (f2 = r(e[t])) && (n && (n += " "), n += f2);
   } else for (f2 in e) e[f2] && (n && (n += " "), n += f2);
   return n;
 }
 function clsx() {
-  for (var e, t, f2 = 0, n = "", o2 = arguments.length; f2 < o2; f2++) (e = arguments[f2]) && (t = r(e)) && (n && (n += " "), n += t);
+  for (var e, t, f2 = 0, n = "", o = arguments.length; f2 < o; f2++) (e = arguments[f2]) && (t = r(e)) && (n && (n += " "), n += t);
   return n;
 }
 const falsyToString = (value) => typeof value === "boolean" ? `${value}` : value === 0 ? "0" : value;
@@ -30407,11 +30735,26 @@ function composeEventHandlers(originalEventHandler, ourEventHandler, { checkForD
     }
   };
 }
+function createContext2(rootComponentName, defaultContext) {
+  const Context = reactExports.createContext(defaultContext);
+  const Provider = (props) => {
+    const { children, ...context } = props;
+    const value = reactExports.useMemo(() => context, Object.values(context));
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Context.Provider, { value, children });
+  };
+  Provider.displayName = rootComponentName + "Provider";
+  function useContext2(consumerName) {
+    const context = reactExports.useContext(Context);
+    if (context) return context;
+    if (defaultContext !== void 0) return defaultContext;
+    throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
+  }
+  return [Provider, useContext2];
+}
 function createContextScope(scopeName, createContextScopeDeps = []) {
   let defaultContexts = [];
   function createContext3(rootComponentName, defaultContext) {
     const BaseContext = reactExports.createContext(defaultContext);
-    BaseContext.displayName = rootComponentName + "Context";
     const index2 = defaultContexts.length;
     defaultContexts = [...defaultContexts, defaultContext];
     const Provider = (props) => {
@@ -30477,29 +30820,6 @@ function useId(deterministicId) {
     setId((reactId) => reactId ?? String(count$1++));
   }, [deterministicId]);
   return deterministicId || (id2 ? `radix-${id2}` : "");
-}
-var useReactEffectEvent = React$2[" useEffectEvent ".trim().toString()];
-var useReactInsertionEffect = React$2[" useInsertionEffect ".trim().toString()];
-function useEffectEvent(callback) {
-  if (typeof useReactEffectEvent === "function") {
-    return useReactEffectEvent(callback);
-  }
-  const ref = reactExports.useRef(() => {
-    throw new Error("Cannot call an event handler while rendering.");
-  });
-  if (typeof useReactInsertionEffect === "function") {
-    useReactInsertionEffect(() => {
-      ref.current = callback;
-    });
-  } else {
-    useLayoutEffect2(() => {
-      ref.current = callback;
-    });
-  }
-  return reactExports.useMemo(() => (...args) => {
-    var _a2;
-    return (_a2 = ref.current) == null ? void 0 : _a2.call(ref, ...args);
-  }, []);
 }
 var useInsertionEffect = React$2[" useInsertionEffect ".trim().toString()] || useLayoutEffect2;
 function useControllableState({
@@ -30567,6 +30887,89 @@ function useUncontrolledState({
 function isFunction(value) {
   return typeof value === "function";
 }
+// @__NO_SIDE_EFFECTS__
+function createSlot(ownerName) {
+  const SlotClone = /* @__PURE__ */ createSlotClone(ownerName);
+  const Slot2 = reactExports.forwardRef((props, forwardedRef) => {
+    const { children, ...slotProps } = props;
+    const childrenArray = reactExports.Children.toArray(children);
+    const slottable = childrenArray.find(isSlottable);
+    if (slottable) {
+      const newElement = slottable.props.children;
+      const newChildren = childrenArray.map((child) => {
+        if (child === slottable) {
+          if (reactExports.Children.count(newElement) > 1) return reactExports.Children.only(null);
+          return reactExports.isValidElement(newElement) ? newElement.props.children : null;
+        } else {
+          return child;
+        }
+      });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: reactExports.isValidElement(newElement) ? reactExports.cloneElement(newElement, void 0, newChildren) : null });
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
+  });
+  Slot2.displayName = `${ownerName}.Slot`;
+  return Slot2;
+}
+// @__NO_SIDE_EFFECTS__
+function createSlotClone(ownerName) {
+  const SlotClone = reactExports.forwardRef((props, forwardedRef) => {
+    const { children, ...slotProps } = props;
+    if (reactExports.isValidElement(children)) {
+      const childrenRef = getElementRef$1(children);
+      const props2 = mergeProps(slotProps, children.props);
+      if (children.type !== reactExports.Fragment) {
+        props2.ref = forwardedRef ? composeRefs(forwardedRef, childrenRef) : childrenRef;
+      }
+      return reactExports.cloneElement(children, props2);
+    }
+    return reactExports.Children.count(children) > 1 ? reactExports.Children.only(null) : null;
+  });
+  SlotClone.displayName = `${ownerName}.SlotClone`;
+  return SlotClone;
+}
+var SLOTTABLE_IDENTIFIER = Symbol("radix.slottable");
+function isSlottable(child) {
+  return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
+}
+function mergeProps(slotProps, childProps) {
+  const overrideProps = { ...childProps };
+  for (const propName in childProps) {
+    const slotPropValue = slotProps[propName];
+    const childPropValue = childProps[propName];
+    const isHandler = /^on[A-Z]/.test(propName);
+    if (isHandler) {
+      if (slotPropValue && childPropValue) {
+        overrideProps[propName] = (...args) => {
+          const result = childPropValue(...args);
+          slotPropValue(...args);
+          return result;
+        };
+      } else if (slotPropValue) {
+        overrideProps[propName] = slotPropValue;
+      }
+    } else if (propName === "style") {
+      overrideProps[propName] = { ...slotPropValue, ...childPropValue };
+    } else if (propName === "className") {
+      overrideProps[propName] = [slotPropValue, childPropValue].filter(Boolean).join(" ");
+    }
+  }
+  return { ...slotProps, ...overrideProps };
+}
+function getElementRef$1(element) {
+  var _a2, _b2;
+  let getter = (_a2 = Object.getOwnPropertyDescriptor(element.props, "ref")) == null ? void 0 : _a2.get;
+  let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+  if (mayWarn) {
+    return element.ref;
+  }
+  getter = (_b2 = Object.getOwnPropertyDescriptor(element, "ref")) == null ? void 0 : _b2.get;
+  mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+  if (mayWarn) {
+    return element.props.ref;
+  }
+  return element.props.ref || element.ref;
+}
 var NODES = [
   "a",
   "button",
@@ -30612,6 +31015,18 @@ function useCallbackRef$1(callback) {
     return (_a2 = callbackRef.current) == null ? void 0 : _a2.call(callbackRef, ...args);
   }, []);
 }
+function useEscapeKeydown(onEscapeKeyDownProp, ownerDocument = globalThis == null ? void 0 : globalThis.document) {
+  const onEscapeKeyDown = useCallbackRef$1(onEscapeKeyDownProp);
+  reactExports.useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onEscapeKeyDown(event);
+      }
+    };
+    ownerDocument.addEventListener("keydown", handleKeyDown, { capture: true });
+    return () => ownerDocument.removeEventListener("keydown", handleKeyDown, { capture: true });
+  }, [onEscapeKeyDown, ownerDocument]);
+}
 var DISMISSABLE_LAYER_NAME = "DismissableLayer";
 var CONTEXT_UPDATE = "dismissableLayer.update";
 var POINTER_DOWN_OUTSIDE = "dismissableLayer.pointerDownOutside";
@@ -30620,19 +31035,12 @@ var originalBodyPointerEvents;
 var DismissableLayerContext = reactExports.createContext({
   layers: /* @__PURE__ */ new Set(),
   layersWithOutsidePointerEventsDisabled: /* @__PURE__ */ new Set(),
-  branches: /* @__PURE__ */ new Set(),
-  // Outside elements that belong to a layer's own dismiss affordance (eg, a
-  // dialog overlay). Pressing them should dismiss the layer regardless of
-  // whether or not they stop propagation.
-  //
-  // See https://github.com/radix-ui/primitives/issues/3346
-  dismissableSurfaces: /* @__PURE__ */ new Set()
+  branches: /* @__PURE__ */ new Set()
 });
 var DismissableLayer = reactExports.forwardRef(
   (props, forwardedRef) => {
     const {
       disableOutsidePointerEvents = false,
-      deferPointerDownOutside = false,
       onEscapeKeyDown,
       onPointerDownOutside,
       onFocusOutside,
@@ -30644,39 +31052,22 @@ var DismissableLayer = reactExports.forwardRef(
     const [node, setNode] = reactExports.useState(null);
     const ownerDocument = (node == null ? void 0 : node.ownerDocument) ?? (globalThis == null ? void 0 : globalThis.document);
     const [, force] = reactExports.useState({});
-    const composedRefs = useComposedRefs(forwardedRef, setNode);
+    const composedRefs = useComposedRefs(forwardedRef, (node2) => setNode(node2));
     const layers = Array.from(context.layers);
     const [highestLayerWithOutsidePointerEventsDisabled] = [...context.layersWithOutsidePointerEventsDisabled].slice(-1);
     const highestLayerWithOutsidePointerEventsDisabledIndex = layers.indexOf(highestLayerWithOutsidePointerEventsDisabled);
     const index2 = node ? layers.indexOf(node) : -1;
     const isBodyPointerEventsDisabled = context.layersWithOutsidePointerEventsDisabled.size > 0;
     const isPointerEventsEnabled = index2 >= highestLayerWithOutsidePointerEventsDisabledIndex;
-    const isDeferredPointerDownOutsideRef = reactExports.useRef(false);
-    const pointerDownOutside = usePointerDownOutside(
-      (event) => {
-        const target = event.target;
-        if (!(target instanceof Node)) {
-          return;
-        }
-        const isPointerDownOnBranch = [...context.branches].some(
-          (branch) => branch.contains(target)
-        );
-        if (!isPointerEventsEnabled || isPointerDownOnBranch) return;
-        onPointerDownOutside == null ? void 0 : onPointerDownOutside(event);
-        onInteractOutside == null ? void 0 : onInteractOutside(event);
-        if (!event.defaultPrevented) onDismiss == null ? void 0 : onDismiss();
-      },
-      {
-        ownerDocument,
-        deferPointerDownOutside,
-        isDeferredPointerDownOutsideRef,
-        dismissableSurfaces: context.dismissableSurfaces
-      }
-    );
+    const pointerDownOutside = usePointerDownOutside((event) => {
+      const target = event.target;
+      const isPointerDownOnBranch = [...context.branches].some((branch) => branch.contains(target));
+      if (!isPointerEventsEnabled || isPointerDownOnBranch) return;
+      onPointerDownOutside == null ? void 0 : onPointerDownOutside(event);
+      onInteractOutside == null ? void 0 : onInteractOutside(event);
+      if (!event.defaultPrevented) onDismiss == null ? void 0 : onDismiss();
+    }, ownerDocument);
     const focusOutside = useFocusOutside((event) => {
-      if (deferPointerDownOutside && isDeferredPointerDownOutsideRef.current) {
-        return;
-      }
       const target = event.target;
       const isFocusInBranch = [...context.branches].some((branch) => branch.contains(target));
       if (isFocusInBranch) return;
@@ -30684,24 +31075,15 @@ var DismissableLayer = reactExports.forwardRef(
       onInteractOutside == null ? void 0 : onInteractOutside(event);
       if (!event.defaultPrevented) onDismiss == null ? void 0 : onDismiss();
     }, ownerDocument);
-    const isHighestLayer = node ? index2 === layers.length - 1 : false;
-    const handleKeyDown = useEffectEvent((event) => {
-      if (event.key !== "Escape") {
-        return;
-      }
+    useEscapeKeydown((event) => {
+      const isHighestLayer = index2 === context.layers.size - 1;
+      if (!isHighestLayer) return;
       onEscapeKeyDown == null ? void 0 : onEscapeKeyDown(event);
       if (!event.defaultPrevented && onDismiss) {
         event.preventDefault();
         onDismiss();
       }
-    });
-    reactExports.useEffect(() => {
-      if (!isHighestLayer) {
-        return;
-      }
-      ownerDocument.addEventListener("keydown", handleKeyDown, { capture: true });
-      return () => ownerDocument.removeEventListener("keydown", handleKeyDown, { capture: true });
-    }, [ownerDocument, isHighestLayer]);
+    }, ownerDocument);
     reactExports.useEffect(() => {
       if (!node) return;
       if (disableOutsidePointerEvents) {
@@ -30714,11 +31096,8 @@ var DismissableLayer = reactExports.forwardRef(
       context.layers.add(node);
       dispatchUpdate();
       return () => {
-        if (disableOutsidePointerEvents) {
-          context.layersWithOutsidePointerEventsDisabled.delete(node);
-          if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
-            ownerDocument.body.style.pointerEvents = originalBodyPointerEvents;
-          }
+        if (disableOutsidePointerEvents && context.layersWithOutsidePointerEventsDisabled.size === 1) {
+          ownerDocument.body.style.pointerEvents = originalBodyPointerEvents;
         }
       };
     }, [node, ownerDocument, disableOutsidePointerEvents, context]);
@@ -30772,108 +31151,35 @@ var DismissableLayerBranch = reactExports.forwardRef((props, forwardedRef) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...props, ref: composedRefs });
 });
 DismissableLayerBranch.displayName = BRANCH_NAME;
-function useDismissableLayerSurface() {
-  const context = reactExports.useContext(DismissableLayerContext);
-  const [node, setNode] = reactExports.useState(null);
-  reactExports.useEffect(() => {
-    if (!node) {
-      return;
-    }
-    context.dismissableSurfaces.add(node);
-    return () => {
-      context.dismissableSurfaces.delete(node);
-    };
-  }, [node, context.dismissableSurfaces]);
-  return setNode;
-}
-function usePointerDownOutside(onPointerDownOutside, args) {
-  const {
-    ownerDocument = globalThis == null ? void 0 : globalThis.document,
-    deferPointerDownOutside = false,
-    isDeferredPointerDownOutsideRef,
-    dismissableSurfaces
-  } = args;
+function usePointerDownOutside(onPointerDownOutside, ownerDocument = globalThis == null ? void 0 : globalThis.document) {
   const handlePointerDownOutside = useCallbackRef$1(onPointerDownOutside);
   const isPointerInsideReactTreeRef = reactExports.useRef(false);
-  const isPointerDownOutsideRef = reactExports.useRef(false);
-  const interceptedOutsideInteractionEventsRef = reactExports.useRef(/* @__PURE__ */ new Map());
   const handleClickRef = reactExports.useRef(() => {
   });
   reactExports.useEffect(() => {
-    function resetOutsideInteraction() {
-      isPointerDownOutsideRef.current = false;
-      isDeferredPointerDownOutsideRef.current = false;
-      interceptedOutsideInteractionEventsRef.current.clear();
-    }
-    function isOutsideInteractionIntercepted() {
-      return Array.from(interceptedOutsideInteractionEventsRef.current.values()).some(Boolean);
-    }
-    function handleInteractionCapture(event) {
-      if (!isPointerDownOutsideRef.current) {
-        return;
-      }
-      const target = event.target;
-      const isDismissableSurface = target instanceof Node && [...dismissableSurfaces].some((surface) => surface.contains(target));
-      if (!isDismissableSurface) {
-        interceptedOutsideInteractionEventsRef.current.set(event.type, true);
-      }
-      if (event.type === "click") {
-        window.setTimeout(() => {
-          if (isPointerDownOutsideRef.current) {
-            handleClickRef.current();
-          }
-        }, 0);
-      }
-    }
-    function handleInteractionBubble(event) {
-      if (isPointerDownOutsideRef.current) {
-        interceptedOutsideInteractionEventsRef.current.set(event.type, false);
-      }
-    }
     const handlePointerDown = (event) => {
       if (event.target && !isPointerInsideReactTreeRef.current) {
         let handleAndDispatchPointerDownOutsideEvent2 = function() {
-          ownerDocument.removeEventListener("click", handleClickRef.current);
-          const wasOutsideInteractionIntercepted = isOutsideInteractionIntercepted();
-          resetOutsideInteraction();
-          if (!wasOutsideInteractionIntercepted) {
-            handleAndDispatchCustomEvent(
-              POINTER_DOWN_OUTSIDE,
-              handlePointerDownOutside,
-              eventDetail,
-              { discrete: true }
-            );
-          }
+          handleAndDispatchCustomEvent(
+            POINTER_DOWN_OUTSIDE,
+            handlePointerDownOutside,
+            eventDetail,
+            { discrete: true }
+          );
         };
         const eventDetail = { originalEvent: event };
-        isPointerDownOutsideRef.current = true;
-        isDeferredPointerDownOutsideRef.current = deferPointerDownOutside && event.button === 0;
-        interceptedOutsideInteractionEventsRef.current.clear();
-        if (!deferPointerDownOutside || event.button !== 0) {
-          handleAndDispatchPointerDownOutsideEvent2();
-        } else {
+        if (event.pointerType === "touch") {
           ownerDocument.removeEventListener("click", handleClickRef.current);
           handleClickRef.current = handleAndDispatchPointerDownOutsideEvent2;
           ownerDocument.addEventListener("click", handleClickRef.current, { once: true });
+        } else {
+          handleAndDispatchPointerDownOutsideEvent2();
         }
       } else {
         ownerDocument.removeEventListener("click", handleClickRef.current);
-        resetOutsideInteraction();
       }
       isPointerInsideReactTreeRef.current = false;
     };
-    const outsideInteractionEvents = [
-      "pointerup",
-      "mousedown",
-      "mouseup",
-      "touchstart",
-      "touchend",
-      "click"
-    ];
-    for (const eventName of outsideInteractionEvents) {
-      ownerDocument.addEventListener(eventName, handleInteractionCapture, true);
-      ownerDocument.addEventListener(eventName, handleInteractionBubble);
-    }
     const timerId = window.setTimeout(() => {
       ownerDocument.addEventListener("pointerdown", handlePointerDown);
     }, 0);
@@ -30881,18 +31187,8 @@ function usePointerDownOutside(onPointerDownOutside, args) {
       window.clearTimeout(timerId);
       ownerDocument.removeEventListener("pointerdown", handlePointerDown);
       ownerDocument.removeEventListener("click", handleClickRef.current);
-      for (const eventName of outsideInteractionEvents) {
-        ownerDocument.removeEventListener(eventName, handleInteractionCapture, true);
-        ownerDocument.removeEventListener(eventName, handleInteractionBubble);
-      }
     };
-  }, [
-    ownerDocument,
-    handlePointerDownOutside,
-    deferPointerDownOutside,
-    isDeferredPointerDownOutsideRef,
-    dismissableSurfaces
-  ]);
+  }, [ownerDocument, handlePointerDownOutside]);
   return {
     // ensures we check React component tree (not just DOM tree)
     onPointerDownCapture: () => isPointerInsideReactTreeRef.current = true
@@ -30948,7 +31244,7 @@ var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
   const onMountAutoFocus = useCallbackRef$1(onMountAutoFocusProp);
   const onUnmountAutoFocus = useCallbackRef$1(onUnmountAutoFocusProp);
   const lastFocusedElementRef = reactExports.useRef(null);
-  const composedRefs = useComposedRefs(forwardedRef, setContainer);
+  const composedRefs = useComposedRefs(forwardedRef, (node) => setContainer(node));
   const focusScope = reactExports.useRef({
     paused: false,
     pause() {
@@ -31133,15 +31429,15 @@ function removeLinks(items) {
   return items.filter((item) => item.tagName !== "A");
 }
 var PORTAL_NAME$1 = "Portal";
-var Portal = reactExports.forwardRef((props, forwardedRef) => {
+var Portal$1 = reactExports.forwardRef((props, forwardedRef) => {
   var _a2;
   const { container: containerProp, ...portalProps } = props;
   const [mounted, setMounted] = reactExports.useState(false);
   useLayoutEffect2(() => setMounted(true), []);
   const container = containerProp || mounted && ((_a2 = globalThis == null ? void 0 : globalThis.document) == null ? void 0 : _a2.body);
-  return container ? reactDomExports.createPortal(/* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...portalProps, ref: forwardedRef }), container) : null;
+  return container ? ReactDOM$2.createPortal(/* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...portalProps, ref: forwardedRef }), container) : null;
 });
-Portal.displayName = PORTAL_NAME$1;
+Portal$1.displayName = PORTAL_NAME$1;
 function useStateMachine(initialState, machine) {
   return reactExports.useReducer((state, event) => {
     const nextState = machine[state][event];
@@ -31152,7 +31448,7 @@ var Presence = (props) => {
   const { present, children } = props;
   const presence = usePresence$1(present);
   const child = typeof children === "function" ? children({ present: presence.isPresent }) : reactExports.Children.only(children);
-  const ref = useStableComposedRefs(presence.ref, getElementRef(child));
+  const ref = useComposedRefs(presence.ref, getElementRef(child));
   const forceMount = typeof children === "function";
   return forceMount || presence.isPresent ? reactExports.cloneElement(child, { ref }) : null;
 };
@@ -31248,40 +31544,6 @@ function usePresence$1(present) {
     }, [])
   };
 }
-function setRef(ref, value) {
-  if (typeof ref === "function") {
-    return ref(value);
-  } else if (ref !== null && ref !== void 0) {
-    ref.current = value;
-  }
-}
-function useStableComposedRefs(...refs) {
-  const refsRef = reactExports.useRef(refs);
-  refsRef.current = refs;
-  return reactExports.useCallback((node) => {
-    const currentRefs = refsRef.current;
-    let hasCleanup = false;
-    const cleanups = currentRefs.map((ref) => {
-      const cleanup = setRef(ref, node);
-      if (!hasCleanup && typeof cleanup === "function") {
-        hasCleanup = true;
-      }
-      return cleanup;
-    });
-    if (hasCleanup) {
-      return () => {
-        for (let i = 0; i < cleanups.length; i++) {
-          const cleanup = cleanups[i];
-          if (typeof cleanup === "function") {
-            cleanup();
-          } else {
-            setRef(currentRefs[i], null);
-          }
-        }
-      };
-    }
-  }, []);
-}
 function getAnimationName(styles) {
   return (styles == null ? void 0 : styles.animationName) || "none";
 }
@@ -31300,27 +31562,17 @@ function getElementRef(element) {
   return element.props.ref || element.ref;
 }
 var count = 0;
-var guards = null;
 function useFocusGuards() {
   reactExports.useEffect(() => {
-    if (!guards) {
-      guards = { start: createFocusGuard(), end: createFocusGuard() };
-    }
-    const { start, end } = guards;
-    if (document.body.firstElementChild !== start) {
-      document.body.insertAdjacentElement("afterbegin", start);
-    }
-    if (document.body.lastElementChild !== end) {
-      document.body.insertAdjacentElement("beforeend", end);
-    }
+    const edgeGuards = document.querySelectorAll("[data-radix-focus-guard]");
+    document.body.insertAdjacentElement("afterbegin", edgeGuards[0] ?? createFocusGuard());
+    document.body.insertAdjacentElement("beforeend", edgeGuards[1] ?? createFocusGuard());
     count++;
     return () => {
       if (count === 1) {
-        guards == null ? void 0 : guards.start.remove();
-        guards == null ? void 0 : guards.end.remove();
-        guards = null;
+        document.querySelectorAll("[data-radix-focus-guard]").forEach((node) => node.remove());
       }
-      count = Math.max(0, count - 1);
+      count--;
     };
   }, []);
 }
@@ -32163,7 +32415,7 @@ var DialogTrigger = reactExports.forwardRef(
         type: "button",
         "aria-haspopup": "dialog",
         "aria-expanded": context.open,
-        "aria-controls": context.open ? context.contentId : void 0,
+        "aria-controls": context.contentId,
         "data-state": getState(context.open),
         ...triggerProps,
         ref: composedTriggerRef,
@@ -32180,7 +32432,7 @@ var [PortalProvider, usePortalContext] = createDialogContext(PORTAL_NAME, {
 var DialogPortal = (props) => {
   const { __scopeDialog, forceMount, children, container } = props;
   const context = useDialogContext(PORTAL_NAME, __scopeDialog);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider, { scope: __scopeDialog, forceMount, children: reactExports.Children.map(children, (child) => /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal, { asChild: true, container, children: child }) })) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider, { scope: __scopeDialog, forceMount, children: reactExports.Children.map(children, (child) => /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, { asChild: true, container, children: child }) })) });
 };
 DialogPortal.displayName = PORTAL_NAME;
 var OVERLAY_NAME = "DialogOverlay";
@@ -32198,8 +32450,6 @@ var DialogOverlayImpl = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...overlayProps } = props;
     const context = useDialogContext(OVERLAY_NAME, __scopeDialog);
-    const registerDismissableSurface = useDismissableLayerSurface();
-    const composedRefs = useComposedRefs(forwardedRef, registerDismissableSurface);
     return (
       // Make sure `Content` is scrollable even when it doesn't live inside `RemoveScroll`
       // ie. when `Overlay` and `Content` are siblings
@@ -32208,7 +32458,7 @@ var DialogOverlayImpl = reactExports.forwardRef(
         {
           "data-state": getState(context.open),
           ...overlayProps,
-          ref: composedRefs,
+          ref: forwardedRef,
           style: { pointerEvents: "auto", ...overlayProps.style }
         }
       ) })
@@ -32240,7 +32490,7 @@ var DialogContentModal = reactExports.forwardRef(
         ...props,
         ref: composedRefs,
         trapFocus: context.open,
-        disableOutsidePointerEvents: context.open,
+        disableOutsidePointerEvents: true,
         onCloseAutoFocus: composeEventHandlers(props.onCloseAutoFocus, (event) => {
           var _a2;
           event.preventDefault();
@@ -32306,31 +32556,38 @@ var DialogContentImpl = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
     const context = useDialogContext(CONTENT_NAME, __scopeDialog);
+    const contentRef = reactExports.useRef(null);
+    const composedRefs = useComposedRefs(forwardedRef, contentRef);
     useFocusGuards();
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      FocusScope,
-      {
-        asChild: true,
-        loop: true,
-        trapped: trapFocus,
-        onMountAutoFocus: onOpenAutoFocus,
-        onUnmountAutoFocus: onCloseAutoFocus,
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          DismissableLayer,
-          {
-            role: "dialog",
-            id: context.contentId,
-            "aria-describedby": context.descriptionId,
-            "aria-labelledby": context.titleId,
-            "data-state": getState(context.open),
-            ...contentProps,
-            ref: forwardedRef,
-            deferPointerDownOutside: true,
-            onDismiss: () => context.onOpenChange(false)
-          }
-        )
-      }
-    ) });
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        FocusScope,
+        {
+          asChild: true,
+          loop: true,
+          trapped: trapFocus,
+          onMountAutoFocus: onOpenAutoFocus,
+          onUnmountAutoFocus: onCloseAutoFocus,
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            DismissableLayer,
+            {
+              role: "dialog",
+              id: context.contentId,
+              "aria-describedby": context.descriptionId,
+              "aria-labelledby": context.titleId,
+              "data-state": getState(context.open),
+              ...contentProps,
+              ref: composedRefs,
+              onDismiss: () => context.onOpenChange(false)
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TitleWarning, { titleId: context.titleId }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(DescriptionWarning, { contentRef, descriptionId: context.descriptionId })
+      ] })
+    ] });
   }
 );
 var TITLE_NAME = "DialogTitle";
@@ -32371,6 +32628,48 @@ DialogClose.displayName = CLOSE_NAME;
 function getState(open) {
   return open ? "open" : "closed";
 }
+var TITLE_WARNING_NAME = "DialogTitleWarning";
+var [WarningProvider, useWarningContext] = createContext2(TITLE_WARNING_NAME, {
+  contentName: CONTENT_NAME,
+  titleName: TITLE_NAME,
+  docsSlug: "dialog"
+});
+var TitleWarning = ({ titleId }) => {
+  const titleWarningContext = useWarningContext(TITLE_WARNING_NAME);
+  const MESSAGE = `\`${titleWarningContext.contentName}\` requires a \`${titleWarningContext.titleName}\` for the component to be accessible for screen reader users.
+
+If you want to hide the \`${titleWarningContext.titleName}\`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/${titleWarningContext.docsSlug}`;
+  reactExports.useEffect(() => {
+    if (titleId) {
+      const hasTitle = document.getElementById(titleId);
+      if (!hasTitle) console.error(MESSAGE);
+    }
+  }, [MESSAGE, titleId]);
+  return null;
+};
+var DESCRIPTION_WARNING_NAME = "DialogDescriptionWarning";
+var DescriptionWarning = ({ contentRef, descriptionId }) => {
+  const descriptionWarningContext = useWarningContext(DESCRIPTION_WARNING_NAME);
+  const MESSAGE = `Warning: Missing \`Description\` or \`aria-describedby={undefined}\` for {${descriptionWarningContext.contentName}}.`;
+  reactExports.useEffect(() => {
+    var _a2;
+    const describedById = (_a2 = contentRef.current) == null ? void 0 : _a2.getAttribute("aria-describedby");
+    if (descriptionId && describedById) {
+      const hasDescription = document.getElementById(descriptionId);
+      if (!hasDescription) console.warn(MESSAGE);
+    }
+  }, [MESSAGE, contentRef, descriptionId]);
+  return null;
+};
+var Root = Dialog;
+var Trigger = DialogTrigger;
+var Portal = DialogPortal;
+var Overlay = DialogOverlay;
+var Content = DialogContent;
+var Title = DialogTitle;
+var Close = DialogClose;
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32476,11 +32775,127 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$5 = [
+const __iconNode$d = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$5);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$d);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$c = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$c);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$b = [
+  ["path", { d: "M12 12h.01", key: "1mp3jc" }],
+  ["path", { d: "M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2", key: "1ksdt3" }],
+  ["path", { d: "M22 13a18.15 18.15 0 0 1-20 0", key: "12hx5q" }],
+  ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
+];
+const BriefcaseBusiness = createLucideIcon("briefcase-business", __iconNode$b);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$a = [
+  ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
+  [
+    "path",
+    {
+      d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2",
+      key: "116196"
+    }
+  ]
+];
+const Clipboard = createLucideIcon("clipboard", __iconNode$a);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$9 = [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+];
+const Database = createLucideIcon("database", __iconNode$9);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$8 = [
+  ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+  [
+    "path",
+    { d: "M4.268 21a2 2 0 0 0 1.727 1H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3", key: "ms7g94" }
+  ],
+  ["path", { d: "m9 18-1.5-1.5", key: "1j6qii" }],
+  ["circle", { cx: "5", cy: "14", r: "3", key: "ufru5t" }]
+];
+const FileSearch = createLucideIcon("file-search", __iconNode$8);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$7 = [
+  [
+    "path",
+    {
+      d: "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4",
+      key: "tonef"
+    }
+  ],
+  ["path", { d: "M9 18c-4.51 2-5-2-7-2", key: "9comsn" }]
+];
+const Github = createLucideIcon("github", __iconNode$7);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$6 = [
+  ["path", { d: "M9 17H7A5 5 0 0 1 7 7h2", key: "8i5ue5" }],
+  ["path", { d: "M15 7h2a5 5 0 1 1 0 10h-2", key: "1b9ql8" }],
+  ["line", { x1: "8", x2: "16", y1: "12", y2: "12", key: "1jonct" }]
+];
+const Link2 = createLucideIcon("link-2", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
+  [
+    "path",
+    {
+      d: "M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z",
+      key: "c2jq9f"
+    }
+  ],
+  ["rect", { width: "4", height: "12", x: "2", y: "9", key: "mk3on5" }],
+  ["circle", { cx: "4", cy: "4", r: "2", key: "bt5ra8" }]
+];
+const Linkedin = createLucideIcon("linkedin", __iconNode$5);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32488,10 +32903,10 @@ const ArrowLeft = createLucideIcon("arrow-left", __iconNode$5);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$4 = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
 ];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$4);
+const Mail = createLucideIcon("mail", __iconNode$4);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32499,10 +32914,11 @@ const ArrowRight = createLucideIcon("arrow-right", __iconNode$4);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$3 = [
-  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
-  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const Mail = createLucideIcon("mail", __iconNode$3);
+const Menu = createLucideIcon("menu", __iconNode$3);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32510,11 +32926,17 @@ const Mail = createLucideIcon("mail", __iconNode$3);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$2 = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
+  [
+    "path",
+    {
+      d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
+      key: "1c8476"
+    }
+  ],
+  ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
+  ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
 ];
-const Menu = createLucideIcon("menu", __iconNode$2);
+const Save = createLucideIcon("save", __iconNode$2);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32525,13 +32947,19 @@ const __iconNode$1 = [
   [
     "path",
     {
-      d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
-      key: "1ffxy3"
+      d: "m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72",
+      key: "ul74o6"
     }
   ],
-  ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
+  ["path", { d: "m14 7 3 3", key: "1r5n42" }],
+  ["path", { d: "M5 6v4", key: "ilb8ba" }],
+  ["path", { d: "M19 14v4", key: "blhpug" }],
+  ["path", { d: "M10 2v2", key: "7u0qdc" }],
+  ["path", { d: "M7 8H3", key: "zfb6yr" }],
+  ["path", { d: "M21 16h-4", key: "1cnmox" }],
+  ["path", { d: "M11 3H9", key: "1obp7u" }]
 ];
-const Send = createLucideIcon("send", __iconNode$1);
+const WandSparkles = createLucideIcon("wand-sparkles", __iconNode$1);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32544,29 +32972,29 @@ const __iconNode = [
 ];
 const X = createLucideIcon("x", __iconNode);
 function Sheet({ ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { "data-slot": "sheet", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root, { "data-slot": "sheet", ...props });
 }
 function SheetTrigger({
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTrigger, { "data-slot": "sheet-trigger", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger, { "data-slot": "sheet-trigger", ...props });
 }
 function SheetClose({
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(DialogClose, { "data-slot": "sheet-close", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { "data-slot": "sheet-close", ...props });
 }
 function SheetPortal({
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(DialogPortal, { "data-slot": "sheet-portal", ...props });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal, { "data-slot": "sheet-portal", ...props });
 }
 function SheetOverlay({
   className,
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    DialogOverlay,
+    Overlay,
     {
       "data-slot": "sheet-overlay",
       className: cn(
@@ -32586,7 +33014,7 @@ function SheetContent({
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(SheetPortal, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(SheetOverlay, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      DialogContent,
+      Content,
       {
         "data-slot": "sheet-content",
         className: cn(
@@ -32600,7 +33028,7 @@ function SheetContent({
         ...props,
         children: [
           children,
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogClose, { className: "ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(Close, { className: "ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "size-4" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sr-only", children: "Close" })
           ] })
@@ -32624,7 +33052,7 @@ function SheetTitle({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    DialogTitle,
+    Title,
     {
       "data-slot": "sheet-title",
       className: cn("text-foreground font-semibold", className),
@@ -32641,7 +33069,19 @@ function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  const handleNav = (id2) => {
+  const handleNav = (route, id2) => {
+    if (route === "/work") {
+      window.history.pushState({}, "", "/work");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+      window.requestAnimationFrame(() => scrollTo("projects"));
+      return;
+    }
+    if (window.location.pathname !== "/") {
+      window.history.pushState({}, "", "/");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+      window.requestAnimationFrame(() => scrollTo(id2));
+      return;
+    }
     scrollTo(id2);
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -32657,10 +33097,10 @@ function Header() {
           "button",
           {
             type: "button",
-            onClick: () => handleNav("hero"),
+            onClick: () => handleNav("/", "hero"),
             "data-ocid": "header.logo",
             className: "font-display text-foreground text-lg font-bold tracking-tight transition-smooth hover:text-primary",
-            children: "My Work Portfolio"
+            children: profile.name
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "hidden items-center gap-1 md:flex", children: [
@@ -32668,7 +33108,7 @@ function Header() {
             "button",
             {
               type: "button",
-              onClick: () => handleNav(link.id),
+              onClick: () => handleNav(link.route, link.id),
               "data-ocid": `header.nav.${link.id}`,
               className: "text-muted-foreground hover:text-foreground rounded-md px-3 py-2 text-sm font-medium transition-smooth",
               children: link.label
@@ -32680,9 +33120,9 @@ function Header() {
             {
               size: "sm",
               className: "ml-2",
-              onClick: () => handleNav("contact"),
+              onClick: () => handleNav("/", "contact"),
               "data-ocid": "header.cta_button",
-              children: "Get in touch"
+              children: "Contact"
             }
           )
         ] }),
@@ -32704,7 +33144,7 @@ function Header() {
               "button",
               {
                 type: "button",
-                onClick: () => handleNav(link.id),
+                onClick: () => handleNav(link.route, link.id),
                 "data-ocid": `header.nav.${link.id}.mobile`,
                 className: "text-foreground hover:bg-accent hover:text-accent-foreground rounded-md px-3 py-3 text-left text-base font-medium transition-smooth",
                 children: link.label
@@ -32722,6 +33162,194 @@ function Layout({ children }) {
     /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1", children }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, {})
   ] });
+}
+const reviewerViewsKey = "terry-work-reviewer-views";
+function normalizeText(value) {
+  return value.toLowerCase().replace(/[^a-z0-9+#./\s-]/g, " ");
+}
+function getRouteState() {
+  const path = window.location.pathname.toLowerCase();
+  const hash = window.location.hash.toLowerCase();
+  const reviewMatch = path.match(/^\/work\/([a-z0-9-]+)$/i);
+  if (path === "/studio" || hash === "#studio" || hash === "#/studio") {
+    return { section: "studio", slug: null };
+  }
+  if (reviewMatch == null ? void 0 : reviewMatch[1]) {
+    return { section: "review", slug: reviewMatch[1] };
+  }
+  if (path === "/work") {
+    return { section: "work", slug: null };
+  }
+  return { section: "home", slug: null };
+}
+function analyzeContext(context) {
+  const normalized = normalizeText(context);
+  const matches = laneProfiles.map((laneProfile) => {
+    const terms = laneProfile.keywords.filter(
+      (keyword) => normalized.includes(keyword)
+    );
+    return {
+      lane: laneProfile.lane,
+      terms,
+      score: terms.length
+    };
+  }).filter((match) => match.score > 0).sort((a2, b2) => b2.score - a2.score);
+  const ranked = matches.length > 0 ? matches : [
+    { lane: "Enablement", terms: ["default"], score: 1 },
+    {
+      lane: "Learning Experience",
+      terms: ["default"],
+      score: 1
+    },
+    { lane: "AI Operations", terms: ["default"], score: 1 }
+  ];
+  const lanes = ranked.slice(0, 3).map((match) => match.lane);
+  const primaryLane = lanes[0];
+  const profile2 = getLaneProfile(primaryLane);
+  return {
+    primaryLane,
+    lanes,
+    angle: profile2.headline,
+    reviewerTakeaway: profile2.reviewerTakeaway,
+    matchedTerms: ranked.flatMap((match) => match.terms).slice(0, 10)
+  };
+}
+function scoreProject(project, lanes) {
+  const laneScore = project.lanes.reduce(
+    (score, lane) => score + (lanes.includes(lane) ? 5 : 0),
+    0
+  );
+  const proofScore = getProofPoints(project.proofIds).reduce(
+    (score, proofPoint) => score + proofPoint.lanes.filter((lane) => lanes.includes(lane)).length,
+    0
+  );
+  return laneScore + proofScore;
+}
+function getRecommendedProjects(lanes, limit = 3) {
+  return [...projects].sort((a2, b2) => scoreProject(b2, lanes) - scoreProject(a2, lanes)).slice(0, limit);
+}
+function getRecommendedProofPoints(lanes, limit = 4) {
+  return proofPoints.filter(
+    (proofPoint) => proofPoint.lanes.some((lane) => lanes.includes(lane))
+  ).slice(0, limit);
+}
+function getRecommendedSkills(lanes, limit = 8) {
+  const keywords = laneProfiles.filter((laneProfile) => lanes.includes(laneProfile.lane)).flatMap((laneProfile) => laneProfile.keywords);
+  const ranked = skills.filter((skill) => {
+    const normalized = normalizeText(skill);
+    return keywords.some((keyword) => normalized.includes(keyword));
+  });
+  return (ranked.length > 0 ? ranked : skills).slice(0, limit);
+}
+function buildStrategyReport(context) {
+  const analysis = analyzeContext(context);
+  const selectedProjects = getRecommendedProjects(analysis.lanes, 3);
+  const selectedProofPoints = getRecommendedProofPoints(analysis.lanes, 4);
+  const lowerContext = normalizeText(context);
+  const likelyProblems = [
+    lowerContext.includes("onboarding") ? "Ramp time or onboarding consistency is probably part of the business problem." : null,
+    lowerContext.includes("dashboard") || lowerContext.includes("analytics") ? "Leaders likely need clearer visibility into readiness, adoption, or performance signals." : null,
+    lowerContext.includes("ai") ? "The team may need practical AI workflow standards, not just experimentation." : null,
+    getLaneProfile(analysis.primaryLane).reviewerTakeaway
+  ].filter((item) => Boolean(item));
+  const evidenceGaps = selectedProjects.flatMap(
+    (project) => project.mediaNeeds.map((need) => `${project.title}: ${need}`)
+  ).slice(0, 5);
+  return {
+    likelyProblems,
+    projectMatches: selectedProjects.map((project) => ({
+      project,
+      reason: `Matches ${project.lanes.filter((lane) => analysis.lanes.includes(lane)).join(", ")} and connects to ${project.proofIds.length} proof signals.`
+    })),
+    proofPoints: selectedProofPoints,
+    evidenceGaps,
+    nextArtifact: getNextArtifact(analysis.lanes, selectedProjects),
+    fitScore: Math.min(
+      96,
+      62 + analysis.lanes.length * 5 + selectedProofPoints.length * 3
+    )
+  };
+}
+function getNextArtifact(lanes, selectedProjects) {
+  var _a2;
+  const firstProject = ((_a2 = selectedProjects[0]) == null ? void 0 : _a2.title) ?? "the strongest project";
+  if (lanes.includes("Sales Enablement")) {
+    return {
+      title: "Sales readiness scorecard",
+      format: "One-page dashboard prototype",
+      buildTime: "4 hours",
+      why: `Pair it with ${firstProject} to show ramp, coaching, and adoption signals clearly.`
+    };
+  }
+  if (lanes.includes("AI Operations")) {
+    return {
+      title: "AI workflow QA board",
+      format: "Small interactive dashboard",
+      buildTime: "6 hours",
+      why: `Pair it with ${firstProject} to show speed, review gates, and human approval.`
+    };
+  }
+  if (lanes.includes("Learning Experience")) {
+    return {
+      title: "Scenario practice prototype",
+      format: "Short interactive decision flow",
+      buildTime: "6 hours",
+      why: `Pair it with ${firstProject} to show how learning becomes workplace practice.`
+    };
+  }
+  return {
+    title: "Role-fit evidence brief",
+    format: "Case-study addendum",
+    buildTime: "2 hours",
+    why: `Use it to connect ${firstProject} to role problems, proof, and measurable outcomes.`
+  };
+}
+function createReviewerView(context, label) {
+  const analysis = analyzeContext(context);
+  const projectIds = getRecommendedProjects(analysis.lanes, 3).map(
+    (project) => project.id
+  );
+  const proofIds = getRecommendedProofPoints(analysis.lanes, 4).map(
+    (proofPoint) => proofPoint.id
+  );
+  const skillIds = getRecommendedSkills(analysis.lanes, 8);
+  return {
+    slug: createSlug(),
+    label: (label == null ? void 0 : label.trim()) || `${analysis.primaryLane} review path`,
+    context,
+    lanes: analysis.lanes,
+    projectIds,
+    proofIds,
+    skillIds,
+    createdAt: (/* @__PURE__ */ new Date()).toISOString()
+  };
+}
+function loadReviewerViews() {
+  try {
+    const raw = window.localStorage.getItem(reviewerViewsKey);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+function saveReviewerView(view) {
+  const views = loadReviewerViews();
+  const nextViews = [view, ...views.filter((item) => item.slug !== view.slug)];
+  window.localStorage.setItem(reviewerViewsKey, JSON.stringify(nextViews));
+  return nextViews;
+}
+function getReviewerView(slug) {
+  if (!slug) return null;
+  return loadReviewerViews().find((view) => view.slug === slug) ?? null;
+}
+function createSlug() {
+  const alphabet2 = "abcdefghjkmnpqrstuvwxyz23456789";
+  let slug = "";
+  for (let index2 = 0; index2 < 6; index2 += 1) {
+    slug += alphabet2[Math.floor(Math.random() * alphabet2.length)];
+  }
+  return slug;
 }
 const badgeVariants = cva(
   "inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
@@ -32786,7 +33414,9 @@ let invariant = () => {
 };
 const MotionGlobalConfig = {};
 const isNumericalString = (v2) => /^-?(?:\d+(?:\.\d+)?|\.\d+)$/u.test(v2);
-const isObject = (value) => typeof value === "object" && value !== null;
+function isObject(value) {
+  return typeof value === "object" && value !== null;
+}
 const isZeroValueString = (v2) => /^0[^.\s]+$/u.test(v2);
 // @__NO_SIDE_EFFECTS__
 function memo(callback) {
@@ -32798,10 +33428,11 @@ function memo(callback) {
   };
 }
 const noop = /* @__NO_SIDE_EFFECTS__ */ (any) => any;
-const pipe = (...transformers) => transformers.reduce((a2, b2) => (v2) => b2(a2(v2)));
+const combineFunctions = (a2, b2) => (v2) => b2(a2(v2));
+const pipe = (...transformers) => transformers.reduce(combineFunctions);
 const progress = /* @__NO_SIDE_EFFECTS__ */ (from, to, value) => {
-  const range = to - from;
-  return range ? (value - from) / range : 1;
+  const toFromDifference = to - from;
+  return toFromDifference === 0 ? 1 : (value - from) / toFromDifference;
 };
 class SubscriptionManager {
   constructor() {
@@ -32833,7 +33464,9 @@ class SubscriptionManager {
 }
 const secondsToMilliseconds = /* @__NO_SIDE_EFFECTS__ */ (seconds) => seconds * 1e3;
 const millisecondsToSeconds = /* @__NO_SIDE_EFFECTS__ */ (milliseconds) => milliseconds / 1e3;
-const velocityPerSecond = /* @__NO_SIDE_EFFECTS__ */ (velocity, frameDuration) => frameDuration ? velocity * (1e3 / frameDuration) : 0;
+function velocityPerSecond(velocity, frameDuration) {
+  return frameDuration ? velocity * (1e3 / frameDuration) : 0;
+}
 const calcBezier = (t, a1, a2) => (((1 - 3 * a2 + 3 * a1) * t + (3 * a2 - 6 * a1)) * t + 3 * a1) * t;
 const subdivisionPrecision = 1e-7;
 const subdivisionMaxIterations = 12;
@@ -32852,29 +33485,28 @@ function binarySubdivide(x2, lowerBound, upperBound, mX1, mX2) {
   } while (Math.abs(currentX) > subdivisionPrecision && ++i < subdivisionMaxIterations);
   return currentT;
 }
-// @__NO_SIDE_EFFECTS__
 function cubicBezier(mX1, mY1, mX2, mY2) {
   if (mX1 === mY1 && mX2 === mY2)
     return noop;
   const getTForX = (aX) => binarySubdivide(aX, 0, 1, mX1, mX2);
   return (t) => t === 0 || t === 1 ? t : calcBezier(getTForX(t), mY1, mY2);
 }
-const mirrorEasing = /* @__NO_SIDE_EFFECTS__ */ (easing) => (p2) => p2 <= 0.5 ? easing(2 * p2) / 2 : (2 - easing(2 * (1 - p2))) / 2;
-const reverseEasing = /* @__NO_SIDE_EFFECTS__ */ (easing) => (p2) => 1 - easing(1 - p2);
+const mirrorEasing = (easing) => (p2) => p2 <= 0.5 ? easing(2 * p2) / 2 : (2 - easing(2 * (1 - p2))) / 2;
+const reverseEasing = (easing) => (p2) => 1 - easing(1 - p2);
 const backOut = /* @__PURE__ */ cubicBezier(0.33, 1.53, 0.69, 0.99);
 const backIn = /* @__PURE__ */ reverseEasing(backOut);
 const backInOut = /* @__PURE__ */ mirrorEasing(backIn);
 const anticipate = (p2) => p2 >= 1 ? 1 : (p2 *= 2) < 1 ? 0.5 * backIn(p2) : 0.5 * (2 - Math.pow(2, -10 * (p2 - 1)));
 const circIn = (p2) => 1 - Math.sin(Math.acos(p2));
-const circOut = /* @__PURE__ */ reverseEasing(circIn);
-const circInOut = /* @__PURE__ */ mirrorEasing(circIn);
+const circOut = reverseEasing(circIn);
+const circInOut = mirrorEasing(circIn);
 const easeIn = /* @__PURE__ */ cubicBezier(0.42, 0, 1, 1);
 const easeOut = /* @__PURE__ */ cubicBezier(0, 0, 0.58, 1);
 const easeInOut = /* @__PURE__ */ cubicBezier(0.42, 0, 0.58, 1);
-const isEasingArray = /* @__NO_SIDE_EFFECTS__ */ (ease2) => {
+const isEasingArray = (ease2) => {
   return Array.isArray(ease2) && typeof ease2[0] !== "number";
 };
-const isBezierDefinition = /* @__NO_SIDE_EFFECTS__ */ (easing) => Array.isArray(easing) && typeof easing[0] === "number";
+const isBezierDefinition = (easing) => Array.isArray(easing) && typeof easing[0] === "number";
 const easingLookup = {
   linear: noop,
   easeIn,
@@ -32892,10 +33524,10 @@ const isValidEasing = (easing) => {
   return typeof easing === "string";
 };
 const easingDefinitionToFunction = (definition) => {
-  if (/* @__PURE__ */ isBezierDefinition(definition)) {
+  if (isBezierDefinition(definition)) {
     invariant(definition.length === 4);
     const [x1, y1, x2, y2] = definition;
-    return /* @__PURE__ */ cubicBezier(x1, y1, x2, y2);
+    return cubicBezier(x1, y1, x2, y2);
   } else if (isValidEasing(definition)) {
     return easingLookup[definition];
   }
@@ -32919,7 +33551,7 @@ const stepsOrder = [
   "postRender"
   // Compute
 ];
-function createRenderStep(runNextFrame) {
+function createRenderStep(runNextFrame, stepName) {
   let thisFrame = /* @__PURE__ */ new Set();
   let nextFrame = /* @__PURE__ */ new Set();
   let isProcessing = false;
@@ -33712,7 +34344,7 @@ spring.applyToOptions = (options) => {
 const velocitySampleDuration = 5;
 function getGeneratorVelocity(resolveValue, t, current) {
   const prevT = Math.max(t - velocitySampleDuration, 0);
-  return /* @__PURE__ */ velocityPerSecond(current - resolveValue(prevT), t - prevT);
+  return velocityPerSecond(current - resolveValue(prevT), t - prevT);
 }
 function inertia({ keyframes: keyframes2, velocity = 0, power = 0.8, timeConstant = 325, bounceDamping = 10, bounceStiffness = 500, modifyTarget, min, max, restDelta = 0.5, restSpeed }) {
   const origin = keyframes2[0];
@@ -33832,13 +34464,13 @@ function defaultOffset(arr) {
   return offset;
 }
 function convertOffsetToTimes(offset, duration) {
-  return offset.map((o2) => o2 * duration);
+  return offset.map((o) => o * duration);
 }
 function defaultEasing(values, easing) {
   return values.map(() => easing || easeInOut).splice(0, values.length - 1);
 }
 function keyframes({ duration = 300, keyframes: keyframeValues, times, ease: ease2 = "easeInOut" }) {
-  const easingFunctions = /* @__PURE__ */ isEasingArray(ease2) ? ease2.map(easingDefinitionToFunction) : easingDefinitionToFunction(ease2);
+  const easingFunctions = isEasingArray(ease2) ? ease2.map(easingDefinitionToFunction) : easingDefinitionToFunction(ease2);
   const state = {
     done: false,
     value: keyframeValues[0]
@@ -34285,7 +34917,7 @@ const transformPropOrder = [
   "skewX",
   "skewY"
 ];
-const transformProps = /* @__PURE__ */ (() => /* @__PURE__ */ new Set([...transformPropOrder, "pathRotation"]))();
+const transformProps = /* @__PURE__ */ (() => new Set(transformPropOrder))();
 const isNumOrPxType = (v2) => v2 === number || v2 === px;
 const transformKeys = /* @__PURE__ */ new Set(["x", "y", "z"]);
 const nonTranslationalTransformKeys = transformPropOrder.filter((key) => !transformKeys.has(key));
@@ -34480,7 +35112,7 @@ function mapEasingToNativeEasing(easing, duration) {
     return void 0;
   } else if (typeof easing === "function") {
     return supportsLinearEasing() ? generateLinearEasing(easing, duration) : "ease-out";
-  } else if (/* @__PURE__ */ isBezierDefinition(easing)) {
+  } else if (isBezierDefinition(easing)) {
     return cubicBezierAsString(easing);
   } else if (Array.isArray(easing)) {
     return easing.map((segmentEasing) => mapEasingToNativeEasing(segmentEasing, duration) || supportedWaapiEasing.easeOut);
@@ -34507,7 +35139,8 @@ function startWaapiAnimation(element, valueName, keyframes2, { delay: delay2 = 0
   };
   if (pseudoElement)
     options.pseudoElement = pseudoElement;
-  return element.animate(keyframeOptions, options);
+  const animation = element.animate(keyframeOptions, options);
+  return animation;
 }
 function isGenerator(type) {
   return typeof type === "function" && "applyToOptions" in type;
@@ -34967,6 +35600,181 @@ function calcChildStagger(children, child, delayChildren, staggerChildren = 0, s
   const delayIsFunction = typeof delayChildren === "function";
   return delayIsFunction ? delayChildren(index2, numChildren) : staggerDirection === 1 ? index2 * staggerChildren : maxStaggerDuration - index2 * staggerChildren;
 }
+const splitCSSVariableRegex = (
+  // eslint-disable-next-line redos-detector/no-unsafe-regex -- false positive, as it can match a lot of words
+  /^var\(--(?:([\w-]+)|([\w-]+), ?([a-zA-Z\d ()%#.,-]+))\)/u
+);
+function parseCSSVariable(current) {
+  const match = splitCSSVariableRegex.exec(current);
+  if (!match)
+    return [,];
+  const [, token1, token2, fallback] = match;
+  return [`--${token1 ?? token2}`, fallback];
+}
+function getVariableValue(current, element, depth = 1) {
+  const [token, fallback] = parseCSSVariable(current);
+  if (!token)
+    return;
+  const resolved = window.getComputedStyle(element).getPropertyValue(token);
+  if (resolved) {
+    const trimmed = resolved.trim();
+    return isNumericalString(trimmed) ? parseFloat(trimmed) : trimmed;
+  }
+  return isCSSVariableToken(fallback) ? getVariableValue(fallback, element, depth + 1) : fallback;
+}
+const underDampedSpring = {
+  type: "spring",
+  stiffness: 500,
+  damping: 25,
+  restSpeed: 10
+};
+const criticallyDampedSpring = (target) => ({
+  type: "spring",
+  stiffness: 550,
+  damping: target === 0 ? 2 * Math.sqrt(550) : 30,
+  restSpeed: 10
+});
+const keyframesTransition = {
+  type: "keyframes",
+  duration: 0.8
+};
+const ease = {
+  type: "keyframes",
+  ease: [0.25, 0.1, 0.35, 1],
+  duration: 0.3
+};
+const getDefaultTransition = (valueKey, { keyframes: keyframes2 }) => {
+  if (keyframes2.length > 2) {
+    return keyframesTransition;
+  } else if (transformProps.has(valueKey)) {
+    return valueKey.startsWith("scale") ? criticallyDampedSpring(keyframes2[1]) : underDampedSpring;
+  }
+  return ease;
+};
+function resolveTransition(transition, parentTransition) {
+  if ((transition == null ? void 0 : transition.inherit) && parentTransition) {
+    const { inherit: _2, ...rest } = transition;
+    return { ...parentTransition, ...rest };
+  }
+  return transition;
+}
+function getValueTransition(transition, key) {
+  const valueTransition = (transition == null ? void 0 : transition[key]) ?? (transition == null ? void 0 : transition["default"]) ?? transition;
+  if (valueTransition !== transition) {
+    return resolveTransition(valueTransition, transition);
+  }
+  return valueTransition;
+}
+const orchestrationKeys = /* @__PURE__ */ new Set([
+  "when",
+  "delay",
+  "delayChildren",
+  "staggerChildren",
+  "staggerDirection",
+  "repeat",
+  "repeatType",
+  "repeatDelay",
+  "from",
+  "elapsed"
+]);
+function isTransitionDefined(transition) {
+  for (const key in transition) {
+    if (!orchestrationKeys.has(key))
+      return true;
+  }
+  return false;
+}
+const animateMotionValue = (name, value, target, transition = {}, element, isHandoff) => (onComplete) => {
+  const valueTransition = getValueTransition(transition, name) || {};
+  const delay2 = valueTransition.delay || transition.delay || 0;
+  let { elapsed = 0 } = transition;
+  elapsed = elapsed - /* @__PURE__ */ secondsToMilliseconds(delay2);
+  const options = {
+    keyframes: Array.isArray(target) ? target : [null, target],
+    ease: "easeOut",
+    velocity: value.getVelocity(),
+    ...valueTransition,
+    delay: -elapsed,
+    onUpdate: (v2) => {
+      value.set(v2);
+      valueTransition.onUpdate && valueTransition.onUpdate(v2);
+    },
+    onComplete: () => {
+      onComplete();
+      valueTransition.onComplete && valueTransition.onComplete();
+    },
+    name,
+    motionValue: value,
+    element: isHandoff ? void 0 : element
+  };
+  if (!isTransitionDefined(valueTransition)) {
+    Object.assign(options, getDefaultTransition(name, options));
+  }
+  options.duration && (options.duration = /* @__PURE__ */ secondsToMilliseconds(options.duration));
+  options.repeatDelay && (options.repeatDelay = /* @__PURE__ */ secondsToMilliseconds(options.repeatDelay));
+  if (options.from !== void 0) {
+    options.keyframes[0] = options.from;
+  }
+  let shouldSkip = false;
+  if (options.type === false || options.duration === 0 && !options.repeatDelay) {
+    makeAnimationInstant(options);
+    if (options.delay === 0) {
+      shouldSkip = true;
+    }
+  }
+  if (MotionGlobalConfig.instantAnimations || MotionGlobalConfig.skipAnimations || (element == null ? void 0 : element.shouldSkipAnimations)) {
+    shouldSkip = true;
+    makeAnimationInstant(options);
+    options.delay = 0;
+  }
+  options.allowFlatten = !valueTransition.type && !valueTransition.ease;
+  if (shouldSkip && !isHandoff && value.get() !== void 0) {
+    const finalKeyframe = getFinalKeyframe(options.keyframes, valueTransition);
+    if (finalKeyframe !== void 0) {
+      frame.update(() => {
+        options.onUpdate(finalKeyframe);
+        options.onComplete();
+      });
+      return;
+    }
+  }
+  return valueTransition.isSync ? new JSAnimation(options) : new AsyncMotionValueAnimation(options);
+};
+function getValueState(visualElement) {
+  const state = [{}, {}];
+  visualElement == null ? void 0 : visualElement.values.forEach((value, key) => {
+    state[0][key] = value.get();
+    state[1][key] = value.getVelocity();
+  });
+  return state;
+}
+function resolveVariantFromProps(props, definition, custom, visualElement) {
+  if (typeof definition === "function") {
+    const [current, velocity] = getValueState(visualElement);
+    definition = definition(custom !== void 0 ? custom : props.custom, current, velocity);
+  }
+  if (typeof definition === "string") {
+    definition = props.variants && props.variants[definition];
+  }
+  if (typeof definition === "function") {
+    const [current, velocity] = getValueState(visualElement);
+    definition = definition(custom !== void 0 ? custom : props.custom, current, velocity);
+  }
+  return definition;
+}
+function resolveVariant(visualElement, definition, custom) {
+  const props = visualElement.getProps();
+  return resolveVariantFromProps(props, definition, custom !== void 0 ? custom : props.custom, visualElement);
+}
+const positionalKeys = /* @__PURE__ */ new Set([
+  "width",
+  "height",
+  "top",
+  "left",
+  "right",
+  "bottom",
+  ...transformPropOrder
+]);
 const MAX_VELOCITY_DELTA = 30;
 const isFloat = (value) => {
   return !isNaN(parseFloat(value));
@@ -35169,7 +35977,7 @@ class MotionValue {
       return 0;
     }
     const delta = Math.min(this.updatedAt - this.prevUpdatedAt, MAX_VELOCITY_DELTA);
-    return /* @__PURE__ */ velocityPerSecond(parseFloat(this.current) - parseFloat(this.prevFrameValue), delta);
+    return velocityPerSecond(parseFloat(this.current) - parseFloat(this.prevFrameValue), delta);
   }
   /**
    * Registers a new animation to control this `MotionValue`. Only one
@@ -35244,181 +36052,6 @@ class MotionValue {
 function motionValue(init, options) {
   return new MotionValue(init, options);
 }
-function resolveTransition(transition, parentTransition) {
-  if ((transition == null ? void 0 : transition.inherit) && parentTransition) {
-    const { inherit: _2, ...rest } = transition;
-    return { ...parentTransition, ...rest };
-  }
-  return transition;
-}
-function getValueTransition(transition, key) {
-  const valueTransition = (transition == null ? void 0 : transition[key]) ?? (transition == null ? void 0 : transition["default"]) ?? transition;
-  if (valueTransition !== transition) {
-    return resolveTransition(valueTransition, transition);
-  }
-  return valueTransition;
-}
-const underDampedSpring = {
-  type: "spring",
-  stiffness: 500,
-  damping: 25,
-  restSpeed: 10
-};
-const criticallyDampedSpring = (target) => ({
-  type: "spring",
-  stiffness: 550,
-  damping: target === 0 ? 2 * Math.sqrt(550) : 30,
-  restSpeed: 10
-});
-const keyframesTransition = {
-  type: "keyframes",
-  duration: 0.8
-};
-const ease = {
-  type: "keyframes",
-  ease: [0.25, 0.1, 0.35, 1],
-  duration: 0.3
-};
-const getDefaultTransition = (valueKey, { keyframes: keyframes2 }) => {
-  if (keyframes2.length > 2) {
-    return keyframesTransition;
-  } else if (transformProps.has(valueKey)) {
-    return valueKey.startsWith("scale") ? criticallyDampedSpring(keyframes2[1]) : underDampedSpring;
-  }
-  return ease;
-};
-const orchestrationKeys = /* @__PURE__ */ new Set([
-  "when",
-  "delay",
-  "delayChildren",
-  "staggerChildren",
-  "staggerDirection",
-  "repeat",
-  "repeatType",
-  "repeatDelay",
-  "from",
-  "elapsed"
-]);
-function isTransitionDefined(transition) {
-  for (const key in transition) {
-    if (!orchestrationKeys.has(key))
-      return true;
-  }
-  return false;
-}
-const animateMotionValue = (name, value, target, transition = {}, element, isHandoff) => (onComplete) => {
-  const valueTransition = getValueTransition(transition, name) || {};
-  const delay2 = valueTransition.delay || transition.delay || 0;
-  let { elapsed = 0 } = transition;
-  elapsed = elapsed - /* @__PURE__ */ secondsToMilliseconds(delay2);
-  const options = {
-    keyframes: Array.isArray(target) ? target : [null, target],
-    ease: "easeOut",
-    velocity: value.getVelocity(),
-    ...valueTransition,
-    delay: -elapsed,
-    onUpdate: (v2) => {
-      value.set(v2);
-      valueTransition.onUpdate && valueTransition.onUpdate(v2);
-    },
-    onComplete: () => {
-      onComplete();
-      valueTransition.onComplete && valueTransition.onComplete();
-    },
-    name,
-    motionValue: value,
-    element: isHandoff ? void 0 : element
-  };
-  if (!isTransitionDefined(valueTransition)) {
-    Object.assign(options, getDefaultTransition(name, options));
-  }
-  options.duration && (options.duration = /* @__PURE__ */ secondsToMilliseconds(options.duration));
-  options.repeatDelay && (options.repeatDelay = /* @__PURE__ */ secondsToMilliseconds(options.repeatDelay));
-  if (options.from !== void 0) {
-    options.keyframes[0] = options.from;
-  }
-  let shouldSkip = false;
-  if (options.type === false || options.duration === 0 && !options.repeatDelay) {
-    makeAnimationInstant(options);
-    if (options.delay === 0) {
-      shouldSkip = true;
-    }
-  }
-  if (MotionGlobalConfig.instantAnimations || MotionGlobalConfig.skipAnimations || (element == null ? void 0 : element.shouldSkipAnimations) || valueTransition.skipAnimations) {
-    shouldSkip = true;
-    makeAnimationInstant(options);
-    options.delay = 0;
-  }
-  options.allowFlatten = !valueTransition.type && !valueTransition.ease;
-  if (shouldSkip && !isHandoff && value.get() !== void 0) {
-    const finalKeyframe = getFinalKeyframe(options.keyframes, valueTransition);
-    if (finalKeyframe !== void 0) {
-      frame.update(() => {
-        options.onUpdate(finalKeyframe);
-        options.onComplete();
-      });
-      return;
-    }
-  }
-  return valueTransition.isSync ? new JSAnimation(options) : new AsyncMotionValueAnimation(options);
-};
-const splitCSSVariableRegex = (
-  // eslint-disable-next-line redos-detector/no-unsafe-regex -- false positive, as it can match a lot of words
-  /^var\(--(?:([\w-]+)|([\w-]+), ?([a-zA-Z\d ()%#.,-]+))\)/u
-);
-function parseCSSVariable(current) {
-  const match = splitCSSVariableRegex.exec(current);
-  if (!match)
-    return [,];
-  const [, token1, token2, fallback] = match;
-  return [`--${token1 ?? token2}`, fallback];
-}
-function getVariableValue(current, element, depth = 1) {
-  const [token, fallback] = parseCSSVariable(current);
-  if (!token)
-    return;
-  const resolved = window.getComputedStyle(element).getPropertyValue(token);
-  if (resolved) {
-    const trimmed = resolved.trim();
-    return isNumericalString(trimmed) ? parseFloat(trimmed) : trimmed;
-  }
-  return isCSSVariableToken(fallback) ? getVariableValue(fallback, element, depth + 1) : fallback;
-}
-function getValueState(visualElement) {
-  const state = [{}, {}];
-  visualElement == null ? void 0 : visualElement.values.forEach((value, key) => {
-    state[0][key] = value.get();
-    state[1][key] = value.getVelocity();
-  });
-  return state;
-}
-function resolveVariantFromProps(props, definition, custom, visualElement) {
-  if (typeof definition === "function") {
-    const [current, velocity] = getValueState(visualElement);
-    definition = definition(custom !== void 0 ? custom : props.custom, current, velocity);
-  }
-  if (typeof definition === "string") {
-    definition = props.variants && props.variants[definition];
-  }
-  if (typeof definition === "function") {
-    const [current, velocity] = getValueState(visualElement);
-    definition = definition(custom !== void 0 ? custom : props.custom, current, velocity);
-  }
-  return definition;
-}
-function resolveVariant(visualElement, definition, custom) {
-  const props = visualElement.getProps();
-  return resolveVariantFromProps(props, definition, custom !== void 0 ? custom : props.custom, visualElement);
-}
-const positionalKeys = /* @__PURE__ */ new Set([
-  "width",
-  "height",
-  "top",
-  "left",
-  "right",
-  "bottom",
-  ...transformPropOrder
-]);
 const isKeyframesTarget = (v2) => {
   return Array.isArray(v2);
 };
@@ -35473,15 +36106,10 @@ function animateTarget(visualElement, targetAndTransition, { delay: delay2 = 0, 
   const defaultTransition = visualElement.getDefaultTransition();
   transition = transition ? resolveTransition(transition, defaultTransition) : defaultTransition;
   const reduceMotion = transition == null ? void 0 : transition.reduceMotion;
-  const skipAnimations = transition == null ? void 0 : transition.skipAnimations;
   if (transitionOverride)
     transition = transitionOverride;
   const animations2 = [];
   const animationTypeState = type && visualElement.animationState && visualElement.animationState.getState()[type];
-  const path = transition == null ? void 0 : transition.path;
-  if (path) {
-    path.animateVisualElement(visualElement, target, transition, delay2, animations2);
-  }
   for (const key in target) {
     const value = visualElement.getValue(key, visualElement.latestValues[key] ?? null);
     const valueTarget = target[key];
@@ -35492,8 +36120,6 @@ function animateTarget(visualElement, targetAndTransition, { delay: delay2 = 0, 
       delay: delay2,
       ...getValueTransition(transition || {}, key)
     };
-    if (skipAnimations)
-      valueTransition.skipAnimations = true;
     const currentValue = value.get();
     if (currentValue !== void 0 && !value.isAnimating() && !Array.isArray(valueTarget) && valueTarget === currentValue && !valueTransition.velocity) {
       frame.update(() => value.set(valueTarget));
@@ -35629,12 +36255,6 @@ const int = {
 };
 const transformValueTypes = {
   rotate: degrees,
-  /**
-   * Internal channel for `transition.path` orientToPath. Composed onto
-   * `rotate` at the transform-build sites so the user's `rotate` is
-   * never read or overwritten. Not part of `transformPropOrder`.
-   */
-  pathRotation: degrees,
   rotateX: degrees,
   rotateY: degrees,
   rotateZ: degrees,
@@ -35863,12 +36483,6 @@ class DOMKeyframesResolver extends KeyframeResolver {
     this.resolveNoneKeyframes();
   }
 }
-const cornerRadiusProps = [
-  "borderTopLeftRadius",
-  "borderTopRightRadius",
-  "borderBottomRightRadius",
-  "borderBottomLeftRadius"
-];
 function resolveElements(elementOrSelector, scope, selectorCache) {
   if (elementOrSelector == null) {
     return [];
@@ -36061,10 +36675,9 @@ function press(targetOrSelector, onPressStart, options = {}) {
       claimedPointerDownEvents.add(startEvent);
     }
     const onPressEnd = onPressStart(target, startEvent);
-    const endEventOptions = { ...eventOptions, capture: true };
     const onPointerEnd = (endEvent, success) => {
-      window.removeEventListener("pointerup", onPointerUp, endEventOptions);
-      window.removeEventListener("pointercancel", onPointerCancel, endEventOptions);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerCancel);
       if (isPressing.has(target)) {
         isPressing.delete(target);
       }
@@ -36081,8 +36694,8 @@ function press(targetOrSelector, onPressStart, options = {}) {
     const onPointerCancel = (cancelEvent) => {
       onPointerEnd(cancelEvent, false);
     };
-    window.addEventListener("pointerup", onPointerUp, endEventOptions);
-    window.addEventListener("pointercancel", onPointerCancel, endEventOptions);
+    window.addEventListener("pointerup", onPointerUp, eventOptions);
+    window.addEventListener("pointercancel", onPointerCancel, eventOptions);
   };
   targets.forEach((target) => {
     const pointerDownTarget = options.useGlobalTarget ? window : target;
@@ -36461,6 +37074,8 @@ class VisualElement {
       removeOnChange();
       if (removeSyncCheck)
         removeSyncCheck();
+      if (value.owner)
+        value.stop();
     });
   }
   sortNodePosition(other) {
@@ -36867,11 +37482,6 @@ function buildTransform(latestValues, transform, transformTemplate) {
       }
     }
   }
-  const pathRotation = latestValues.pathRotation;
-  if (pathRotation) {
-    transformIsDefault = false;
-    transformString += `rotate(${getValueAsType(pathRotation, numberValueTypes.pathRotation)}) `;
-  }
   transformString = transformString.trim();
   if (transformTemplate) {
     transformString = transformTemplate(transform, transformIsDefault ? "" : transformString);
@@ -36969,7 +37579,12 @@ const correctBoxShadow = {
 const scaleCorrectors = {
   borderRadius: {
     ...correctBorderRadius,
-    applyTo: [...cornerRadiusProps]
+    applyTo: [
+      "borderTopLeftRadius",
+      "borderTopRightRadius",
+      "borderBottomLeftRadius",
+      "borderBottomRightRadius"
+    ]
   },
   borderTopLeftRadius: correctBorderRadius,
   borderTopRightRadius: correctBorderRadius,
@@ -37291,7 +37906,7 @@ function createAnimationState(visualElement) {
           continue;
         let valueHasChanged = false;
         if (isKeyframesTarget(next) && isKeyframesTarget(prev)) {
-          valueHasChanged = !shallowCompare(next, prev) || variantDidChange;
+          valueHasChanged = !shallowCompare(next, prev);
         } else {
           valueHasChanged = next !== prev;
         }
@@ -37543,13 +38158,11 @@ function buildProjectionTransform(delta, treeScale, latestTransform) {
     transform += `scale(${1 / treeScale.x}, ${1 / treeScale.y}) `;
   }
   if (latestTransform) {
-    const { transformPerspective, rotate: rotate2, pathRotation, rotateX, rotateY, skewX, skewY } = latestTransform;
+    const { transformPerspective, rotate: rotate2, rotateX, rotateY, skewX, skewY } = latestTransform;
     if (transformPerspective)
       transform = `perspective(${transformPerspective}px) ${transform}`;
     if (rotate2)
       transform += `rotate(${rotate2}deg) `;
-    if (pathRotation)
-      transform += `rotate(${pathRotation}deg) `;
     if (rotateX)
       transform += `rotateX(${rotateX}deg) `;
     if (rotateY)
@@ -37566,7 +38179,13 @@ function buildProjectionTransform(delta, treeScale, latestTransform) {
   }
   return transform || "none";
 }
-const numBorders = cornerRadiusProps.length;
+const borderLabels = [
+  "borderTopLeftRadius",
+  "borderTopRightRadius",
+  "borderBottomLeftRadius",
+  "borderBottomRightRadius"
+];
+const numBorders = borderLabels.length;
 const asNumber = (value) => typeof value === "string" ? parseFloat(value) : value;
 const isPx = (value) => typeof value === "number" || px.test(value);
 function mixValues(target, follow, lead, progress2, shouldCrossfadeOpacity, isOnlyMember) {
@@ -37577,7 +38196,7 @@ function mixValues(target, follow, lead, progress2, shouldCrossfadeOpacity, isOn
     target.opacity = mixNumber$1(follow.opacity ?? 1, lead.opacity ?? 1, progress2);
   }
   for (let i = 0; i < numBorders; i++) {
-    const borderLabel = cornerRadiusProps[i];
+    const borderLabel = borderLabels[i];
     let followRadius = getRadius(follow, borderLabel);
     let leadRadius = getRadius(lead, borderLabel);
     if (followRadius === void 0 && leadRadius === void 0)
@@ -37619,7 +38238,7 @@ function animateSingleValue(value, keyframes2, options) {
 }
 function addDomEvent(target, eventName, handler, options = { passive: true }) {
   target.addEventListener(eventName, handler, options);
-  return () => target.removeEventListener(eventName, handler, options);
+  return () => target.removeEventListener(eventName, handler);
 }
 const compareByDepth = (a2, b2) => a2.depth - b2.depth;
 class FlatTree {
@@ -37919,7 +38538,7 @@ function createProjectionNode$1({ attachResizeListener, defaultParent, measureSc
               animationOptions.type = false;
             }
             this.startAnimation(animationOptions);
-            this.setAnimationOrigin(delta, hasOnlyRelativeTargetChanged, animationOptions.path);
+            this.setAnimationOrigin(delta, hasOnlyRelativeTargetChanged);
           } else {
             if (!hasLayoutChanged) {
               finishAnimation(this);
@@ -38398,7 +39017,7 @@ function createProjectionNode$1({ attachResizeListener, defaultParent, measureSc
       this.projectionDelta = createDelta();
       this.projectionDeltaWithTransform = createDelta();
     }
-    setAnimationOrigin(delta, hasOnlyRelativeTargetChanged = false, pathFn) {
+    setAnimationOrigin(delta, hasOnlyRelativeTargetChanged = false) {
       const snapshot = this.snapshot;
       const snapshotLatestValues = snapshot ? snapshot.latestValues : {};
       const mixedValues = { ...this.latestValues };
@@ -38416,23 +39035,10 @@ function createProjectionNode$1({ attachResizeListener, defaultParent, measureSc
       const shouldCrossfadeOpacity = Boolean(isSharedLayoutAnimation && !isOnlyMember && this.options.crossfade === true && !this.path.some(hasOpacityCrossfade));
       this.animationProgress = 0;
       let prevRelativeTarget;
-      const interpolate2 = pathFn == null ? void 0 : pathFn.interpolateProjection(delta);
       this.mixTargetDelta = (latest) => {
         const progress2 = latest / 1e3;
-        const point = interpolate2 == null ? void 0 : interpolate2(progress2);
-        if (point) {
-          targetDelta.x.translate = point.x;
-          targetDelta.x.scale = mixNumber$1(delta.x.scale, 1, progress2);
-          targetDelta.x.origin = delta.x.origin;
-          targetDelta.x.originPoint = delta.x.originPoint;
-          targetDelta.y.translate = point.y;
-          targetDelta.y.scale = mixNumber$1(delta.y.scale, 1, progress2);
-          targetDelta.y.origin = delta.y.origin;
-          targetDelta.y.originPoint = delta.y.originPoint;
-        } else {
-          mixAxisDeltaLinear(targetDelta.x, delta.x, progress2);
-          mixAxisDeltaLinear(targetDelta.y, delta.y, progress2);
-        }
+        mixAxisDelta(targetDelta.x, delta.x, progress2);
+        mixAxisDelta(targetDelta.y, delta.y, progress2);
         this.setTargetDelta(targetDelta);
         if (this.relativeTarget && this.relativeTargetOrigin && this.layout && this.relativeParent && this.relativeParent.layout) {
           calcRelativePosition(relativeLayout, this.layout.layoutBox, this.relativeParent.layout.layoutBox, this.options.layoutAnchor || void 0);
@@ -38447,11 +39053,6 @@ function createProjectionNode$1({ attachResizeListener, defaultParent, measureSc
         if (isSharedLayoutAnimation) {
           this.animationValues = mixedValues;
           mixValues(mixedValues, snapshotLatestValues, this.latestValues, progress2, shouldCrossfadeOpacity, isOnlyMember);
-        }
-        if (point && point.rotate !== void 0) {
-          if (!this.animationValues)
-            this.animationValues = mixedValues;
-          this.animationValues.pathRotation = point.rotate;
         }
         this.root.scheduleUpdateProjection();
         this.scheduleRender();
@@ -38479,6 +39080,8 @@ function createProjectionNode$1({ attachResizeListener, defaultParent, measureSc
           onUpdate: (latest) => {
             this.mixTargetDelta(latest);
             options.onUpdate && options.onUpdate(latest);
+          },
+          onStop: () => {
           },
           onComplete: () => {
             options.onComplete && options.onComplete();
@@ -38814,7 +39417,7 @@ function resetSkewAndRotation(node) {
 function removeLeadSnapshots(stack) {
   stack.removeLeadSnapshot();
 }
-function mixAxisDeltaLinear(output, delta, p2) {
+function mixAxisDelta(output, delta, p2) {
   output.translate = mixNumber$1(delta.translate, 0, p2);
   output.scale = mixNumber$1(delta.scale, 1, p2);
   output.origin = delta.origin;
@@ -39231,9 +39834,6 @@ function useMotionRef(visualState, visualElement, externalRef) {
     if (instance) {
       (_a2 = visualState.onMount) == null ? void 0 : _a2.call(visualState, instance);
     }
-    if (visualElement) {
-      instance ? visualElement.mount(instance) : visualElement.unmount();
-    }
     const ref = externalRefContainer.current;
     if (typeof ref === "function") {
       if (instance) {
@@ -39249,6 +39849,9 @@ function useMotionRef(visualState, visualElement, externalRef) {
       }
     } else if (ref) {
       ref.current = instance;
+    }
+    if (visualElement) {
+      instance ? visualElement.mount(instance) : visualElement.unmount();
     }
   }, [visualElement]);
 }
@@ -39484,7 +40087,7 @@ class ExitAnimationFeature extends Feature {
     if (isPresent && prevIsPresent === false) {
       if (this.isExitComplete) {
         const { initial, custom } = this.node.getProps();
-        if (typeof initial === "string" || typeof initial === "object" && initial !== null && !Array.isArray(initial)) {
+        if (typeof initial === "string") {
           const resolved = resolveVariant(this.node, initial, custom);
           if (resolved) {
             const { transition, transitionEnd, ...target } = resolved;
@@ -39622,8 +40225,7 @@ class PanSession {
     this.history = [{ ...point, timestamp }];
     const { onSessionStart } = handlers;
     onSessionStart && onSessionStart(event, getPanInfo(initialInfo, this.history));
-    const eventOptions = { passive: true, capture: true };
-    this.removeListeners = pipe(addPointerEvent(this.contextWindow, "pointermove", this.handlePointerMove, eventOptions), addPointerEvent(this.contextWindow, "pointerup", this.handlePointerUp, eventOptions), addPointerEvent(this.contextWindow, "pointercancel", this.handlePointerUp, eventOptions));
+    this.removeListeners = pipe(addPointerEvent(this.contextWindow, "pointermove", this.handlePointerMove), addPointerEvent(this.contextWindow, "pointerup", this.handlePointerUp), addPointerEvent(this.contextWindow, "pointercancel", this.handlePointerUp));
     if (element) {
       this.startScrollTracking(element);
     }
@@ -40032,10 +40634,6 @@ class VisualElementDragControls {
     const { projection } = this.visualElement;
     if (!projection || !projection.layout)
       return false;
-    if (projection.root) {
-      projection.root.scroll = void 0;
-      projection.root.updateScroll();
-    }
     const constraintsBox = measurePageBox(constraintsElement, projection.root, this.visualElement.getTransformPagePoint());
     let measuredConstraints = calcViewportConstraints(projection.layout.layoutBox, constraintsBox);
     if (onMeasureDragConstraints) {
@@ -40092,7 +40690,7 @@ class VisualElementDragControls {
     const dragKey = `_drag${axis.toUpperCase()}`;
     const props = this.visualElement.getProps();
     const externalMotionValue = props[dragKey];
-    return externalMotionValue ? externalMotionValue : this.visualElement.getValue(axis, this.visualElement.latestValues[axis] ?? 0);
+    return externalMotionValue ? externalMotionValue : this.visualElement.getValue(axis, (props.initial ? props.initial[axis] : void 0) || 0);
   }
   snapToCursor(point) {
     eachAxis((axis) => {
@@ -40623,8 +41221,7 @@ const featureBundle = {
   ...drag,
   ...layout
 };
-const motion$1 = /* @__PURE__ */ createMotionProxy(featureBundle, createDomVisualElement);
-const motion = motion$1;
+const motion = /* @__PURE__ */ createMotionProxy(featureBundle, createDomVisualElement);
 function About() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "about", className: "bg-background py-20 md:py-28", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid items-center gap-12 md:grid-cols-2 md:gap-16", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -40638,8 +41235,8 @@ function About() {
         children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-muted relative h-64 w-64 overflow-hidden rounded-full shadow-elevated-lg sm:h-80 sm:w-80", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           "img",
           {
-            src: "/assets/generated/profile.dim_800x800.png",
-            alt: "Portrait of the designer",
+            src: "/assets/portfolio/terry-profile.png",
+            alt: "Portrait of Terry Brutus",
             loading: "lazy",
             className: "h-full w-full object-cover"
           }
@@ -40656,378 +41253,41 @@ function About() {
         className: "flex flex-col gap-5",
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "About" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl", children: "A designer who listens first." }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-base leading-relaxed", children: "I'm a product designer and visual storyteller with a decade of experience turning complex problems into calm, usable interfaces. My work spans product design, brand identity, and editorial illustration — unified by a belief that good design is mostly about subtraction. I work best with small teams who care about craft and want a partner, not a vendor." }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-base leading-relaxed", children: "Currently based in the Pacific Northwest, available for select commissions and full-time roles." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl", children: "Systems thinker, learning designer, practical builder." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-base leading-relaxed", children: [
+            profile.shortSummary,
+            " My background sits at the intersection of instructional systems design, enablement strategy, AI-assisted workflow design, and product-minded prototyping."
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-base leading-relaxed", children: "I work best where the challenge is messy: people need to learn something, leaders need evidence, and the system needs to become easier to run after the project ships." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-3 pt-2", children: humanHighlights.map((highlight) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "border-border bg-card rounded-lg border p-4 shadow-elevated",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: highlight.label }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 text-sm leading-relaxed", children: highlight.detail })
+              ]
+            },
+            highlight.label
+          )) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2 pt-2", children: skills.map((skill) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", className: "px-3 py-1", children: skill }, skill)) })
         ]
       }
     )
   ] }) }) });
 }
-function Input({ className, type, ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "input",
-    {
-      type,
-      "data-slot": "input",
-      className: cn(
-        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-        className
-      ),
-      ...props
-    }
-  );
-}
-var NAME = "Label";
-var Label$1 = reactExports.forwardRef((props, forwardedRef) => {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Primitive.label,
-    {
-      ...props,
-      ref: forwardedRef,
-      onMouseDown: (event) => {
-        var _a2;
-        const target = event.target;
-        if (target.closest("button, input, select, textarea")) return;
-        (_a2 = props.onMouseDown) == null ? void 0 : _a2.call(props, event);
-        if (!event.defaultPrevented && event.detail > 1) event.preventDefault();
-      }
-    }
-  );
-});
-Label$1.displayName = NAME;
-var Root = Label$1;
-function Label({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root,
-    {
-      "data-slot": "label",
-      className: cn(
-        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-        className
-      ),
-      ...props
-    }
-  );
-}
-function Textarea({ className, ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "textarea",
-    {
-      "data-slot": "textarea",
-      className: cn(
-        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        className
-      ),
-      ...props
-    }
-  );
-}
-var jt = (n) => {
-  switch (n) {
-    case "success":
-      return ee;
-    case "info":
-      return ae;
-    case "warning":
-      return oe;
-    case "error":
-      return se;
-    default:
-      return null;
-  }
-}, te = Array(12).fill(0), Yt = ({ visible: n, className: e }) => o.createElement("div", { className: ["sonner-loading-wrapper", e].filter(Boolean).join(" "), "data-visible": n }, o.createElement("div", { className: "sonner-spinner" }, te.map((t, a2) => o.createElement("div", { className: "sonner-loading-bar", key: `spinner-bar-${a2}` })))), ee = o.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", height: "20", width: "20" }, o.createElement("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z", clipRule: "evenodd" })), oe = o.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", height: "20", width: "20" }, o.createElement("path", { fillRule: "evenodd", d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z", clipRule: "evenodd" })), ae = o.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", height: "20", width: "20" }, o.createElement("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z", clipRule: "evenodd" })), se = o.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", height: "20", width: "20" }, o.createElement("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z", clipRule: "evenodd" })), Ot = o.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }, o.createElement("line", { x1: "18", y1: "6", x2: "6", y2: "18" }), o.createElement("line", { x1: "6", y1: "6", x2: "18", y2: "18" }));
-var Ft = () => {
-  let [n, e] = o.useState(document.hidden);
-  return o.useEffect(() => {
-    let t = () => {
-      e(document.hidden);
-    };
-    return document.addEventListener("visibilitychange", t), () => window.removeEventListener("visibilitychange", t);
-  }, []), n;
+const iconByLabel = {
+  Email: Mail,
+  GitHub: Github,
+  LinkedIn: Linkedin
 };
-var bt = 1, yt = class {
-  constructor() {
-    this.subscribe = (e) => (this.subscribers.push(e), () => {
-      let t = this.subscribers.indexOf(e);
-      this.subscribers.splice(t, 1);
-    });
-    this.publish = (e) => {
-      this.subscribers.forEach((t) => t(e));
-    };
-    this.addToast = (e) => {
-      this.publish(e), this.toasts = [...this.toasts, e];
-    };
-    this.create = (e) => {
-      var S2;
-      let { message: t, ...a2 } = e, u2 = typeof (e == null ? void 0 : e.id) == "number" || ((S2 = e.id) == null ? void 0 : S2.length) > 0 ? e.id : bt++, f2 = this.toasts.find((g2) => g2.id === u2), w2 = e.dismissible === void 0 ? true : e.dismissible;
-      return this.dismissedToasts.has(u2) && this.dismissedToasts.delete(u2), f2 ? this.toasts = this.toasts.map((g2) => g2.id === u2 ? (this.publish({ ...g2, ...e, id: u2, title: t }), { ...g2, ...e, id: u2, dismissible: w2, title: t }) : g2) : this.addToast({ title: t, ...a2, dismissible: w2, id: u2 }), u2;
-    };
-    this.dismiss = (e) => (this.dismissedToasts.add(e), e || this.toasts.forEach((t) => {
-      this.subscribers.forEach((a2) => a2({ id: t.id, dismiss: true }));
-    }), this.subscribers.forEach((t) => t({ id: e, dismiss: true })), e);
-    this.message = (e, t) => this.create({ ...t, message: e });
-    this.error = (e, t) => this.create({ ...t, message: e, type: "error" });
-    this.success = (e, t) => this.create({ ...t, type: "success", message: e });
-    this.info = (e, t) => this.create({ ...t, type: "info", message: e });
-    this.warning = (e, t) => this.create({ ...t, type: "warning", message: e });
-    this.loading = (e, t) => this.create({ ...t, type: "loading", message: e });
-    this.promise = (e, t) => {
-      if (!t) return;
-      let a2;
-      t.loading !== void 0 && (a2 = this.create({ ...t, promise: e, type: "loading", message: t.loading, description: typeof t.description != "function" ? t.description : void 0 }));
-      let u2 = e instanceof Promise ? e : e(), f2 = a2 !== void 0, w2, S2 = u2.then(async (i) => {
-        if (w2 = ["resolve", i], o.isValidElement(i)) f2 = false, this.create({ id: a2, type: "default", message: i });
-        else if (ie(i) && !i.ok) {
-          f2 = false;
-          let T2 = typeof t.error == "function" ? await t.error(`HTTP error! status: ${i.status}`) : t.error, F2 = typeof t.description == "function" ? await t.description(`HTTP error! status: ${i.status}`) : t.description;
-          this.create({ id: a2, type: "error", message: T2, description: F2 });
-        } else if (t.success !== void 0) {
-          f2 = false;
-          let T2 = typeof t.success == "function" ? await t.success(i) : t.success, F2 = typeof t.description == "function" ? await t.description(i) : t.description;
-          this.create({ id: a2, type: "success", message: T2, description: F2 });
-        }
-      }).catch(async (i) => {
-        if (w2 = ["reject", i], t.error !== void 0) {
-          f2 = false;
-          let D = typeof t.error == "function" ? await t.error(i) : t.error, T2 = typeof t.description == "function" ? await t.description(i) : t.description;
-          this.create({ id: a2, type: "error", message: D, description: T2 });
-        }
-      }).finally(() => {
-        var i;
-        f2 && (this.dismiss(a2), a2 = void 0), (i = t.finally) == null || i.call(t);
-      }), g2 = () => new Promise((i, D) => S2.then(() => w2[0] === "reject" ? D(w2[1]) : i(w2[1])).catch(D));
-      return typeof a2 != "string" && typeof a2 != "number" ? { unwrap: g2 } : Object.assign(a2, { unwrap: g2 });
-    };
-    this.custom = (e, t) => {
-      let a2 = (t == null ? void 0 : t.id) || bt++;
-      return this.create({ jsx: e(a2), id: a2, ...t }), a2;
-    };
-    this.getActiveToasts = () => this.toasts.filter((e) => !this.dismissedToasts.has(e.id));
-    this.subscribers = [], this.toasts = [], this.dismissedToasts = /* @__PURE__ */ new Set();
-  }
-}, v = new yt(), ne = (n, e) => {
-  let t = (e == null ? void 0 : e.id) || bt++;
-  return v.addToast({ title: n, ...e, id: t }), t;
-}, ie = (n) => n && typeof n == "object" && "ok" in n && typeof n.ok == "boolean" && "status" in n && typeof n.status == "number", le = ne, ce = () => v.toasts, de = () => v.getActiveToasts(), ue = Object.assign(le, { success: v.success, info: v.info, warning: v.warning, error: v.error, custom: v.custom, message: v.message, promise: v.promise, dismiss: v.dismiss, loading: v.loading }, { getHistory: ce, getToasts: de });
-function wt(n, { insertAt: e } = {}) {
-  if (typeof document == "undefined") return;
-  let t = document.head || document.getElementsByTagName("head")[0], a2 = document.createElement("style");
-  a2.type = "text/css", e === "top" && t.firstChild ? t.insertBefore(a2, t.firstChild) : t.appendChild(a2), a2.styleSheet ? a2.styleSheet.cssText = n : a2.appendChild(document.createTextNode(n));
-}
-wt(`:where(html[dir="ltr"]),:where([data-sonner-toaster][dir="ltr"]){--toast-icon-margin-start: -3px;--toast-icon-margin-end: 4px;--toast-svg-margin-start: -1px;--toast-svg-margin-end: 0px;--toast-button-margin-start: auto;--toast-button-margin-end: 0;--toast-close-button-start: 0;--toast-close-button-end: unset;--toast-close-button-transform: translate(-35%, -35%)}:where(html[dir="rtl"]),:where([data-sonner-toaster][dir="rtl"]){--toast-icon-margin-start: 4px;--toast-icon-margin-end: -3px;--toast-svg-margin-start: 0px;--toast-svg-margin-end: -1px;--toast-button-margin-start: 0;--toast-button-margin-end: auto;--toast-close-button-start: unset;--toast-close-button-end: 0;--toast-close-button-transform: translate(35%, -35%)}:where([data-sonner-toaster]){position:fixed;width:var(--width);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;--gray1: hsl(0, 0%, 99%);--gray2: hsl(0, 0%, 97.3%);--gray3: hsl(0, 0%, 95.1%);--gray4: hsl(0, 0%, 93%);--gray5: hsl(0, 0%, 90.9%);--gray6: hsl(0, 0%, 88.7%);--gray7: hsl(0, 0%, 85.8%);--gray8: hsl(0, 0%, 78%);--gray9: hsl(0, 0%, 56.1%);--gray10: hsl(0, 0%, 52.3%);--gray11: hsl(0, 0%, 43.5%);--gray12: hsl(0, 0%, 9%);--border-radius: 8px;box-sizing:border-box;padding:0;margin:0;list-style:none;outline:none;z-index:999999999;transition:transform .4s ease}:where([data-sonner-toaster][data-lifted="true"]){transform:translateY(-10px)}@media (hover: none) and (pointer: coarse){:where([data-sonner-toaster][data-lifted="true"]){transform:none}}:where([data-sonner-toaster][data-x-position="right"]){right:var(--offset-right)}:where([data-sonner-toaster][data-x-position="left"]){left:var(--offset-left)}:where([data-sonner-toaster][data-x-position="center"]){left:50%;transform:translate(-50%)}:where([data-sonner-toaster][data-y-position="top"]){top:var(--offset-top)}:where([data-sonner-toaster][data-y-position="bottom"]){bottom:var(--offset-bottom)}:where([data-sonner-toast]){--y: translateY(100%);--lift-amount: calc(var(--lift) * var(--gap));z-index:var(--z-index);position:absolute;opacity:0;transform:var(--y);filter:blur(0);touch-action:none;transition:transform .4s,opacity .4s,height .4s,box-shadow .2s;box-sizing:border-box;outline:none;overflow-wrap:anywhere}:where([data-sonner-toast][data-styled="true"]){padding:16px;background:var(--normal-bg);border:1px solid var(--normal-border);color:var(--normal-text);border-radius:var(--border-radius);box-shadow:0 4px 12px #0000001a;width:var(--width);font-size:13px;display:flex;align-items:center;gap:6px}:where([data-sonner-toast]:focus-visible){box-shadow:0 4px 12px #0000001a,0 0 0 2px #0003}:where([data-sonner-toast][data-y-position="top"]){top:0;--y: translateY(-100%);--lift: 1;--lift-amount: calc(1 * var(--gap))}:where([data-sonner-toast][data-y-position="bottom"]){bottom:0;--y: translateY(100%);--lift: -1;--lift-amount: calc(var(--lift) * var(--gap))}:where([data-sonner-toast]) :where([data-description]){font-weight:400;line-height:1.4;color:inherit}:where([data-sonner-toast]) :where([data-title]){font-weight:500;line-height:1.5;color:inherit}:where([data-sonner-toast]) :where([data-icon]){display:flex;height:16px;width:16px;position:relative;justify-content:flex-start;align-items:center;flex-shrink:0;margin-left:var(--toast-icon-margin-start);margin-right:var(--toast-icon-margin-end)}:where([data-sonner-toast][data-promise="true"]) :where([data-icon])>svg{opacity:0;transform:scale(.8);transform-origin:center;animation:sonner-fade-in .3s ease forwards}:where([data-sonner-toast]) :where([data-icon])>*{flex-shrink:0}:where([data-sonner-toast]) :where([data-icon]) svg{margin-left:var(--toast-svg-margin-start);margin-right:var(--toast-svg-margin-end)}:where([data-sonner-toast]) :where([data-content]){display:flex;flex-direction:column;gap:2px}[data-sonner-toast][data-styled=true] [data-button]{border-radius:4px;padding-left:8px;padding-right:8px;height:24px;font-size:12px;color:var(--normal-bg);background:var(--normal-text);margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end);border:none;cursor:pointer;outline:none;display:flex;align-items:center;flex-shrink:0;transition:opacity .4s,box-shadow .2s}:where([data-sonner-toast]) :where([data-button]):focus-visible{box-shadow:0 0 0 2px #0006}:where([data-sonner-toast]) :where([data-button]):first-of-type{margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end)}:where([data-sonner-toast]) :where([data-cancel]){color:var(--normal-text);background:rgba(0,0,0,.08)}:where([data-sonner-toast][data-theme="dark"]) :where([data-cancel]){background:rgba(255,255,255,.3)}:where([data-sonner-toast]) :where([data-close-button]){position:absolute;left:var(--toast-close-button-start);right:var(--toast-close-button-end);top:0;height:20px;width:20px;display:flex;justify-content:center;align-items:center;padding:0;color:var(--gray12);border:1px solid var(--gray4);transform:var(--toast-close-button-transform);border-radius:50%;cursor:pointer;z-index:1;transition:opacity .1s,background .2s,border-color .2s}[data-sonner-toast] [data-close-button]{background:var(--gray1)}:where([data-sonner-toast]) :where([data-close-button]):focus-visible{box-shadow:0 4px 12px #0000001a,0 0 0 2px #0003}:where([data-sonner-toast]) :where([data-disabled="true"]){cursor:not-allowed}:where([data-sonner-toast]):hover :where([data-close-button]):hover{background:var(--gray2);border-color:var(--gray5)}:where([data-sonner-toast][data-swiping="true"]):before{content:"";position:absolute;left:-50%;right:-50%;height:100%;z-index:-1}:where([data-sonner-toast][data-y-position="top"][data-swiping="true"]):before{bottom:50%;transform:scaleY(3) translateY(50%)}:where([data-sonner-toast][data-y-position="bottom"][data-swiping="true"]):before{top:50%;transform:scaleY(3) translateY(-50%)}:where([data-sonner-toast][data-swiping="false"][data-removed="true"]):before{content:"";position:absolute;inset:0;transform:scaleY(2)}:where([data-sonner-toast]):after{content:"";position:absolute;left:0;height:calc(var(--gap) + 1px);bottom:100%;width:100%}:where([data-sonner-toast][data-mounted="true"]){--y: translateY(0);opacity:1}:where([data-sonner-toast][data-expanded="false"][data-front="false"]){--scale: var(--toasts-before) * .05 + 1;--y: translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));height:var(--front-toast-height)}:where([data-sonner-toast])>*{transition:opacity .4s}:where([data-sonner-toast][data-expanded="false"][data-front="false"][data-styled="true"])>*{opacity:0}:where([data-sonner-toast][data-visible="false"]){opacity:0;pointer-events:none}:where([data-sonner-toast][data-mounted="true"][data-expanded="true"]){--y: translateY(calc(var(--lift) * var(--offset)));height:var(--initial-height)}:where([data-sonner-toast][data-removed="true"][data-front="true"][data-swipe-out="false"]){--y: translateY(calc(var(--lift) * -100%));opacity:0}:where([data-sonner-toast][data-removed="true"][data-front="false"][data-swipe-out="false"][data-expanded="true"]){--y: translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));opacity:0}:where([data-sonner-toast][data-removed="true"][data-front="false"][data-swipe-out="false"][data-expanded="false"]){--y: translateY(40%);opacity:0;transition:transform .5s,opacity .2s}:where([data-sonner-toast][data-removed="true"][data-front="false"]):before{height:calc(var(--initial-height) + 20%)}[data-sonner-toast][data-swiping=true]{transform:var(--y) translateY(var(--swipe-amount-y, 0px)) translate(var(--swipe-amount-x, 0px));transition:none}[data-sonner-toast][data-swiped=true]{user-select:none}[data-sonner-toast][data-swipe-out=true][data-y-position=bottom],[data-sonner-toast][data-swipe-out=true][data-y-position=top]{animation-duration:.2s;animation-timing-function:ease-out;animation-fill-mode:forwards}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=left]{animation-name:swipe-out-left}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=right]{animation-name:swipe-out-right}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=up]{animation-name:swipe-out-up}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=down]{animation-name:swipe-out-down}@keyframes swipe-out-left{0%{transform:var(--y) translate(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translate(calc(var(--swipe-amount-x) - 100%));opacity:0}}@keyframes swipe-out-right{0%{transform:var(--y) translate(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translate(calc(var(--swipe-amount-x) + 100%));opacity:0}}@keyframes swipe-out-up{0%{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) - 100%));opacity:0}}@keyframes swipe-out-down{0%{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) + 100%));opacity:0}}@media (max-width: 600px){[data-sonner-toaster]{position:fixed;right:var(--mobile-offset-right);left:var(--mobile-offset-left);width:100%}[data-sonner-toaster][dir=rtl]{left:calc(var(--mobile-offset-left) * -1)}[data-sonner-toaster] [data-sonner-toast]{left:0;right:0;width:calc(100% - var(--mobile-offset-left) * 2)}[data-sonner-toaster][data-x-position=left]{left:var(--mobile-offset-left)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--mobile-offset-bottom)}[data-sonner-toaster][data-y-position=top]{top:var(--mobile-offset-top)}[data-sonner-toaster][data-x-position=center]{left:var(--mobile-offset-left);right:var(--mobile-offset-right);transform:none}}[data-sonner-toaster][data-theme=light]{--normal-bg: #fff;--normal-border: var(--gray4);--normal-text: var(--gray12);--success-bg: hsl(143, 85%, 96%);--success-border: hsl(145, 92%, 91%);--success-text: hsl(140, 100%, 27%);--info-bg: hsl(208, 100%, 97%);--info-border: hsl(221, 91%, 91%);--info-text: hsl(210, 92%, 45%);--warning-bg: hsl(49, 100%, 97%);--warning-border: hsl(49, 91%, 91%);--warning-text: hsl(31, 92%, 45%);--error-bg: hsl(359, 100%, 97%);--error-border: hsl(359, 100%, 94%);--error-text: hsl(360, 100%, 45%)}[data-sonner-toaster][data-theme=light] [data-sonner-toast][data-invert=true]{--normal-bg: #000;--normal-border: hsl(0, 0%, 20%);--normal-text: var(--gray1)}[data-sonner-toaster][data-theme=dark] [data-sonner-toast][data-invert=true]{--normal-bg: #fff;--normal-border: var(--gray3);--normal-text: var(--gray12)}[data-sonner-toaster][data-theme=dark]{--normal-bg: #000;--normal-bg-hover: hsl(0, 0%, 12%);--normal-border: hsl(0, 0%, 20%);--normal-border-hover: hsl(0, 0%, 25%);--normal-text: var(--gray1);--success-bg: hsl(150, 100%, 6%);--success-border: hsl(147, 100%, 12%);--success-text: hsl(150, 86%, 65%);--info-bg: hsl(215, 100%, 6%);--info-border: hsl(223, 100%, 12%);--info-text: hsl(216, 87%, 65%);--warning-bg: hsl(64, 100%, 6%);--warning-border: hsl(60, 100%, 12%);--warning-text: hsl(46, 87%, 65%);--error-bg: hsl(358, 76%, 10%);--error-border: hsl(357, 89%, 16%);--error-text: hsl(358, 100%, 81%)}[data-sonner-toaster][data-theme=dark] [data-sonner-toast] [data-close-button]{background:var(--normal-bg);border-color:var(--normal-border);color:var(--normal-text)}[data-sonner-toaster][data-theme=dark] [data-sonner-toast] [data-close-button]:hover{background:var(--normal-bg-hover);border-color:var(--normal-border-hover)}[data-rich-colors=true][data-sonner-toast][data-type=success],[data-rich-colors=true][data-sonner-toast][data-type=success] [data-close-button]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=info],[data-rich-colors=true][data-sonner-toast][data-type=info] [data-close-button]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning],[data-rich-colors=true][data-sonner-toast][data-type=warning] [data-close-button]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=error],[data-rich-colors=true][data-sonner-toast][data-type=error] [data-close-button]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}.sonner-loading-wrapper{--size: 16px;height:var(--size);width:var(--size);position:absolute;inset:0;z-index:10}.sonner-loading-wrapper[data-visible=false]{transform-origin:center;animation:sonner-fade-out .2s ease forwards}.sonner-spinner{position:relative;top:50%;left:50%;height:var(--size);width:var(--size)}.sonner-loading-bar{animation:sonner-spin 1.2s linear infinite;background:var(--gray11);border-radius:6px;height:8%;left:-10%;position:absolute;top:-3.9%;width:24%}.sonner-loading-bar:nth-child(1){animation-delay:-1.2s;transform:rotate(.0001deg) translate(146%)}.sonner-loading-bar:nth-child(2){animation-delay:-1.1s;transform:rotate(30deg) translate(146%)}.sonner-loading-bar:nth-child(3){animation-delay:-1s;transform:rotate(60deg) translate(146%)}.sonner-loading-bar:nth-child(4){animation-delay:-.9s;transform:rotate(90deg) translate(146%)}.sonner-loading-bar:nth-child(5){animation-delay:-.8s;transform:rotate(120deg) translate(146%)}.sonner-loading-bar:nth-child(6){animation-delay:-.7s;transform:rotate(150deg) translate(146%)}.sonner-loading-bar:nth-child(7){animation-delay:-.6s;transform:rotate(180deg) translate(146%)}.sonner-loading-bar:nth-child(8){animation-delay:-.5s;transform:rotate(210deg) translate(146%)}.sonner-loading-bar:nth-child(9){animation-delay:-.4s;transform:rotate(240deg) translate(146%)}.sonner-loading-bar:nth-child(10){animation-delay:-.3s;transform:rotate(270deg) translate(146%)}.sonner-loading-bar:nth-child(11){animation-delay:-.2s;transform:rotate(300deg) translate(146%)}.sonner-loading-bar:nth-child(12){animation-delay:-.1s;transform:rotate(330deg) translate(146%)}@keyframes sonner-fade-in{0%{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}@keyframes sonner-fade-out{0%{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.8)}}@keyframes sonner-spin{0%{opacity:1}to{opacity:.15}}@media (prefers-reduced-motion){[data-sonner-toast],[data-sonner-toast]>*,.sonner-loading-bar{transition:none!important;animation:none!important}}.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .2s,transform .2s}.sonner-loader[data-visible=false]{opacity:0;transform:scale(.8) translate(-50%,-50%)}
-`);
-function tt(n) {
-  return n.label !== void 0;
-}
-var pe = 3, me = "32px", ge = "16px", Wt = 4e3, he = 356, be = 14, ye = 20, we = 200;
-function M(...n) {
-  return n.filter(Boolean).join(" ");
-}
-function xe(n) {
-  let [e, t] = n.split("-"), a2 = [];
-  return e && a2.push(e), t && a2.push(t), a2;
-}
-var ve = (n) => {
-  var Dt, Pt, Nt, Bt, Ct, kt, It, Mt, Ht, At, Lt;
-  let { invert: e, toast: t, unstyled: a2, interacting: u2, setHeights: f2, visibleToasts: w2, heights: S2, index: g2, toasts: i, expanded: D, removeToast: T2, defaultRichColors: F2, closeButton: et2, style: ut2, cancelButtonStyle: ft2, actionButtonStyle: l2, className: ot2 = "", descriptionClassName: at = "", duration: X2, position: st2, gap: pt, loadingIcon: rt2, expandByDefault: B2, classNames: s, icons: P2, closeButtonAriaLabel: nt2 = "Close toast", pauseWhenPageIsHidden: it2 } = n, [Y2, C2] = o.useState(null), [lt, J2] = o.useState(null), [W2, H2] = o.useState(false), [A, mt] = o.useState(false), [L2, z2] = o.useState(false), [ct2, d2] = o.useState(false), [h2, y2] = o.useState(false), [R2, j2] = o.useState(0), [p2, _2] = o.useState(0), O2 = o.useRef(t.duration || X2 || Wt), G2 = o.useRef(null), k2 = o.useRef(null), Vt = g2 === 0, Ut = g2 + 1 <= w2, N2 = t.type, V2 = t.dismissible !== false, Kt = t.className || "", Xt = t.descriptionClassName || "", dt = o.useMemo(() => S2.findIndex((r2) => r2.toastId === t.id) || 0, [S2, t.id]), Jt = o.useMemo(() => {
-    var r2;
-    return (r2 = t.closeButton) != null ? r2 : et2;
-  }, [t.closeButton, et2]), Tt = o.useMemo(() => t.duration || X2 || Wt, [t.duration, X2]), gt2 = o.useRef(0), U2 = o.useRef(0), St = o.useRef(0), K2 = o.useRef(null), [Gt, Qt] = st2.split("-"), Rt = o.useMemo(() => S2.reduce((r2, m2, c2) => c2 >= dt ? r2 : r2 + m2.height, 0), [S2, dt]), Et = Ft(), qt = t.invert || e, ht = N2 === "loading";
-  U2.current = o.useMemo(() => dt * pt + Rt, [dt, Rt]), o.useEffect(() => {
-    O2.current = Tt;
-  }, [Tt]), o.useEffect(() => {
-    H2(true);
-  }, []), o.useEffect(() => {
-    let r2 = k2.current;
-    if (r2) {
-      let m2 = r2.getBoundingClientRect().height;
-      return _2(m2), f2((c2) => [{ toastId: t.id, height: m2, position: t.position }, ...c2]), () => f2((c2) => c2.filter((b2) => b2.toastId !== t.id));
-    }
-  }, [f2, t.id]), o.useLayoutEffect(() => {
-    if (!W2) return;
-    let r2 = k2.current, m2 = r2.style.height;
-    r2.style.height = "auto";
-    let c2 = r2.getBoundingClientRect().height;
-    r2.style.height = m2, _2(c2), f2((b2) => b2.find((x2) => x2.toastId === t.id) ? b2.map((x2) => x2.toastId === t.id ? { ...x2, height: c2 } : x2) : [{ toastId: t.id, height: c2, position: t.position }, ...b2]);
-  }, [W2, t.title, t.description, f2, t.id]);
-  let $2 = o.useCallback(() => {
-    mt(true), j2(U2.current), f2((r2) => r2.filter((m2) => m2.toastId !== t.id)), setTimeout(() => {
-      T2(t);
-    }, we);
-  }, [t, T2, f2, U2]);
-  o.useEffect(() => {
-    if (t.promise && N2 === "loading" || t.duration === 1 / 0 || t.type === "loading") return;
-    let r2;
-    return D || u2 || it2 && Et ? (() => {
-      if (St.current < gt2.current) {
-        let b2 = (/* @__PURE__ */ new Date()).getTime() - gt2.current;
-        O2.current = O2.current - b2;
-      }
-      St.current = (/* @__PURE__ */ new Date()).getTime();
-    })() : (() => {
-      O2.current !== 1 / 0 && (gt2.current = (/* @__PURE__ */ new Date()).getTime(), r2 = setTimeout(() => {
-        var b2;
-        (b2 = t.onAutoClose) == null || b2.call(t, t), $2();
-      }, O2.current));
-    })(), () => clearTimeout(r2);
-  }, [D, u2, t, N2, it2, Et, $2]), o.useEffect(() => {
-    t.delete && $2();
-  }, [$2, t.delete]);
-  function Zt() {
-    var r2, m2, c2;
-    return P2 != null && P2.loading ? o.createElement("div", { className: M(s == null ? void 0 : s.loader, (r2 = t == null ? void 0 : t.classNames) == null ? void 0 : r2.loader, "sonner-loader"), "data-visible": N2 === "loading" }, P2.loading) : rt2 ? o.createElement("div", { className: M(s == null ? void 0 : s.loader, (m2 = t == null ? void 0 : t.classNames) == null ? void 0 : m2.loader, "sonner-loader"), "data-visible": N2 === "loading" }, rt2) : o.createElement(Yt, { className: M(s == null ? void 0 : s.loader, (c2 = t == null ? void 0 : t.classNames) == null ? void 0 : c2.loader), visible: N2 === "loading" });
-  }
-  return o.createElement("li", { tabIndex: 0, ref: k2, className: M(ot2, Kt, s == null ? void 0 : s.toast, (Dt = t == null ? void 0 : t.classNames) == null ? void 0 : Dt.toast, s == null ? void 0 : s.default, s == null ? void 0 : s[N2], (Pt = t == null ? void 0 : t.classNames) == null ? void 0 : Pt[N2]), "data-sonner-toast": "", "data-rich-colors": (Nt = t.richColors) != null ? Nt : F2, "data-styled": !(t.jsx || t.unstyled || a2), "data-mounted": W2, "data-promise": !!t.promise, "data-swiped": h2, "data-removed": A, "data-visible": Ut, "data-y-position": Gt, "data-x-position": Qt, "data-index": g2, "data-front": Vt, "data-swiping": L2, "data-dismissible": V2, "data-type": N2, "data-invert": qt, "data-swipe-out": ct2, "data-swipe-direction": lt, "data-expanded": !!(D || B2 && W2), style: { "--index": g2, "--toasts-before": g2, "--z-index": i.length - g2, "--offset": `${A ? R2 : U2.current}px`, "--initial-height": B2 ? "auto" : `${p2}px`, ...ut2, ...t.style }, onDragEnd: () => {
-    z2(false), C2(null), K2.current = null;
-  }, onPointerDown: (r2) => {
-    ht || !V2 || (G2.current = /* @__PURE__ */ new Date(), j2(U2.current), r2.target.setPointerCapture(r2.pointerId), r2.target.tagName !== "BUTTON" && (z2(true), K2.current = { x: r2.clientX, y: r2.clientY }));
-  }, onPointerUp: () => {
-    var x2, Q2, q2, Z2;
-    if (ct2 || !V2) return;
-    K2.current = null;
-    let r2 = Number(((x2 = k2.current) == null ? void 0 : x2.style.getPropertyValue("--swipe-amount-x").replace("px", "")) || 0), m2 = Number(((Q2 = k2.current) == null ? void 0 : Q2.style.getPropertyValue("--swipe-amount-y").replace("px", "")) || 0), c2 = (/* @__PURE__ */ new Date()).getTime() - ((q2 = G2.current) == null ? void 0 : q2.getTime()), b2 = Y2 === "x" ? r2 : m2, I = Math.abs(b2) / c2;
-    if (Math.abs(b2) >= ye || I > 0.11) {
-      j2(U2.current), (Z2 = t.onDismiss) == null || Z2.call(t, t), J2(Y2 === "x" ? r2 > 0 ? "right" : "left" : m2 > 0 ? "down" : "up"), $2(), d2(true), y2(false);
-      return;
-    }
-    z2(false), C2(null);
-  }, onPointerMove: (r2) => {
-    var Q2, q2, Z2, zt;
-    if (!K2.current || !V2 || ((Q2 = window.getSelection()) == null ? void 0 : Q2.toString().length) > 0) return;
-    let c2 = r2.clientY - K2.current.y, b2 = r2.clientX - K2.current.x, I = (q2 = n.swipeDirections) != null ? q2 : xe(st2);
-    !Y2 && (Math.abs(b2) > 1 || Math.abs(c2) > 1) && C2(Math.abs(b2) > Math.abs(c2) ? "x" : "y");
-    let x2 = { x: 0, y: 0 };
-    Y2 === "y" ? (I.includes("top") || I.includes("bottom")) && (I.includes("top") && c2 < 0 || I.includes("bottom") && c2 > 0) && (x2.y = c2) : Y2 === "x" && (I.includes("left") || I.includes("right")) && (I.includes("left") && b2 < 0 || I.includes("right") && b2 > 0) && (x2.x = b2), (Math.abs(x2.x) > 0 || Math.abs(x2.y) > 0) && y2(true), (Z2 = k2.current) == null || Z2.style.setProperty("--swipe-amount-x", `${x2.x}px`), (zt = k2.current) == null || zt.style.setProperty("--swipe-amount-y", `${x2.y}px`);
-  } }, Jt && !t.jsx ? o.createElement("button", { "aria-label": nt2, "data-disabled": ht, "data-close-button": true, onClick: ht || !V2 ? () => {
-  } : () => {
-    var r2;
-    $2(), (r2 = t.onDismiss) == null || r2.call(t, t);
-  }, className: M(s == null ? void 0 : s.closeButton, (Bt = t == null ? void 0 : t.classNames) == null ? void 0 : Bt.closeButton) }, (Ct = P2 == null ? void 0 : P2.close) != null ? Ct : Ot) : null, t.jsx || reactExports.isValidElement(t.title) ? t.jsx ? t.jsx : typeof t.title == "function" ? t.title() : t.title : o.createElement(o.Fragment, null, N2 || t.icon || t.promise ? o.createElement("div", { "data-icon": "", className: M(s == null ? void 0 : s.icon, (kt = t == null ? void 0 : t.classNames) == null ? void 0 : kt.icon) }, t.promise || t.type === "loading" && !t.icon ? t.icon || Zt() : null, t.type !== "loading" ? t.icon || (P2 == null ? void 0 : P2[N2]) || jt(N2) : null) : null, o.createElement("div", { "data-content": "", className: M(s == null ? void 0 : s.content, (It = t == null ? void 0 : t.classNames) == null ? void 0 : It.content) }, o.createElement("div", { "data-title": "", className: M(s == null ? void 0 : s.title, (Mt = t == null ? void 0 : t.classNames) == null ? void 0 : Mt.title) }, typeof t.title == "function" ? t.title() : t.title), t.description ? o.createElement("div", { "data-description": "", className: M(at, Xt, s == null ? void 0 : s.description, (Ht = t == null ? void 0 : t.classNames) == null ? void 0 : Ht.description) }, typeof t.description == "function" ? t.description() : t.description) : null), reactExports.isValidElement(t.cancel) ? t.cancel : t.cancel && tt(t.cancel) ? o.createElement("button", { "data-button": true, "data-cancel": true, style: t.cancelButtonStyle || ft2, onClick: (r2) => {
-    var m2, c2;
-    tt(t.cancel) && V2 && ((c2 = (m2 = t.cancel).onClick) == null || c2.call(m2, r2), $2());
-  }, className: M(s == null ? void 0 : s.cancelButton, (At = t == null ? void 0 : t.classNames) == null ? void 0 : At.cancelButton) }, t.cancel.label) : null, reactExports.isValidElement(t.action) ? t.action : t.action && tt(t.action) ? o.createElement("button", { "data-button": true, "data-action": true, style: t.actionButtonStyle || l2, onClick: (r2) => {
-    var m2, c2;
-    tt(t.action) && ((c2 = (m2 = t.action).onClick) == null || c2.call(m2, r2), !r2.defaultPrevented && $2());
-  }, className: M(s == null ? void 0 : s.actionButton, (Lt = t == null ? void 0 : t.classNames) == null ? void 0 : Lt.actionButton) }, t.action.label) : null));
-};
-function _t() {
-  if (typeof window == "undefined" || typeof document == "undefined") return "ltr";
-  let n = document.documentElement.getAttribute("dir");
-  return n === "auto" || !n ? window.getComputedStyle(document.documentElement).direction : n;
-}
-function Te(n, e) {
-  let t = {};
-  return [n, e].forEach((a2, u2) => {
-    let f2 = u2 === 1, w2 = f2 ? "--mobile-offset" : "--offset", S2 = f2 ? ge : me;
-    function g2(i) {
-      ["top", "right", "bottom", "left"].forEach((D) => {
-        t[`${w2}-${D}`] = typeof i == "number" ? `${i}px` : i;
-      });
-    }
-    typeof a2 == "number" || typeof a2 == "string" ? g2(a2) : typeof a2 == "object" ? ["top", "right", "bottom", "left"].forEach((i) => {
-      a2[i] === void 0 ? t[`${w2}-${i}`] = S2 : t[`${w2}-${i}`] = typeof a2[i] == "number" ? `${a2[i]}px` : a2[i];
-    }) : g2(S2);
-  }), t;
-}
-reactExports.forwardRef(function(e, t) {
-  let { invert: a2, position: u2 = "bottom-right", hotkey: f2 = ["altKey", "KeyT"], expand: w2, closeButton: S2, className: g2, offset: i, mobileOffset: D, theme: T2 = "light", richColors: F2, duration: et2, style: ut2, visibleToasts: ft2 = pe, toastOptions: l2, dir: ot2 = _t(), gap: at = be, loadingIcon: X2, icons: st2, containerAriaLabel: pt = "Notifications", pauseWhenPageIsHidden: rt2 } = e, [B2, s] = o.useState([]), P2 = o.useMemo(() => Array.from(new Set([u2].concat(B2.filter((d2) => d2.position).map((d2) => d2.position)))), [B2, u2]), [nt2, it2] = o.useState([]), [Y2, C2] = o.useState(false), [lt, J2] = o.useState(false), [W2, H2] = o.useState(T2 !== "system" ? T2 : typeof window != "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"), A = o.useRef(null), mt = f2.join("+").replace(/Key/g, "").replace(/Digit/g, ""), L2 = o.useRef(null), z2 = o.useRef(false), ct2 = o.useCallback((d2) => {
-    s((h2) => {
-      var y2;
-      return (y2 = h2.find((R2) => R2.id === d2.id)) != null && y2.delete || v.dismiss(d2.id), h2.filter(({ id: R2 }) => R2 !== d2.id);
-    });
-  }, []);
-  return o.useEffect(() => v.subscribe((d2) => {
-    if (d2.dismiss) {
-      s((h2) => h2.map((y2) => y2.id === d2.id ? { ...y2, delete: true } : y2));
-      return;
-    }
-    setTimeout(() => {
-      vt.flushSync(() => {
-        s((h2) => {
-          let y2 = h2.findIndex((R2) => R2.id === d2.id);
-          return y2 !== -1 ? [...h2.slice(0, y2), { ...h2[y2], ...d2 }, ...h2.slice(y2 + 1)] : [d2, ...h2];
-        });
-      });
-    });
-  }), []), o.useEffect(() => {
-    if (T2 !== "system") {
-      H2(T2);
-      return;
-    }
-    if (T2 === "system" && (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? H2("dark") : H2("light")), typeof window == "undefined") return;
-    let d2 = window.matchMedia("(prefers-color-scheme: dark)");
-    try {
-      d2.addEventListener("change", ({ matches: h2 }) => {
-        H2(h2 ? "dark" : "light");
-      });
-    } catch (h2) {
-      d2.addListener(({ matches: y2 }) => {
-        try {
-          H2(y2 ? "dark" : "light");
-        } catch (R2) {
-          console.error(R2);
-        }
-      });
-    }
-  }, [T2]), o.useEffect(() => {
-    B2.length <= 1 && C2(false);
-  }, [B2]), o.useEffect(() => {
-    let d2 = (h2) => {
-      var R2, j2;
-      f2.every((p2) => h2[p2] || h2.code === p2) && (C2(true), (R2 = A.current) == null || R2.focus()), h2.code === "Escape" && (document.activeElement === A.current || (j2 = A.current) != null && j2.contains(document.activeElement)) && C2(false);
-    };
-    return document.addEventListener("keydown", d2), () => document.removeEventListener("keydown", d2);
-  }, [f2]), o.useEffect(() => {
-    if (A.current) return () => {
-      L2.current && (L2.current.focus({ preventScroll: true }), L2.current = null, z2.current = false);
-    };
-  }, [A.current]), o.createElement("section", { ref: t, "aria-label": `${pt} ${mt}`, tabIndex: -1, "aria-live": "polite", "aria-relevant": "additions text", "aria-atomic": "false", suppressHydrationWarning: true }, P2.map((d2, h2) => {
-    var j2;
-    let [y2, R2] = d2.split("-");
-    return B2.length ? o.createElement("ol", { key: d2, dir: ot2 === "auto" ? _t() : ot2, tabIndex: -1, ref: A, className: g2, "data-sonner-toaster": true, "data-theme": W2, "data-y-position": y2, "data-lifted": Y2 && B2.length > 1 && !w2, "data-x-position": R2, style: { "--front-toast-height": `${((j2 = nt2[0]) == null ? void 0 : j2.height) || 0}px`, "--width": `${he}px`, "--gap": `${at}px`, ...ut2, ...Te(i, D) }, onBlur: (p2) => {
-      z2.current && !p2.currentTarget.contains(p2.relatedTarget) && (z2.current = false, L2.current && (L2.current.focus({ preventScroll: true }), L2.current = null));
-    }, onFocus: (p2) => {
-      p2.target instanceof HTMLElement && p2.target.dataset.dismissible === "false" || z2.current || (z2.current = true, L2.current = p2.relatedTarget);
-    }, onMouseEnter: () => C2(true), onMouseMove: () => C2(true), onMouseLeave: () => {
-      lt || C2(false);
-    }, onDragEnd: () => C2(false), onPointerDown: (p2) => {
-      p2.target instanceof HTMLElement && p2.target.dataset.dismissible === "false" || J2(true);
-    }, onPointerUp: () => J2(false) }, B2.filter((p2) => !p2.position && h2 === 0 || p2.position === d2).map((p2, _2) => {
-      var O2, G2;
-      return o.createElement(ve, { key: p2.id, icons: st2, index: _2, toast: p2, defaultRichColors: F2, duration: (O2 = l2 == null ? void 0 : l2.duration) != null ? O2 : et2, className: l2 == null ? void 0 : l2.className, descriptionClassName: l2 == null ? void 0 : l2.descriptionClassName, invert: a2, visibleToasts: ft2, closeButton: (G2 = l2 == null ? void 0 : l2.closeButton) != null ? G2 : S2, interacting: lt, position: d2, style: l2 == null ? void 0 : l2.style, unstyled: l2 == null ? void 0 : l2.unstyled, classNames: l2 == null ? void 0 : l2.classNames, cancelButtonStyle: l2 == null ? void 0 : l2.cancelButtonStyle, actionButtonStyle: l2 == null ? void 0 : l2.actionButtonStyle, removeToast: ct2, toasts: B2.filter((k2) => k2.position == p2.position), heights: nt2.filter((k2) => k2.position == p2.position), setHeights: it2, expandByDefault: w2, gap: at, loadingIcon: X2, expanded: Y2, pauseWhenPageIsHidden: rt2, swipeDirections: e.swipeDirections });
-    })) : null;
-  }));
-});
 function Contact() {
-  const [name, setName] = reactExports.useState("");
-  const [email, setEmail] = reactExports.useState("");
-  const [message, setMessage] = reactExports.useState("");
-  const [submitting, setSubmitting] = reactExports.useState(false);
-  const onSubmit = (e) => {
-    e.preventDefault();
-    if (!name.trim() || !email.trim() || !message.trim()) return;
-    setSubmitting(true);
-    window.setTimeout(() => {
-      setSubmitting(false);
-      setName("");
-      setEmail("");
-      setMessage("");
-      ue.success("Thanks for reaching out — I'll be in touch soon.");
-    }, 600);
-  };
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "section",
     {
       id: "contact",
       className: "bg-muted/30 border-border border-y py-20 md:py-28",
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-12 lg:grid-cols-2 lg:gap-16", children: [
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           motion.div,
           {
@@ -41038,108 +41298,46 @@ function Contact() {
             className: "flex flex-col gap-5",
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Contact" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl", children: "Let's make something good." }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-base leading-relaxed", children: "Have a project in mind, or just want to say hello? Send a note and I'll get back to you within a couple of days." }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-4 pt-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "a",
-                  {
-                    href: "mailto:hello@myworkportfolio.com",
-                    "data-ocid": "contact.email_link",
-                    className: "text-foreground hover:text-primary inline-flex items-center gap-2 text-base font-medium transition-smooth",
-                    children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(Mail, { className: "size-5 text-primary" }),
-                      "hello@myworkportfolio.com"
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Elsewhere" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-3", children: socialLinks.map((link) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "a",
-                    {
-                      href: link.href,
-                      target: "_blank",
-                      rel: "noreferrer",
-                      "data-ocid": `contact.social_link.${link.label.toLowerCase()}`,
-                      className: "text-muted-foreground hover:text-primary border-border bg-card rounded-md border px-3 py-1.5 text-sm font-medium transition-smooth",
-                      children: link.label
-                    },
-                    link.label
-                  )) })
-                ] })
-              ] })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl", children: "Let us talk when the work needs clarity." }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground max-w-2xl text-base leading-relaxed", children: "I am open to enablement, learning experience, AI workflow, and product-adjacent roles where practical systems matter more than polished buzzwords." }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { asChild: true, size: "lg", className: "w-fit", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: `mailto:${profile.email}`, "data-ocid": "contact.email", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Mail, { className: "size-4" }),
+                "Email Terry"
+              ] }) })
             ]
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          motion.form,
+          motion.div,
           {
             initial: { opacity: 0, y: 12 },
             whileInView: { opacity: 1, y: 0 },
             viewport: { once: true },
             transition: { duration: 0.4, delay: 0.1 },
-            onSubmit,
-            className: "bg-card border-border flex flex-col gap-5 rounded-xl border p-6 shadow-elevated md:p-8",
+            className: "bg-card border-border flex flex-col gap-4 rounded-xl border p-6 shadow-elevated md:p-8",
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "name", "data-ocid": "contact.name.label", children: "Name" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Input,
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Direct links" }),
+              socialLinks.map((link) => {
+                const Icon2 = iconByLabel[link.label] ?? Mail;
+                return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "a",
                   {
-                    id: "name",
-                    value: name,
-                    onChange: (e) => setName(e.target.value),
-                    placeholder: "Your name",
-                    required: true,
-                    "data-ocid": "contact.name.input"
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "email", "data-ocid": "contact.email.label", children: "Email" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Input,
-                  {
-                    id: "email",
-                    type: "email",
-                    value: email,
-                    onChange: (e) => setEmail(e.target.value),
-                    placeholder: "you@example.com",
-                    required: true,
-                    "data-ocid": "contact.email.input"
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "message", "data-ocid": "contact.message.label", children: "Message" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Textarea,
-                  {
-                    id: "message",
-                    value: message,
-                    onChange: (e) => setMessage(e.target.value),
-                    placeholder: "Tell me a little about your project...",
-                    required: true,
-                    rows: 5,
-                    "data-ocid": "contact.message.textarea"
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                Button,
-                {
-                  type: "submit",
-                  size: "lg",
-                  disabled: submitting,
-                  "data-ocid": "contact.submit_button",
-                  className: "w-full",
-                  children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { className: "size-4" }),
-                    submitting ? "Sending..." : "Send message"
-                  ]
-                }
-              )
+                    href: link.href,
+                    target: link.href.startsWith("mailto:") ? void 0 : "_blank",
+                    rel: link.href.startsWith("mailto:") ? void 0 : "noreferrer",
+                    "data-ocid": `contact.social.${link.label.toLowerCase()}`,
+                    className: "border-border hover:border-primary/40 hover:text-primary flex items-center justify-between rounded-lg border px-4 py-3 text-sm font-medium transition-smooth",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "inline-flex items-center gap-3", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { className: "size-4" }),
+                        link.label
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-muted-foreground text-xs", children: link.label === "Email" ? profile.email : "Open" })
+                    ]
+                  },
+                  link.label
+                );
+              })
             ]
           }
         )
@@ -41149,6 +41347,7 @@ function Contact() {
 }
 function Hero() {
   const scrollTo = useSmoothScroll();
+  const previewProof = proofPoints.slice(0, 3);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "section",
     {
@@ -41159,7 +41358,7 @@ function Hero() {
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "img",
             {
-              src: "/assets/generated/hero-bg.dim_1600x1000.png",
+              src: "/assets/portfolio/hero-bg.png",
               alt: "",
               "aria-hidden": "true",
               className: "h-full w-full object-cover opacity-70"
@@ -41181,7 +41380,7 @@ function Hero() {
               initial: { opacity: 0, y: 12 },
               animate: { opacity: 1, y: 0 },
               transition: { duration: 0.5 },
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", className: "mb-6", children: "Product Designer & Visual Storyteller" })
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", className: "mb-6", children: profile.title })
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -41191,7 +41390,7 @@ function Hero() {
               animate: { opacity: 1, y: 0 },
               transition: { duration: 0.5, delay: 0.1 },
               className: "font-display text-foreground max-w-4xl text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl",
-              children: "Design that speaks for itself."
+              children: profile.headline
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -41201,7 +41400,7 @@ function Hero() {
               animate: { opacity: 1, y: 0 },
               transition: { duration: 0.5, delay: 0.2 },
               className: "text-muted-foreground mt-6 max-w-2xl text-base leading-relaxed sm:text-lg",
-              children: "I craft calm, considered interfaces and identities for teams who care about the details. A selection of recent work across product, brand, and editorial."
+              children: profile.shortSummary
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -41216,11 +41415,14 @@ function Hero() {
                   Button,
                   {
                     size: "lg",
-                    onClick: () => scrollTo("projects"),
+                    onClick: () => {
+                      window.history.pushState({}, "", "/work");
+                      window.dispatchEvent(new PopStateEvent("popstate"));
+                    },
                     "data-ocid": "hero.primary_button",
                     className: "w-full sm:w-auto",
                     children: [
-                      "View Projects",
+                      "View Work",
                       /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "size-4" })
                     ]
                   }
@@ -41241,14 +41443,51 @@ function Hero() {
                 )
               ]
             }
-          )
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            motion.div,
+            {
+              initial: { opacity: 0, y: 16 },
+              animate: { opacity: 1, y: 0 },
+              transition: { duration: 0.5, delay: 0.4 },
+              className: "mt-12 grid w-full max-w-4xl gap-3 sm:grid-cols-3",
+              children: previewProof.map((proofPoint) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: "bg-card/85 border-border rounded-xl border p-4 text-left shadow-elevated backdrop-blur",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-3 inline-flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary", children: /* @__PURE__ */ jsxRuntimeExports.jsx(BriefcaseBusiness, { className: "size-4" }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display text-foreground text-2xl font-bold", children: proofPoint.value }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 text-sm leading-relaxed", children: proofPoint.label })
+                  ]
+                },
+                proofPoint.id
+              ))
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground mt-6 text-sm", children: [
+            "Previewing ",
+            projects.length,
+            " evidence-backed work examples across enablement, learning systems, AI workflows, and technical prototypes."
+          ] })
         ] })
       ]
     }
   );
 }
-function Projects({ activeProject, onSelectProject }) {
+function Projects({
+  activeProject,
+  onSelectProject,
+  eyebrow = "Proof of work",
+  title = "Work",
+  description = "A focused collection of enablement systems, learning experiences, AI workflows, and product-minded prototypes.",
+  projectIds,
+  proofIds,
+  isReviewPath = false
+}) {
   const scrollTo = useSmoothScroll();
+  const visibleProjects = projectIds && projectIds.length > 0 ? projectIds.map((id2) => projects.find((project) => project.id === id2)).filter((project) => Boolean(project)) : projects;
+  const visibleProof = proofIds && proofIds.length > 0 ? getProofPoints(proofIds) : proofPoints.slice(0, 4);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "section",
     {
@@ -41264,13 +41503,25 @@ function Projects({ activeProject, onSelectProject }) {
             transition: { duration: 0.4 },
             className: "mb-12 flex flex-col gap-3",
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Selected work" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl", children: "Projects" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground max-w-xl text-base leading-relaxed", children: "A focused collection of recent commissions and personal work. Tap any project to read the full case study." })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: eyebrow }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl", children: title }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground max-w-xl text-base leading-relaxed", children: description })
             ]
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-6 sm:grid-cols-2 lg:grid-cols-3", children: projects.map((project, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4", children: visibleProof.map((proofPoint) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: "bg-card border-border rounded-xl border p-5 shadow-elevated",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display text-foreground text-2xl font-bold", children: proofPoint.value }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground mt-2 text-sm font-semibold", children: proofPoint.label }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: proofPoint.detail })
+            ]
+          },
+          proofPoint.id
+        )) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-6 sm:grid-cols-2 lg:grid-cols-3", children: visibleProjects.map((project, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           motion.article,
           {
             initial: { opacity: 0, y: 16 },
@@ -41303,6 +41554,7 @@ function Projects({ activeProject, onSelectProject }) {
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display text-foreground text-xl font-semibold leading-snug", children: project.title }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground line-clamp-2 text-sm leading-relaxed", children: project.shortDescription }),
+                    isReviewPath && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs leading-relaxed", children: project.sourceNote }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-primary group-hover:text-primary/80 mt-1 inline-flex items-center gap-1.5 text-sm font-medium transition-smooth", children: [
                       "View",
                       /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "size-4 transition-transform group-hover:translate-x-1" })
@@ -41373,14 +41625,219 @@ function ProjectDetail({
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl", children: project.title }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground max-w-3xl text-base leading-relaxed md:text-lg", children: project.fullDescription }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-6 md:grid-cols-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Problem" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: project.problem })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Actions" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "text-muted-foreground mt-2 space-y-2 text-sm leading-relaxed", children: project.actions.map((action) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: action }, action)) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Outcomes" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "text-muted-foreground mt-2 space-y-2 text-sm leading-relaxed", children: project.outcomes.map((outcome) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: outcome }, outcome)) })
+            ] })
+          ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: project.tags.map((tag) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", children: tag }, tag)) })
         ] })
       ]
     }
   );
 }
+function Textarea({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "textarea",
+    {
+      "data-slot": "textarea",
+      className: cn(
+        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        className
+      ),
+      ...props
+    }
+  );
+}
+const sampleContext = "Enablement role focused on onboarding, LMS governance, sales readiness, AI workflow improvement, stakeholder assets, and measurable adoption.";
+function Studio() {
+  const [context, setContext] = reactExports.useState(sampleContext);
+  const [label, setLabel] = reactExports.useState("");
+  const [views, setViews] = reactExports.useState(() => loadReviewerViews());
+  const report = reactExports.useMemo(() => buildStrategyReport(context), [context]);
+  const handleSave = () => {
+    const view = createReviewerView(context, label);
+    setViews(saveReviewerView(view));
+    setLabel("");
+  };
+  const currentOrigin = window.location.origin;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-background py-16 md:py-20", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-10 max-w-3xl", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", className: "mb-4", children: "Portfolio Studio" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "font-display text-foreground text-4xl font-bold tracking-tight md:text-5xl", children: "Build a focused review path without changing the public front door." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-4 text-base leading-relaxed", children: "Paste a role, job description, or target context. The workspace recommends lanes, projects, proof points, gaps, and a next artifact to strengthen the portfolio." })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-6 lg:grid-cols-[0.9fr_1.1fr]", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 flex items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-primary/10 p-2 text-primary", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FileSearch, { className: "size-4" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-xl font-semibold", children: "Role context" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "Keep this practical. The output stays local for now." })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Textarea,
+          {
+            value: context,
+            onChange: (event) => setContext(event.target.value),
+            rows: 11,
+            className: "resize-none",
+            "data-ocid": "studio.context"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            value: label,
+            onChange: (event) => setLabel(event.target.value),
+            placeholder: "Optional private label",
+            className: "border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-4 flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+            "data-ocid": "studio.label"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            className: "mt-4 w-full",
+            onClick: handleSave,
+            "data-ocid": "studio.save",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "size-4" }),
+              "Generate review path"
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-5 flex items-center justify-between gap-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "JD Strategy Report" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "font-display text-2xl font-semibold", children: [
+                report.fitScore,
+                "% estimated role fit"
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-primary/10 p-3 text-primary", children: /* @__PURE__ */ jsxRuntimeExports.jsx(WandSparkles, { className: "size-5" }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-5 md:grid-cols-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              ReportList,
+              {
+                title: "Likely company problems",
+                items: report.likelyProblems
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ReportList, { title: "Evidence gaps", items: report.evidenceGaps })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 rounded-xl bg-muted/50 p-5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Suggested artifact" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display mt-2 text-xl font-semibold", children: report.nextArtifact.title }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: [
+              report.nextArtifact.format,
+              " · ",
+              report.nextArtifact.buildTime
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: report.nextArtifact.why })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-6 md:grid-cols-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary mb-4 text-sm font-semibold uppercase tracking-wider", children: "Project matches" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: report.projectMatches.map((match) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: match.project.title }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 text-sm leading-relaxed", children: match.reason })
+            ] }, match.project.id)) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary mb-4 text-sm font-semibold uppercase tracking-wider", children: "Source pool" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: brainSources.map((source) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { className: "mt-0.5 size-4 text-primary" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: source.title }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-xs", children: [
+                  source.type,
+                  " · ",
+                  source.status
+                ] })
+              ] })
+            ] }, source.id)) })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary mb-4 text-sm font-semibold uppercase tracking-wider", children: "Saved review paths" }),
+          views.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "No paths saved yet." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: views.map((view) => {
+            const link = `${currentOrigin}/work/${view.slug}`;
+            return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: "border-border flex flex-col gap-3 rounded-lg border p-4 md:flex-row md:items-center md:justify-between",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: view.label }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 break-all text-xs", children: link })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { size: "sm", variant: "outline", asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: `/work/${view.slug}`, children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Link2, { className: "size-4" }),
+                      "Open"
+                    ] }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      Button,
+                      {
+                        size: "sm",
+                        variant: "outline",
+                        onClick: () => navigator.clipboard.writeText(link),
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(Clipboard, { className: "size-4" }),
+                          "Copy"
+                        ]
+                      }
+                    )
+                  ] })
+                ]
+              },
+              view.slug
+            );
+          }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs leading-relaxed", children: "Admin note: this first interval is local-first. It proves the experience before adding backend persistence or document parsing. Accepted evidence inputs next: images, GIF/video, PDF, DOCX, PPTX, TXT, MD, CSV, raw notes, transcripts, and repository links." })
+      ] })
+    ] })
+  ] }) });
+}
+function ReportList({ title, items }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: title }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "text-muted-foreground mt-3 space-y-2 text-sm leading-relaxed", children: items.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: item }, item)) })
+  ] });
+}
 function App() {
   const [activeProject, setActiveProject] = reactExports.useState(null);
+  const [routeState, setRouteState] = reactExports.useState(() => getRouteState());
+  reactExports.useEffect(() => {
+    const updateRoute = () => {
+      setRouteState(getRouteState());
+      setActiveProject(null);
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener("popstate", updateRoute);
+    window.addEventListener("hashchange", updateRoute);
+    return () => {
+      window.removeEventListener("popstate", updateRoute);
+      window.removeEventListener("hashchange", updateRoute);
+    };
+  }, []);
   const handleSelectProject = (id2) => {
     setActiveProject(id2 || null);
     if (id2) {
@@ -41395,13 +41852,59 @@ function App() {
       });
     }
   };
+  if (routeState.section === "studio") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Studio, {}) });
+  }
+  if (routeState.section === "review") {
+    const view = getReviewerView(routeState.slug);
+    const lanes = (view == null ? void 0 : view.lanes) ?? ["Enablement", "Learning Experience"];
+    const laneProfile = getLaneProfile(lanes[0]);
+    const projectIds = (view == null ? void 0 : view.projectIds) ?? projects.slice(0, 3).map((project) => project.id);
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(Layout, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Projects,
+        {
+          activeProject,
+          onSelectProject: handleSelectProject,
+          eyebrow: laneProfile.lane,
+          title: laneProfile.headline,
+          description: laneProfile.reviewerTakeaway,
+          projectIds,
+          proofIds: view == null ? void 0 : view.proofIds,
+          isReviewPath: true
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(About, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Contact, {})
+    ] });
+  }
+  if (routeState.section === "work") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(Layout, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Projects,
+        {
+          activeProject,
+          onSelectProject: handleSelectProject,
+          eyebrow: "Evidence portfolio",
+          title: "Work that connects learning, systems, and execution."
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(About, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Contact, {})
+    ] });
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(Layout, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Hero, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Projects,
       {
         activeProject,
-        onSelectProject: handleSelectProject
+        onSelectProject: handleSelectProject,
+        projectIds: projects.slice(0, 3).map((project) => project.id),
+        proofIds: ["defense-workforce", "asset-cycle", "release-depth"],
+        eyebrow: "Preview",
+        title: "A quick look at the work.",
+        description: "A light preview of the broader portfolio. The full work view keeps the proof organized without overloading the front door."
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(About, {}),

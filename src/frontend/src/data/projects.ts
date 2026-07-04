@@ -1,3 +1,19 @@
+export type Lane =
+  | "Enablement"
+  | "AI Operations"
+  | "Learning Experience"
+  | "Technical Product"
+  | "Sales Enablement"
+  | "Compliance";
+
+export type ProofPoint = {
+  id: string;
+  label: string;
+  value: string;
+  detail: string;
+  lanes: Lane[];
+};
+
 export type Project = {
   id: string;
   title: string;
@@ -7,82 +23,517 @@ export type Project = {
   image: string;
   shortDescription: string;
   fullDescription: string;
+  problem: string;
+  actions: string[];
+  outcomes: string[];
   tags: string[];
+  lanes: Lane[];
+  proofIds: string[];
+  mediaNeeds: string[];
+  sourceNote: string;
+  repo?: string;
 };
+
+export type LaneProfile = {
+  lane: Lane;
+  headline: string;
+  reviewerTakeaway: string;
+  keywords: string[];
+};
+
+export type HumanHighlight = {
+  label: string;
+  detail: string;
+};
+
+export type BrainSource = {
+  id: string;
+  title: string;
+  type: string;
+  status: "ready" | "needs cleanup" | "private source" | "needs artifact";
+  linkedProjectIds: string[];
+  note: string;
+};
+
+export const profile = {
+  name: "Terry Brutus",
+  title: "Enablement Systems and Learning Experience Builder",
+  location: "Leland, NC",
+  email: "terrbrutus@gmail.com",
+  linkedIn: "https://www.linkedin.com/in/terrybrutus",
+  github: "https://github.com/terrybrutus",
+  headline:
+    "I build practical enablement systems for teams that need clearer execution.",
+  shortSummary:
+    "I connect instructional systems design, AI workflow design, and product-minded execution so complex work becomes easier to learn, run, and measure.",
+};
+
+export const laneProfiles: LaneProfile[] = [
+  {
+    lane: "Enablement",
+    headline: "Enablement systems for clearer execution.",
+    reviewerTakeaway:
+      "Strong fit for onboarding, manager support, stakeholder alignment, role readiness, and practical performance support.",
+    keywords: [
+      "enablement",
+      "onboarding",
+      "readiness",
+      "adoption",
+      "stakeholder",
+      "manager",
+      "talent",
+      "performance",
+      "change",
+    ],
+  },
+  {
+    lane: "AI Operations",
+    headline: "AI-assisted workflows with human quality gates.",
+    reviewerTakeaway:
+      "Strong fit for AI adoption, content operations, process automation, QA, and repeatable production systems.",
+    keywords: [
+      "ai",
+      "automation",
+      "llm",
+      "workflow",
+      "operations",
+      "rag",
+      "prompt",
+      "qa",
+      "process",
+    ],
+  },
+  {
+    lane: "Learning Experience",
+    headline: "Learning products that turn complexity into practice.",
+    reviewerTakeaway:
+      "Strong fit for instructional design, simulations, curriculum, course design, facilitation, and learner-centered systems.",
+    keywords: [
+      "learning",
+      "instructional",
+      "training",
+      "curriculum",
+      "course",
+      "facilitation",
+      "lxd",
+      "elearning",
+      "storyboard",
+    ],
+  },
+  {
+    lane: "Technical Product",
+    headline: "Workflow tools built around evidence and adoption.",
+    reviewerTakeaway:
+      "Strong fit for prototypes, workflow platforms, dashboards, technical translation, user flows, and product-adjacent systems work.",
+    keywords: [
+      "product",
+      "platform",
+      "dashboard",
+      "prototype",
+      "technical",
+      "systems",
+      "tool",
+      "ux",
+      "data",
+    ],
+  },
+  {
+    lane: "Sales Enablement",
+    headline: "Sales readiness tied to field execution.",
+    reviewerTakeaway:
+      "Strong fit for GTM readiness, seller onboarding, field messaging, manager coaching, and adoption support.",
+    keywords: [
+      "sales",
+      "seller",
+      "revenue",
+      "gtm",
+      "field",
+      "crm",
+      "customer",
+      "messaging",
+      "coaching",
+    ],
+  },
+  {
+    lane: "Compliance",
+    headline: "Learning systems that are easier to complete and defend.",
+    reviewerTakeaway:
+      "Strong fit for regulated training, accessibility, governance, audit evidence, required learning, and documentation-heavy environments.",
+    keywords: [
+      "compliance",
+      "audit",
+      "accessibility",
+      "508",
+      "wcag",
+      "governance",
+      "policy",
+      "regulated",
+      "security",
+    ],
+  },
+];
+
+export const proofPoints: ProofPoint[] = [
+  {
+    id: "defense-workforce",
+    label: "Defense workforce supported",
+    value: "158,000",
+    detail:
+      "Supported learning and talent-development systems for a large defense acquisition audience.",
+    lanes: ["Enablement", "Compliance"],
+  },
+  {
+    id: "army-lms",
+    label: "Army LMS platform scale",
+    value: "1.2M+ users",
+    detail:
+      "Worked in a technical simulation and LMS environment with enterprise-scale deployment expectations.",
+    lanes: ["Learning Experience", "Compliance", "Technical Product"],
+  },
+  {
+    id: "asset-cycle",
+    label: "Asset cycle improvement",
+    value: "1.5 hrs to 9.5 min",
+    detail:
+      "Reduced repeated talent-content processing with AI-assisted analysis, scripting, and QA standards.",
+    lanes: ["AI Operations", "Enablement"],
+  },
+  {
+    id: "audit-cost",
+    label: "Audit cost reduction",
+    value: "90%",
+    detail:
+      "Used structured review logic to reduce manual audit burden while keeping human review in the loop.",
+    lanes: ["AI Operations", "Compliance"],
+  },
+  {
+    id: "market-lots",
+    label: "Market lots standardized",
+    value: "76,000",
+    detail:
+      "Designed scalable enablement touchpoints for a distributed selling-community environment.",
+    lanes: ["Sales Enablement", "Enablement"],
+  },
+  {
+    id: "municipal-coverage",
+    label: "Municipal coverage",
+    value: "1,750+ employees",
+    detail:
+      "Built mobile-first compliance support for a workforce without formal LMS infrastructure.",
+    lanes: ["Compliance", "Learning Experience"],
+  },
+  {
+    id: "release-depth",
+    label: "Product iteration depth",
+    value: "77+ releases",
+    detail:
+      "Used rapid AI-assisted build cycles and GitHub-connected workflows to move ideas into working tools.",
+    lanes: ["Technical Product", "AI Operations"],
+  },
+  {
+    id: "feature-set",
+    label: "Workflow feature set",
+    value: "50+ features",
+    detail:
+      "Built workflow features around visibility, handoffs, readiness, and delivery governance.",
+    lanes: ["Technical Product", "Enablement"],
+  },
+];
 
 export const projects: Project[] = [
   {
-    id: "tide-analytics",
-    title: "Tide Analytics Dashboard",
-    category: "Product Design",
+    id: "ai-talent-content-pipeline",
+    title: "AI Talent Content Pipeline",
+    category: "AI Operations",
+    year: "2026",
+    thumbnail: "/assets/portfolio/ai-content-pipeline.png",
+    image: "/assets/portfolio/ai-content-pipeline.png",
+    shortDescription:
+      "A repeatable AI-assisted content operations system with source review, scripting, QA, and human approval.",
+    fullDescription:
+      "A practical production system for high-volume talent-development assets. The work combined source analysis, NotebookLM-style review, scripting, and quality gates so AI accelerated repeated work without removing expert judgment.",
+    problem:
+      "High-volume learning assets needed faster review, cleaner metadata, and repeatable compliance alignment.",
+    actions: [
+      "Converted repeated review steps into a structured AI-assisted workflow.",
+      "Documented quality standards so outputs could be checked consistently.",
+      "Kept human review gates in place for decisions that required judgment.",
+    ],
+    outcomes: [
+      "Reduced per-deliverable processing from 1.5 hours to 9.5 minutes.",
+      "Created a repeatable foundation for future talent-content production.",
+      "Balanced speed with traceable QA instead of treating AI as a black box.",
+    ],
+    tags: ["AI Workflow", "Talent Enablement", "QA"],
+    lanes: ["AI Operations", "Enablement", "Compliance"],
+    proofIds: ["asset-cycle", "audit-cost"],
+    mediaNeeds: [
+      "Redacted workflow screenshot",
+      "Before/after timing visual",
+      "Sample QA checklist",
+    ],
+    sourceNote: "Current resume, internal workflow notes, and project records.",
+  },
+  {
+    id: "workflow-management-platform",
+    title: "Workflow Management Platform",
+    category: "Technical Product",
+    year: "2026",
+    thumbnail: "/assets/portfolio/workflow-platform.png",
+    image: "/assets/portfolio/workflow-platform.png",
+    shortDescription:
+      "A custom workflow layer for status visibility, stakeholder handoffs, content readiness, and delivery governance.",
+    fullDescription:
+      "A product-minded operating layer for content and enablement work. The platform organizes intake, build, review, readiness, and delivery signals so stakeholders can see what is moving, blocked, or ready to ship.",
+    problem:
+      "Manual tracking made it hard to see ownership, review status, handoffs, and readiness.",
+    actions: [
+      "Mapped production states around intake, build, review, ready, and measure.",
+      "Designed views for ownership, blockers, and delivery readiness.",
+      "Used AI-assisted prototyping to move faster from need to usable release.",
+    ],
+    outcomes: [
+      "Improved visibility across a multi-project operating model.",
+      "Reduced tracking friction by making status and ownership explicit.",
+      "Demonstrated product thinking through working software, not just slides.",
+    ],
+    tags: ["Workflow Design", "React", "Delivery Systems"],
+    lanes: ["Technical Product", "Enablement", "AI Operations"],
+    proofIds: ["release-depth", "feature-set"],
+    mediaNeeds: [
+      "Actual app screenshot",
+      "Redacted status board",
+      "Before/after tracking diagram",
+    ],
+    sourceNote: "GitHub repositories and shipped workflow experiments.",
+  },
+  {
+    id: "enterprise-onboarding-journey",
+    title: "Enterprise Onboarding and Readiness Journey",
+    category: "Enablement",
+    year: "2025",
+    thumbnail: "/assets/portfolio/readiness-journey.png",
+    image: "/assets/portfolio/readiness-journey.png",
+    shortDescription:
+      "A distributed enablement architecture for role readiness, onboarding, and field execution.",
+    fullDescription:
+      "A scalable readiness model for a distributed selling-community environment. The work connected lifecycle moments, role expectations, manager support, and field execution into a clearer path for enablement delivery.",
+    problem:
+      "A distributed sales ecosystem needed clearer readiness paths across roles, communities, and employee lifecycle moments.",
+    actions: [
+      "Mapped employee lifecycle moments into a practical enablement journey.",
+      "Aligned learning touchpoints to role expectations and operating rhythm.",
+      "Created a more scalable foundation for field-facing support.",
+    ],
+    outcomes: [
+      "Standardized enablement delivery across 76,000 market lots.",
+      "Supported clearer learning paths for 400+ selling communities.",
+    ],
+    tags: ["Onboarding", "Sales Readiness", "Journey Mapping"],
+    lanes: ["Sales Enablement", "Enablement", "Learning Experience"],
+    proofIds: ["market-lots"],
+    mediaNeeds: [
+      "Redacted journey map",
+      "Onboarding architecture artifact",
+      "Manager-support sample",
+    ],
+    sourceNote: "Resume, LinkedIn history, and enterprise enablement notes.",
+  },
+  {
+    id: "compliance-enablement-ecosystem",
+    title: "Mobile-First Compliance Enablement Ecosystem",
+    category: "Compliance",
     year: "2024",
-    thumbnail: "/assets/generated/project-1.dim_800x600.png",
-    image: "/assets/generated/project-1.dim_800x600.png",
+    thumbnail: "/assets/portfolio/compliance-ecosystem.png",
+    image: "/assets/portfolio/compliance-ecosystem.png",
     shortDescription:
-      "A real-time analytics platform that turns raw event streams into clear, actionable insight for product teams.",
+      "A low-code, mobile-first learning system for required training in a workforce without formal LMS infrastructure.",
     fullDescription:
-      "Tide is a real-time analytics platform built for product teams who need to understand user behavior without waiting on data engineers. I led the end-to-end product design — from the information architecture of the event model to the visual language of the dashboard. The interface prioritizes legibility: large typographic hierarchy, calm color use, and a layout that scales from a single chart to a full grid of metrics. The result is a tool that feels less like a database and more like a conversation with your data.",
-    tags: ["UX Research", "Data Viz", "Design System"],
+      "A constraints-based compliance learning ecosystem designed for practical access, evidence, and completion. The work focused on making required learning easier to reach, complete, and defend for a distributed workforce.",
+    problem:
+      "A municipal workforce needed audit-ready training coverage without traditional LMS infrastructure.",
+    actions: [
+      "Designed mobile-first access patterns for required learning.",
+      "Balanced audit evidence, usability, and low-code deployment constraints.",
+      "Organized content around completion, tracking, and practical support.",
+    ],
+    outcomes: [
+      "Supported audit-ready coverage for 1,750+ employees.",
+      "Demonstrated practical learning design under real infrastructure limits.",
+    ],
+    tags: ["Compliance", "Mobile-First", "Audit Evidence"],
+    lanes: ["Compliance", "Learning Experience", "Enablement"],
+    proofIds: ["municipal-coverage"],
+    mediaNeeds: [
+      "Mobile screen preview",
+      "Tracking artifact",
+      "Redacted audit evidence",
+    ],
+    sourceNote: "Legacy instructional design site and project notes.",
   },
   {
-    id: "harbor-mobile",
-    title: "Harbor Mobile Banking",
-    category: "Mobile App",
-    year: "2023",
-    thumbnail: "/assets/generated/project-2.dim_800x600.png",
-    image: "/assets/generated/project-2.dim_800x600.png",
+    id: "phishing-red-flags",
+    title: "Spot the Red Flags Interaction",
+    category: "Learning Experience",
+    year: "2024",
+    thumbnail: "/assets/portfolio/ai-content-pipeline.png",
+    image: "/assets/portfolio/ai-content-pipeline.png",
     shortDescription:
-      "A calm, human-centered mobile banking experience designed to reduce financial anxiety for first-time savers.",
+      "A compact security-awareness interaction built around active judgment instead of passive compliance reading.",
     fullDescription:
-      "Harbor is a mobile banking app aimed at first-time savers who feel overwhelmed by traditional finance tools. The design language is deliberately quiet — soft motion, generous spacing, and a single confident accent color reserved for the most important actions. I designed the onboarding flow, the savings goal journey, and the recurring transfer experience. Usability testing showed a 40% reduction in task-completion time compared to the previous app, and qualitative feedback centered on the app feeling 'calm' and 'trustworthy'.",
-    tags: ["Mobile", "Fintech", "Prototyping"],
+      "A scenario-based learning interaction that asks learners to identify suspicious sender, link, attachment, and urgency cues. The point is simple: practice the decision, do not just read the policy.",
+    problem:
+      "Security topics can become passive compliance content when learners do not practice realistic judgment.",
+    actions: [
+      "Turned phishing recognition into a short visual decision activity.",
+      "Focused feedback around realistic red-flag categories.",
+      "Kept the experience small enough for workplace performance support.",
+    ],
+    outcomes: [
+      "Converted a compliance topic into active judgment practice.",
+      "Created a reusable pattern for short scenario-based security learning.",
+    ],
+    tags: ["Scenario Design", "Security Awareness", "eLearning"],
+    lanes: ["Learning Experience", "Compliance", "Technical Product"],
+    proofIds: ["municipal-coverage", "army-lms"],
+    mediaNeeds: [
+      "Direct interaction screenshot",
+      "Short click-through GIF",
+      "Clean exported course screen",
+    ],
+    sourceNote: "Legacy TerryLXD and instructional design portfolio artifacts.",
   },
   {
-    id: "atelier-identity",
-    title: "Atelier Brand Identity",
-    category: "Brand Design",
-    year: "2023",
-    thumbnail: "/assets/generated/project-3.dim_800x600.png",
-    image: "/assets/generated/project-3.dim_800x600.png",
+    id: "career-city",
+    title: "Career City",
+    category: "Learning Product",
+    year: "2026",
+    thumbnail: "/assets/portfolio/workflow-platform.png",
+    image: "/assets/portfolio/workflow-platform.png",
     shortDescription:
-      "A complete visual identity for an independent architecture studio, from wordmark to stationery system.",
+      "A gameful career-development prototype that turns growth paths into an explorable learning product.",
     fullDescription:
-      "Atelier is an independent architecture studio working on residential and small civic projects. They needed an identity that felt grounded and precise without being cold. I developed the wordmark, a flexible grid system for layouts, and a stationery set that scales from business cards to project proposals. The palette is restrained — a deep ink, a warm paper, and a single accent — letting the studio's own architectural photography carry the visual weight. The system is documented in a brand book that the studio now uses internally.",
-    tags: ["Identity", "Typography", "Print"],
-  },
-  {
-    id: "meadow-illustration",
-    title: "Meadow Editorial Illustration",
-    category: "Illustration",
-    year: "2022",
-    thumbnail: "/assets/generated/project-4.dim_800x600.png",
-    image: "/assets/generated/project-4.dim_800x600.png",
-    shortDescription:
-      "A series of editorial illustrations exploring the quiet rhythms of rural life across four seasons.",
-    fullDescription:
-      "Meadow is a personal illustration series commissioned by an independent culture magazine. Across four pieces — one for each season — I explored the quiet rhythms of rural life: the slow thaw of spring, the long light of summer, the harvest gold of autumn, and the still blue of winter. The illustrations use a limited palette of warm cream, peach, gold, and ocean blue, with flowing organic shapes that echo the landscape without depicting it literally. The series ran as the magazine's cover art for a full year.",
-    tags: ["Illustration", "Editorial", "Color"],
+      "An interactive career-development concept that frames career growth as a navigable city. It shows how learning strategy, product thinking, and AI-assisted build workflows can come together in a usable prototype.",
+    problem:
+      "Career growth can feel abstract when people need to compare paths, practice choices, and decide what to do next.",
+    actions: [
+      "Designed a gameful flow around exploration and decision-making.",
+      "Used AI-assisted build workflows to move from idea to prototype.",
+      "Framed learning strategy as an interactive product instead of a static course.",
+    ],
+    outcomes: [
+      "Shows product thinking, learning strategy, and AI-enabled build capability together.",
+      "Demonstrates how career navigation can become a practical learning product.",
+    ],
+    tags: ["Gameful Learning", "React", "Career Development"],
+    lanes: ["Learning Experience", "Technical Product", "AI Operations"],
+    proofIds: ["release-depth"],
+    mediaNeeds: ["Actual app screenshot", "Gameplay GIF", "Demo link"],
+    sourceNote: "GitHub repo and app prototype.",
+    repo: "https://github.com/terrybrutus/career-city",
   },
 ];
 
 export const skills = [
-  "Product Design",
-  "Typography",
-  "Design Systems",
-  "Prototyping",
-  "Illustration",
+  "Enablement Strategy",
+  "Learning Experience Design",
+  "Instructional Systems Design",
+  "AI Workflow Design",
+  "Sales Readiness",
+  "Compliance Learning",
+  "Workflow Prototyping",
+  "Stakeholder Alignment",
+  "Manager Support",
+  "Measurement Planning",
+];
+
+export const humanHighlights: HumanHighlight[] = [
+  {
+    label: "Former Division I athlete",
+    detail:
+      "Played basketball at Ole Miss, which still shapes how I think about preparation, feedback, standards, and team execution.",
+  },
+  {
+    label: "Maker mindset",
+    detail:
+      "Sewing and making clothes sharpen the same instincts I use in systems work: fit, iteration, detail, and craft.",
+  },
+  {
+    label: "Competitive outlet",
+    detail:
+      "Pickleball keeps the quick-read, adjust-fast part of my brain active without turning every problem into a playbook.",
+  },
+];
+
+export const brainSources: BrainSource[] = [
+  {
+    id: "latest-resume",
+    title: "Current resume",
+    type: "Resume",
+    status: "needs cleanup",
+    linkedProjectIds: [
+      "ai-talent-content-pipeline",
+      "workflow-management-platform",
+      "enterprise-onboarding-journey",
+    ],
+    note: "Best source for current positioning, scale, and metrics. Copy should stay concise.",
+  },
+  {
+    id: "linkedin-profile",
+    title: "LinkedIn profile export",
+    type: "LinkedIn",
+    status: "needs cleanup",
+    linkedProjectIds: [
+      "enterprise-onboarding-journey",
+      "phishing-red-flags",
+      "compliance-enablement-ecosystem",
+    ],
+    note: "Useful background, but public copy should be slimmer and less verbose.",
+  },
+  {
+    id: "legacy-isd-site",
+    title: "Instructional Design by Terry",
+    type: "Old website",
+    status: "needs artifact",
+    linkedProjectIds: ["phishing-red-flags", "compliance-enablement-ecosystem"],
+    note: "Good older ISD proof. Needs cleaner media crops and updated framing.",
+  },
+  {
+    id: "github-repos",
+    title: "GitHub projects",
+    type: "Repository evidence",
+    status: "ready",
+    linkedProjectIds: ["workflow-management-platform", "career-city"],
+    note: "Useful proof of shipped prototypes, AI-assisted build workflows, and technical credibility.",
+  },
 ];
 
 export const socialLinks = [
-  { label: "Dribbble", href: "https://dribbble.com" },
-  { label: "Behance", href: "https://behance.net" },
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "GitHub", href: "https://github.com" },
+  { label: "LinkedIn", href: profile.linkedIn },
+  { label: "GitHub", href: profile.github },
+  { label: "Email", href: `mailto:${profile.email}` },
 ];
 
 export const navLinks = [
-  { label: "Hero", id: "hero" },
-  { label: "Projects", id: "projects" },
-  { label: "About", id: "about" },
-  { label: "Contact", id: "contact" },
+  { label: "Home", id: "hero", route: "/" },
+  { label: "Work", id: "projects", route: "/work" },
+  { label: "About", id: "about", route: "/" },
+  { label: "Contact", id: "contact", route: "/" },
 ];
+
+export function getProofPoints(ids: string[]) {
+  return ids
+    .map((id) => proofPoints.find((proofPoint) => proofPoint.id === id))
+    .filter((proofPoint): proofPoint is ProofPoint => Boolean(proofPoint));
+}
+
+export function getProjectById(id: string) {
+  return projects.find((project) => project.id === id);
+}
+
+export function getLaneProfile(lane: Lane) {
+  return (
+    laneProfiles.find((laneProfile) => laneProfile.lane === lane) ??
+    laneProfiles[0]
+  );
+}

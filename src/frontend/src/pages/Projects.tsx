@@ -1,6 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { projects } from "@/data/projects";
+import {
+  type Project,
+  getProofPoints,
+  projects,
+  proofPoints,
+} from "@/data/projects";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
@@ -8,10 +13,35 @@ import { motion } from "motion/react";
 type ProjectsProps = {
   activeProject: string | null;
   onSelectProject: (id: string) => void;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  projectIds?: string[];
+  proofIds?: string[];
+  isReviewPath?: boolean;
 };
 
-export function Projects({ activeProject, onSelectProject }: ProjectsProps) {
+export function Projects({
+  activeProject,
+  onSelectProject,
+  eyebrow = "Proof of work",
+  title = "Work",
+  description = "A focused collection of enablement systems, learning experiences, AI workflows, and product-minded prototypes.",
+  projectIds,
+  proofIds,
+  isReviewPath = false,
+}: ProjectsProps) {
   const scrollTo = useSmoothScroll();
+  const visibleProjects =
+    projectIds && projectIds.length > 0
+      ? projectIds
+          .map((id) => projects.find((project) => project.id === id))
+          .filter((project): project is Project => Boolean(project))
+      : projects;
+  const visibleProof =
+    proofIds && proofIds.length > 0
+      ? getProofPoints(proofIds)
+      : proofPoints.slice(0, 4);
 
   return (
     <section
@@ -27,19 +57,37 @@ export function Projects({ activeProject, onSelectProject }: ProjectsProps) {
           className="mb-12 flex flex-col gap-3"
         >
           <p className="text-primary text-sm font-semibold uppercase tracking-wider">
-            Selected work
+            {eyebrow}
           </p>
           <h2 className="font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
-            Projects
+            {title}
           </h2>
           <p className="text-muted-foreground max-w-xl text-base leading-relaxed">
-            A focused collection of recent commissions and personal work. Tap
-            any project to read the full case study.
+            {description}
           </p>
         </motion.div>
 
+        <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {visibleProof.map((proofPoint) => (
+            <div
+              key={proofPoint.id}
+              className="bg-card border-border rounded-xl border p-5 shadow-elevated"
+            >
+              <p className="font-display text-foreground text-2xl font-bold">
+                {proofPoint.value}
+              </p>
+              <p className="text-foreground mt-2 text-sm font-semibold">
+                {proofPoint.label}
+              </p>
+              <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                {proofPoint.detail}
+              </p>
+            </div>
+          ))}
+        </div>
+
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, index) => (
+          {visibleProjects.map((project, index) => (
             <motion.article
               key={project.id}
               initial={{ opacity: 0, y: 16 }}
@@ -76,6 +124,11 @@ export function Projects({ activeProject, onSelectProject }: ProjectsProps) {
                   <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
                     {project.shortDescription}
                   </p>
+                  {isReviewPath && (
+                    <p className="text-muted-foreground text-xs leading-relaxed">
+                      {project.sourceNote}
+                    </p>
+                  )}
                   <span className="text-primary group-hover:text-primary/80 mt-1 inline-flex items-center gap-1.5 text-sm font-medium transition-smooth">
                     View
                     <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
@@ -151,6 +204,37 @@ function ProjectDetail({
         <p className="text-muted-foreground max-w-3xl text-base leading-relaxed md:text-lg">
           {project.fullDescription}
         </p>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          <div>
+            <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+              Problem
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+              {project.problem}
+            </p>
+          </div>
+          <div>
+            <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+              Actions
+            </p>
+            <ul className="text-muted-foreground mt-2 space-y-2 text-sm leading-relaxed">
+              {project.actions.map((action) => (
+                <li key={action}>{action}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+              Outcomes
+            </p>
+            <ul className="text-muted-foreground mt-2 space-y-2 text-sm leading-relaxed">
+              {project.outcomes.map((outcome) => (
+                <li key={outcome}>{outcome}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
         <div className="flex flex-wrap gap-2">
           {project.tags.map((tag) => (

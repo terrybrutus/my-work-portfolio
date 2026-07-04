@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { skills } from "@/data/projects";
+import { humanHighlights, profile, skills } from "@/data/projects";
 import { motion } from "motion/react";
 
 export function About() {
@@ -16,8 +16,8 @@ export function About() {
           >
             <div className="bg-muted relative h-64 w-64 overflow-hidden rounded-full shadow-elevated-lg sm:h-80 sm:w-80">
               <img
-                src="/assets/generated/profile.dim_800x800.png"
-                alt="Portrait of the designer"
+                src="/assets/portfolio/terry-profile.png"
+                alt="Portrait of Terry Brutus"
                 loading="lazy"
                 className="h-full w-full object-cover"
               />
@@ -35,20 +35,34 @@ export function About() {
               About
             </p>
             <h2 className="font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
-              A designer who listens first.
+              Systems thinker, learning designer, practical builder.
             </h2>
             <p className="text-muted-foreground text-base leading-relaxed">
-              I'm a product designer and visual storyteller with a decade of
-              experience turning complex problems into calm, usable interfaces.
-              My work spans product design, brand identity, and editorial
-              illustration — unified by a belief that good design is mostly
-              about subtraction. I work best with small teams who care about
-              craft and want a partner, not a vendor.
+              {profile.shortSummary} My background sits at the intersection of
+              instructional systems design, enablement strategy, AI-assisted
+              workflow design, and product-minded prototyping.
             </p>
             <p className="text-muted-foreground text-base leading-relaxed">
-              Currently based in the Pacific Northwest, available for select
-              commissions and full-time roles.
+              I work best where the challenge is messy: people need to learn
+              something, leaders need evidence, and the system needs to become
+              easier to run after the project ships.
             </p>
+
+            <div className="grid gap-3 pt-2">
+              {humanHighlights.map((highlight) => (
+                <div
+                  key={highlight.label}
+                  className="border-border bg-card rounded-lg border p-4 shadow-elevated"
+                >
+                  <p className="text-foreground text-sm font-semibold">
+                    {highlight.label}
+                  </p>
+                  <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                    {highlight.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
 
             <div className="flex flex-wrap gap-2 pt-2">
               {skills.map((skill) => (

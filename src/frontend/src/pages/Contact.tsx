@@ -1,40 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { socialLinks } from "@/data/projects";
-import { Mail, Send } from "lucide-react";
+import { profile, socialLinks } from "@/data/projects";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { motion } from "motion/react";
-import { type FormEvent, useState } from "react";
-import { toast } from "sonner";
+
+const iconByLabel: Record<string, typeof Mail> = {
+  Email: Mail,
+  GitHub: Github,
+  LinkedIn: Linkedin,
+};
 
 export function Contact() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!name.trim() || !email.trim() || !message.trim()) return;
-    setSubmitting(true);
-    // Simulated submit — this is a static showcase portfolio.
-    window.setTimeout(() => {
-      setSubmitting(false);
-      setName("");
-      setEmail("");
-      setMessage("");
-      toast.success("Thanks for reaching out — I'll be in touch soon.");
-    }, 600);
-  };
-
   return (
     <section
       id="contact"
       className="bg-muted/30 border-border border-y py-20 md:py-28"
     >
       <div className="container">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -46,108 +28,57 @@ export function Contact() {
               Contact
             </p>
             <h2 className="font-display text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
-              Let's make something good.
+              Let us talk when the work needs clarity.
             </h2>
-            <p className="text-muted-foreground text-base leading-relaxed">
-              Have a project in mind, or just want to say hello? Send a note and
-              I'll get back to you within a couple of days.
+            <p className="text-muted-foreground max-w-2xl text-base leading-relaxed">
+              I am open to enablement, learning experience, AI workflow, and
+              product-adjacent roles where practical systems matter more than
+              polished buzzwords.
             </p>
-
-            <div className="flex flex-col gap-4 pt-2">
-              <a
-                href="mailto:hello@myworkportfolio.com"
-                data-ocid="contact.email_link"
-                className="text-foreground hover:text-primary inline-flex items-center gap-2 text-base font-medium transition-smooth"
-              >
-                <Mail className="size-5 text-primary" />
-                hello@myworkportfolio.com
+            <Button asChild size="lg" className="w-fit">
+              <a href={`mailto:${profile.email}`} data-ocid="contact.email">
+                <Mail className="size-4" />
+                Email Terry
               </a>
-
-              <div className="flex flex-col gap-2">
-                <p className="text-foreground text-sm font-semibold">
-                  Elsewhere
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {socialLinks.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      data-ocid={`contact.social_link.${link.label.toLowerCase()}`}
-                      className="text-muted-foreground hover:text-primary border-border bg-card rounded-md border px-3 py-1.5 text-sm font-medium transition-smooth"
-                    >
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
+            </Button>
           </motion.div>
 
-          <motion.form
+          <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            onSubmit={onSubmit}
-            className="bg-card border-border flex flex-col gap-5 rounded-xl border p-6 shadow-elevated md:p-8"
+            className="bg-card border-border flex flex-col gap-4 rounded-xl border p-6 shadow-elevated md:p-8"
           >
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="name" data-ocid="contact.name.label">
-                Name
-              </Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
-                required
-                data-ocid="contact.name.input"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email" data-ocid="contact.email.label">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                data-ocid="contact.email.input"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="message" data-ocid="contact.message.label">
-                Message
-              </Label>
-              <Textarea
-                id="message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Tell me a little about your project..."
-                required
-                rows={5}
-                data-ocid="contact.message.textarea"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              size="lg"
-              disabled={submitting}
-              data-ocid="contact.submit_button"
-              className="w-full"
-            >
-              <Send className="size-4" />
-              {submitting ? "Sending..." : "Send message"}
-            </Button>
-          </motion.form>
+            <p className="text-foreground text-sm font-semibold">
+              Direct links
+            </p>
+            {socialLinks.map((link) => {
+              const Icon = iconByLabel[link.label] ?? Mail;
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={
+                    link.href.startsWith("mailto:") ? undefined : "_blank"
+                  }
+                  rel={
+                    link.href.startsWith("mailto:") ? undefined : "noreferrer"
+                  }
+                  data-ocid={`contact.social.${link.label.toLowerCase()}`}
+                  className="border-border hover:border-primary/40 hover:text-primary flex items-center justify-between rounded-lg border px-4 py-3 text-sm font-medium transition-smooth"
+                >
+                  <span className="inline-flex items-center gap-3">
+                    <Icon className="size-4" />
+                    {link.label}
+                  </span>
+                  <span className="text-muted-foreground text-xs">
+                    {link.label === "Email" ? profile.email : "Open"}
+                  </span>
+                </a>
+              );
+            })}
+          </motion.div>
         </div>
       </div>
     </section>
