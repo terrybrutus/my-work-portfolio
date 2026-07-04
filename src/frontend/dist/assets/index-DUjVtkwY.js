@@ -1,4 +1,4 @@
-var __defProp = Object.defineProperty;
+﻿var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
 };
@@ -2931,7 +2931,7 @@ class VecClass extends ConstructType {
       try {
         return this._type.covariant(v2);
       } catch (e) {
-        throw new Error(`Invalid ${this.display()} argument: 
+        throw new Error(`Invalid ${this.display()} argument:
 
 index ${idx} -> ${e.message}`, { cause: e });
       }
@@ -3088,7 +3088,7 @@ class OptClass extends ConstructType {
         return true;
       }
     } catch (e) {
-      throw new Error(`Invalid ${this.display()} argument: ${toReadableString(x2)} 
+      throw new Error(`Invalid ${this.display()} argument: ${toReadableString(x2)}
 
 -> ${e.message}`, { cause: e });
     }
@@ -3204,7 +3204,7 @@ class RecordClass extends ConstructType {
       try {
         return t.covariant(x2[k2]);
       } catch (e) {
-        throw new Error(`Invalid ${this.display()} argument: 
+        throw new Error(`Invalid ${this.display()} argument:
 
 field ${k2} -> ${e.message}`, {
           cause: e
@@ -3316,7 +3316,7 @@ class TupleClass extends RecordClass {
       try {
         return t.covariant(x2[i]);
       } catch (e) {
-        throw new Error(`Invalid ${this.display()} argument: 
+        throw new Error(`Invalid ${this.display()} argument:
 
 index ${i} -> ${e.message}`, {
           cause: e
@@ -3377,7 +3377,7 @@ class VariantClass extends ConstructType {
       try {
         return !x2.hasOwnProperty(k2) || v2.covariant(x2[k2]);
       } catch (e) {
-        throw new Error(`Invalid ${this.display()} argument: 
+        throw new Error(`Invalid ${this.display()} argument:
 
 variant ${k2} -> ${e.message}`, {
           cause: e
@@ -3511,7 +3511,7 @@ const _RecClass = class _RecClass extends ConstructType {
     if (!this._type) {
       throw Error("Recursive type uninitialized.");
     }
-    return `μ${this.name}.${this._type.name}`;
+    return `Î¼${this.name}.${this._type.name}`;
   }
   valueToString(x2) {
     if (!this._type) {
@@ -3642,7 +3642,7 @@ class FuncClass extends ConstructType {
     const args = this.argTypes.map((arg) => arg.display()).join(", ");
     const rets = this.retTypes.map((arg) => arg.display()).join(", ");
     const annon = ` ${this.annotations.join(" ")}`;
-    return `(${args}) → (${rets})${annon}`;
+    return `(${args}) â†’ (${rets})${annon}`;
   }
   encodeAnnotation(ann) {
     if (ann === "query") {
@@ -5391,9 +5391,9 @@ class wNAF {
    * Creates a wNAF precomputation window. Used for caching.
    * Default window size is set by `utils.precompute()` and is equal to 8.
    * Number of precomputed points depends on the curve size:
-   * 2^(𝑊−1) * (Math.ceil(𝑛 / 𝑊) + 1), where:
-   * - 𝑊 is the window size
-   * - 𝑛 is the bitlength of the curve order.
+   * 2^(ð‘Šâˆ’1) * (Math.ceil(ð‘› / ð‘Š) + 1), where:
+   * - ð‘Š is the window size
+   * - ð‘› is the bitlength of the curve order.
    * For a 256-bit curve and window size 8, the number of precomputed points is 128 * 33 = 4224.
    * @param point Point instance
    * @param W window size
@@ -6949,9 +6949,9 @@ class _Field2 {
     const b22 = Fp22.sqr(b2);
     return {
       first: Fp22.add(Fp22.mulByNonresidue(b22), a22),
-      // b² * Nonresidue + a²
+      // bÂ² * Nonresidue + aÂ²
       second: Fp22.sub(Fp22.sub(Fp22.sqr(Fp22.add(a2, b2)), a22), b22)
-      // (a + b)² - a² - b²
+      // (a + b)Â² - aÂ² - bÂ²
     };
   }
   // multiply by u + 1
@@ -7030,7 +7030,7 @@ class _Field6 {
       // T3 * (u + 1) + T0
       c1: Fp22.add(Fp22.mulByNonresidue(t4), t1),
       // T4 * (u + 1) + T1
-      // T1 + (c0 - c1 + c2)² + T3 - T0 - T4
+      // T1 + (c0 - c1 + c2)Â² + T3 - T0 - T4
       c2: Fp22.sub(Fp22.sub(Fp22.add(Fp22.add(t1, Fp22.sqr(Fp22.add(Fp22.sub(c0, c1), c2))), t3), t0), t4)
     };
   }
@@ -7367,7 +7367,7 @@ class _Field12 {
     };
   }
   // A cyclotomic group is a subgroup of Fp^n defined by
-  //   GΦₙ(p) = {α ∈ Fpⁿ : α^Φₙ(p) = 1}
+  //   GÎ¦â‚™(p) = {Î± âˆˆ Fpâ¿ : Î±^Î¦â‚™(p) = 1}
   // The result of any pairing is in a cyclotomic subgroup
   // https://eprint.iacr.org/2009/565.pdf
   // https://eprint.iacr.org/2010/354.pdf
@@ -7437,7 +7437,7 @@ const { Fp: Fp$1, Fp2, Fp6, Fp12 } = tower12({
   ORDER: bls12_381_CURVE_G1.p,
   X_LEN: BLS_X_LEN,
   // Finite extension field over irreducible polynominal.
-  // Fp(u) / (u² - β) where β = -1
+  // Fp(u) / (uÂ² - Î²) where Î² = -1
   FP2_NONRESIDUE: [_1n$2, _1n$2],
   Fp2mulByB: ({ c0, c1 }) => {
     const t0 = Fp$1.mul(c0, _4n);
@@ -7690,7 +7690,7 @@ const bls12_381 = bls({
     Fp12,
     Fr: bls12_381_Fr
   },
-  // G1: y² = x³ + 4
+  // G1: yÂ² = xÂ³ + 4
   G1: {
     ...bls12_381_CURVE_G1,
     Fp: Fp$1,
@@ -7796,7 +7796,7 @@ const bls12_381 = bls({
     ateLoopSize: BLS_X,
     // The BLS parameter x for BLS12-381
     r: bls12_381_CURVE_G1.n,
-    // order; z⁴ − z² + 1; CURVE.n from other curves
+    // order; zâ´ âˆ’ zÂ² + 1; CURVE.n from other curves
     xNegative: true,
     twistType: "multiplicative"
   },
@@ -9318,7 +9318,7 @@ const ed25519Defaults = /* @__PURE__ */ (() => ({
   adjustScalarBytes,
   // dom2
   // Ratio of u to v. Allows us to combine inversion and square root. Uses algo from RFC8032 5.1.3.
-  // Constant-time, u/√v
+  // Constant-time, u/âˆšv
   uvRatio
 }))();
 const ed25519 = /* @__PURE__ */ (() => twistedEdwards(ed25519Defaults))();
@@ -15711,7 +15711,7 @@ resolveNonce_fn = async function(nonce) {
     __privateGet(this, _signer2).autoCloseTransportChannel = previousAutoClose;
   }
 };
-// Memoized — only runs #hydrate once, returns the same promise on repeat calls.
+// Memoized â€” only runs #hydrate once, returns the same promise on repeat calls.
 init_fn = function() {
   if (!__privateGet(this, _initPromise)) {
     __privateSet(this, _initPromise, __privateMethod(this, _AuthClient_instances, hydrate_fn).call(this));
@@ -20018,12 +20018,12 @@ var ContextOnlyDispatcher = {
       var JSCompiler_inline_result = treeContextOverflow;
       var idWithLeadingBit = treeContextId;
       JSCompiler_inline_result = (idWithLeadingBit & ~(1 << 32 - clz32(idWithLeadingBit) - 1)).toString(32) + JSCompiler_inline_result;
-      identifierPrefix = "«" + identifierPrefix + "R" + JSCompiler_inline_result;
+      identifierPrefix = "Â«" + identifierPrefix + "R" + JSCompiler_inline_result;
       JSCompiler_inline_result = localIdCounter++;
       0 < JSCompiler_inline_result && (identifierPrefix += "H" + JSCompiler_inline_result.toString(32));
-      identifierPrefix += "»";
+      identifierPrefix += "Â»";
     } else
-      JSCompiler_inline_result = globalClientIdCounter++, identifierPrefix = "«" + identifierPrefix + "r" + JSCompiler_inline_result.toString(32) + "»";
+      JSCompiler_inline_result = globalClientIdCounter++, identifierPrefix = "Â«" + identifierPrefix + "r" + JSCompiler_inline_result.toString(32) + "Â»";
     return hook.memoizedState = identifierPrefix;
   },
   useHostTransitionStatus,
@@ -42306,30 +42306,79 @@ function Studio() {
             ] }, match.project.id)) })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary mb-4 text-sm font-semibold uppercase tracking-wider", children: "Source pool" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-              brainSources.map((source) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { className: "mt-0.5 size-4 text-primary" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: source.title }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-xs", children: [
-                    source.type,
-                    " / ",
-                    source.status
-                  ] })
-                ] })
-              ] }, source.id)),
-              intakeSources.map((source) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { className: "mt-0.5 size-4 text-primary" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: source.title }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-xs", children: [
-                    source.sourceType,
-                    " / ",
-                    source.status
-                  ] })
-                ] })
-              ] }, source.id))
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Source pool" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: "Review what each source supports before it becomes public evidence. Keep, clean, or replace anything that does not match the role context." })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-5", children: [
+              brainSources.map((source) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: "border-border rounded-lg border p-4",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { className: "mt-0.5 size-4 text-primary" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: source.title }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-xs", children: [
+                          source.type,
+                          " / ",
+                          source.status
+                        ] })
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-3 text-sm leading-relaxed", children: source.note }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      SourceProjectBadges,
+                      {
+                        projectIds: source.linkedProjectIds
+                      }
+                    )
+                  ]
+                },
+                source.id
+              )),
+              intakeSources.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-border rounded-lg border border-dashed p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm leading-relaxed", children: "Added sources will appear here with matched projects, file details, links, and cleanup status." }) }) : intakeSources.map((source) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: "border-border rounded-lg border p-4",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { className: "mt-0.5 size-4 text-primary" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: source.title }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground text-xs", children: [
+                          source.sourceType,
+                          " / ",
+                          source.status
+                        ] })
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-muted-foreground mt-3 grid gap-1 text-xs", children: [
+                      source.fileName ? /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+                        "File: ",
+                        source.fileName,
+                        source.fileSize ? ` (${formatFileSize(source.fileSize)})` : ""
+                      ] }) : null,
+                      source.sourceUrl ? /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "break-all", children: [
+                        "Link: ",
+                        source.sourceUrl
+                      ] }) : null,
+                      source.sourceText ? /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+                        "Notes: ",
+                        source.sourceText.trim().length,
+                        " chars"
+                      ] }) : null,
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+                        "Lanes: ",
+                        source.lanes.join(", ")
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(SourceProjectBadges, { projectIds: source.projectIds })
+                  ]
+                },
+                source.id
+              ))
             ] })
           ] })
         ] }),
@@ -42503,6 +42552,23 @@ function inferSourceType(need) {
     return "Diagram";
   }
   return "Project artifact";
+}
+function SourceProjectBadges({ projectIds }) {
+  const matchedProjects = projectIds.map((projectId) => getProjectById(projectId)).filter((project) => Boolean(project));
+  if (matchedProjects.length === 0) {
+    return null;
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 flex flex-wrap gap-2", children: matchedProjects.map((project) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: project.title }, project.id)) });
+}
+function formatFileSize(bytes) {
+  if (bytes < 1024) {
+    return `${bytes} B`;
+  }
+  const kilobytes = bytes / 1024;
+  if (kilobytes < 1024) {
+    return `${kilobytes.toFixed(1)} KB`;
+  }
+  return `${(kilobytes / 1024).toFixed(1)} MB`;
 }
 const fallbackReviewSkills = [
   "Enablement Strategy",

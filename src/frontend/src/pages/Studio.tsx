@@ -497,36 +497,90 @@ export function Studio() {
               </div>
 
               <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
-                <p className="text-primary mb-4 text-sm font-semibold uppercase tracking-wider">
-                  Source pool
-                </p>
-                <div className="space-y-4">
+                <div className="mb-4">
+                  <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+                    Source pool
+                  </p>
+                  <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                    Review what each source supports before it becomes public
+                    evidence. Keep, clean, or replace anything that does not
+                    match the role context.
+                  </p>
+                </div>
+                <div className="space-y-5">
                   {brainSources.map((source) => (
-                    <div key={source.id} className="flex gap-3">
-                      <Database className="mt-0.5 size-4 text-primary" />
-                      <div>
-                        <p className="text-foreground text-sm font-semibold">
-                          {source.title}
-                        </p>
-                        <p className="text-muted-foreground text-xs">
-                          {source.type} / {source.status}
-                        </p>
+                    <div
+                      key={source.id}
+                      className="border-border rounded-lg border p-4"
+                    >
+                      <div className="flex gap-3">
+                        <Database className="mt-0.5 size-4 text-primary" />
+                        <div>
+                          <p className="text-foreground text-sm font-semibold">
+                            {source.title}
+                          </p>
+                          <p className="text-muted-foreground text-xs">
+                            {source.type} / {source.status}
+                          </p>
+                        </div>
                       </div>
+                      <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
+                        {source.note}
+                      </p>
+                      <SourceProjectBadges
+                        projectIds={source.linkedProjectIds}
+                      />
                     </div>
                   ))}
-                  {intakeSources.map((source) => (
-                    <div key={source.id} className="flex gap-3">
-                      <Database className="mt-0.5 size-4 text-primary" />
-                      <div>
-                        <p className="text-foreground text-sm font-semibold">
-                          {source.title}
-                        </p>
-                        <p className="text-muted-foreground text-xs">
-                          {source.sourceType} / {source.status}
-                        </p>
-                      </div>
+                  {intakeSources.length === 0 ? (
+                    <div className="border-border rounded-lg border border-dashed p-4">
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        Added sources will appear here with matched projects,
+                        file details, links, and cleanup status.
+                      </p>
                     </div>
-                  ))}
+                  ) : (
+                    intakeSources.map((source) => (
+                      <div
+                        key={source.id}
+                        className="border-border rounded-lg border p-4"
+                      >
+                        <div className="flex gap-3">
+                          <Database className="mt-0.5 size-4 text-primary" />
+                          <div>
+                            <p className="text-foreground text-sm font-semibold">
+                              {source.title}
+                            </p>
+                            <p className="text-muted-foreground text-xs">
+                              {source.sourceType} / {source.status}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-muted-foreground mt-3 grid gap-1 text-xs">
+                          {source.fileName ? (
+                            <p>
+                              File: {source.fileName}
+                              {source.fileSize
+                                ? ` (${formatFileSize(source.fileSize)})`
+                                : ""}
+                            </p>
+                          ) : null}
+                          {source.sourceUrl ? (
+                            <p className="break-all">
+                              Link: {source.sourceUrl}
+                            </p>
+                          ) : null}
+                          {source.sourceText ? (
+                            <p>
+                              Notes: {source.sourceText.trim().length} chars
+                            </p>
+                          ) : null}
+                          <p>Lanes: {source.lanes.join(", ")}</p>
+                        </div>
+                        <SourceProjectBadges projectIds={source.projectIds} />
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
@@ -808,4 +862,37 @@ function inferSourceType(need: string) {
   }
 
   return "Project artifact";
+}
+
+function SourceProjectBadges({ projectIds }: { projectIds: string[] }) {
+  const matchedProjects = projectIds
+    .map((projectId) => getProjectById(projectId))
+    .filter((project): project is Project => Boolean(project));
+
+  if (matchedProjects.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="mt-3 flex flex-wrap gap-2">
+      {matchedProjects.map((project) => (
+        <Badge key={project.id} variant="outline">
+          {project.title}
+        </Badge>
+      ))}
+    </div>
+  );
+}
+
+function formatFileSize(bytes: number) {
+  if (bytes < 1024) {
+    return `${bytes} B`;
+  }
+
+  const kilobytes = bytes / 1024;
+  if (kilobytes < 1024) {
+    return `${kilobytes.toFixed(1)} KB`;
+  }
+
+  return `${(kilobytes / 1024).toFixed(1)} MB`;
 }
