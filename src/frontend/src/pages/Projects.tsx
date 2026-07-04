@@ -18,7 +18,6 @@ type ProjectsProps = {
   description?: string;
   projectIds?: string[];
   proofIds?: string[];
-  isReviewPath?: boolean;
 };
 
 export function Projects({
@@ -29,7 +28,6 @@ export function Projects({
   description = "A focused collection of enablement systems, learning experiences, AI workflows, and product-minded prototypes.",
   projectIds,
   proofIds,
-  isReviewPath = false,
 }: ProjectsProps) {
   const scrollTo = useSmoothScroll();
   const visibleProjects =
@@ -124,11 +122,6 @@ export function Projects({
                   <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
                     {project.shortDescription}
                   </p>
-                  {isReviewPath && (
-                    <p className="text-muted-foreground text-xs leading-relaxed">
-                      {project.sourceNote}
-                    </p>
-                  )}
                   <span className="text-primary group-hover:text-primary/80 mt-1 inline-flex items-center gap-1.5 text-sm font-medium transition-smooth">
                     View
                     <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />

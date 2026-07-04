@@ -1,20 +1,32 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { brainSources, profile } from "@/data/projects";
+import {
+  type Project,
+  acceptedEvidenceTypes,
+  brainSources,
+  getProjectById,
+} from "@/data/projects";
 import {
   type ReviewerView,
+  type SavedTargetProfile,
   buildStrategyReport,
   createReviewerView,
+  createTargetProfile,
+  getMediaAlignment,
   loadReviewerViews,
+  loadTargetProfiles,
   saveReviewerView,
+  saveTargetProfile,
 } from "@/lib/portfolioStrategy";
 import {
   Clipboard,
   Database,
   FileSearch,
   Link2,
+  RotateCcw,
   Save,
+  SearchCheck,
   Wand2,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -26,12 +38,31 @@ export function Studio() {
   const [context, setContext] = useState(sampleContext);
   const [label, setLabel] = useState("");
   const [views, setViews] = useState<ReviewerView[]>(() => loadReviewerViews());
+  const [profiles, setProfiles] = useState<SavedTargetProfile[]>(() =>
+    loadTargetProfiles(),
+  );
   const report = useMemo(() => buildStrategyReport(context), [context]);
+  const mediaAlignment = useMemo(
+    () =>
+      getMediaAlignment(report.projectMatches.map((match) => match.project)),
+    [report.projectMatches],
+  );
 
   const handleSave = () => {
     const view = createReviewerView(context, label);
     setViews(saveReviewerView(view));
     setLabel("");
+  };
+
+  const handleSaveProfile = () => {
+    const profile = createTargetProfile(context, label);
+    setProfiles(saveTargetProfile(profile));
+    setLabel("");
+  };
+
+  const handleReuseProfile = (profile: SavedTargetProfile) => {
+    setContext(profile.context);
+    setLabel(profile.name);
   };
 
   const currentOrigin = window.location.origin;
@@ -54,7 +85,7 @@ export function Studio() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
+          <div className="bg-card border-border h-fit rounded-xl border p-6 shadow-elevated">
             <div className="mb-4 flex items-center gap-3">
               <div className="rounded-full bg-primary/10 p-2 text-primary">
                 <FileSearch className="size-4" />
@@ -89,6 +120,15 @@ export function Studio() {
             >
               <Save className="size-4" />
               Generate review path
+            </Button>
+            <Button
+              className="mt-3 w-full"
+              variant="outline"
+              onClick={handleSaveProfile}
+              data-ocid="studio.save_profile"
+            >
+              <SearchCheck className="size-4" />
+              Save target profile
             </Button>
           </div>
 
@@ -175,6 +215,98 @@ export function Studio() {
 
             <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
               <p className="text-primary mb-4 text-sm font-semibold uppercase tracking-wider">
+                Media and artifact alignment
+              </p>
+              <div className="grid gap-4 md:grid-cols-3">
+                {mediaAlignment.map((item) => (
+                  <div
+                    key={item.project.id}
+                    className="border-border rounded-lg border p-4"
+                  >
+                    <p className="text-foreground text-sm font-semibold">
+                      {item.project.title}
+                    </p>
+                    <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                      {item.recommendation}
+                    </p>
+                    <p className="text-muted-foreground mt-3 text-xs">
+                      Ready source signals: {item.readySources}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
+                <p className="text-primary mb-4 text-sm font-semibold uppercase tracking-wider">
+                  Accepted source types
+                </p>
+                <div className="space-y-3">
+                  {acceptedEvidenceTypes.map((type) => (
+                    <div key={type.extension}>
+                      <p className="text-foreground text-sm font-semibold">
+                        {type.extension}
+                      </p>
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        {type.use}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
+                <p className="text-primary mb-4 text-sm font-semibold uppercase tracking-wider">
+                  Saved target profiles
+                </p>
+                {profiles.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">
+                    No profiles saved yet.
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {profiles.map((profile) => (
+                      <div
+                        key={profile.id}
+                        className="border-border rounded-lg border p-4"
+                      >
+                        <p className="text-foreground text-sm font-semibold">
+                          {profile.name}
+                        </p>
+                        <p className="text-muted-foreground mt-1 text-xs">
+                          {profile.lanes.join(", ")}
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {profile.projectIds
+                            .map((projectId) => getProjectById(projectId))
+                            .filter((project): project is Project =>
+                              Boolean(project),
+                            )
+                            .map((project) => (
+                              <Badge key={project.id} variant="outline">
+                                {project.title}
+                              </Badge>
+                            ))}
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="mt-3"
+                          onClick={() => handleReuseProfile(profile)}
+                        >
+                          <RotateCcw className="size-4" />
+                          Reuse
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
+              <p className="text-primary mb-4 text-sm font-semibold uppercase tracking-wider">
                 Saved review paths
               </p>
               {views.length === 0 ? (
@@ -222,10 +354,10 @@ export function Studio() {
             </div>
 
             <p className="text-muted-foreground text-xs leading-relaxed">
-              Admin note: this first interval is local-first. It proves the
+              Admin note: this interval is still local-first. It proves the
               experience before adding backend persistence or document parsing.
-              Accepted evidence inputs next: images, GIF/video, PDF, DOCX, PPTX,
-              TXT, MD, CSV, raw notes, transcripts, and repository links.
+              The next persistence step is what makes random review paths work
+              for someone opening the link on another device.
             </p>
           </div>
         </div>

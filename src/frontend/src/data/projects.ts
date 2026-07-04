@@ -55,6 +55,11 @@ export type BrainSource = {
   note: string;
 };
 
+export type AcceptedEvidenceType = {
+  extension: string;
+  use: string;
+};
+
 export const profile = {
   name: "Terry Brutus",
   title: "Enablement Systems and Learning Experience Builder",
@@ -505,6 +510,29 @@ export const brainSources: BrainSource[] = [
     status: "ready",
     linkedProjectIds: ["workflow-management-platform", "career-city"],
     note: "Useful proof of shipped prototypes, AI-assisted build workflows, and technical credibility.",
+  },
+];
+
+export const acceptedEvidenceTypes: AcceptedEvidenceType[] = [
+  {
+    extension: ".png / .jpg / .webp",
+    use: "Project screenshots, artifact previews, diagram exports, UI states",
+  },
+  {
+    extension: ".gif / .mp4 / .webm",
+    use: "Short demos, click-throughs, workflow walkthroughs",
+  },
+  {
+    extension: ".pdf / .docx / .pptx",
+    use: "Resume versions, case-study artifacts, job aids, decks, storyboards",
+  },
+  {
+    extension: ".txt / .md / .csv",
+    use: "Raw notes, transcripts, metrics, project logs, structured source text",
+  },
+  {
+    extension: "GitHub / site links",
+    use: "Repo proof, deployed app evidence, legacy portfolio references",
   },
 ];
 

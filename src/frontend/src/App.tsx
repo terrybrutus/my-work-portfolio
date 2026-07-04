@@ -65,11 +65,10 @@ export default function App() {
           activeProject={activeProject}
           onSelectProject={handleSelectProject}
           eyebrow={laneProfile.lane}
-          title={laneProfile.headline}
-          description={laneProfile.reviewerTakeaway}
+          title={view?.headline ?? laneProfile.headline}
+          description={view?.summary ?? laneProfile.reviewerTakeaway}
           projectIds={projectIds}
           proofIds={view?.proofIds}
-          isReviewPath
         />
         <About />
         <Contact />

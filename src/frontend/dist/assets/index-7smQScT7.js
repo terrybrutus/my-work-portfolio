@@ -27964,6 +27964,28 @@ const brainSources = [
     note: "Useful proof of shipped prototypes, AI-assisted build workflows, and technical credibility."
   }
 ];
+const acceptedEvidenceTypes = [
+  {
+    extension: ".png / .jpg / .webp",
+    use: "Project screenshots, artifact previews, diagram exports, UI states"
+  },
+  {
+    extension: ".gif / .mp4 / .webm",
+    use: "Short demos, click-throughs, workflow walkthroughs"
+  },
+  {
+    extension: ".pdf / .docx / .pptx",
+    use: "Resume versions, case-study artifacts, job aids, decks, storyboards"
+  },
+  {
+    extension: ".txt / .md / .csv",
+    use: "Raw notes, transcripts, metrics, project logs, structured source text"
+  },
+  {
+    extension: "GitHub / site links",
+    use: "Repo proof, deployed app evidence, legacy portfolio references"
+  }
+];
 const socialLinks = [
   { label: "LinkedIn", href: profile.linkedIn },
   { label: "GitHub", href: profile.github },
@@ -27977,6 +27999,9 @@ const navLinks = [
 ];
 function getProofPoints(ids) {
   return ids.map((id2) => proofPoints.find((proofPoint) => proofPoint.id === id2)).filter((proofPoint) => Boolean(proofPoint));
+}
+function getProjectById(id2) {
+  return projects.find((project) => project.id === id2);
 }
 function getLaneProfile(lane) {
   return laneProfiles.find((laneProfile) => laneProfile.lane === lane) ?? laneProfiles[0];
@@ -32775,11 +32800,35 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$d = [
+const __iconNode$f = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$d);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$f);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$e = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$e);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$d = [
+  ["path", { d: "M12 12h.01", key: "1mp3jc" }],
+  ["path", { d: "M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2", key: "1ksdt3" }],
+  ["path", { d: "M22 13a18.15 18.15 0 0 1-20 0", key: "12hx5q" }],
+  ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
+];
+const BriefcaseBusiness = createLucideIcon("briefcase-business", __iconNode$d);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32787,30 +32836,6 @@ const ArrowLeft = createLucideIcon("arrow-left", __iconNode$d);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$c = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
-];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$c);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$b = [
-  ["path", { d: "M12 12h.01", key: "1mp3jc" }],
-  ["path", { d: "M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2", key: "1ksdt3" }],
-  ["path", { d: "M22 13a18.15 18.15 0 0 1-20 0", key: "12hx5q" }],
-  ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
-];
-const BriefcaseBusiness = createLucideIcon("briefcase-business", __iconNode$b);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$a = [
   ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
   [
     "path",
@@ -32820,26 +32845,26 @@ const __iconNode$a = [
     }
   ]
 ];
-const Clipboard = createLucideIcon("clipboard", __iconNode$a);
+const Clipboard = createLucideIcon("clipboard", __iconNode$c);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$9 = [
+const __iconNode$b = [
   ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
   ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
   ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
 ];
-const Database = createLucideIcon("database", __iconNode$9);
+const Database = createLucideIcon("database", __iconNode$b);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$8 = [
+const __iconNode$a = [
   ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
   [
     "path",
@@ -32848,7 +32873,36 @@ const __iconNode$8 = [
   ["path", { d: "m9 18-1.5-1.5", key: "1j6qii" }],
   ["circle", { cx: "5", cy: "14", r: "3", key: "ufru5t" }]
 ];
-const FileSearch = createLucideIcon("file-search", __iconNode$8);
+const FileSearch = createLucideIcon("file-search", __iconNode$a);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$9 = [
+  [
+    "path",
+    {
+      d: "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4",
+      key: "tonef"
+    }
+  ],
+  ["path", { d: "M9 18c-4.51 2-5-2-7-2", key: "9comsn" }]
+];
+const Github = createLucideIcon("github", __iconNode$9);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$8 = [
+  ["path", { d: "M9 17H7A5 5 0 0 1 7 7h2", key: "8i5ue5" }],
+  ["path", { d: "M15 7h2a5 5 0 1 1 0 10h-2", key: "1b9ql8" }],
+  ["line", { x1: "8", x2: "16", y1: "12", y2: "12", key: "1jonct" }]
+];
+const Link2 = createLucideIcon("link-2", __iconNode$8);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32859,35 +32913,6 @@ const __iconNode$7 = [
   [
     "path",
     {
-      d: "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4",
-      key: "tonef"
-    }
-  ],
-  ["path", { d: "M9 18c-4.51 2-5-2-7-2", key: "9comsn" }]
-];
-const Github = createLucideIcon("github", __iconNode$7);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$6 = [
-  ["path", { d: "M9 17H7A5 5 0 0 1 7 7h2", key: "8i5ue5" }],
-  ["path", { d: "M15 7h2a5 5 0 1 1 0 10h-2", key: "1b9ql8" }],
-  ["line", { x1: "8", x2: "16", y1: "12", y2: "12", key: "1jonct" }]
-];
-const Link2 = createLucideIcon("link-2", __iconNode$6);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$5 = [
-  [
-    "path",
-    {
       d: "M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z",
       key: "c2jq9f"
     }
@@ -32895,7 +32920,30 @@ const __iconNode$5 = [
   ["rect", { width: "4", height: "12", x: "2", y: "9", key: "mk3on5" }],
   ["circle", { cx: "4", cy: "4", r: "2", key: "bt5ra8" }]
 ];
-const Linkedin = createLucideIcon("linkedin", __iconNode$5);
+const Linkedin = createLucideIcon("linkedin", __iconNode$7);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$6 = [
+  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+];
+const Mail = createLucideIcon("mail", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
+];
+const Menu = createLucideIcon("menu", __iconNode$5);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32903,10 +32951,10 @@ const Linkedin = createLucideIcon("linkedin", __iconNode$5);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$4 = [
-  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
-  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+  ["path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", key: "1357e3" }],
+  ["path", { d: "M3 3v5h5", key: "1xhq8a" }]
 ];
-const Mail = createLucideIcon("mail", __iconNode$4);
+const RotateCcw = createLucideIcon("rotate-ccw", __iconNode$4);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32914,18 +32962,6 @@ const Mail = createLucideIcon("mail", __iconNode$4);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$3 = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
-];
-const Menu = createLucideIcon("menu", __iconNode$3);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$2 = [
   [
     "path",
     {
@@ -32936,7 +32972,19 @@ const __iconNode$2 = [
   ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
   ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
 ];
-const Save = createLucideIcon("save", __iconNode$2);
+const Save = createLucideIcon("save", __iconNode$3);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$2 = [
+  ["path", { d: "m8 11 2 2 4-4", key: "1sed1v" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
+  ["path", { d: "m21 21-4.3-4.3", key: "1qie3q" }]
+];
+const SearchCheck = createLucideIcon("search-check", __iconNode$2);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -33164,6 +33212,7 @@ function Layout({ children }) {
   ] });
 }
 const reviewerViewsKey = "terry-work-reviewer-views";
+const targetProfilesKey = "terry-work-target-profiles";
 function normalizeText(value) {
   return value.toLowerCase().replace(/[^a-z0-9+#./\s-]/g, " ");
 }
@@ -33270,6 +33319,18 @@ function buildStrategyReport(context) {
     )
   };
 }
+function getMediaAlignment(selectedProjects) {
+  return selectedProjects.map((project) => {
+    const missing = project.mediaNeeds;
+    const readySources = project.sourceNote.toLowerCase().includes("github") ? 1 : 0;
+    return {
+      project,
+      readySources,
+      missing,
+      recommendation: missing.length > 0 ? `Add or clean: ${missing.slice(0, 2).join(", ")}.` : "Media looks ready for a reviewer card."
+    };
+  });
+}
 function getNextArtifact(lanes, selectedProjects) {
   var _a2;
   const firstProject = ((_a2 = selectedProjects[0]) == null ? void 0 : _a2.title) ?? "the strongest project";
@@ -33317,12 +33378,52 @@ function createReviewerView(context, label) {
     slug: createSlug(),
     label: (label == null ? void 0 : label.trim()) || `${analysis.primaryLane} review path`,
     context,
+    headline: getLaneProfile(analysis.primaryLane).headline,
+    summary: getLaneProfile(analysis.primaryLane).reviewerTakeaway,
     lanes: analysis.lanes,
     projectIds,
     proofIds,
     skillIds,
     createdAt: (/* @__PURE__ */ new Date()).toISOString()
   };
+}
+function createTargetProfile(context, name) {
+  const analysis = analyzeContext(context);
+  const projectIds = getRecommendedProjects(analysis.lanes, 3).map(
+    (project) => project.id
+  );
+  const proofIds = getRecommendedProofPoints(analysis.lanes, 4).map(
+    (proofPoint) => proofPoint.id
+  );
+  const skillIds = getRecommendedSkills(analysis.lanes, 8);
+  return {
+    id: createSlug(),
+    name: (name == null ? void 0 : name.trim()) || `${analysis.primaryLane} profile`,
+    context,
+    lanes: analysis.lanes,
+    projectIds,
+    proofIds,
+    skillIds,
+    createdAt: (/* @__PURE__ */ new Date()).toISOString()
+  };
+}
+function loadTargetProfiles() {
+  try {
+    const raw = window.localStorage.getItem(targetProfilesKey);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+function saveTargetProfile(profile2) {
+  const profiles = loadTargetProfiles();
+  const nextProfiles = [
+    profile2,
+    ...profiles.filter((item) => item.id !== profile2.id)
+  ];
+  window.localStorage.setItem(targetProfilesKey, JSON.stringify(nextProfiles));
+  return nextProfiles;
 }
 function loadReviewerViews() {
   try {
@@ -41482,8 +41583,7 @@ function Projects({
   title = "Work",
   description = "A focused collection of enablement systems, learning experiences, AI workflows, and product-minded prototypes.",
   projectIds,
-  proofIds,
-  isReviewPath = false
+  proofIds
 }) {
   const scrollTo = useSmoothScroll();
   const visibleProjects = projectIds && projectIds.length > 0 ? projectIds.map((id2) => projects.find((project) => project.id === id2)).filter((project) => Boolean(project)) : projects;
@@ -41554,7 +41654,6 @@ function Projects({
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display text-foreground text-xl font-semibold leading-snug", children: project.title }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground line-clamp-2 text-sm leading-relaxed", children: project.shortDescription }),
-                    isReviewPath && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs leading-relaxed", children: project.sourceNote }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-primary group-hover:text-primary/80 mt-1 inline-flex items-center gap-1.5 text-sm font-medium transition-smooth", children: [
                       "View",
                       /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "size-4 transition-transform group-hover:translate-x-1" })
@@ -41663,11 +41762,27 @@ function Studio() {
   const [context, setContext] = reactExports.useState(sampleContext);
   const [label, setLabel] = reactExports.useState("");
   const [views, setViews] = reactExports.useState(() => loadReviewerViews());
+  const [profiles, setProfiles] = reactExports.useState(
+    () => loadTargetProfiles()
+  );
   const report = reactExports.useMemo(() => buildStrategyReport(context), [context]);
+  const mediaAlignment = reactExports.useMemo(
+    () => getMediaAlignment(report.projectMatches.map((match) => match.project)),
+    [report.projectMatches]
+  );
   const handleSave = () => {
     const view = createReviewerView(context, label);
     setViews(saveReviewerView(view));
     setLabel("");
+  };
+  const handleSaveProfile = () => {
+    const profile2 = createTargetProfile(context, label);
+    setProfiles(saveTargetProfile(profile2));
+    setLabel("");
+  };
+  const handleReuseProfile = (profile2) => {
+    setContext(profile2.context);
+    setLabel(profile2.name);
   };
   const currentOrigin = window.location.origin;
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-background py-16 md:py-20", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container", children: [
@@ -41677,7 +41792,7 @@ function Studio() {
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-4 text-base leading-relaxed", children: "Paste a role, job description, or target context. The workspace recommends lanes, projects, proof points, gaps, and a next artifact to strengthen the portfolio." })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-6 lg:grid-cols-[0.9fr_1.1fr]", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border h-fit rounded-xl border p-6 shadow-elevated", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 flex items-center gap-3", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-primary/10 p-2 text-primary", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FileSearch, { className: "size-4" }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -41714,6 +41829,19 @@ function Studio() {
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "size-4" }),
               "Generate review path"
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            className: "mt-3 w-full",
+            variant: "outline",
+            onClick: handleSaveProfile,
+            "data-ocid": "studio.save_profile",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(SearchCheck, { className: "size-4" }),
+              "Save target profile"
             ]
           }
         )
@@ -41775,6 +41903,63 @@ function Studio() {
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary mb-4 text-sm font-semibold uppercase tracking-wider", children: "Media and artifact alignment" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-4 md:grid-cols-3", children: mediaAlignment.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: "border-border rounded-lg border p-4",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: item.project.title }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 text-sm leading-relaxed", children: item.recommendation }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-muted-foreground mt-3 text-xs", children: [
+                  "Ready source signals: ",
+                  item.readySources
+                ] })
+              ]
+            },
+            item.project.id
+          )) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-6 md:grid-cols-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary mb-4 text-sm font-semibold uppercase tracking-wider", children: "Accepted source types" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: acceptedEvidenceTypes.map((type) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: type.extension }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm leading-relaxed", children: type.use })
+            ] }, type.extension)) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary mb-4 text-sm font-semibold uppercase tracking-wider", children: "Saved target profiles" }),
+            profiles.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "No profiles saved yet." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: profiles.map((profile2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: "border-border rounded-lg border p-4",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: profile2.name }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 text-xs", children: profile2.lanes.join(", ") }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 flex flex-wrap gap-2", children: profile2.projectIds.map((projectId) => getProjectById(projectId)).filter(
+                    (project) => Boolean(project)
+                  ).map((project) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: project.title }, project.id)) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    Button,
+                    {
+                      size: "sm",
+                      variant: "outline",
+                      className: "mt-3",
+                      onClick: () => handleReuseProfile(profile2),
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(RotateCcw, { className: "size-4" }),
+                        "Reuse"
+                      ]
+                    }
+                  )
+                ]
+              },
+              profile2.id
+            )) })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary mb-4 text-sm font-semibold uppercase tracking-wider", children: "Saved review paths" }),
           views.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm", children: "No paths saved yet." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: views.map((view) => {
             const link = `${currentOrigin}/work/${view.slug}`;
@@ -41811,7 +41996,7 @@ function Studio() {
             );
           }) })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs leading-relaxed", children: "Admin note: this first interval is local-first. It proves the experience before adding backend persistence or document parsing. Accepted evidence inputs next: images, GIF/video, PDF, DOCX, PPTX, TXT, MD, CSV, raw notes, transcripts, and repository links." })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs leading-relaxed", children: "Admin note: this interval is still local-first. It proves the experience before adding backend persistence or document parsing. The next persistence step is what makes random review paths work for someone opening the link on another device." })
       ] })
     ] })
   ] }) });
@@ -41867,11 +42052,10 @@ function App() {
           activeProject,
           onSelectProject: handleSelectProject,
           eyebrow: laneProfile.lane,
-          title: laneProfile.headline,
-          description: laneProfile.reviewerTakeaway,
+          title: (view == null ? void 0 : view.headline) ?? laneProfile.headline,
+          description: (view == null ? void 0 : view.summary) ?? laneProfile.reviewerTakeaway,
           projectIds,
-          proofIds: view == null ? void 0 : view.proofIds,
-          isReviewPath: true
+          proofIds: view == null ? void 0 : view.proofIds
         }
       ),
       /* @__PURE__ */ jsxRuntimeExports.jsx(About, {}),

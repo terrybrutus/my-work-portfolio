@@ -27,11 +27,31 @@ export type ReviewerView = {
   slug: string;
   label: string;
   context: string;
+  headline: string;
+  summary: string;
   lanes: Lane[];
   projectIds: string[];
   proofIds: string[];
   skillIds: string[];
   createdAt: string;
+};
+
+export type SavedTargetProfile = {
+  id: string;
+  name: string;
+  context: string;
+  lanes: Lane[];
+  projectIds: string[];
+  proofIds: string[];
+  skillIds: string[];
+  createdAt: string;
+};
+
+export type MediaAlignment = {
+  project: Project;
+  readySources: number;
+  missing: string[];
+  recommendation: string;
 };
 
 export type StrategyReport = {
@@ -52,6 +72,7 @@ export type StrategyReport = {
 };
 
 const reviewerViewsKey = "terry-work-reviewer-views";
+const targetProfilesKey = "terry-work-target-profiles";
 
 function normalizeText(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9+#./\s-]/g, " ");
@@ -198,6 +219,27 @@ export function buildStrategyReport(context: string): StrategyReport {
   };
 }
 
+export function getMediaAlignment(
+  selectedProjects: Project[],
+): MediaAlignment[] {
+  return selectedProjects.map((project) => {
+    const missing = project.mediaNeeds;
+    const readySources = project.sourceNote.toLowerCase().includes("github")
+      ? 1
+      : 0;
+
+    return {
+      project,
+      readySources,
+      missing,
+      recommendation:
+        missing.length > 0
+          ? `Add or clean: ${missing.slice(0, 2).join(", ")}.`
+          : "Media looks ready for a reviewer card.",
+    };
+  });
+}
+
 function getNextArtifact(lanes: Lane[], selectedProjects: Project[]) {
   const firstProject = selectedProjects[0]?.title ?? "the strongest project";
 
@@ -253,12 +295,59 @@ export function createReviewerView(
     slug: createSlug(),
     label: label?.trim() || `${analysis.primaryLane} review path`,
     context,
+    headline: getLaneProfile(analysis.primaryLane).headline,
+    summary: getLaneProfile(analysis.primaryLane).reviewerTakeaway,
     lanes: analysis.lanes,
     projectIds,
     proofIds,
     skillIds,
     createdAt: new Date().toISOString(),
   };
+}
+
+export function createTargetProfile(
+  context: string,
+  name?: string,
+): SavedTargetProfile {
+  const analysis = analyzeContext(context);
+  const projectIds = getRecommendedProjects(analysis.lanes, 3).map(
+    (project) => project.id,
+  );
+  const proofIds = getRecommendedProofPoints(analysis.lanes, 4).map(
+    (proofPoint) => proofPoint.id,
+  );
+  const skillIds = getRecommendedSkills(analysis.lanes, 8);
+
+  return {
+    id: createSlug(),
+    name: name?.trim() || `${analysis.primaryLane} profile`,
+    context,
+    lanes: analysis.lanes,
+    projectIds,
+    proofIds,
+    skillIds,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+export function loadTargetProfiles() {
+  try {
+    const raw = window.localStorage.getItem(targetProfilesKey);
+    if (!raw) return [];
+    return JSON.parse(raw) as SavedTargetProfile[];
+  } catch {
+    return [];
+  }
+}
+
+export function saveTargetProfile(profile: SavedTargetProfile) {
+  const profiles = loadTargetProfiles();
+  const nextProfiles = [
+    profile,
+    ...profiles.filter((item) => item.id !== profile.id),
+  ];
+  window.localStorage.setItem(targetProfilesKey, JSON.stringify(nextProfiles));
+  return nextProfiles;
 }
 
 export function loadReviewerViews() {
