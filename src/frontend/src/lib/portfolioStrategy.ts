@@ -54,6 +54,21 @@ export type MediaAlignment = {
   recommendation: string;
 };
 
+export type IntakeSource = {
+  id: string;
+  title: string;
+  sourceType: string;
+  fileName: string;
+  fileType: string;
+  fileSize: number;
+  sourceText: string;
+  sourceUrl: string;
+  lanes: Lane[];
+  projectIds: string[];
+  status: "ready" | "needs cleanup" | "needs OCR" | "needs media";
+  createdAt: string;
+};
+
 export type StrategyReport = {
   likelyProblems: string[];
   projectMatches: Array<{
@@ -73,6 +88,7 @@ export type StrategyReport = {
 
 const reviewerViewsKey = "terry-work-reviewer-views";
 const targetProfilesKey = "terry-work-target-profiles";
+const intakeSourcesKey = "terry-work-intake-sources";
 
 function normalizeText(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9+#./\s-]/g, " ");
@@ -221,12 +237,16 @@ export function buildStrategyReport(context: string): StrategyReport {
 
 export function getMediaAlignment(
   selectedProjects: Project[],
+  intakeSources: IntakeSource[] = [],
 ): MediaAlignment[] {
   return selectedProjects.map((project) => {
     const missing = project.mediaNeeds;
-    const readySources = project.sourceNote.toLowerCase().includes("github")
-      ? 1
-      : 0;
+    const matchedSources = intakeSources.filter((source) =>
+      source.projectIds.includes(project.id),
+    );
+    const readySources =
+      (project.sourceNote.toLowerCase().includes("github") ? 1 : 0) +
+      matchedSources.length;
 
     return {
       project,
@@ -348,6 +368,88 @@ export function saveTargetProfile(profile: SavedTargetProfile) {
   ];
   window.localStorage.setItem(targetProfilesKey, JSON.stringify(nextProfiles));
   return nextProfiles;
+}
+
+export function createIntakeSource(input: {
+  title: string;
+  sourceType: string;
+  fileName: string;
+  fileType: string;
+  fileSize: number;
+  sourceText: string;
+  sourceUrl: string;
+  context: string;
+}) {
+  const combinedText = [
+    input.title,
+    input.sourceType,
+    input.fileName,
+    input.sourceText,
+    input.sourceUrl,
+    input.context,
+  ].join(" ");
+  const analysis = analyzeContext(combinedText);
+  const selectedProjects = getRecommendedProjects(analysis.lanes, 3);
+  const lowerFileName = input.fileName.toLowerCase();
+  const lowerFileType = input.fileType.toLowerCase();
+  const isDocument =
+    lowerFileName.endsWith(".pdf") ||
+    lowerFileName.endsWith(".docx") ||
+    lowerFileName.endsWith(".pptx");
+  const isVisual =
+    lowerFileType.startsWith("image/") ||
+    lowerFileType.startsWith("video/") ||
+    lowerFileName.endsWith(".gif") ||
+    lowerFileName.endsWith(".mp4") ||
+    lowerFileName.endsWith(".webm");
+  const hasText = input.sourceText.trim().length > 40;
+
+  const status: IntakeSource["status"] = isDocument
+    ? "needs OCR"
+    : isVisual
+      ? "needs media"
+      : hasText || input.sourceUrl.trim()
+        ? "ready"
+        : "needs cleanup";
+
+  return {
+    id: createSlug(),
+    title:
+      input.title.trim() ||
+      input.fileName.trim() ||
+      input.sourceUrl.trim() ||
+      "Untitled source",
+    sourceType: input.sourceType.trim() || "Source",
+    fileName: input.fileName,
+    fileType: input.fileType,
+    fileSize: input.fileSize,
+    sourceText: input.sourceText,
+    sourceUrl: input.sourceUrl,
+    lanes: analysis.lanes,
+    projectIds: selectedProjects.map((project) => project.id),
+    status,
+    createdAt: new Date().toISOString(),
+  } satisfies IntakeSource;
+}
+
+export function loadIntakeSources() {
+  try {
+    const raw = window.localStorage.getItem(intakeSourcesKey);
+    if (!raw) return [];
+    return JSON.parse(raw) as IntakeSource[];
+  } catch {
+    return [];
+  }
+}
+
+export function saveIntakeSource(source: IntakeSource) {
+  const sources = loadIntakeSources();
+  const nextSources = [
+    source,
+    ...sources.filter((item) => item.id !== source.id),
+  ];
+  window.localStorage.setItem(intakeSourcesKey, JSON.stringify(nextSources));
+  return nextSources;
 }
 
 export function loadReviewerViews() {

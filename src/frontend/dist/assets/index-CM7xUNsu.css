@@ -1261,6 +1261,9 @@ video {
 .cursor-default {
   cursor: default;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 .touch-none {
   touch-action: none;
 }
@@ -1397,6 +1400,11 @@ video {
 .overflow-x-hidden {
   overflow-x: hidden;
 }
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .whitespace-nowrap {
   white-space: nowrap;
 }
@@ -1526,6 +1534,9 @@ video {
 }
 .bg-muted\/30 {
   background-color: oklch(var(--muted) / 0.3);
+}
+.bg-muted\/40 {
+  background-color: oklch(var(--muted) / 0.4);
 }
 .bg-muted\/50 {
   background-color: oklch(var(--muted) / 0.5);
@@ -1702,6 +1713,9 @@ video {
 }
 .pt-4 {
   padding-top: 1rem;
+}
+.pt-6 {
+  padding-top: 1.5rem;
 }
 .text-left {
   text-align: left;

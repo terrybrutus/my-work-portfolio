@@ -39,4 +39,4 @@ caffeineai-lints = "0.1.0"
 
 [canisters.backend.migrations]
 chain = "src/backend/migrations"
-check-limit = 1
+check-limit = 2

@@ -8,14 +8,18 @@ import {
   getProjectById,
 } from "@/data/projects";
 import {
+  type IntakeSource,
   type ReviewerView,
   type SavedTargetProfile,
   buildStrategyReport,
+  createIntakeSource,
   createReviewerView,
   createTargetProfile,
   getMediaAlignment,
+  loadIntakeSources,
   loadReviewerViews,
   loadTargetProfiles,
+  saveIntakeSource,
   saveReviewerView,
   saveTargetProfile,
 } from "@/lib/portfolioStrategy";
@@ -23,11 +27,13 @@ import { savePersistedReviewerView } from "@/lib/reviewerStore";
 import {
   Clipboard,
   Database,
+  FilePlus2,
   FileSearch,
   Link2,
   RotateCcw,
   Save,
   SearchCheck,
+  Upload,
   Wand2,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -43,11 +49,32 @@ export function Studio() {
   const [profiles, setProfiles] = useState<SavedTargetProfile[]>(() =>
     loadTargetProfiles(),
   );
+  const [intakeSources, setIntakeSources] = useState<IntakeSource[]>(() =>
+    loadIntakeSources(),
+  );
+  const [sourceTitle, setSourceTitle] = useState("");
+  const [sourceType, setSourceType] = useState("Project note");
+  const [sourceUrl, setSourceUrl] = useState("");
+  const [sourceText, setSourceText] = useState("");
+  const [sourceFile, setSourceFile] = useState<File | null>(null);
+  const [sourceStatus, setSourceStatus] = useState("");
   const report = useMemo(() => buildStrategyReport(context), [context]);
   const mediaAlignment = useMemo(
     () =>
-      getMediaAlignment(report.projectMatches.map((match) => match.project)),
-    [report.projectMatches],
+      getMediaAlignment(
+        report.projectMatches.map((match) => match.project),
+        intakeSources,
+      ),
+    [report.projectMatches, intakeSources],
+  );
+  const relevantIntakeSources = useMemo(
+    () =>
+      intakeSources.filter((source) =>
+        report.projectMatches.some((match) =>
+          source.projectIds.includes(match.project.id),
+        ),
+      ),
+    [intakeSources, report.projectMatches],
   );
 
   const handleSave = async () => {
@@ -72,6 +99,28 @@ export function Studio() {
   const handleReuseProfile = (profile: SavedTargetProfile) => {
     setContext(profile.context);
     setLabel(profile.name);
+  };
+
+  const handleAddSource = () => {
+    const source = createIntakeSource({
+      title: sourceTitle,
+      sourceType,
+      fileName: sourceFile?.name ?? "",
+      fileType: sourceFile?.type ?? "",
+      fileSize: sourceFile?.size ?? 0,
+      sourceText,
+      sourceUrl,
+      context,
+    });
+    setIntakeSources(saveIntakeSource(source));
+    setSourceTitle("");
+    setSourceType("Project note");
+    setSourceUrl("");
+    setSourceText("");
+    setSourceFile(null);
+    setSourceStatus(
+      `${source.title} added. Status: ${source.status}. Matched ${source.projectIds.length} project signals.`,
+    );
   };
 
   const currentOrigin = window.location.origin;
@@ -142,6 +191,80 @@ export function Studio() {
               <SearchCheck className="size-4" />
               Save target profile
             </Button>
+
+            <div className="border-border mt-6 border-t pt-6">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="rounded-full bg-primary/10 p-2 text-primary">
+                  <FilePlus2 className="size-4" />
+                </div>
+                <div>
+                  <h2 className="font-display text-xl font-semibold">
+                    Add source
+                  </h2>
+                  <p className="text-muted-foreground text-sm">
+                    Drop in notes, links, resumes, screenshots, or artifacts.
+                  </p>
+                </div>
+              </div>
+              <div className="grid gap-3">
+                <input
+                  value={sourceTitle}
+                  onChange={(event) => setSourceTitle(event.target.value)}
+                  placeholder="Source title"
+                  className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                />
+                <input
+                  value={sourceType}
+                  onChange={(event) => setSourceType(event.target.value)}
+                  placeholder="Source type"
+                  className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                />
+                <input
+                  value={sourceUrl}
+                  onChange={(event) => setSourceUrl(event.target.value)}
+                  placeholder="Link, repo, or reference URL"
+                  className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                />
+                <label className="border-border bg-muted/40 text-muted-foreground flex cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-sm">
+                  <span className="truncate">
+                    {sourceFile?.name ?? "Choose file"}
+                  </span>
+                  <Upload className="size-4 shrink-0" />
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(event) =>
+                      setSourceFile(event.target.files?.[0] ?? null)
+                    }
+                  />
+                </label>
+                <Textarea
+                  value={sourceText}
+                  onChange={(event) => setSourceText(event.target.value)}
+                  rows={5}
+                  placeholder="Paste raw notes, transcript snippets, resume bullets, or artifact context"
+                  className="resize-none"
+                />
+                <Button
+                  variant="outline"
+                  onClick={handleAddSource}
+                  disabled={
+                    !sourceTitle.trim() &&
+                    !sourceText.trim() &&
+                    !sourceUrl.trim() &&
+                    !sourceFile
+                  }
+                >
+                  <Database className="size-4" />
+                  Add to workspace
+                </Button>
+                {sourceStatus ? (
+                  <p className="text-muted-foreground text-sm">
+                    {sourceStatus}
+                  </p>
+                ) : null}
+              </div>
+            </div>
           </div>
 
           <div className="grid gap-6">
@@ -221,6 +344,19 @@ export function Studio() {
                       </div>
                     </div>
                   ))}
+                  {intakeSources.map((source) => (
+                    <div key={source.id} className="flex gap-3">
+                      <Database className="mt-0.5 size-4 text-primary" />
+                      <div>
+                        <p className="text-foreground text-sm font-semibold">
+                          {source.title}
+                        </p>
+                        <p className="text-muted-foreground text-xs">
+                          {source.sourceType} / {source.status}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -250,6 +386,43 @@ export function Studio() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
+              <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
+                <p className="text-primary mb-4 text-sm font-semibold uppercase tracking-wider">
+                  Source matches
+                </p>
+                {relevantIntakeSources.length === 0 ? (
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    Add a resume, note, screenshot, repo, or artifact to see
+                    what supports this role context.
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {relevantIntakeSources.map((source) => (
+                      <div key={source.id}>
+                        <p className="text-foreground text-sm font-semibold">
+                          {source.title}
+                        </p>
+                        <p className="text-muted-foreground mt-1 text-xs">
+                          {source.lanes.join(", ")} / {source.status}
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {source.projectIds
+                            .map((projectId) => getProjectById(projectId))
+                            .filter((project): project is Project =>
+                              Boolean(project),
+                            )
+                            .map((project) => (
+                              <Badge key={project.id} variant="outline">
+                                {project.title}
+                              </Badge>
+                            ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
                 <p className="text-primary mb-4 text-sm font-semibold uppercase tracking-wider">
                   Accepted source types
@@ -368,8 +541,8 @@ export function Studio() {
             <p className="text-muted-foreground text-xs leading-relaxed">
               Admin note: review paths save locally first and use backend
               persistence when Caffeine provides the deployed backend config.
-              Document parsing and source ingestion are the next workspace
-              layer.
+              Source intake is local in this interval; OCR and richer document
+              parsing can layer on top without changing the public portfolio.
             </p>
           </div>
         </div>
