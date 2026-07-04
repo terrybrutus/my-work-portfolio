@@ -20,6 +20,9 @@ import {
   createIntakeSource,
   createReviewerView,
   createTargetProfile,
+  deleteIntakeSource,
+  deleteReviewerView,
+  deleteTargetProfile,
   getMediaAlignment,
   getRecommendedSkills,
   loadIntakeSources,
@@ -40,6 +43,7 @@ import {
   RotateCcw,
   Save,
   SearchCheck,
+  Trash2,
   Upload,
   Wand2,
 } from "lucide-react";
@@ -131,6 +135,15 @@ export function Studio() {
     setLabel(profile.name);
   };
 
+  const handleDeleteProfile = (profileId: string) => {
+    setProfiles(deleteTargetProfile(profileId));
+  };
+
+  const handleDeleteView = (slug: string) => {
+    setViews(deleteReviewerView(slug));
+    setSaveStatus("Review path removed from local Studio history.");
+  };
+
   const handleAddSource = () => {
     const source = createIntakeSource({
       title: sourceTitle,
@@ -166,6 +179,11 @@ export function Studio() {
     setSourceStatus(
       "Source form prefilled. Add a file, link, or notes, then save it to the workspace.",
     );
+  };
+
+  const handleDeleteSource = (sourceId: string) => {
+    setIntakeSources(deleteIntakeSource(sourceId));
+    setSourceStatus("Source removed from local workspace.");
   };
 
   const handleSourceFileChange = async (file: File | null) => {
@@ -659,16 +677,26 @@ export function Studio() {
                         key={source.id}
                         className="border-border rounded-lg border p-4"
                       >
-                        <div className="flex gap-3">
-                          <Database className="mt-0.5 size-4 text-primary" />
-                          <div>
-                            <p className="text-foreground text-sm font-semibold">
-                              {source.title}
-                            </p>
-                            <p className="text-muted-foreground text-xs">
-                              {source.sourceType} / {source.status}
-                            </p>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex gap-3">
+                            <Database className="mt-0.5 size-4 text-primary" />
+                            <div>
+                              <p className="text-foreground text-sm font-semibold">
+                                {source.title}
+                              </p>
+                              <p className="text-muted-foreground text-xs">
+                                {source.sourceType} / {source.status}
+                              </p>
+                            </div>
                           </div>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            aria-label={`Remove ${source.title}`}
+                            onClick={() => handleDeleteSource(source.id)}
+                          >
+                            <Trash2 className="size-4" />
+                          </Button>
                         </div>
                         <div className="text-muted-foreground mt-3 grid gap-1 text-xs">
                           {source.fileName ? (
@@ -866,15 +894,24 @@ export function Studio() {
                               </Badge>
                             ))}
                         </div>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="mt-3"
-                          onClick={() => handleReuseProfile(profile)}
-                        >
-                          <RotateCcw className="size-4" />
-                          Reuse
-                        </Button>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleReuseProfile(profile)}
+                          >
+                            <RotateCcw className="size-4" />
+                            Reuse
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleDeleteProfile(profile.id)}
+                          >
+                            <Trash2 className="size-4" />
+                            Remove
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -921,6 +958,14 @@ export function Studio() {
                           >
                             <Clipboard className="size-4" />
                             Copy
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleDeleteView(view.slug)}
+                          >
+                            <Trash2 className="size-4" />
+                            Remove
                           </Button>
                         </div>
                       </div>

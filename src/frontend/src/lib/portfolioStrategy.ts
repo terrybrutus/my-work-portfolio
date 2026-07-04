@@ -370,6 +370,12 @@ export function saveTargetProfile(profile: SavedTargetProfile) {
   return nextProfiles;
 }
 
+export function deleteTargetProfile(id: string) {
+  const nextProfiles = loadTargetProfiles().filter((item) => item.id !== id);
+  window.localStorage.setItem(targetProfilesKey, JSON.stringify(nextProfiles));
+  return nextProfiles;
+}
+
 export function createIntakeSource(input: {
   title: string;
   sourceType: string;
@@ -452,6 +458,12 @@ export function saveIntakeSource(source: IntakeSource) {
   return nextSources;
 }
 
+export function deleteIntakeSource(id: string) {
+  const nextSources = loadIntakeSources().filter((item) => item.id !== id);
+  window.localStorage.setItem(intakeSourcesKey, JSON.stringify(nextSources));
+  return nextSources;
+}
+
 export function loadReviewerViews() {
   try {
     const raw = window.localStorage.getItem(reviewerViewsKey);
@@ -465,6 +477,12 @@ export function loadReviewerViews() {
 export function saveReviewerView(view: ReviewerView) {
   const views = loadReviewerViews();
   const nextViews = [view, ...views.filter((item) => item.slug !== view.slug)];
+  window.localStorage.setItem(reviewerViewsKey, JSON.stringify(nextViews));
+  return nextViews;
+}
+
+export function deleteReviewerView(slug: string) {
+  const nextViews = loadReviewerViews().filter((item) => item.slug !== slug);
   window.localStorage.setItem(reviewerViewsKey, JSON.stringify(nextViews));
   return nextViews;
 }
