@@ -32131,43 +32131,76 @@ function ReviewFitNotes({
 }) {
   const visibleProjects = projectIds.map((projectId) => getProjectById(projectId)).filter((project) => Boolean(project));
   const visibleProof = getProofPoints(proofIds).slice(0, 3);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-background py-16 md:py-20", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-8 lg:grid-cols-[0.9fr_1.1fr]", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Why these examples" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "font-display text-foreground mt-3 text-3xl font-bold tracking-tight", children: [
-        "A focused read on ",
-        laneProfile.lane.toLowerCase(),
-        " work."
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-background py-16 md:py-20", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-8 lg:grid-cols-[0.9fr_1.1fr]", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Why these examples" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "font-display text-foreground mt-3 text-3xl font-bold tracking-tight", children: [
+          "A focused read on ",
+          laneProfile.lane.toLowerCase(),
+          " work."
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-4 text-base leading-relaxed", children: laneProfile.proofNarrative }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-5 flex flex-wrap gap-2", children: laneProfile.evidenceFocus.map((focus2) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: focus2 }, focus2)) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-4 text-base leading-relaxed", children: laneProfile.proofNarrative }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-5 flex flex-wrap gap-2", children: laneProfile.evidenceFocus.map((focus2) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: focus2 }, focus2)) })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 md:grid-cols-3", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card rounded-xl border p-5 shadow-elevated", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Work to inspect" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 space-y-2", children: visibleProjects.slice(0, 3).map((project) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "p",
-          {
-            className: "text-muted-foreground text-sm leading-relaxed",
-            children: project.title
-          },
-          project.id
-        )) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card rounded-xl border p-5 shadow-elevated", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Proof signals" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 space-y-2", children: visibleProof.map((proofPoint) => /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm leading-relaxed", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-foreground font-semibold", children: proofPoint.value }),
-          " ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-muted-foreground", children: proofPoint.label })
-        ] }, proofPoint.id)) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card rounded-xl border p-5 shadow-elevated", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Capabilities" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 flex flex-wrap gap-2", children: skillIds.slice(0, 5).map((skill) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", children: skill }, skill)) })
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 md:grid-cols-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card rounded-xl border p-5 shadow-elevated", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Work to inspect" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 space-y-2", children: visibleProjects.slice(0, 3).map((project) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "p",
+            {
+              className: "text-muted-foreground text-sm leading-relaxed",
+              children: project.title
+            },
+            project.id
+          )) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card rounded-xl border p-5 shadow-elevated", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Proof signals" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 space-y-2", children: visibleProof.map((proofPoint) => /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm leading-relaxed", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-foreground font-semibold", children: proofPoint.value }),
+            " ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-muted-foreground", children: proofPoint.label })
+          ] }, proofPoint.id)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card rounded-xl border p-5 shadow-elevated", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Capabilities" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 flex flex-wrap gap-2", children: skillIds.slice(0, 5).map((skill) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", children: skill }, skill)) })
+        ] })
       ] })
-    ] })
-  ] }) }) });
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-10 grid gap-4 md:grid-cols-3", children: visibleProjects.slice(0, 3).map((project) => {
+      const proofPoint = getProofPoints(project.proofIds)[0];
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "article",
+        {
+          className: "border-border bg-card overflow-hidden rounded-xl border shadow-elevated",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-muted aspect-[16/9] overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "img",
+              {
+                src: project.thumbnail,
+                alt: "",
+                "aria-hidden": "true",
+                loading: "lazy",
+                className: "h-full w-full object-cover"
+              }
+            ) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-5", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: project.title }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-2 line-clamp-2 text-sm leading-relaxed", children: project.shortDescription }),
+              proofPoint ? /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { variant: "outline", className: "mt-4", children: [
+                proofPoint.value,
+                " ",
+                proofPoint.label
+              ] }) : null
+            ] })
+          ]
+        },
+        project.id
+      );
+    }) })
+  ] }) });
 }
 BigInt.prototype.toJSON = function() {
   return this.toString();

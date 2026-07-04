@@ -246,6 +246,42 @@ function ReviewFitNotes({
             </div>
           </div>
         </div>
+
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {visibleProjects.slice(0, 3).map((project) => {
+            const proofPoint = getProofPoints(project.proofIds)[0];
+
+            return (
+              <article
+                key={project.id}
+                className="border-border bg-card overflow-hidden rounded-xl border shadow-elevated"
+              >
+                <div className="bg-muted aspect-[16/9] overflow-hidden">
+                  <img
+                    src={project.thumbnail}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="p-5">
+                  <p className="text-foreground text-sm font-semibold">
+                    {project.title}
+                  </p>
+                  <p className="text-muted-foreground mt-2 line-clamp-2 text-sm leading-relaxed">
+                    {project.shortDescription}
+                  </p>
+                  {proofPoint ? (
+                    <Badge variant="outline" className="mt-4">
+                      {proofPoint.value} {proofPoint.label}
+                    </Badge>
+                  ) : null}
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
