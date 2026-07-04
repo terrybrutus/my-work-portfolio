@@ -27,6 +27,18 @@ export type Error = { 'FrontendOriginsNotConfigured' : null } |
   { 'FrontendOriginMismatch' : { 'got' : string, 'expected' : Array<string> } };
 export type Result = { 'ok' : null } |
   { 'err' : Error };
+export interface StoredReviewerView {
+  'createdAt' : string,
+  'context' : string,
+  'headline' : string,
+  'label' : string,
+  'lanes' : Array<string>,
+  'projectIds' : Array<string>,
+  'proofIds' : Array<string>,
+  'skillIds' : Array<string>,
+  'slug' : string,
+  'summary' : string,
+}
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
@@ -37,7 +49,9 @@ export interface _SERVICE {
   '_internet_identity_sign_in_start' : ActorMethod<[], Uint8Array>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getReviewerView' : ActorMethod<[string], [] | [StoredReviewerView]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'saveReviewerView' : ActorMethod<[StoredReviewerView], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

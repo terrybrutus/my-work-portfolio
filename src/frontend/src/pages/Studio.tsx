@@ -19,6 +19,7 @@ import {
   saveReviewerView,
   saveTargetProfile,
 } from "@/lib/portfolioStrategy";
+import { savePersistedReviewerView } from "@/lib/reviewerStore";
 import {
   Clipboard,
   Database,
@@ -38,6 +39,7 @@ export function Studio() {
   const [context, setContext] = useState(sampleContext);
   const [label, setLabel] = useState("");
   const [views, setViews] = useState<ReviewerView[]>(() => loadReviewerViews());
+  const [saveStatus, setSaveStatus] = useState("");
   const [profiles, setProfiles] = useState<SavedTargetProfile[]>(() =>
     loadTargetProfiles(),
   );
@@ -48,10 +50,17 @@ export function Studio() {
     [report.projectMatches],
   );
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const view = createReviewerView(context, label);
     setViews(saveReviewerView(view));
     setLabel("");
+    setSaveStatus("Saving review path...");
+    const didPersist = await savePersistedReviewerView(view);
+    setSaveStatus(
+      didPersist
+        ? "Review path saved for external viewing."
+        : "Review path saved locally. Caffeine will persist it after backend config is available.",
+    );
   };
 
   const handleSaveProfile = () => {
@@ -95,7 +104,7 @@ export function Studio() {
                   Role context
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  Keep this practical. The output stays local for now.
+                  Keep this practical. The public view stays clean.
                 </p>
               </div>
             </div>
@@ -121,6 +130,9 @@ export function Studio() {
               <Save className="size-4" />
               Generate review path
             </Button>
+            {saveStatus ? (
+              <p className="text-muted-foreground mt-3 text-sm">{saveStatus}</p>
+            ) : null}
             <Button
               className="mt-3 w-full"
               variant="outline"
@@ -164,7 +176,7 @@ export function Studio() {
                   {report.nextArtifact.title}
                 </h3>
                 <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-                  {report.nextArtifact.format} · {report.nextArtifact.buildTime}
+                  {report.nextArtifact.format} / {report.nextArtifact.buildTime}
                 </p>
                 <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
                   {report.nextArtifact.why}
@@ -204,7 +216,7 @@ export function Studio() {
                           {source.title}
                         </p>
                         <p className="text-muted-foreground text-xs">
-                          {source.type} · {source.status}
+                          {source.type} / {source.status}
                         </p>
                       </div>
                     </div>
@@ -354,10 +366,10 @@ export function Studio() {
             </div>
 
             <p className="text-muted-foreground text-xs leading-relaxed">
-              Admin note: this interval is still local-first. It proves the
-              experience before adding backend persistence or document parsing.
-              The next persistence step is what makes random review paths work
-              for someone opening the link on another device.
+              Admin note: review paths save locally first and use backend
+              persistence when Caffeine provides the deployed backend config.
+              Document parsing and source ingestion are the next workspace
+              layer.
             </p>
           </div>
         </div>

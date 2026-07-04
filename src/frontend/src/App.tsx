@@ -1,6 +1,11 @@
 import { Layout } from "@/components/Layout";
 import { getLaneProfile, projects } from "@/data/projects";
-import { getReviewerView, getRouteState } from "@/lib/portfolioStrategy";
+import {
+  type ReviewerView,
+  getReviewerView,
+  getRouteState,
+} from "@/lib/portfolioStrategy";
+import { loadPersistedReviewerView } from "@/lib/reviewerStore";
 import { About } from "@/pages/About";
 import { Contact } from "@/pages/Contact";
 import { Hero } from "@/pages/Hero";
@@ -11,6 +16,8 @@ import { useEffect, useState } from "react";
 export default function App() {
   const [activeProject, setActiveProject] = useState<string | null>(null);
   const [routeState, setRouteState] = useState(() => getRouteState());
+  const [persistedReviewView, setPersistedReviewView] =
+    useState<ReviewerView | null>(null);
 
   useEffect(() => {
     const updateRoute = () => {
@@ -25,6 +32,23 @@ export default function App() {
       window.removeEventListener("hashchange", updateRoute);
     };
   }, []);
+
+  useEffect(() => {
+    let isCurrent = true;
+    setPersistedReviewView(null);
+
+    if (routeState.section === "review" && routeState.slug) {
+      loadPersistedReviewerView(routeState.slug).then((view) => {
+        if (isCurrent) {
+          setPersistedReviewView(view);
+        }
+      });
+    }
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [routeState.section, routeState.slug]);
 
   const handleSelectProject = (id: string) => {
     setActiveProject(id || null);
@@ -53,7 +77,7 @@ export default function App() {
   }
 
   if (routeState.section === "review") {
-    const view = getReviewerView(routeState.slug);
+    const view = getReviewerView(routeState.slug) ?? persistedReviewView;
     const lanes = view?.lanes ?? ["Enablement", "Learning Experience"];
     const laneProfile = getLaneProfile(lanes[0]);
     const projectIds =

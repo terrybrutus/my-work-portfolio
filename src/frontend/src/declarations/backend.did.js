@@ -30,6 +30,18 @@ export const Error = IDL.Variant({
   }),
 });
 export const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
+export const StoredReviewerView = IDL.Record({
+  'createdAt' : IDL.Text,
+  'context' : IDL.Text,
+  'headline' : IDL.Text,
+  'label' : IDL.Text,
+  'lanes' : IDL.Vec(IDL.Text),
+  'projectIds' : IDL.Vec(IDL.Text),
+  'proofIds' : IDL.Vec(IDL.Text),
+  'skillIds' : IDL.Vec(IDL.Text),
+  'slug' : IDL.Text,
+  'summary' : IDL.Text,
+});
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
@@ -43,7 +55,9 @@ export const idlService = IDL.Service({
   '_internet_identity_sign_in_start' : IDL.Func([], [IDL.Vec(IDL.Nat8)], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getReviewerView' : IDL.Func([IDL.Text], [IDL.Opt(StoredReviewerView)], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'saveReviewerView' : IDL.Func([StoredReviewerView], [], []),
 });
 
 export const idlInitArgs = [];
@@ -71,6 +85,18 @@ export const idlFactory = ({ IDL }) => {
     }),
   });
   const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
+  const StoredReviewerView = IDL.Record({
+    'createdAt' : IDL.Text,
+    'context' : IDL.Text,
+    'headline' : IDL.Text,
+    'label' : IDL.Text,
+    'lanes' : IDL.Vec(IDL.Text),
+    'projectIds' : IDL.Vec(IDL.Text),
+    'proofIds' : IDL.Vec(IDL.Text),
+    'skillIds' : IDL.Vec(IDL.Text),
+    'slug' : IDL.Text,
+    'summary' : IDL.Text,
+  });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
@@ -84,7 +110,9 @@ export const idlFactory = ({ IDL }) => {
     '_internet_identity_sign_in_start' : IDL.Func([], [IDL.Vec(IDL.Nat8)], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getReviewerView' : IDL.Func([IDL.Text], [IDL.Opt(StoredReviewerView)], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'saveReviewerView' : IDL.Func([StoredReviewerView], [], []),
   });
 };
 
