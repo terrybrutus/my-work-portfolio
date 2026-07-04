@@ -93,7 +93,7 @@ export default function App() {
   }
 
   if (routeState.section === "review") {
-    const view = getReviewerView(routeState.slug) ?? persistedReviewView;
+    const view = persistedReviewView ?? getReviewerView(routeState.slug);
     const lanes = view?.lanes ?? ["Enablement", "Learning Experience"];
     const laneProfile = getLaneProfile(lanes[0]);
     const projectIds =

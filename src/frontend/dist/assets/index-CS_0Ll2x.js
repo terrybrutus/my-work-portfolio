@@ -19828,6 +19828,17 @@ function Badge({
 const reviewerViewsKey = "terry-work-reviewer-views";
 const targetProfilesKey = "terry-work-target-profiles";
 const intakeSourcesKey = "terry-work-intake-sources";
+const laneCodes = {
+  Enablement: "q7",
+  "AI Operations": "m4",
+  "Learning Experience": "r8",
+  "Technical Product": "p6",
+  "Sales Enablement": "c9",
+  Compliance: "v3"
+};
+const codeLanes = Object.fromEntries(
+  Object.entries(laneCodes).map(([lane, code]) => [code, lane])
+);
 function normalizeText(value) {
   return value.toLowerCase().replace(/[^a-z0-9+#./\s-]/g, " ");
 }
@@ -19993,7 +20004,7 @@ function createReviewerView(context, label) {
   );
   const skillIds = getRecommendedSkills(analysis.lanes, 8);
   return {
-    slug: createSlug(),
+    slug: createReviewSlug(analysis.lanes),
     label: (label == null ? void 0 : label.trim()) || `${analysis.primaryLane} review path`,
     context,
     headline: getLaneProfile(analysis.primaryLane).headline,
@@ -20125,7 +20136,7 @@ function deleteReviewerView(slug) {
 }
 function getReviewerView(slug) {
   if (!slug) return null;
-  return loadReviewerViews().find((view) => view.slug === slug) ?? null;
+  return loadReviewerViews().find((view) => view.slug === slug) ?? createReviewerViewFromSlug(slug);
 }
 function createSlug() {
   const alphabet2 = "abcdefghjkmnpqrstuvwxyz23456789";
@@ -20134,6 +20145,37 @@ function createSlug() {
     slug += alphabet2[Math.floor(Math.random() * alphabet2.length)];
   }
   return slug;
+}
+function createReviewSlug(lanes2) {
+  const primary = laneCodes[lanes2[0]] ?? laneCodes.Enablement;
+  const secondary = laneCodes[lanes2[1]] ?? "z5";
+  return `${primary}${secondary}${createSlug().slice(0, 2)}`;
+}
+function createReviewerViewFromSlug(slug) {
+  const primary = codeLanes[slug.slice(0, 2)];
+  if (!primary) return null;
+  const secondary = codeLanes[slug.slice(2, 4)];
+  const lanes2 = [primary, secondary].filter(
+    (lane) => Boolean(lane)
+  );
+  const projectIds = getRecommendedProjects(lanes2, 3).map(
+    (project) => project.id
+  );
+  const proofIds = getRecommendedProofPoints(lanes2, 4).map(
+    (proofPoint) => proofPoint.id
+  );
+  return {
+    slug,
+    label: "Focused review",
+    context: "",
+    headline: getLaneProfile(primary).headline,
+    summary: getLaneProfile(primary).reviewerTakeaway,
+    lanes: lanes2,
+    projectIds,
+    proofIds,
+    skillIds: getRecommendedSkills(lanes2, 8),
+    createdAt: ""
+  };
 }
 const alphabet = "abcdefghijklmnopqrstuvwxyz234567";
 const lookupTable = /* @__PURE__ */ Object.create(null);
@@ -31987,7 +32029,7 @@ function App() {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Studio, {}) });
   }
   if (routeState.section === "review") {
-    const view = getReviewerView(routeState.slug) ?? persistedReviewView;
+    const view = persistedReviewView ?? getReviewerView(routeState.slug);
     const lanes2 = (view == null ? void 0 : view.lanes) ?? ["Enablement", "Learning Experience"];
     const laneProfile = getLaneProfile(lanes2[0]);
     const projectIds = (view == null ? void 0 : view.projectIds) ?? projects.slice(0, 3).map((project) => project.id);

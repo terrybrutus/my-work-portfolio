@@ -89,6 +89,17 @@ export type StrategyReport = {
 const reviewerViewsKey = "terry-work-reviewer-views";
 const targetProfilesKey = "terry-work-target-profiles";
 const intakeSourcesKey = "terry-work-intake-sources";
+const laneCodes: Record<Lane, string> = {
+  Enablement: "q7",
+  "AI Operations": "m4",
+  "Learning Experience": "r8",
+  "Technical Product": "p6",
+  "Sales Enablement": "c9",
+  Compliance: "v3",
+};
+const codeLanes = Object.fromEntries(
+  Object.entries(laneCodes).map(([lane, code]) => [code, lane as Lane]),
+) as Record<string, Lane>;
 
 function normalizeText(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9+#./\s-]/g, " ");
@@ -312,7 +323,7 @@ export function createReviewerView(
   const skillIds = getRecommendedSkills(analysis.lanes, 8);
 
   return {
-    slug: createSlug(),
+    slug: createReviewSlug(analysis.lanes),
     label: label?.trim() || `${analysis.primaryLane} review path`,
     context,
     headline: getLaneProfile(analysis.primaryLane).headline,
@@ -489,7 +500,10 @@ export function deleteReviewerView(slug: string) {
 
 export function getReviewerView(slug: string | null) {
   if (!slug) return null;
-  return loadReviewerViews().find((view) => view.slug === slug) ?? null;
+  return (
+    loadReviewerViews().find((view) => view.slug === slug) ??
+    createReviewerViewFromSlug(slug)
+  );
 }
 
 function createSlug() {
@@ -499,4 +513,39 @@ function createSlug() {
     slug += alphabet[Math.floor(Math.random() * alphabet.length)];
   }
   return slug;
+}
+
+function createReviewSlug(lanes: Lane[]) {
+  const primary = laneCodes[lanes[0]] ?? laneCodes.Enablement;
+  const secondary = laneCodes[lanes[1]] ?? "z5";
+  return `${primary}${secondary}${createSlug().slice(0, 2)}`;
+}
+
+function createReviewerViewFromSlug(slug: string): ReviewerView | null {
+  const primary = codeLanes[slug.slice(0, 2)];
+  if (!primary) return null;
+
+  const secondary = codeLanes[slug.slice(2, 4)];
+  const lanes = [primary, secondary].filter((lane): lane is Lane =>
+    Boolean(lane),
+  );
+  const projectIds = getRecommendedProjects(lanes, 3).map(
+    (project) => project.id,
+  );
+  const proofIds = getRecommendedProofPoints(lanes, 4).map(
+    (proofPoint) => proofPoint.id,
+  );
+
+  return {
+    slug,
+    label: "Focused review",
+    context: "",
+    headline: getLaneProfile(primary).headline,
+    summary: getLaneProfile(primary).reviewerTakeaway,
+    lanes,
+    projectIds,
+    proofIds,
+    skillIds: getRecommendedSkills(lanes, 8),
+    createdAt: "",
+  };
 }
