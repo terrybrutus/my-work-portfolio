@@ -49,7 +49,7 @@ export function Footer() {
       <div className="border-border border-t">
         <div className="container flex flex-col items-center justify-between gap-2 py-6 sm:flex-row">
           <p className="text-muted-foreground text-xs">
-            © {year} {profile.name}. Built with Caffeine.
+            Copyright {year} {profile.name}.
           </p>
           <p className="text-muted-foreground text-xs">All rights reserved.</p>
         </div>

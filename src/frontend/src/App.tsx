@@ -1,5 +1,13 @@
 import { Layout } from "@/components/Layout";
-import { getLaneProfile, projects } from "@/data/projects";
+import { Badge } from "@/components/ui/badge";
+import {
+  type LaneProfile,
+  type Project,
+  getLaneProfile,
+  getProjectById,
+  getProofPoints,
+  projects,
+} from "@/data/projects";
 import {
   type ReviewerView,
   getReviewerView,
@@ -90,6 +98,8 @@ export default function App() {
     const laneProfile = getLaneProfile(lanes[0]);
     const projectIds =
       view?.projectIds ?? projects.slice(0, 3).map((project) => project.id);
+    const proofIds = view?.proofIds ?? ["defense-workforce", "asset-cycle"];
+    const skillIds = view?.skillIds ?? fallbackReviewSkills;
 
     return (
       <Layout>
@@ -100,8 +110,14 @@ export default function App() {
           title={view?.headline ?? laneProfile.headline}
           description={view?.summary ?? laneProfile.reviewerTakeaway}
           projectIds={projectIds}
-          proofIds={view?.proofIds}
-          skillIds={view?.skillIds ?? fallbackReviewSkills}
+          proofIds={proofIds}
+          skillIds={skillIds}
+        />
+        <ReviewFitNotes
+          laneProfile={laneProfile}
+          projectIds={projectIds}
+          proofIds={proofIds}
+          skillIds={skillIds}
         />
         <About />
         <Contact />
@@ -139,5 +155,93 @@ export default function App() {
       <About />
       <Contact />
     </Layout>
+  );
+}
+
+function ReviewFitNotes({
+  laneProfile,
+  projectIds,
+  proofIds,
+  skillIds,
+}: {
+  laneProfile: LaneProfile;
+  projectIds: string[];
+  proofIds: string[];
+  skillIds: string[];
+}) {
+  const visibleProjects = projectIds
+    .map((projectId) => getProjectById(projectId))
+    .filter((project): project is Project => Boolean(project));
+  const visibleProof = getProofPoints(proofIds).slice(0, 3);
+
+  return (
+    <section className="bg-background py-16 md:py-20">
+      <div className="container">
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+              Why these examples
+            </p>
+            <h2 className="font-display text-foreground mt-3 text-3xl font-bold tracking-tight">
+              A focused read on {laneProfile.lane.toLowerCase()} work.
+            </h2>
+            <p className="text-muted-foreground mt-4 text-base leading-relaxed">
+              The examples above emphasize practical systems, clear handoffs,
+              measurable proof, and work that moves from idea to usable
+              execution.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="border-border bg-card rounded-xl border p-5 shadow-elevated">
+              <p className="text-foreground text-sm font-semibold">
+                Work to inspect
+              </p>
+              <div className="mt-3 space-y-2">
+                {visibleProjects.slice(0, 3).map((project) => (
+                  <p
+                    key={project.id}
+                    className="text-muted-foreground text-sm leading-relaxed"
+                  >
+                    {project.title}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-border bg-card rounded-xl border p-5 shadow-elevated">
+              <p className="text-foreground text-sm font-semibold">
+                Proof signals
+              </p>
+              <div className="mt-3 space-y-2">
+                {visibleProof.map((proofPoint) => (
+                  <p key={proofPoint.id} className="text-sm leading-relaxed">
+                    <span className="text-foreground font-semibold">
+                      {proofPoint.value}
+                    </span>{" "}
+                    <span className="text-muted-foreground">
+                      {proofPoint.label}
+                    </span>
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-border bg-card rounded-xl border p-5 shadow-elevated">
+              <p className="text-foreground text-sm font-semibold">
+                Capabilities
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {skillIds.slice(0, 5).map((skill) => (
+                  <Badge key={skill} variant="secondary">
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
