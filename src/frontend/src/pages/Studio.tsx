@@ -11,11 +11,13 @@ import {
   type IntakeSource,
   type ReviewerView,
   type SavedTargetProfile,
+  analyzeContext,
   buildStrategyReport,
   createIntakeSource,
   createReviewerView,
   createTargetProfile,
   getMediaAlignment,
+  getRecommendedSkills,
   loadIntakeSources,
   loadReviewerViews,
   loadTargetProfiles,
@@ -58,7 +60,12 @@ export function Studio() {
   const [sourceText, setSourceText] = useState("");
   const [sourceFile, setSourceFile] = useState<File | null>(null);
   const [sourceStatus, setSourceStatus] = useState("");
+  const analysis = useMemo(() => analyzeContext(context), [context]);
   const report = useMemo(() => buildStrategyReport(context), [context]);
+  const recommendedSkills = useMemo(
+    () => getRecommendedSkills(analysis.lanes, 6),
+    [analysis.lanes],
+  );
   const mediaAlignment = useMemo(
     () =>
       getMediaAlignment(
@@ -268,6 +275,74 @@ export function Studio() {
           </div>
 
           <div className="grid gap-6">
+            <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
+              <p className="text-primary mb-4 text-sm font-semibold uppercase tracking-wider">
+                Recommended focus
+              </p>
+              <div className="grid gap-5 md:grid-cols-[0.9fr_1.1fr]">
+                <div>
+                  <p className="text-muted-foreground text-xs uppercase tracking-wider">
+                    Primary lane
+                  </p>
+                  <h2 className="font-display mt-2 text-2xl font-semibold">
+                    {analysis.primaryLane}
+                  </h2>
+                  <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                    {analysis.reviewerTakeaway}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {analysis.lanes.map((lane) => (
+                      <Badge key={lane} variant="outline">
+                        {lane}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+                <div className="grid gap-4">
+                  <div>
+                    <p className="text-foreground text-sm font-semibold">
+                      Skill emphasis
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {recommendedSkills.map((skill) => (
+                        <Badge key={skill} variant="secondary">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-foreground text-sm font-semibold">
+                      Proof to lead with
+                    </p>
+                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                      {report.proofPoints.slice(0, 4).map((proofPoint) => (
+                        <div
+                          key={proofPoint.id}
+                          className="border-border rounded-lg border p-3"
+                        >
+                          <p className="text-foreground text-sm font-semibold">
+                            {proofPoint.value}
+                          </p>
+                          <p className="text-muted-foreground text-xs">
+                            {proofPoint.label}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-foreground text-sm font-semibold">
+                      Matched language
+                    </p>
+                    <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                      {analysis.matchedTerms.join(", ")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
               <div className="mb-5 flex items-center justify-between gap-4">
                 <div>
