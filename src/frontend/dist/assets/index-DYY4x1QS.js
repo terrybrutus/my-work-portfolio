@@ -14241,6 +14241,11 @@ const projects = [
     tags: ["AI Workflow", "Talent Enablement", "QA"],
     lanes: ["AI Operations", "Enablement", "Compliance"],
     proofIds: ["asset-cycle", "audit-cost"],
+    artifactHighlights: [
+      "Workflow map for source review, scripting, QA, and approval",
+      "Before/after timing proof for repeated content processing",
+      "Quality checklist showing where human review stays in the loop"
+    ],
     mediaNeeds: [
       "Redacted workflow screenshot",
       "Before/after timing visual",
@@ -14271,6 +14276,11 @@ const projects = [
     tags: ["Workflow Design", "React", "Delivery Systems"],
     lanes: ["Technical Product", "Enablement", "AI Operations"],
     proofIds: ["release-depth", "feature-set"],
+    artifactHighlights: [
+      "Working app view showing intake, status, ownership, and delivery signals",
+      "Release history proving iterative build depth",
+      "Workflow model connecting stakeholder handoffs to readiness"
+    ],
     mediaNeeds: [
       "Actual app screenshot",
       "Redacted status board",
@@ -14300,6 +14310,11 @@ const projects = [
     tags: ["Onboarding", "Sales Readiness", "Journey Mapping"],
     lanes: ["Sales Enablement", "Enablement", "Learning Experience"],
     proofIds: ["market-lots"],
+    artifactHighlights: [
+      "Readiness journey organized around lifecycle moments and role expectations",
+      "Manager-support sample for field execution",
+      "Scale note connecting the model to market lots and selling communities"
+    ],
     mediaNeeds: [
       "Redacted journey map",
       "Onboarding architecture artifact",
@@ -14329,6 +14344,11 @@ const projects = [
     tags: ["Compliance", "Mobile-First", "Audit Evidence"],
     lanes: ["Compliance", "Learning Experience", "Enablement"],
     proofIds: ["municipal-coverage"],
+    artifactHighlights: [
+      "Mobile-first access pattern for required training",
+      "Tracking approach for completion and audit evidence",
+      "Low-code delivery model built around workforce constraints"
+    ],
     mediaNeeds: [
       "Mobile screen preview",
       "Tracking artifact",
@@ -14358,6 +14378,11 @@ const projects = [
     tags: ["Scenario Design", "Security Awareness", "eLearning"],
     lanes: ["Learning Experience", "Compliance", "Technical Product"],
     proofIds: ["municipal-coverage", "army-lms"],
+    artifactHighlights: [
+      "Scenario screen where learners identify suspicious cues",
+      "Feedback model organized around sender, link, attachment, and urgency signals",
+      "Reusable pattern for short active-judgment compliance practice"
+    ],
     mediaNeeds: [
       "Direct interaction screenshot",
       "Short click-through GIF",
@@ -14387,6 +14412,11 @@ const projects = [
     tags: ["Gameful Learning", "React", "Career Development"],
     lanes: ["Learning Experience", "Technical Product", "AI Operations"],
     proofIds: ["release-depth"],
+    artifactHighlights: [
+      "Interactive career map showing paths as navigable choices",
+      "Prototype flow connecting learning strategy to product behavior",
+      "Repo-backed proof of AI-assisted concept-to-build execution"
+    ],
     mediaNeeds: ["Actual app screenshot", "Gameplay GIF", "Demo link"],
     sourceNote: "GitHub repo and app prototype.",
     repo: "https://github.com/terrybrutus/career-city"
@@ -31064,6 +31094,23 @@ function ProjectDetail({
               proofPoint.label
             ] }, proofPoint.id)),
             project.tags.map((tag) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", children: tag }, tag))
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 md:grid-cols-[1fr_0.8fr]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card rounded-xl border p-5 shadow-elevated", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Evidence packet" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 grid gap-3", children: project.artifactHighlights.map((artifact) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-primary/10 mt-1 size-2 rounded-full" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm leading-relaxed", children: artifact })
+              ] }, artifact)) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card rounded-xl border p-5 shadow-elevated", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Source signal" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-4 text-sm leading-relaxed", children: project.sourceNote }),
+              project.repo ? /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { variant: "outline", size: "sm", className: "mt-4", asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: project.repo, target: "_blank", rel: "noreferrer", children: [
+                "View repo",
+                /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "size-4" })
+              ] }) }) : null
+            ] })
           ] })
         ] })
       ]

@@ -264,6 +264,41 @@ function ProjectDetail({
             </Badge>
           ))}
         </div>
+
+        <div className="grid gap-4 md:grid-cols-[1fr_0.8fr]">
+          <div className="border-border bg-card rounded-xl border p-5 shadow-elevated">
+            <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+              Evidence packet
+            </p>
+            <div className="mt-4 grid gap-3">
+              {project.artifactHighlights.map((artifact) => (
+                <div key={artifact} className="flex gap-3">
+                  <span className="bg-primary/10 mt-1 size-2 rounded-full" />
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {artifact}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-border bg-card rounded-xl border p-5 shadow-elevated">
+            <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+              Source signal
+            </p>
+            <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
+              {project.sourceNote}
+            </p>
+            {project.repo ? (
+              <Button variant="outline" size="sm" className="mt-4" asChild>
+                <a href={project.repo} target="_blank" rel="noreferrer">
+                  View repo
+                  <ArrowRight className="size-4" />
+                </a>
+              </Button>
+            ) : null}
+          </div>
+        </div>
       </div>
     </motion.div>
   );
