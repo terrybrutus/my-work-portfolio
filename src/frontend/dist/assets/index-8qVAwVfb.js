@@ -32800,11 +32800,22 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$h = [
+const __iconNode$i = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$h);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$i);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$h = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$h);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32812,10 +32823,12 @@ const ArrowLeft = createLucideIcon("arrow-left", __iconNode$h);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$g = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+  ["path", { d: "M12 12h.01", key: "1mp3jc" }],
+  ["path", { d: "M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2", key: "1ksdt3" }],
+  ["path", { d: "M22 13a18.15 18.15 0 0 1-20 0", key: "12hx5q" }],
+  ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
 ];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$g);
+const BriefcaseBusiness = createLucideIcon("briefcase-business", __iconNode$g);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32823,19 +32836,6 @@ const ArrowRight = createLucideIcon("arrow-right", __iconNode$g);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$f = [
-  ["path", { d: "M12 12h.01", key: "1mp3jc" }],
-  ["path", { d: "M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2", key: "1ksdt3" }],
-  ["path", { d: "M22 13a18.15 18.15 0 0 1-20 0", key: "12hx5q" }],
-  ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
-];
-const BriefcaseBusiness = createLucideIcon("briefcase-business", __iconNode$f);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$e = [
   ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
   [
     "path",
@@ -32845,7 +32845,19 @@ const __iconNode$e = [
     }
   ]
 ];
-const Clipboard = createLucideIcon("clipboard", __iconNode$e);
+const Clipboard = createLucideIcon("clipboard", __iconNode$f);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$e = [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+];
+const Database = createLucideIcon("database", __iconNode$e);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32853,11 +32865,16 @@ const Clipboard = createLucideIcon("clipboard", __iconNode$e);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$d = [
-  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
-  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
-  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+  [
+    "path",
+    {
+      d: "M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0",
+      key: "1nclc0"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Database = createLucideIcon("database", __iconNode$d);
+const Eye = createLucideIcon("eye", __iconNode$d);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -41503,15 +41520,13 @@ function About() {
         viewport: { once: true },
         transition: { duration: 0.5 },
         className: "flex justify-center md:justify-start",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-muted relative h-64 w-64 overflow-hidden rounded-full shadow-elevated-lg sm:h-80 sm:w-80", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "img",
-          {
-            src: "/assets/portfolio/terry-profile.png",
-            alt: "Portrait of Terry Brutus",
-            loading: "lazy",
-            className: "h-full w-full object-cover"
-          }
-        ) })
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-card flex aspect-square w-full max-w-80 flex-col justify-between rounded-3xl border p-8 shadow-elevated-lg", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-primary font-display text-7xl font-bold", children: "TB" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground font-display text-2xl font-semibold", children: "Builder. Strategist. Maker." }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-3 text-sm leading-relaxed", children: "Former Division I athlete with a hands-on creative streak and a bias for useful systems." })
+          ] })
+        ] })
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -42199,6 +42214,33 @@ function Studio() {
                 /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Matched language" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 text-sm leading-relaxed", children: analysis.matchedTerms.join(", ") })
               ] })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border-border rounded-xl border p-6 shadow-elevated", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-5 flex items-center justify-between gap-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-primary text-sm font-semibold uppercase tracking-wider", children: "Review preview" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-2xl font-semibold", children: analysis.angle })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-full bg-primary/10 p-3 text-primary", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { className: "size-5" }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm leading-relaxed", children: "This is the emphasis a hiring team would see if you create the path from the current role context." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: report.projectMatches.map((match, index2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground", children: index2 + 1 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: match.project.title }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 text-sm leading-relaxed", children: match.reason })
+              ] })
+            ] }, match.project.id)) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-xl bg-muted/45 p-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Lead proof" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 space-y-3", children: report.proofPoints.slice(0, 3).map((proofPoint) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: proofPoint.value }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-xs", children: proofPoint.label })
+              ] }, proofPoint.id)) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 flex flex-wrap gap-2", children: recommendedSkills.slice(0, 4).map((skill) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: skill }, skill)) })
             ] })
           ] })
         ] }),

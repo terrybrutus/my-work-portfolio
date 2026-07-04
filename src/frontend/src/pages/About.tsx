@@ -14,13 +14,19 @@ export function About() {
             transition={{ duration: 0.5 }}
             className="flex justify-center md:justify-start"
           >
-            <div className="bg-muted relative h-64 w-64 overflow-hidden rounded-full shadow-elevated-lg sm:h-80 sm:w-80">
-              <img
-                src="/assets/portfolio/terry-profile.png"
-                alt="Portrait of Terry Brutus"
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
+            <div className="border-border bg-card flex aspect-square w-full max-w-80 flex-col justify-between rounded-3xl border p-8 shadow-elevated-lg">
+              <div className="text-primary font-display text-7xl font-bold">
+                TB
+              </div>
+              <div>
+                <p className="text-foreground font-display text-2xl font-semibold">
+                  Builder. Strategist. Maker.
+                </p>
+                <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
+                  Former Division I athlete with a hands-on creative streak and
+                  a bias for useful systems.
+                </p>
+              </div>
             </div>
           </motion.div>
 

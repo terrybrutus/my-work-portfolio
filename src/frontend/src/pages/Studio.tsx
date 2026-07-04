@@ -29,6 +29,7 @@ import { savePersistedReviewerView } from "@/lib/reviewerStore";
 import {
   Clipboard,
   Database,
+  Eye,
   FilePlus2,
   FileSearch,
   Link2,
@@ -338,6 +339,71 @@ export function Studio() {
                     <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
                       {analysis.matchedTerms.join(", ")}
                     </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-card border-border rounded-xl border p-6 shadow-elevated">
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-primary text-sm font-semibold uppercase tracking-wider">
+                    Review preview
+                  </p>
+                  <h2 className="font-display text-2xl font-semibold">
+                    {analysis.angle}
+                  </h2>
+                </div>
+                <div className="rounded-full bg-primary/10 p-3 text-primary">
+                  <Eye className="size-5" />
+                </div>
+              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                This is the emphasis a hiring team would see if you create the
+                path from the current role context.
+              </p>
+
+              <div className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+                <div className="space-y-4">
+                  {report.projectMatches.map((match, index) => (
+                    <div key={match.project.id} className="flex gap-3">
+                      <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                        {index + 1}
+                      </span>
+                      <div>
+                        <p className="text-foreground text-sm font-semibold">
+                          {match.project.title}
+                        </p>
+                        <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                          {match.reason}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="rounded-xl bg-muted/45 p-4">
+                  <p className="text-foreground text-sm font-semibold">
+                    Lead proof
+                  </p>
+                  <div className="mt-3 space-y-3">
+                    {report.proofPoints.slice(0, 3).map((proofPoint) => (
+                      <div key={proofPoint.id}>
+                        <p className="text-foreground text-sm font-semibold">
+                          {proofPoint.value}
+                        </p>
+                        <p className="text-muted-foreground text-xs">
+                          {proofPoint.label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {recommendedSkills.slice(0, 4).map((skill) => (
+                      <Badge key={skill} variant="outline">
+                        {skill}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
               </div>
