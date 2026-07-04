@@ -7,6 +7,7 @@ import {
   acceptedEvidenceTypes,
   brainSources,
   getProjectById,
+  getProofPoints,
   laneProfiles,
   projects,
   proofPoints,
@@ -228,6 +229,15 @@ export function Studio() {
   const latestLink = latestView
     ? `${currentOrigin}/work/${latestView.slug}`
     : "";
+  const latestProjects = latestView
+    ? latestView.projectIds
+        .map((projectId) => getProjectById(projectId))
+        .filter((project): project is Project => Boolean(project))
+        .slice(0, 3)
+    : [];
+  const latestProof = latestView
+    ? getProofPoints(latestView.proofIds).slice(0, 2)
+    : [];
 
   const handleCopyLatestLink = async () => {
     if (!latestLink) return;
@@ -300,6 +310,32 @@ export function Studio() {
                 <p className="text-muted-foreground mt-1 break-all text-xs">
                   {latestLink}
                 </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {latestView.lanes.slice(0, 3).map((lane) => (
+                    <Badge key={lane} variant="outline">
+                      {lane}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="mt-3 grid gap-2">
+                  {latestProjects.map((project) => (
+                    <p
+                      key={project.id}
+                      className="text-muted-foreground text-xs leading-relaxed"
+                    >
+                      {project.title}
+                    </p>
+                  ))}
+                </div>
+                {latestProof.length > 0 ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {latestProof.map((proofPoint) => (
+                      <Badge key={proofPoint.id} variant="secondary">
+                        {proofPoint.value} {proofPoint.label}
+                      </Badge>
+                    ))}
+                  </div>
+                ) : null}
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Button size="sm" variant="outline" asChild>
                     <a href={`/work/${latestView.slug}`}>

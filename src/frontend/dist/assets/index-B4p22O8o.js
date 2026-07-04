@@ -31349,6 +31349,8 @@ function Studio() {
   const currentOrigin = window.location.origin;
   const latestView = views[0];
   const latestLink = latestView ? `${currentOrigin}/work/${latestView.slug}` : "";
+  const latestProjects = latestView ? latestView.projectIds.map((projectId) => getProjectById(projectId)).filter((project) => Boolean(project)).slice(0, 3) : [];
+  const latestProof = latestView ? getProofPoints(latestView.proofIds).slice(0, 2) : [];
   const handleCopyLatestLink = async () => {
     if (!latestLink) return;
     await navigator.clipboard.writeText(latestLink);
@@ -31405,6 +31407,20 @@ function Studio() {
         latestView ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-border bg-muted/40 mt-4 rounded-lg border p-4", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-foreground text-sm font-semibold", children: "Latest review path" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground mt-1 break-all text-xs", children: latestLink }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 flex flex-wrap gap-2", children: latestView.lanes.slice(0, 3).map((lane) => /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "outline", children: lane }, lane)) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 grid gap-2", children: latestProjects.map((project) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "p",
+            {
+              className: "text-muted-foreground text-xs leading-relaxed",
+              children: project.title
+            },
+            project.id
+          )) }),
+          latestProof.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 flex flex-wrap gap-2", children: latestProof.map((proofPoint) => /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { variant: "secondary", children: [
+            proofPoint.value,
+            " ",
+            proofPoint.label
+          ] }, proofPoint.id)) }) : null,
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3 flex flex-wrap gap-2", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { size: "sm", variant: "outline", asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: `/work/${latestView.slug}`, children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Link2, { className: "size-4" }),
