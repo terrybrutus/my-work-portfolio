@@ -1,8 +1,8 @@
 manifest_version = "0.1.0"
 
 [project]
-id = "my-app"
-name = "my-app"
+id = "my-work-portfolio"
+name = "Terry Brutus Work Portfolio"
 
 [workspace]
 include = ["src/**"]
