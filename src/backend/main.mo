@@ -17,7 +17,7 @@ actor {
     createdAt : Text;
   };
 
-  stable var reviewerViews : [StoredReviewerView] = [];
+  stable var reviewerViews : [StoredReviewerView];
 
   include MixinViews();
 
@@ -37,6 +37,6 @@ actor {
 
   public shared func saveReviewerView(view : StoredReviewerView) : async () {
     let existingViews = Array.filter<StoredReviewerView>(reviewerViews, func(item : StoredReviewerView) : Bool { item.slug != view.slug });
-    reviewerViews := Array.append<StoredReviewerView>([view], existingViews);
+    reviewerViews := Array.concat<StoredReviewerView>([view], existingViews);
   };
 };
