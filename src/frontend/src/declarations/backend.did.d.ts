@@ -31,7 +31,7 @@ export interface StoredReviewerView {
   'createdAt' : string,
   'context' : string,
   'headline' : string,
-  'label' : string,
+  'labelText' : string,
   'lanes' : Array<string>,
   'projectIds' : Array<string>,
   'proofIds' : Array<string>,

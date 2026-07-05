@@ -15,7 +15,7 @@ module {
 
   public type StoredReviewerView = {
     slug : Text;
-    label : Text;
+    labelText : Text;
     context : Text;
     headline : Text;
     summary : Text;

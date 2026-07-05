@@ -51,6 +51,7 @@ export async function loadPersistedReviewerView(
     );
     return {
       ...view,
+      label: view.labelText,
       lanes: viewLanes.length > 0 ? viewLanes : ["Enablement" as Lane],
     };
   } catch (error) {
@@ -63,7 +64,10 @@ export async function savePersistedReviewerView(view: ReviewerView) {
   try {
     const actor = await getActor();
     if (!actor) return false;
-    await actor.saveReviewerView(view);
+    await actor.saveReviewerView({
+      ...view,
+      labelText: view.label,
+    });
     return true;
   } catch (error) {
     console.warn("Reviewer path persistence unavailable", error);

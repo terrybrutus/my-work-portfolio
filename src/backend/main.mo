@@ -6,7 +6,7 @@ import MixinAuthorization "mo:caffeineai-authorization/MixinAuthorization";
 actor {
   public type StoredReviewerView = {
     slug : Text;
-    label : Text;
+    labelText : Text;
     context : Text;
     headline : Text;
     summary : Text;

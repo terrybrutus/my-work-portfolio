@@ -22826,7 +22826,7 @@ const StoredReviewerView = Record({
   "createdAt": Text,
   "context": Text,
   "headline": Text,
-  "label": Text,
+  "labelText": Text,
   "lanes": Vec(Text),
   "projectIds": Vec(Text),
   "proofIds": Vec(Text),
@@ -22873,6 +22873,7 @@ async function loadPersistedReviewerView(slug) {
     );
     return {
       ...view,
+      label: view.labelText,
       lanes: viewLanes.length > 0 ? viewLanes : ["Enablement"]
     };
   } catch (error) {
@@ -22884,7 +22885,10 @@ async function savePersistedReviewerView(view) {
   try {
     const actor = await getActor();
     if (!actor) return false;
-    await actor.saveReviewerView(view);
+    await actor.saveReviewerView({
+      ...view,
+      labelText: view.label
+    });
     return true;
   } catch (error) {
     console.warn("Reviewer path persistence unavailable", error);
