@@ -1,8 +1,11 @@
 import { Badge } from "@/components/ui/badge";
-import { humanHighlights, profile, skills } from "@/data/projects";
+import { humanHighlights, skills } from "@/data/projects";
+import { getDisplayProfile } from "@/lib/portfolioCustomization";
 import { motion } from "motion/react";
 
 export function About() {
+  const displayProfile = getDisplayProfile();
+
   return (
     <section id="about" className="bg-background py-20 md:py-28">
       <div className="container">
@@ -44,9 +47,9 @@ export function About() {
               Systems thinker, learning designer, practical builder.
             </h2>
             <p className="text-muted-foreground text-base leading-relaxed">
-              {profile.shortSummary} My background sits at the intersection of
-              instructional systems design, enablement strategy, AI-assisted
-              workflow design, and product-minded prototyping.
+              {displayProfile.shortSummary} My background sits at the
+              intersection of instructional systems design, enablement strategy,
+              AI-assisted workflow design, and product-minded prototyping.
             </p>
             <p className="text-muted-foreground text-base leading-relaxed">
               I work best where the challenge is messy: people need to learn

@@ -7,8 +7,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { navLinks, profile } from "@/data/projects";
+import { navLinks } from "@/data/projects";
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
+import { getDisplayProfile } from "@/lib/portfolioCustomization";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ import { useEffect, useState } from "react";
 export function Header() {
   const scrollTo = useSmoothScroll();
   const [scrolled, setScrolled] = useState(false);
+  const displayProfile = getDisplayProfile();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -46,7 +48,7 @@ export function Header() {
     <header
       data-header
       className={cn(
-        "bg-card/80 border-border sticky top-0 z-40 w-full border-b backdrop-blur-md transition-smooth",
+        "sticky top-0 z-40 w-full border-b border-black/10 bg-[#f8f5ef] transition-smooth",
         scrolled ? "shadow-elevated" : "shadow-none",
       )}
     >
@@ -57,7 +59,7 @@ export function Header() {
           data-ocid="header.logo"
           className="font-display text-foreground text-lg font-bold tracking-tight transition-smooth hover:text-primary"
         >
-          {profile.name}
+          {displayProfile.name}
         </button>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -74,7 +76,7 @@ export function Header() {
           ))}
           <Button
             size="sm"
-            className="ml-2"
+            className="ml-2 rounded-none bg-black text-white hover:bg-black/85"
             onClick={() => handleNav("/", "contact")}
             data-ocid="header.cta_button"
           >

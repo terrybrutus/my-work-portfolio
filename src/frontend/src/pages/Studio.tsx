@@ -13,6 +13,17 @@ import {
   proofPoints,
 } from "@/data/projects";
 import {
+  type PortfolioCustomization,
+  getDisplayProfile,
+  getDisplayProjects,
+  loadPortfolioCustomization,
+  readImageFileAsDataUrl,
+  resetPortfolioCustomization,
+  savePortfolioCustomization,
+  updateProfileOverrides,
+  updateProjectOverride,
+} from "@/lib/portfolioCustomization";
+import {
   type IntakeSource,
   type ReviewerView,
   type SavedTargetProfile,
@@ -40,6 +51,7 @@ import {
   Eye,
   FilePlus2,
   FileSearch,
+  ImageIcon,
   Link2,
   RotateCcw,
   Save,
@@ -70,6 +82,13 @@ export function Studio() {
   const [sourceText, setSourceText] = useState("");
   const [sourceFile, setSourceFile] = useState<File | null>(null);
   const [sourceStatus, setSourceStatus] = useState("");
+  const [customization, setCustomization] = useState<PortfolioCustomization>(
+    () => loadPortfolioCustomization(),
+  );
+  const [selectedProjectId, setSelectedProjectId] = useState(
+    projects[0]?.id ?? "",
+  );
+  const [displayStatus, setDisplayStatus] = useState("");
   const analysis = useMemo(() => analyzeContext(context), [context]);
   const report = useMemo(() => buildStrategyReport(context), [context]);
   const recommendedSkills = useMemo(
@@ -111,6 +130,60 @@ export function Studio() {
     () => getCoverageRows(analysis.lanes, intakeSources),
     [analysis.lanes, intakeSources],
   );
+  const displayProfile = getDisplayProfile(customization);
+  const displayProjects = getDisplayProjects(customization);
+  const selectedDisplayProject =
+    displayProjects.find((project) => project.id === selectedProjectId) ??
+    displayProjects[0];
+
+  const commitCustomization = (
+    next: PortfolioCustomization,
+    status: string,
+  ) => {
+    setCustomization(savePortfolioCustomization(next));
+    setDisplayStatus(status);
+  };
+
+  const handleProfileImageChange = async (file: File | null) => {
+    if (!file) return;
+    const imageUrl = await readImageFileAsDataUrl(file);
+    commitCustomization(
+      updateProfileOverrides(customization, { profileImage: imageUrl }),
+      "Profile image saved for this browser draft.",
+    );
+  };
+
+  const handleProjectImageChange = async (
+    file: File | null,
+    field: "thumbnail" | "image",
+  ) => {
+    if (!file || !selectedDisplayProject) return;
+    const imageUrl = await readImageFileAsDataUrl(file);
+    commitCustomization(
+      updateProjectOverride(customization, selectedDisplayProject.id, {
+        [field]: imageUrl,
+      }),
+      `${field === "thumbnail" ? "Thumbnail" : "Detail image"} saved for ${selectedDisplayProject.title}.`,
+    );
+  };
+
+  const handleResetDisplayDraft = () => {
+    setCustomization(resetPortfolioCustomization());
+    setDisplayStatus("Display draft reset to the default source data.");
+  };
+
+  const handleResetSelectedProject = () => {
+    if (!selectedDisplayProject) return;
+    const next = {
+      ...customization,
+      projects: { ...customization.projects },
+    };
+    delete next.projects[selectedDisplayProject.id];
+    commitCustomization(
+      next,
+      `${selectedDisplayProject.title} reset to the default source data.`,
+    );
+  };
 
   const handleSave = async () => {
     const view = createReviewerView(context, label);
@@ -260,6 +333,277 @@ export function Studio() {
             recommends lanes, projects, proof points, gaps, and a next artifact
             to strengthen the portfolio.
           </p>
+        </div>
+
+        <div className="bg-card border-border mb-6 rounded-xl border p-6 shadow-elevated">
+          <div className="mb-5 flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
+            <div>
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-primary">
+                <ImageIcon className="size-4" />
+                <span className="text-xs font-semibold uppercase tracking-wider">
+                  Display editor
+                </span>
+              </div>
+              <h2 className="font-display text-2xl font-semibold">
+                Profile and showcase controls
+              </h2>
+              <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-relaxed">
+                Edit the visible profile copy, profile image, project copy, and
+                thumbnails for this draft. These changes save in this browser
+                now; Caffeine persistence can be wired after the visual system
+                is approved.
+              </p>
+            </div>
+            <Button variant="outline" onClick={handleResetDisplayDraft}>
+              <RotateCcw className="size-4" />
+              Reset display draft
+            </Button>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+            <div className="rounded-lg border border-border p-4">
+              <p className="text-foreground text-sm font-semibold">
+                Profile front door
+              </p>
+              <div className="mt-4 grid gap-3">
+                <input
+                  value={displayProfile.name}
+                  onChange={(event) =>
+                    commitCustomization(
+                      updateProfileOverrides(customization, {
+                        name: event.target.value,
+                      }),
+                      "Profile name saved.",
+                    )
+                  }
+                  placeholder="Name"
+                  className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                />
+                <input
+                  value={displayProfile.title}
+                  onChange={(event) =>
+                    commitCustomization(
+                      updateProfileOverrides(customization, {
+                        title: event.target.value,
+                      }),
+                      "Profile title saved.",
+                    )
+                  }
+                  placeholder="Portfolio title"
+                  className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                />
+                <Textarea
+                  value={displayProfile.headline}
+                  onChange={(event) =>
+                    commitCustomization(
+                      updateProfileOverrides(customization, {
+                        headline: event.target.value,
+                      }),
+                      "Profile headline saved.",
+                    )
+                  }
+                  rows={3}
+                  placeholder="Hero headline"
+                  className="resize-none"
+                />
+                <Textarea
+                  value={displayProfile.shortSummary}
+                  onChange={(event) =>
+                    commitCustomization(
+                      updateProfileOverrides(customization, {
+                        shortSummary: event.target.value,
+                      }),
+                      "Profile summary saved.",
+                    )
+                  }
+                  rows={4}
+                  placeholder="Short summary"
+                  className="resize-none"
+                />
+                <label className="border-border bg-muted/40 text-muted-foreground flex cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-sm">
+                  <span>Upload profile image</span>
+                  <Upload className="size-4 shrink-0" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(event) =>
+                      void handleProfileImageChange(
+                        event.target.files?.[0] ?? null,
+                      )
+                    }
+                  />
+                </label>
+                {displayProfile.profileImage ? (
+                  <img
+                    src={displayProfile.profileImage}
+                    alt={displayProfile.name}
+                    className="aspect-[4/3] w-full rounded-md border border-border object-cover"
+                  />
+                ) : (
+                  <div className="flex aspect-[4/3] items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-muted-foreground">
+                    Profile image placeholder
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-border p-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-foreground text-sm font-semibold">
+                  Showcase item editor
+                </p>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleResetSelectedProject}
+                  disabled={!selectedDisplayProject}
+                >
+                  <RotateCcw className="size-4" />
+                  Reset item
+                </Button>
+              </div>
+              {selectedDisplayProject ? (
+                <div className="mt-4 grid gap-4">
+                  <select
+                    value={selectedProjectId}
+                    onChange={(event) =>
+                      setSelectedProjectId(event.target.value)
+                    }
+                    className="border-input bg-background ring-offset-background focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                  >
+                    {displayProjects.map((project) => (
+                      <option key={project.id} value={project.id}>
+                        {project.title}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <input
+                      value={selectedDisplayProject.title}
+                      onChange={(event) =>
+                        commitCustomization(
+                          updateProjectOverride(
+                            customization,
+                            selectedDisplayProject.id,
+                            { title: event.target.value },
+                          ),
+                          "Project title saved.",
+                        )
+                      }
+                      placeholder="Project title"
+                      className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                    />
+                    <input
+                      value={selectedDisplayProject.category}
+                      onChange={(event) =>
+                        commitCustomization(
+                          updateProjectOverride(
+                            customization,
+                            selectedDisplayProject.id,
+                            { category: event.target.value },
+                          ),
+                          "Project category saved.",
+                        )
+                      }
+                      placeholder="Category"
+                      className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                    />
+                  </div>
+
+                  <Textarea
+                    value={selectedDisplayProject.shortDescription}
+                    onChange={(event) =>
+                      commitCustomization(
+                        updateProjectOverride(
+                          customization,
+                          selectedDisplayProject.id,
+                          { shortDescription: event.target.value },
+                        ),
+                        "Project short description saved.",
+                      )
+                    }
+                    rows={3}
+                    placeholder="Short project description"
+                    className="resize-none"
+                  />
+                  <Textarea
+                    value={selectedDisplayProject.fullDescription}
+                    onChange={(event) =>
+                      commitCustomization(
+                        updateProjectOverride(
+                          customization,
+                          selectedDisplayProject.id,
+                          { fullDescription: event.target.value },
+                        ),
+                        "Project detail description saved.",
+                      )
+                    }
+                    rows={4}
+                    placeholder="Detail description"
+                    className="resize-none"
+                  />
+
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <label className="border-border bg-muted/40 text-muted-foreground flex cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-sm">
+                      <span>Upload thumbnail</span>
+                      <Upload className="size-4 shrink-0" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(event) =>
+                          void handleProjectImageChange(
+                            event.target.files?.[0] ?? null,
+                            "thumbnail",
+                          )
+                        }
+                      />
+                    </label>
+                    <label className="border-border bg-muted/40 text-muted-foreground flex cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-sm">
+                      <span>Upload detail image</span>
+                      <Upload className="size-4 shrink-0" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(event) =>
+                          void handleProjectImageChange(
+                            event.target.files?.[0] ?? null,
+                            "image",
+                          )
+                        }
+                      />
+                    </label>
+                  </div>
+
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <img
+                      src={selectedDisplayProject.thumbnail}
+                      alt={`${selectedDisplayProject.title} thumbnail`}
+                      className="aspect-[4/3] w-full rounded-md border border-border object-cover"
+                    />
+                    <img
+                      src={selectedDisplayProject.image}
+                      alt={`${selectedDisplayProject.title} detail`}
+                      className="aspect-[4/3] w-full rounded-md border border-border object-cover"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-4 rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
+                  Add a project to the source data before editing showcase
+                  display settings.
+                </div>
+              )}
+            </div>
+          </div>
+          {displayStatus ? (
+            <p className="text-muted-foreground mt-4 text-sm">
+              {displayStatus}
+            </p>
+          ) : null}
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">

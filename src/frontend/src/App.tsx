@@ -146,11 +146,11 @@ export default function App() {
       <Projects
         activeProject={activeProject}
         onSelectProject={handleSelectProject}
-        projectIds={projects.slice(0, 3).map((project) => project.id)}
+        projectIds={projects.slice(0, 5).map((project) => project.id)}
         proofIds={["defense-workforce", "asset-cycle", "release-depth"]}
-        eyebrow="Preview"
-        title="A quick look at the work."
-        description="A light preview of the broader portfolio. The full work view keeps the proof organized without overloading the front door."
+        eyebrow="Work samples"
+        title="A quick read on the systems behind the work."
+        description="A clean preview of the broader portfolio. Tailored review paths can reorder the evidence without making the public front door feel overbuilt."
       />
       <About />
       <Contact />

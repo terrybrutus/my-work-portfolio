@@ -70,6 +70,7 @@ export const profile = {
   email: "terrbrutus@gmail.com",
   linkedIn: "https://www.linkedin.com/in/terrybrutus",
   github: "https://github.com/terrybrutus",
+  profileImage: "",
   headline:
     "I build practical enablement systems for teams that need clearer execution.",
   shortSummary:
