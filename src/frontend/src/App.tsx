@@ -579,6 +579,7 @@ function AdminStudio({
   setContent: React.Dispatch<React.SetStateAction<PortfolioContent>>;
 }) {
   const [exported, setExported] = useState("");
+  const [saveStatus, setSaveStatus] = useState("Autosaves in this browser.");
 
   const moveSection = (index: number, direction: -1 | 1) => {
     const next = [...content.sections];
@@ -599,6 +600,24 @@ function AdminStudio({
     const reader = new FileReader();
     reader.onload = () => updateContent("profileImage", String(reader.result));
     reader.readAsDataURL(file);
+  };
+
+  const saveDraft = () => {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+    setSaveStatus(`Saved locally at ${new Date().toLocaleTimeString()}.`);
+  };
+
+  const downloadBackup = () => {
+    const backup = JSON.stringify(content, null, 2);
+    const blob = new Blob([backup], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `terrylxd-portfolio-draft-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setExported(backup);
+    setSaveStatus("Backup JSON downloaded.");
   };
 
   return (
@@ -672,12 +691,22 @@ function AdminStudio({
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
+          <button className="admin-button" type="button" onClick={saveDraft}>
+            <Save className="h-4 w-4" /> Save draft
+          </button>
           <button
             className="admin-button"
             type="button"
             onClick={() => setExported(JSON.stringify(content, null, 2))}
           >
             <Download className="h-4 w-4" /> Export JSON
+          </button>
+          <button
+            className="admin-button"
+            type="button"
+            onClick={downloadBackup}
+          >
+            <Download className="h-4 w-4" /> Download backup
           </button>
           <button
             className="admin-button"
@@ -690,6 +719,9 @@ function AdminStudio({
             <Eye className="h-4 w-4" /> Preview
           </a>
         </div>
+        <p className="mt-3 text-xs font-semibold text-white/[0.50]">
+          {saveStatus}
+        </p>
       </div>
 
       <div className="space-y-6">
