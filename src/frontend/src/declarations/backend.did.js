@@ -29,35 +29,35 @@ export const Error = IDL.Variant({
     'expected' : IDL.Vec(IDL.Text),
   }),
 });
-export const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
-export const StoredReviewerView = IDL.Record({
-  'createdAt' : IDL.Text,
-  'context' : IDL.Text,
-  'headline' : IDL.Text,
-  'labelText' : IDL.Text,
-  'lanes' : IDL.Vec(IDL.Text),
-  'projectIds' : IDL.Vec(IDL.Text),
-  'proofIds' : IDL.Vec(IDL.Text),
-  'skillIds' : IDL.Vec(IDL.Text),
-  'slug' : IDL.Text,
-  'summary' : IDL.Text,
-});
+export const Result__1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
+export const Value = IDL.Variant({
+  'int' : IDL.Int,
+  'nat' : IDL.Nat,
+  'float' : IDL.Float64,
+  'bool' : IDL.Bool,
+  'null' : IDL.Null,
+  'text' : IDL.Text,
+});
+export const Cell = IDL.Record({ 'value' : Value, 'name' : IDL.Text });
+export const Result = IDL.Record({
+  'hasMore' : IDL.Bool,
+  'rows' : IDL.Vec(IDL.Vec(Cell)),
+});
 
 export const idlService = IDL.Service({
-  '__accessControlState' : IDL.Func([], [IDL.Reserved], ['query']),
   '_initialize_access_control' : IDL.Func([], [], []),
-  '_internet_identity_sign_in_finish' : IDL.Func([], [Result], []),
+  '_internet_identity_sign_in_finish' : IDL.Func([], [Result__1], []),
   '_internet_identity_sign_in_start' : IDL.Func([], [IDL.Vec(IDL.Nat8)], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'execute' : IDL.Func([IDL.Text], [Result], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getReviewerView' : IDL.Func([IDL.Text], [IDL.Opt(StoredReviewerView)], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-  'saveReviewerView' : IDL.Func([StoredReviewerView], [], []),
+  'schema' : IDL.Func([], [IDL.Text], ['query']),
 });
 
 export const idlInitArgs = [];
@@ -84,35 +84,35 @@ export const idlFactory = ({ IDL }) => {
       'expected' : IDL.Vec(IDL.Text),
     }),
   });
-  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
-  const StoredReviewerView = IDL.Record({
-    'createdAt' : IDL.Text,
-    'context' : IDL.Text,
-    'headline' : IDL.Text,
-    'labelText' : IDL.Text,
-    'lanes' : IDL.Vec(IDL.Text),
-    'projectIds' : IDL.Vec(IDL.Text),
-    'proofIds' : IDL.Vec(IDL.Text),
-    'skillIds' : IDL.Vec(IDL.Text),
-    'slug' : IDL.Text,
-    'summary' : IDL.Text,
-  });
+  const Result__1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
   });
+  const Value = IDL.Variant({
+    'int' : IDL.Int,
+    'nat' : IDL.Nat,
+    'float' : IDL.Float64,
+    'bool' : IDL.Bool,
+    'null' : IDL.Null,
+    'text' : IDL.Text,
+  });
+  const Cell = IDL.Record({ 'value' : Value, 'name' : IDL.Text });
+  const Result = IDL.Record({
+    'hasMore' : IDL.Bool,
+    'rows' : IDL.Vec(IDL.Vec(Cell)),
+  });
   
   return IDL.Service({
-    '__accessControlState' : IDL.Func([], [IDL.Reserved], ['query']),
     '_initialize_access_control' : IDL.Func([], [], []),
-    '_internet_identity_sign_in_finish' : IDL.Func([], [Result], []),
+    '_internet_identity_sign_in_finish' : IDL.Func([], [Result__1], []),
     '_internet_identity_sign_in_start' : IDL.Func([], [IDL.Vec(IDL.Nat8)], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'execute' : IDL.Func([IDL.Text], [Result], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getReviewerView' : IDL.Func([IDL.Text], [IDL.Opt(StoredReviewerView)], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-    'saveReviewerView' : IDL.Func([StoredReviewerView], [], []),
+    'schema' : IDL.Func([], [IDL.Text], ['query']),
   });
 };
 

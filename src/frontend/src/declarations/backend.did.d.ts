@@ -10,6 +10,7 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface Cell { 'value' : Value, 'name' : string }
 export type Error = { 'FrontendOriginsNotConfigured' : null } |
   {
     'MixedSsoSources' : {
@@ -25,33 +26,27 @@ export type Error = { 'FrontendOriginsNotConfigured' : null } |
   { 'UntrustedSsoSource' : { 'domain' : string } } |
   { 'MissingField' : string } |
   { 'FrontendOriginMismatch' : { 'got' : string, 'expected' : Array<string> } };
-export type Result = { 'ok' : null } |
+export interface Result { 'hasMore' : boolean, 'rows' : Array<Array<Cell>> }
+export type Result__1 = { 'ok' : null } |
   { 'err' : Error };
-export interface StoredReviewerView {
-  'createdAt' : string,
-  'context' : string,
-  'headline' : string,
-  'labelText' : string,
-  'lanes' : Array<string>,
-  'projectIds' : Array<string>,
-  'proofIds' : Array<string>,
-  'skillIds' : Array<string>,
-  'slug' : string,
-  'summary' : string,
-}
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export type Value = { 'int' : bigint } |
+  { 'nat' : bigint } |
+  { 'float' : number } |
+  { 'bool' : boolean } |
+  { 'null' : null } |
+  { 'text' : string };
 export interface _SERVICE {
-  '__accessControlState' : ActorMethod<[], any>,
   '_initialize_access_control' : ActorMethod<[], undefined>,
-  '_internet_identity_sign_in_finish' : ActorMethod<[], Result>,
+  '_internet_identity_sign_in_finish' : ActorMethod<[], Result__1>,
   '_internet_identity_sign_in_start' : ActorMethod<[], Uint8Array>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'execute' : ActorMethod<[string], Result>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
-  'getReviewerView' : ActorMethod<[string], [] | [StoredReviewerView]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
-  'saveReviewerView' : ActorMethod<[StoredReviewerView], undefined>,
+  'schema' : ActorMethod<[], string>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

@@ -9,8 +9,6 @@ const ii_url =
     : `https://id.ai/authorize`;
 
 process.env.II_URL = process.env.II_URL || ii_url;
-process.env.STORAGE_GATEWAY_URL =
-  process.env.STORAGE_GATEWAY_URL || "https://blob.caffeine.ai";
 
 export default defineConfig({
   logLevel: "error",
@@ -41,7 +39,6 @@ export default defineConfig({
     environment("all", { prefix: "CANISTER_" }),
     environment("all", { prefix: "DFX_" }),
     environment(["II_URL"]),
-    environment(["STORAGE_GATEWAY_URL"]),
     react(),
   ],
   resolve: {
