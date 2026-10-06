@@ -62,7 +62,7 @@ type Template = {
   accent: string;
 };
 
-const STORAGE_KEY = "terry-lxd-portfolio-draft-v1";
+const STORAGE_KEY = "terry-lxd-portfolio-draft-v2";
 
 const templates: Template[] = [
   {
@@ -125,57 +125,57 @@ const templates: Template[] = [
 
 const defaultContent: PortfolioContent = {
   name: "Terry Brutus",
-  eyebrow: "Learning systems, sales enablement, and performance strategy",
+  eyebrow: "Learning & Enablement Architect | AI Workflow Automation",
   headline:
-    "I design enablement experiences that turn messy business problems into clear, playable systems.",
+    "I build scalable learning systems that make complex work easier to adopt.",
   subheadline:
-    "My work sits where learning design, product thinking, and revenue performance meet: diagnosing what people actually need, building tools that make decisions easier, and proving whether the work changed behavior.",
-  location: "United States",
-  email: "hello@terrylxd.com",
+    "I translate stakeholder goals, skill gaps, and adoption blockers into practical enablement workflows, compliance-ready learning assets, and AI-assisted operations for federal, enterprise, SaaS, healthcare, sales, and technical teams.",
+  location: "Leland, North Carolina",
+  email: "terrbrutus@gmail.com",
   profileImage: "/assets/legacy/legacy-profile.png",
   profileImagePosition: "50% 42%",
   proofPoints: [
-    "Learning experience design",
-    "Sales enablement strategy",
-    "Performance diagnostics",
-    "Interactive product prototypes",
+    "8+ years in learning architecture and technical enablement",
+    "158K+ defense learners supported through scalable training systems",
+    "122+ enterprise learning assets governed for Section 508/WCAG",
+    "AI-assisted workflows reducing review time by up to 90%",
   ],
   about: [
-    "I do not treat training as the default answer. I start by finding the real blocker: unclear expectations, weak practice loops, missing manager support, poor information design, or a workflow problem pretending to be a knowledge gap.",
-    "From there, I build learning systems that feel practical and alive: scenario-based tools, evidence boards, manager guides, simulations, performance support, and experiences people can actually use inside the job.",
+    "My work lives between learning strategy, customer adoption, technical enablement, and operational workflow design. I help teams move from scattered stakeholder requests to structured learning systems that can be delivered, measured, maintained, and trusted.",
+    "Across federal, enterprise, municipal, SaaS, healthcare, sales, and technical environments, I focus on the part that matters most: making complex work easier for real people to perform without burying them in generic training.",
   ],
   capabilities: [
-    "Diagnose performance problems before designing solutions",
-    "Translate stakeholder asks into measurable enablement systems",
-    "Design scenario-based practice, simulations, and decision tools",
-    "Build portfolio-ready prototypes that show how learning works",
-    "Create manager-ready playbooks, field guides, and evidence models",
-    "Use AI thoughtfully without making the work feel generic",
+    "Translate stakeholder goals and operational priorities into scalable learning strategies",
+    "Design role-based onboarding, compliance, and customer enablement journeys",
+    "Build AI-assisted QA, content analysis, and skills-alignment workflows",
+    "Govern accessible learning assets using Section 508 and WCAG standards",
+    "Create scenario-based, simulation-based, and self-paced technical training",
+    "Use analytics and support data to identify adoption blockers and reduce escalations",
   ],
   projects: [
     {
-      title: "Enablement Quest",
+      title: "Defense Workforce Learning Architecture",
       summary:
-        "A playable sales enablement RPG where learners inspect evidence, talk to stakeholders, and decide what is proven before recommending training.",
+        "Learning architecture and technical enablement for a 158,000-person defense acquisition workforce, translating stakeholder needs into scalable readiness solutions.",
       result:
-        "Turns a static portfolio claim into an interactive proof of analysis, systems thinking, and learning design craft.",
-      tags: ["Game-based learning", "Sales enablement", "Evidence analysis"],
+        "Improved delivery quality, governed 122+ accessible assets, and contributed to expanded client confidence and engagement scope.",
+      tags: ["Federal learning", "Technical enablement", "Accessibility"],
     },
     {
-      title: "Atlas Pro Diagnostic",
+      title: "AI-Assisted Production Workflow",
       summary:
-        "A simulated leadership request where the player must investigate why demos are not converting instead of assuming more training is the fix.",
+        "A content analysis and skills-alignment workflow that uses AI to accelerate review, QA, and production decisions across large learning asset sets.",
       result:
-        "Shows how enablement can connect field signals, stakeholder interviews, and business outcomes.",
-      tags: ["Needs analysis", "Scenario design", "Revenue learning"],
+        "Cut per-deliverable processing from roughly 1.5 hours to 9.5 minutes across 100+ assets and became a documented production standard.",
+      tags: ["AI workflow automation", "Learning operations", "QA"],
     },
     {
-      title: "Editable Portfolio System",
+      title: "Distributed Onboarding & Compliance Systems",
       summary:
-        "A living portfolio with admin editing, reusable layouts, and structured content blocks that can evolve as the work changes.",
+        "Consulting work across enterprise and municipal contexts, including onboarding for distributed selling communities and compliance enablement without traditional LMS infrastructure.",
       result:
-        "Makes the portfolio itself a product: editable, modular, and designed to support future case studies.",
-      tags: ["Portfolio product", "CMS thinking", "Design systems"],
+        "Standardized enablement delivery across 400+ selling communities and created audit-ready compliance coverage for 1,750+ employees.",
+      tags: ["Customer adoption", "Compliance", "Program design"],
     },
   ],
   sections: [
@@ -288,7 +288,7 @@ function PublicPortfolio({
 
   return (
     <>
-      <section className="grid min-h-[72vh] items-center gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr]">
+      <section className="grid min-h-[72vh] items-start gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-sm font-medium text-white/[0.80] backdrop-blur">
             <Sparkles className="h-4 w-4 text-cyan-200" />
@@ -345,8 +345,15 @@ function HeroCard({
   content,
   template,
 }: { content: PortfolioContent; template: Template }) {
+  const impactStats = [
+    ["8+ yrs", "learning architecture"],
+    ["158K+", "defense learners"],
+    ["122+", "accessible assets"],
+    ["90%", "review-time reduction"],
+  ];
+
   return (
-    <div className="hero-orb relative mx-auto w-full max-w-[34rem] rounded-[2rem] border border-white/10 bg-white/10 p-5 shadow-2xl shadow-black/40 backdrop-blur-2xl">
+    <div className="hero-orb relative mx-auto w-full max-w-[35rem] rounded-[2rem] border border-white/10 bg-white/10 p-5 shadow-2xl shadow-black/40 backdrop-blur-2xl lg:mt-4">
       <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-cyan-300/20 blur-3xl" />
       <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-fuchsia-300/20 blur-3xl" />
       <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950">
@@ -362,28 +369,30 @@ function HeroCard({
             />
             <div>
               <p className="text-sm uppercase tracking-[0.32em] text-white/[0.45]">
-                Portfolio OS
+                Learning & Enablement Architect
               </p>
               <h2 className="text-2xl font-black text-white">{content.name}</h2>
               <p className="text-sm text-white/[0.55]">{content.location}</p>
             </div>
           </div>
-          <div className="grid gap-3">
-            {[
-              ["Diagnose", "Find the real performance blocker"],
-              ["Design", "Create usable learning systems"],
-              ["Prove", "Connect evidence to business outcomes"],
-            ].map(([label, value]) => (
+          <div className="grid grid-cols-2 gap-3">
+            {impactStats.map(([label, value]) => (
               <div
-                className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3"
+                className="rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-4"
                 key={label}
               >
-                <span className="text-sm font-semibold text-white/[0.65]">
+                <span className="block text-2xl font-black tracking-tight text-white">
                   {label}
                 </span>
-                <span className="text-right text-sm text-white">{value}</span>
+                <span className="mt-1 block text-sm leading-5 text-white/[0.62]">
+                  {value}
+                </span>
               </div>
             ))}
+          </div>
+          <div className="rounded-2xl border border-cyan-200/20 bg-cyan-200/[0.08] p-4 text-sm leading-6 text-white/[0.72]">
+            Current focus: technical enablement, customer adoption, accessible
+            learning systems, and AI-assisted production workflows.
           </div>
         </div>
       </div>
@@ -416,7 +425,7 @@ function ApproachSection({ content }: { content: PortfolioContent }) {
       <SectionHeader
         icon={<BrainCircuit className="h-5 w-5" />}
         eyebrow="Approach"
-        title="Training is not always the answer. The system is."
+        title="I connect business needs to learning systems people can actually use."
       />
       <div className="space-y-5 text-lg leading-8 text-white/[0.72]">
         {content.about.map((paragraph) => (
@@ -433,7 +442,7 @@ function CapabilitiesSection({ content }: { content: PortfolioContent }) {
       <SectionHeader
         icon={<Boxes className="h-5 w-5" />}
         eyebrow="Capabilities"
-        title="What this portfolio needs to prove"
+        title="Core strengths pulled from the work, not buzzwords"
       />
       <div className="mt-8 grid gap-3 md:grid-cols-2">
         {content.capabilities.map((capability) => (
@@ -456,7 +465,7 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
       <SectionHeader
         icon={<BriefcaseBusiness className="h-5 w-5" />}
         eyebrow="Selected Work"
-        title="Case studies that behave more like products"
+        title="Evidence of scale, access, automation, and adoption"
       />
       <div className="mt-8 grid gap-5 lg:grid-cols-3">
         {content.projects.map((project, index) => (
@@ -509,7 +518,7 @@ function TemplateSection({
       <SectionHeader
         icon={<LayoutTemplate className="h-5 w-5" />}
         eyebrow="Template System"
-        title="Same content, different portfolio directions"
+        title="A living portfolio that can keep evolving"
       />
       <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         {templates.map((item) => (

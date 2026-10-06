@@ -17,13 +17,15 @@ describe("App default route", () => {
   it("renders the TerryLXD portfolio instead of a blank screen", () => {
     render(<App />);
     expect(
-      screen.getByText(/I design enablement experiences/i),
+      screen.getByText(/I build scalable learning systems/i),
     ).toBeInTheDocument();
   });
 
   it("renders portfolio navigation and work section", () => {
     render(<App />);
     expect(screen.getByText("TerryLXD")).toBeInTheDocument();
-    expect(screen.getByText("Enablement Quest")).toBeInTheDocument();
+    expect(
+      screen.getByText("Defense Workforce Learning Architecture"),
+    ).toBeInTheDocument();
   });
 });
