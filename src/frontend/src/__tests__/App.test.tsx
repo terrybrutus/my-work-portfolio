@@ -3,7 +3,6 @@ import { cleanup, configure, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import App from "../App";
 
-// The generated app marks its empty-state placeholder with data-ocid.
 configure({ testIdAttribute: "data-ocid" });
 
 afterEach(() => {
@@ -15,18 +14,16 @@ vi.mock("../hooks/useQueries", () => ({
 }));
 
 describe("App default route", () => {
-  it("renders a plain empty placeholder instead of a blank screen", () => {
+  it("renders the TerryLXD portfolio instead of a blank screen", () => {
     render(<App />);
-    // The page must not be blank: the empty-state placeholder is present.
-    expect(screen.getByTestId("empty_state")).toBeInTheDocument();
+    expect(
+      screen.getByText(/I design enablement experiences/i),
+    ).toBeInTheDocument();
   });
 
-  it("renders a single plain placeholder with no features or navigation", () => {
+  it("renders portfolio navigation and work section", () => {
     render(<App />);
-    const placeholder = screen.getByTestId("empty_state");
-    // The placeholder is plain: no links, buttons, inputs, or navigation.
-    expect(placeholder.querySelector("a, button, input, nav")).toBeNull();
-    // It is a single placeholder, not a featureful page.
-    expect(screen.getAllByTestId("empty_state")).toHaveLength(1);
+    expect(screen.getByText("TerryLXD")).toBeInTheDocument();
+    expect(screen.getByText("Enablement Quest")).toBeInTheDocument();
   });
 });

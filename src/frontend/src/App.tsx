@@ -1,17 +1,874 @@
+import {
+  ArrowRight,
+  BadgeCheck,
+  BarChart3,
+  BookOpenCheck,
+  Boxes,
+  BrainCircuit,
+  BriefcaseBusiness,
+  ChevronDown,
+  ChevronUp,
+  ClipboardCheck,
+  Download,
+  Eye,
+  ImagePlus,
+  LayoutTemplate,
+  Lock,
+  MousePointer2,
+  Palette,
+  Save,
+  Sparkles,
+  Wand2,
+} from "lucide-react";
+import type React from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCallerUserRole } from "./hooks/useQueries";
 
+type Project = {
+  title: string;
+  summary: string;
+  result: string;
+  tags: string[];
+};
+
+type PortfolioSection = {
+  id: string;
+  label: string;
+  visible: boolean;
+};
+
+type PortfolioContent = {
+  name: string;
+  eyebrow: string;
+  headline: string;
+  subheadline: string;
+  location: string;
+  email: string;
+  profileImage: string;
+  profileImagePosition: string;
+  proofPoints: string[];
+  about: string[];
+  capabilities: string[];
+  projects: Project[];
+  sections: PortfolioSection[];
+  selectedTemplate: string;
+};
+
+type Template = {
+  id: string;
+  name: string;
+  description: string;
+  className: string;
+  accent: string;
+};
+
+const STORAGE_KEY = "terry-lxd-portfolio-draft-v1";
+
+const templates: Template[] = [
+  {
+    id: "systems-lab",
+    name: "Systems Lab",
+    description: "Dark, polished, product-strategy dashboard energy.",
+    className: "theme-systems-lab",
+    accent: "from-cyan-300 to-blue-500",
+  },
+  {
+    id: "executive-brief",
+    name: "Executive Brief",
+    description: "Clean, credible, boardroom-ready consulting portfolio.",
+    className: "theme-executive-brief",
+    accent: "from-amber-300 to-orange-500",
+  },
+  {
+    id: "field-notes",
+    name: "Field Notes",
+    description: "Human, editorial, reflective learning strategist.",
+    className: "theme-field-notes",
+    accent: "from-emerald-300 to-teal-500",
+  },
+  {
+    id: "neon-console",
+    name: "Neon Console",
+    description: "Animated technical showcase with game-like polish.",
+    className: "theme-neon-console",
+    accent: "from-fuchsia-400 to-cyan-400",
+  },
+  {
+    id: "product-studio",
+    name: "Product Studio",
+    description: "Modern SaaS portfolio for enablement products.",
+    className: "theme-product-studio",
+    accent: "from-violet-300 to-indigo-500",
+  },
+  {
+    id: "case-library",
+    name: "Case Library",
+    description: "Evidence-first case study wall.",
+    className: "theme-case-library",
+    accent: "from-lime-300 to-green-500",
+  },
+  {
+    id: "learning-city",
+    name: "Learning City",
+    description: "Playful but professional nod to interactive learning.",
+    className: "theme-learning-city",
+    accent: "from-sky-300 to-emerald-400",
+  },
+  {
+    id: "signal-room",
+    name: "Signal Room",
+    description: "Sharp, minimal, high-contrast operator console.",
+    className: "theme-signal-room",
+    accent: "from-red-400 to-yellow-300",
+  },
+];
+
+const defaultContent: PortfolioContent = {
+  name: "Terry Brutus",
+  eyebrow: "Learning systems, sales enablement, and performance strategy",
+  headline:
+    "I design enablement experiences that turn messy business problems into clear, playable systems.",
+  subheadline:
+    "My work sits where learning design, product thinking, and revenue performance meet: diagnosing what people actually need, building tools that make decisions easier, and proving whether the work changed behavior.",
+  location: "United States",
+  email: "hello@terrylxd.com",
+  profileImage: "/assets/legacy/legacy-profile.png",
+  profileImagePosition: "50% 42%",
+  proofPoints: [
+    "Learning experience design",
+    "Sales enablement strategy",
+    "Performance diagnostics",
+    "Interactive product prototypes",
+  ],
+  about: [
+    "I do not treat training as the default answer. I start by finding the real blocker: unclear expectations, weak practice loops, missing manager support, poor information design, or a workflow problem pretending to be a knowledge gap.",
+    "From there, I build learning systems that feel practical and alive: scenario-based tools, evidence boards, manager guides, simulations, performance support, and experiences people can actually use inside the job.",
+  ],
+  capabilities: [
+    "Diagnose performance problems before designing solutions",
+    "Translate stakeholder asks into measurable enablement systems",
+    "Design scenario-based practice, simulations, and decision tools",
+    "Build portfolio-ready prototypes that show how learning works",
+    "Create manager-ready playbooks, field guides, and evidence models",
+    "Use AI thoughtfully without making the work feel generic",
+  ],
+  projects: [
+    {
+      title: "Enablement Quest",
+      summary:
+        "A playable sales enablement RPG where learners inspect evidence, talk to stakeholders, and decide what is proven before recommending training.",
+      result:
+        "Turns a static portfolio claim into an interactive proof of analysis, systems thinking, and learning design craft.",
+      tags: ["Game-based learning", "Sales enablement", "Evidence analysis"],
+    },
+    {
+      title: "Atlas Pro Diagnostic",
+      summary:
+        "A simulated leadership request where the player must investigate why demos are not converting instead of assuming more training is the fix.",
+      result:
+        "Shows how enablement can connect field signals, stakeholder interviews, and business outcomes.",
+      tags: ["Needs analysis", "Scenario design", "Revenue learning"],
+    },
+    {
+      title: "Editable Portfolio System",
+      summary:
+        "A living portfolio with admin editing, reusable layouts, and structured content blocks that can evolve as the work changes.",
+      result:
+        "Makes the portfolio itself a product: editable, modular, and designed to support future case studies.",
+      tags: ["Portfolio product", "CMS thinking", "Design systems"],
+    },
+  ],
+  sections: [
+    { id: "proof", label: "Proof Points", visible: true },
+    { id: "about", label: "Approach", visible: true },
+    { id: "capabilities", label: "Capabilities", visible: true },
+    { id: "projects", label: "Selected Work", visible: true },
+    { id: "templates", label: "Template System", visible: true },
+  ],
+  selectedTemplate: "systems-lab",
+};
+
+function getInitialContent(): PortfolioContent {
+  if (typeof window === "undefined") return defaultContent;
+  const saved = window.localStorage.getItem(STORAGE_KEY);
+  if (!saved) return defaultContent;
+  try {
+    return { ...defaultContent, ...JSON.parse(saved) };
+  } catch {
+    return defaultContent;
+  }
+}
+
 export default function App() {
-  // Wire the frontend to the backend so the app boots end to end.
   useCallerUserRole();
+  const [content, setContent] = useState<PortfolioContent>(getInitialContent);
+  const isAdmin =
+    typeof window !== "undefined" &&
+    window.location.pathname.startsWith("/admin");
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+  }, [content]);
+
+  const template = useMemo(
+    () =>
+      templates.find((item) => item.id === content.selectedTemplate) ??
+      templates[0],
+    [content.selectedTemplate],
+  );
+
+  const updateContent = <K extends keyof PortfolioContent>(
+    key: K,
+    value: PortfolioContent[K],
+  ) => {
+    setContent((current) => ({ ...current, [key]: value }));
+  };
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div
-        data-ocid="empty_state"
-        className="flex min-h-screen items-center justify-center"
-      >
-        <p className="text-sm text-muted-foreground">This app is empty.</p>
+    <main className={`portfolio-shell min-h-screen ${template.className}`}>
+      <AmbientBackdrop />
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-5 py-6 sm:px-8 lg:px-10">
+        <TopNav isAdmin={isAdmin} />
+        {isAdmin ? (
+          <AdminStudio
+            content={content}
+            template={template}
+            updateContent={updateContent}
+            setContent={setContent}
+          />
+        ) : (
+          <PublicPortfolio
+            content={content}
+            template={template}
+            updateContent={updateContent}
+          />
+        )}
       </div>
     </main>
+  );
+}
+
+function TopNav({ isAdmin }: { isAdmin: boolean }) {
+  return (
+    <nav className="mb-10 flex items-center justify-between rounded-full border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/[0.80] shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <a href="/" className="flex items-center gap-2 font-semibold text-white">
+        <span className="grid h-8 w-8 place-items-center rounded-full bg-white text-slate-950">
+          TB
+        </span>
+        TerryLXD
+      </a>
+      <div className="flex items-center gap-2">
+        <a className="nav-pill" href="/#work">
+          Work
+        </a>
+        <a className="nav-pill" href="/#approach">
+          Approach
+        </a>
+        <a className="nav-pill" href={isAdmin ? "/" : "/admin"}>
+          {isAdmin ? "Preview" : "Admin"}
+        </a>
+      </div>
+    </nav>
+  );
+}
+
+function PublicPortfolio({
+  content,
+  template,
+  updateContent,
+}: {
+  content: PortfolioContent;
+  template: Template;
+  updateContent: <K extends keyof PortfolioContent>(
+    key: K,
+    value: PortfolioContent[K],
+  ) => void;
+}) {
+  const visibleSections = content.sections.filter((section) => section.visible);
+
+  return (
+    <>
+      <section className="grid min-h-[72vh] items-center gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-sm font-medium text-white/[0.80] backdrop-blur">
+            <Sparkles className="h-4 w-4 text-cyan-200" />
+            {content.eyebrow}
+          </div>
+          <h1 className="max-w-4xl text-balance text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
+            {content.headline}
+          </h1>
+          <p className="mt-7 max-w-2xl text-lg leading-8 text-white/[0.72]">
+            {content.subheadline}
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a className="primary-cta" href="#work">
+              See the work <ArrowRight className="h-4 w-4" />
+            </a>
+            <a className="secondary-cta" href={`mailto:${content.email}`}>
+              Start a conversation
+            </a>
+          </div>
+        </div>
+        <HeroCard content={content} template={template} />
+      </section>
+
+      <div className="space-y-8 pb-20">
+        {visibleSections.map((section) => {
+          switch (section.id) {
+            case "proof":
+              return <ProofStrip key={section.id} content={content} />;
+            case "about":
+              return <ApproachSection key={section.id} content={content} />;
+            case "capabilities":
+              return <CapabilitiesSection key={section.id} content={content} />;
+            case "projects":
+              return <ProjectSection key={section.id} content={content} />;
+            case "templates":
+              return (
+                <TemplateSection
+                  key={section.id}
+                  content={content}
+                  template={template}
+                  updateContent={updateContent}
+                />
+              );
+            default:
+              return null;
+          }
+        })}
+      </div>
+    </>
+  );
+}
+
+function HeroCard({
+  content,
+  template,
+}: { content: PortfolioContent; template: Template }) {
+  return (
+    <div className="hero-orb relative mx-auto w-full max-w-[34rem] rounded-[2rem] border border-white/10 bg-white/10 p-5 shadow-2xl shadow-black/40 backdrop-blur-2xl">
+      <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-cyan-300/20 blur-3xl" />
+      <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-fuchsia-300/20 blur-3xl" />
+      <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950">
+        <div className={`h-2 bg-gradient-to-r ${template.accent}`} />
+        <div className="grid gap-6 p-6">
+          <div className="flex items-center gap-4">
+            <div
+              className="h-24 w-24 rounded-3xl border border-white/[0.15] bg-cover bg-center shadow-xl"
+              style={{
+                backgroundImage: `url(${content.profileImage})`,
+                backgroundPosition: content.profileImagePosition,
+              }}
+            />
+            <div>
+              <p className="text-sm uppercase tracking-[0.32em] text-white/[0.45]">
+                Portfolio OS
+              </p>
+              <h2 className="text-2xl font-black text-white">{content.name}</h2>
+              <p className="text-sm text-white/[0.55]">{content.location}</p>
+            </div>
+          </div>
+          <div className="grid gap-3">
+            {[
+              ["Diagnose", "Find the real performance blocker"],
+              ["Design", "Create usable learning systems"],
+              ["Prove", "Connect evidence to business outcomes"],
+            ].map(([label, value]) => (
+              <div
+                className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3"
+                key={label}
+              >
+                <span className="text-sm font-semibold text-white/[0.65]">
+                  {label}
+                </span>
+                <span className="text-right text-sm text-white">{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProofStrip({ content }: { content: PortfolioContent }) {
+  return (
+    <section className="glass-panel grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-4">
+      {content.proofPoints.map((point) => (
+        <div
+          className="rounded-3xl border border-white/10 bg-black/20 p-5"
+          key={point}
+        >
+          <BadgeCheck className="mb-4 h-6 w-6 text-cyan-200" />
+          <p className="font-bold text-white">{point}</p>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function ApproachSection({ content }: { content: PortfolioContent }) {
+  return (
+    <section
+      id="approach"
+      className="glass-panel grid gap-8 p-7 lg:grid-cols-[0.65fr_1fr]"
+    >
+      <SectionHeader
+        icon={<BrainCircuit className="h-5 w-5" />}
+        eyebrow="Approach"
+        title="Training is not always the answer. The system is."
+      />
+      <div className="space-y-5 text-lg leading-8 text-white/[0.72]">
+        {content.about.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CapabilitiesSection({ content }: { content: PortfolioContent }) {
+  return (
+    <section className="glass-panel p-7">
+      <SectionHeader
+        icon={<Boxes className="h-5 w-5" />}
+        eyebrow="Capabilities"
+        title="What this portfolio needs to prove"
+      />
+      <div className="mt-8 grid gap-3 md:grid-cols-2">
+        {content.capabilities.map((capability) => (
+          <div
+            className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-4"
+            key={capability}
+          >
+            <ClipboardCheck className="mt-1 h-5 w-5 shrink-0 text-cyan-200" />
+            <p className="text-white/[0.78]">{capability}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProjectSection({ content }: { content: PortfolioContent }) {
+  return (
+    <section id="work" className="glass-panel p-7">
+      <SectionHeader
+        icon={<BriefcaseBusiness className="h-5 w-5" />}
+        eyebrow="Selected Work"
+        title="Case studies that behave more like products"
+      />
+      <div className="mt-8 grid gap-5 lg:grid-cols-3">
+        {content.projects.map((project, index) => (
+          <article className="project-card group" key={project.title}>
+            <div className="mb-6 flex items-center justify-between">
+              <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-950">
+                0{index + 1}
+              </span>
+              <BarChart3 className="h-5 w-5 text-white/[0.45] transition group-hover:text-white" />
+            </div>
+            <h3 className="text-2xl font-black tracking-tight text-white">
+              {project.title}
+            </h3>
+            <p className="mt-4 text-sm leading-6 text-white/[0.65]">
+              {project.summary}
+            </p>
+            <p className="mt-5 rounded-2xl bg-black/[0.25] p-4 text-sm leading-6 text-white/[0.75]">
+              {project.result}
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <span
+                  className="rounded-full border border-white/10 px-3 py-1 text-xs text-white/[0.62]"
+                  key={tag}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TemplateSection({
+  template,
+  updateContent,
+}: {
+  content: PortfolioContent;
+  template: Template;
+  updateContent: <K extends keyof PortfolioContent>(
+    key: K,
+    value: PortfolioContent[K],
+  ) => void;
+}) {
+  return (
+    <section className="glass-panel p-7">
+      <SectionHeader
+        icon={<LayoutTemplate className="h-5 w-5" />}
+        eyebrow="Template System"
+        title="Same content, different portfolio directions"
+      />
+      <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+        {templates.map((item) => (
+          <button
+            type="button"
+            className={`template-card text-left ${item.id === template.id ? "is-active" : ""}`}
+            key={item.id}
+            onClick={() => updateContent("selectedTemplate", item.id)}
+          >
+            <span
+              className={`mb-4 block h-2 rounded-full bg-gradient-to-r ${item.accent}`}
+            />
+            <span className="block font-black text-white">{item.name}</span>
+            <span className="mt-2 block text-sm leading-5 text-white/[0.58]">
+              {item.description}
+            </span>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SectionHeader({
+  icon,
+  eyebrow,
+  title,
+}: {
+  icon: React.ReactNode;
+  eyebrow: string;
+  title: string;
+}) {
+  return (
+    <div>
+      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-3 py-2 text-sm font-semibold text-white/[0.70]">
+        {icon}
+        {eyebrow}
+      </div>
+      <h2 className="max-w-3xl text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+function AdminStudio({
+  content,
+  template,
+  updateContent,
+  setContent,
+}: {
+  content: PortfolioContent;
+  template: Template;
+  updateContent: <K extends keyof PortfolioContent>(
+    key: K,
+    value: PortfolioContent[K],
+  ) => void;
+  setContent: React.Dispatch<React.SetStateAction<PortfolioContent>>;
+}) {
+  const [exported, setExported] = useState("");
+
+  const moveSection = (index: number, direction: -1 | 1) => {
+    const next = [...content.sections];
+    const target = index + direction;
+    if (target < 0 || target >= next.length) return;
+    [next[index], next[target]] = [next[target], next[index]];
+    updateContent("sections", next);
+  };
+
+  const updateProject = (index: number, project: Project) => {
+    const projects = [...content.projects];
+    projects[index] = project;
+    updateContent("projects", projects);
+  };
+
+  const handleImageUpload = (file: File | undefined) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => updateContent("profileImage", String(reader.result));
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <section className="grid gap-6 pb-20 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="glass-panel sticky top-6 h-fit p-6">
+        <div className="mb-6 flex items-center gap-3">
+          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
+            <Lock className="h-5 w-5" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-black text-white">
+              Portfolio Admin Studio
+            </h1>
+            <p className="text-sm text-white/[0.55]">
+              Local draft editor now. Auth/publish next.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-3">
+          <AdminField
+            label="Name"
+            value={content.name}
+            onChange={(value) => updateContent("name", value)}
+          />
+          <AdminField
+            label="Eyebrow"
+            value={content.eyebrow}
+            onChange={(value) => updateContent("eyebrow", value)}
+          />
+          <AdminTextArea
+            label="Headline"
+            value={content.headline}
+            onChange={(value) => updateContent("headline", value)}
+          />
+          <AdminTextArea
+            label="Subheadline"
+            value={content.subheadline}
+            onChange={(value) => updateContent("subheadline", value)}
+          />
+          <AdminField
+            label="Email"
+            value={content.email}
+            onChange={(value) => updateContent("email", value)}
+          />
+        </div>
+
+        <div className="mt-6 rounded-3xl border border-white/10 bg-black/20 p-4">
+          <div className="mb-3 flex items-center gap-2 text-sm font-bold text-white">
+            <ImagePlus className="h-4 w-4" />
+            Profile image
+          </div>
+          <input
+            className="admin-input"
+            value={content.profileImage}
+            onChange={(event) =>
+              updateContent("profileImage", event.target.value)
+            }
+          />
+          <input
+            className="mt-3 block w-full text-sm text-white/[0.70]"
+            type="file"
+            accept="image/*"
+            onChange={(event) => handleImageUpload(event.target.files?.[0])}
+          />
+          <AdminField
+            label="Image position"
+            value={content.profileImagePosition}
+            onChange={(value) => updateContent("profileImagePosition", value)}
+          />
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <button
+            className="admin-button"
+            type="button"
+            onClick={() => setExported(JSON.stringify(content, null, 2))}
+          >
+            <Download className="h-4 w-4" /> Export JSON
+          </button>
+          <button
+            className="admin-button"
+            type="button"
+            onClick={() => setContent(defaultContent)}
+          >
+            <Wand2 className="h-4 w-4" /> Reset
+          </button>
+          <a className="admin-button" href="/">
+            <Eye className="h-4 w-4" /> Preview
+          </a>
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        <div className="glass-panel p-6">
+          <SectionHeader
+            icon={<Palette className="h-5 w-5" />}
+            eyebrow="Templates"
+            title="Choose a starting direction"
+          />
+          <div className="mt-6 grid gap-3 md:grid-cols-2">
+            {templates.map((item) => (
+              <button
+                type="button"
+                className={`template-card text-left ${item.id === template.id ? "is-active" : ""}`}
+                key={item.id}
+                onClick={() => updateContent("selectedTemplate", item.id)}
+              >
+                <span
+                  className={`mb-4 block h-2 rounded-full bg-gradient-to-r ${item.accent}`}
+                />
+                <span className="block font-black text-white">{item.name}</span>
+                <span className="mt-2 block text-sm leading-5 text-white/[0.58]">
+                  {item.description}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="glass-panel p-6">
+          <SectionHeader
+            icon={<MousePointer2 className="h-5 w-5" />}
+            eyebrow="Layout"
+            title="Reorder and show/hide sections"
+          />
+          <div className="mt-6 space-y-3">
+            {content.sections.map((section, index) => (
+              <div
+                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/20 p-3"
+                key={section.id}
+              >
+                <input
+                  checked={section.visible}
+                  type="checkbox"
+                  onChange={(event) => {
+                    const sections = [...content.sections];
+                    sections[index] = {
+                      ...section,
+                      visible: event.target.checked,
+                    };
+                    updateContent("sections", sections);
+                  }}
+                />
+                <span className="flex-1 font-bold text-white">
+                  {section.label}
+                </span>
+                <button
+                  className="icon-button"
+                  type="button"
+                  onClick={() => moveSection(index, -1)}
+                >
+                  <ChevronUp className="h-4 w-4" />
+                </button>
+                <button
+                  className="icon-button"
+                  type="button"
+                  onClick={() => moveSection(index, 1)}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="glass-panel p-6">
+          <SectionHeader
+            icon={<BookOpenCheck className="h-5 w-5" />}
+            eyebrow="Content"
+            title="Project cards"
+          />
+          <div className="mt-6 space-y-4">
+            {content.projects.map((project, index) => (
+              <div
+                className="rounded-3xl border border-white/10 bg-black/20 p-4"
+                key={project.title}
+              >
+                <AdminField
+                  label="Title"
+                  value={project.title}
+                  onChange={(value) =>
+                    updateProject(index, { ...project, title: value })
+                  }
+                />
+                <AdminTextArea
+                  label="Summary"
+                  value={project.summary}
+                  onChange={(value) =>
+                    updateProject(index, { ...project, summary: value })
+                  }
+                />
+                <AdminTextArea
+                  label="Result"
+                  value={project.result}
+                  onChange={(value) =>
+                    updateProject(index, { ...project, result: value })
+                  }
+                />
+                <AdminField
+                  label="Tags, comma separated"
+                  value={project.tags.join(", ")}
+                  onChange={(value) =>
+                    updateProject(index, {
+                      ...project,
+                      tags: value
+                        .split(",")
+                        .map((tag) => tag.trim())
+                        .filter(Boolean),
+                    })
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {exported ? (
+          <div className="glass-panel p-6">
+            <div className="mb-3 flex items-center gap-2 font-bold text-white">
+              <Save className="h-5 w-5" />
+              Exported draft
+            </div>
+            <textarea
+              className="admin-textarea min-h-[18rem] font-mono text-xs"
+              value={exported}
+              readOnly
+            />
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+function AdminField({
+  label,
+  value,
+  onChange,
+}: { label: string; value: string; onChange: (value: string) => void }) {
+  return (
+    <label className="grid gap-2 text-sm font-semibold text-white/[0.65]">
+      {label}
+      <input
+        className="admin-input"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
+
+function AdminTextArea({
+  label,
+  value,
+  onChange,
+}: { label: string; value: string; onChange: (value: string) => void }) {
+  return (
+    <label className="grid gap-2 text-sm font-semibold text-white/[0.65]">
+      {label}
+      <textarea
+        className="admin-textarea"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
+
+function AmbientBackdrop() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 overflow-hidden"
+    >
+      <div className="absolute left-[-10%] top-[-10%] h-[32rem] w-[32rem] rounded-full bg-cyan-400/20 blur-[110px]" />
+      <div className="absolute right-[-10%] top-[10%] h-[30rem] w-[30rem] rounded-full bg-violet-500/20 blur-[120px]" />
+      <div className="absolute bottom-[-20%] left-[20%] h-[38rem] w-[38rem] rounded-full bg-emerald-400/10 blur-[130px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] bg-[size:72px_72px]" />
+    </div>
   );
 }
