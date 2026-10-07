@@ -17,7 +17,6 @@ import {
   MousePointer2,
   Palette,
   Save,
-  Sparkles,
   Wand2,
 } from "lucide-react";
 import type React from "react";
@@ -291,7 +290,6 @@ function PublicPortfolio({
       <section className="grid min-h-[72vh] items-start gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-sm font-medium text-white/[0.80] backdrop-blur">
-            <Sparkles className="h-4 w-4 text-cyan-200" />
             {content.eyebrow}
           </div>
           <h1 className="max-w-4xl text-balance text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
