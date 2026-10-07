@@ -37,6 +37,13 @@ type PortfolioSection = {
 };
 
 type PortfolioContent = {
+  brandLabel: string;
+  brandLogoText: string;
+  brandLogoImage: string;
+  navWorkLabel: string;
+  navApproachLabel: string;
+  navAdminLabel: string;
+  navPreviewLabel: string;
   name: string;
   eyebrow: string;
   headline: string;
@@ -61,7 +68,7 @@ type Template = {
   accent: string;
 };
 
-const STORAGE_KEY = "terry-lxd-portfolio-draft-v2";
+const STORAGE_KEY = "terry-lxd-portfolio-draft-v3";
 
 const templates: Template[] = [
   {
@@ -123,6 +130,13 @@ const templates: Template[] = [
 ];
 
 const defaultContent: PortfolioContent = {
+  brandLabel: "TerryLXD",
+  brandLogoText: "TB",
+  brandLogoImage: "",
+  navWorkLabel: "Work",
+  navApproachLabel: "Approach",
+  navAdminLabel: "Admin",
+  navPreviewLabel: "Preview",
   name: "Terry Brutus",
   eyebrow: "Learning & Enablement Architect | AI Workflow Automation",
   headline:
@@ -227,7 +241,7 @@ export default function App() {
     <main className={`portfolio-shell min-h-screen ${template.className}`}>
       <AmbientBackdrop />
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-5 py-6 sm:px-8 lg:px-10">
-        <TopNav isAdmin={isAdmin} />
+        <TopNav content={content} isAdmin={isAdmin} />
         {isAdmin ? (
           <AdminStudio
             content={content}
@@ -247,24 +261,42 @@ export default function App() {
   );
 }
 
-function TopNav({ isAdmin }: { isAdmin: boolean }) {
+function TopNav({
+  content,
+  isAdmin,
+}: {
+  content: PortfolioContent;
+  isAdmin: boolean;
+}) {
+  const hasLogo = Boolean(content.brandLogoImage || content.brandLogoText);
+
   return (
     <nav className="mb-10 flex items-center justify-between rounded-full border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/[0.80] shadow-2xl shadow-black/20 backdrop-blur-xl">
       <a href="/" className="flex items-center gap-2 font-semibold text-white">
-        <span className="grid h-8 w-8 place-items-center rounded-full bg-white text-slate-950">
-          TB
-        </span>
-        TerryLXD
+        {hasLogo ? (
+          <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-white text-slate-950">
+            {content.brandLogoImage ? (
+              <img
+                alt=""
+                className="h-full w-full object-cover"
+                src={content.brandLogoImage}
+              />
+            ) : (
+              content.brandLogoText
+            )}
+          </span>
+        ) : null}
+        {content.brandLabel}
       </a>
       <div className="flex items-center gap-2">
         <a className="nav-pill" href="/#work">
-          Work
+          {content.navWorkLabel}
         </a>
         <a className="nav-pill" href="/#approach">
-          Approach
+          {content.navApproachLabel}
         </a>
         <a className="nav-pill" href={isAdmin ? "/" : "/admin"}>
-          {isAdmin ? "Preview" : "Admin"}
+          {isAdmin ? content.navPreviewLabel : content.navAdminLabel}
         </a>
       </div>
     </nav>
@@ -600,6 +632,14 @@ function AdminStudio({
     reader.readAsDataURL(file);
   };
 
+  const handleBrandLogoUpload = (file: File | undefined) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () =>
+      updateContent("brandLogoImage", String(reader.result));
+    reader.readAsDataURL(file);
+  };
+
   const saveDraft = () => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
     setSaveStatus(`Saved locally at ${new Date().toLocaleTimeString()}.`);
@@ -661,6 +701,70 @@ function AdminStudio({
             value={content.email}
             onChange={(value) => updateContent("email", value)}
           />
+        </div>
+
+        <div className="mt-6 rounded-3xl border border-white/10 bg-black/20 p-4">
+          <div className="mb-3 flex items-center gap-2 text-sm font-bold text-white">
+            <ImagePlus className="h-4 w-4" />
+            Top navigation pill
+          </div>
+          <div className="grid gap-3">
+            <AdminField
+              label="Brand text"
+              value={content.brandLabel}
+              onChange={(value) => updateContent("brandLabel", value)}
+            />
+            <AdminField
+              label="Logo initials/text (leave blank to remove)"
+              value={content.brandLogoText}
+              onChange={(value) => updateContent("brandLogoText", value)}
+            />
+            <AdminField
+              label="Work link text"
+              value={content.navWorkLabel}
+              onChange={(value) => updateContent("navWorkLabel", value)}
+            />
+            <AdminField
+              label="Approach link text"
+              value={content.navApproachLabel}
+              onChange={(value) => updateContent("navApproachLabel", value)}
+            />
+            <AdminField
+              label="Admin link text"
+              value={content.navAdminLabel}
+              onChange={(value) => updateContent("navAdminLabel", value)}
+            />
+            <AdminField
+              label="Preview link text"
+              value={content.navPreviewLabel}
+              onChange={(value) => updateContent("navPreviewLabel", value)}
+            />
+          </div>
+          <input
+            className="mt-3 block w-full text-sm text-white/[0.70]"
+            type="file"
+            accept="image/*,.svg"
+            onChange={(event) => handleBrandLogoUpload(event.target.files?.[0])}
+          />
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              className="admin-button px-4 py-2"
+              type="button"
+              onClick={() => updateContent("brandLogoImage", "")}
+            >
+              Remove uploaded logo
+            </button>
+            <button
+              className="admin-button px-4 py-2"
+              type="button"
+              onClick={() => {
+                updateContent("brandLogoImage", "");
+                updateContent("brandLogoText", "");
+              }}
+            >
+              Remove logo entirely
+            </button>
+          </div>
         </div>
 
         <div className="mt-6 rounded-3xl border border-white/10 bg-black/20 p-4">
