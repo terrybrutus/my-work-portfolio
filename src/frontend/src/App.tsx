@@ -28,6 +28,8 @@ type Project = {
   summary: string;
   result: string;
   tags: string[];
+  image?: string;
+  url?: string;
 };
 
 type PortfolioSection = {
@@ -42,8 +44,15 @@ type PortfolioContent = {
   brandLogoImage: string;
   navWorkLabel: string;
   navApproachLabel: string;
+  navContactLabel: string;
   navAdminLabel: string;
   navPreviewLabel: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+  contactHeading: string;
+  contactText: string;
   name: string;
   eyebrow: string;
   headline: string;
@@ -68,7 +77,7 @@ type Template = {
   accent: string;
 };
 
-const STORAGE_KEY = "terry-lxd-portfolio-draft-v3";
+const STORAGE_KEY = "terry-lxd-portfolio-draft-v4";
 
 const templates: Template[] = [
   {
@@ -134,9 +143,17 @@ const defaultContent: PortfolioContent = {
   brandLogoText: "TB",
   brandLogoImage: "",
   navWorkLabel: "Work",
-  navApproachLabel: "Approach",
+  navApproachLabel: "About",
+  navContactLabel: "Contact",
   navAdminLabel: "Admin",
   navPreviewLabel: "Preview",
+  primaryCtaLabel: "About me",
+  primaryCtaHref: "#about",
+  secondaryCtaLabel: "Start a conversation",
+  secondaryCtaHref: "mailto:terrbrutus@gmail.com",
+  contactHeading: "Let's connect",
+  contactText:
+    "If you are looking for someone who can connect learning strategy, technical enablement, AI-assisted workflows, and practical adoption systems, I would be glad to talk.",
   name: "Terry Brutus",
   eyebrow: "Learning & Enablement Architect | AI Workflow Automation",
   headline:
@@ -173,6 +190,8 @@ const defaultContent: PortfolioContent = {
       result:
         "Improved delivery quality, governed 122+ accessible assets, and contributed to expanded client confidence and engagement scope.",
       tags: ["Federal learning", "Technical enablement", "Accessibility"],
+      image: "/assets/legacy/legacy-motion.gif",
+      url: "",
     },
     {
       title: "AI-Assisted Production Workflow",
@@ -181,6 +200,8 @@ const defaultContent: PortfolioContent = {
       result:
         "Cut per-deliverable processing from roughly 1.5 hours to 9.5 minutes across 100+ assets and became a documented production standard.",
       tags: ["AI workflow automation", "Learning operations", "QA"],
+      image: "",
+      url: "",
     },
     {
       title: "Distributed Onboarding & Compliance Systems",
@@ -189,14 +210,17 @@ const defaultContent: PortfolioContent = {
       result:
         "Standardized enablement delivery across 400+ selling communities and created audit-ready compliance coverage for 1,750+ employees.",
       tags: ["Customer adoption", "Compliance", "Program design"],
+      image: "",
+      url: "",
     },
   ],
   sections: [
-    { id: "proof", label: "Proof Points", visible: true },
     { id: "about", label: "Approach", visible: true },
-    { id: "capabilities", label: "Capabilities", visible: true },
     { id: "projects", label: "Selected Work", visible: true },
-    { id: "templates", label: "Template System", visible: true },
+    { id: "contact", label: "Contact", visible: true },
+    { id: "proof", label: "Proof Points", visible: false },
+    { id: "capabilities", label: "Capabilities", visible: false },
+    { id: "templates", label: "Template System", visible: false },
   ],
   selectedTemplate: "systems-lab",
 };
@@ -269,6 +293,14 @@ function TopNav({
   isAdmin: boolean;
 }) {
   const hasLogo = Boolean(content.brandLogoImage || content.brandLogoText);
+  const navItems = [
+    { href: "/#about", label: content.navApproachLabel },
+    { href: "/#work", label: content.navWorkLabel },
+    { href: "/#contact", label: content.navContactLabel },
+    ...(isAdmin ? [{ href: "/", label: content.navPreviewLabel }] : []),
+  ]
+    .map((item) => ({ ...item, label: item.label.trim() }))
+    .filter((item) => item.label.length > 0);
 
   return (
     <nav className="mb-10 flex items-center justify-between rounded-full border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/[0.80] shadow-2xl shadow-black/20 backdrop-blur-xl">
@@ -289,15 +321,11 @@ function TopNav({
         {content.brandLabel}
       </a>
       <div className="flex items-center gap-2">
-        <a className="nav-pill" href="/#work">
-          {content.navWorkLabel}
-        </a>
-        <a className="nav-pill" href="/#approach">
-          {content.navApproachLabel}
-        </a>
-        <a className="nav-pill" href={isAdmin ? "/" : "/admin"}>
-          {isAdmin ? content.navPreviewLabel : content.navAdminLabel}
-        </a>
+        {navItems.map((item) => (
+          <a className="nav-pill" href={item.href} key={item.href}>
+            {item.label}
+          </a>
+        ))}
       </div>
     </nav>
   );
@@ -330,14 +358,20 @@ function PublicPortfolio({
           <p className="mt-7 max-w-2xl text-lg leading-8 text-white/[0.72]">
             {content.subheadline}
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a className="primary-cta" href="#work">
-              See the work <ArrowRight className="h-4 w-4" />
-            </a>
-            <a className="secondary-cta" href={`mailto:${content.email}`}>
-              Start a conversation
-            </a>
-          </div>
+          {content.primaryCtaLabel || content.secondaryCtaLabel ? (
+            <div className="mt-8 flex flex-wrap gap-3">
+              {content.primaryCtaLabel ? (
+                <a className="primary-cta" href={content.primaryCtaHref}>
+                  {content.primaryCtaLabel} <ArrowRight className="h-4 w-4" />
+                </a>
+              ) : null}
+              {content.secondaryCtaLabel ? (
+                <a className="secondary-cta" href={content.secondaryCtaHref}>
+                  {content.secondaryCtaLabel}
+                </a>
+              ) : null}
+            </div>
+          ) : null}
         </div>
         <HeroCard content={content} template={template} />
       </section>
@@ -353,6 +387,8 @@ function PublicPortfolio({
               return <CapabilitiesSection key={section.id} content={content} />;
             case "projects":
               return <ProjectSection key={section.id} content={content} />;
+            case "contact":
+              return <ContactSection key={section.id} content={content} />;
             case "templates":
               return (
                 <TemplateSection
@@ -399,7 +435,7 @@ function HeroCard({
             />
             <div>
               <p className="text-sm uppercase tracking-[0.32em] text-white/[0.45]">
-                Learning & Enablement Architect
+                Selected impact
               </p>
               <h2 className="text-2xl font-black text-white">{content.name}</h2>
               <p className="text-sm text-white/[0.55]">{content.location}</p>
@@ -449,7 +485,7 @@ function ProofStrip({ content }: { content: PortfolioContent }) {
 function ApproachSection({ content }: { content: PortfolioContent }) {
   return (
     <section
-      id="approach"
+      id="about"
       className="glass-panel grid gap-8 p-7 lg:grid-cols-[0.65fr_1fr]"
     >
       <SectionHeader
@@ -500,6 +536,15 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
       <div className="mt-8 grid gap-5 lg:grid-cols-3">
         {content.projects.map((project, index) => (
           <article className="project-card group" key={project.title}>
+            {project.image ? (
+              <div className="mb-5 aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black/25">
+                <img
+                  alt=""
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  src={project.image}
+                />
+              </div>
+            ) : null}
             <div className="mb-6 flex items-center justify-between">
               <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-950">
                 0{index + 1}
@@ -515,18 +560,38 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
             <p className="mt-5 rounded-2xl bg-black/[0.25] p-4 text-sm leading-6 text-white/[0.75]">
               {project.result}
             </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <span
-                  className="rounded-full border border-white/10 px-3 py-1 text-xs text-white/[0.62]"
-                  key={tag}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            {project.url ? (
+              <a
+                className="mt-5 inline-flex text-sm font-bold text-cyan-200 transition hover:text-white"
+                href={project.url}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Open project <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            ) : null}
           </article>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function ContactSection({ content }: { content: PortfolioContent }) {
+  return (
+    <section id="contact" className="glass-panel p-7">
+      <SectionHeader
+        icon={<BriefcaseBusiness className="h-5 w-5" />}
+        eyebrow="Contact"
+        title={content.contactHeading}
+      />
+      <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+        <p className="max-w-3xl text-lg leading-8 text-white/[0.72]">
+          {content.contactText}
+        </p>
+        <a className="primary-cta" href={`mailto:${content.email}`}>
+          Email Terry <ArrowRight className="h-4 w-4" />
+        </a>
       </div>
     </section>
   );
@@ -640,6 +705,16 @@ function AdminStudio({
     reader.readAsDataURL(file);
   };
 
+  const handleProjectImageUpload = (index: number, file: File | undefined) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const project = content.projects[index];
+      updateProject(index, { ...project, image: String(reader.result) });
+    };
+    reader.readAsDataURL(file);
+  };
+
   const saveDraft = () => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
     setSaveStatus(`Saved locally at ${new Date().toLocaleTimeString()}.`);
@@ -720,22 +795,22 @@ function AdminStudio({
               onChange={(value) => updateContent("brandLogoText", value)}
             />
             <AdminField
-              label="Work link text"
+              label="Projects link text (leave blank to remove)"
               value={content.navWorkLabel}
               onChange={(value) => updateContent("navWorkLabel", value)}
             />
             <AdminField
-              label="Approach link text"
+              label="Approach link text (leave blank to remove)"
               value={content.navApproachLabel}
               onChange={(value) => updateContent("navApproachLabel", value)}
             />
             <AdminField
-              label="Admin link text"
-              value={content.navAdminLabel}
-              onChange={(value) => updateContent("navAdminLabel", value)}
+              label="Contact link text (leave blank to remove)"
+              value={content.navContactLabel}
+              onChange={(value) => updateContent("navContactLabel", value)}
             />
             <AdminField
-              label="Preview link text"
+              label="Preview link text for admin view"
               value={content.navPreviewLabel}
               onChange={(value) => updateContent("navPreviewLabel", value)}
             />
@@ -901,6 +976,48 @@ function AdminStudio({
 
         <div className="glass-panel p-6">
           <SectionHeader
+            icon={<ArrowRight className="h-5 w-5" />}
+            eyebrow="Calls To Action"
+            title="Hero buttons and contact block"
+          />
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <AdminField
+              label="Primary button text (blank hides it)"
+              value={content.primaryCtaLabel}
+              onChange={(value) => updateContent("primaryCtaLabel", value)}
+            />
+            <AdminField
+              label="Primary button link"
+              value={content.primaryCtaHref}
+              onChange={(value) => updateContent("primaryCtaHref", value)}
+            />
+            <AdminField
+              label="Secondary button text (blank hides it)"
+              value={content.secondaryCtaLabel}
+              onChange={(value) => updateContent("secondaryCtaLabel", value)}
+            />
+            <AdminField
+              label="Secondary button link"
+              value={content.secondaryCtaHref}
+              onChange={(value) => updateContent("secondaryCtaHref", value)}
+            />
+          </div>
+          <div className="mt-4 grid gap-4">
+            <AdminField
+              label="Contact heading"
+              value={content.contactHeading}
+              onChange={(value) => updateContent("contactHeading", value)}
+            />
+            <AdminTextArea
+              label="Contact text"
+              value={content.contactText}
+              onChange={(value) => updateContent("contactText", value)}
+            />
+          </div>
+        </div>
+
+        <div className="glass-panel p-6">
+          <SectionHeader
             icon={<BookOpenCheck className="h-5 w-5" />}
             eyebrow="Content"
             title="Project cards"
@@ -933,7 +1050,38 @@ function AdminStudio({
                   }
                 />
                 <AdminField
-                  label="Tags, comma separated"
+                  label="Project link URL"
+                  value={project.url ?? ""}
+                  onChange={(value) =>
+                    updateProject(index, { ...project, url: value })
+                  }
+                />
+                <AdminField
+                  label="Preview image/GIF URL"
+                  value={project.image ?? ""}
+                  onChange={(value) =>
+                    updateProject(index, { ...project, image: value })
+                  }
+                />
+                <input
+                  className="mt-3 block w-full text-sm text-white/[0.70]"
+                  type="file"
+                  accept="image/*,.svg"
+                  onChange={(event) =>
+                    handleProjectImageUpload(index, event.target.files?.[0])
+                  }
+                />
+                <button
+                  className="admin-button mt-3 px-4 py-2"
+                  type="button"
+                  onClick={() =>
+                    updateProject(index, { ...project, image: "" })
+                  }
+                >
+                  Remove project image
+                </button>
+                <AdminField
+                  label="Internal tags, comma separated (not shown publicly)"
                   value={project.tags.join(", ")}
                   onChange={(value) =>
                     updateProject(index, {
