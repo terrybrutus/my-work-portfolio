@@ -583,7 +583,7 @@ function AboutTvModal({
           </button>
           <div className="about-tv-content">
             <p className="text-xs font-black uppercase tracking-[0.4em] text-cyan-700/70">
-              About broadcast
+              About Me
             </p>
             <h2
               className="mt-3 text-3xl font-black tracking-[-0.04em] text-slate-950 sm:text-4xl"
