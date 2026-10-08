@@ -184,6 +184,167 @@
   .icon-button {
     @apply grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/[0.08] text-white transition hover:bg-white/[0.15];
   }
+
+  .about-modal-backdrop {
+    @apply fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-slate-950/75 p-4 backdrop-blur-md;
+  }
+
+  .about-tv-shell {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 8rem;
+    width: min(58rem, 94vw);
+    min-height: min(36rem, 86vh);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 2.2rem;
+    background: linear-gradient(
+        145deg,
+        rgba(151, 76, 59, 0.95),
+        rgba(66, 28, 24, 0.98)
+      ), #40201b;
+    box-shadow: 0 3rem 7rem rgba(0, 0, 0, 0.55), inset 0 0 0 0.5rem
+      rgba(255, 255, 255, 0.08), inset 0 0 0 1rem rgba(0, 0, 0, 0.22);
+    transform-origin: 18% 0%;
+    animation: aboutTvPop 360ms cubic-bezier(0.2, 0.92, 0.28, 1.08);
+  }
+
+  .about-tv-shell::before {
+    content: "";
+    position: absolute;
+    inset: 1rem;
+    border-radius: 1.6rem;
+    border: 2px solid rgba(211, 226, 216, 0.45);
+    pointer-events: none;
+  }
+
+  .about-tv-screen {
+    position: relative;
+    margin: 2.2rem 1.3rem 2.2rem 2.2rem;
+    overflow: hidden;
+    border-radius: 1.2rem;
+    border: 0.9rem solid rgba(71, 32, 27, 0.95);
+    background: radial-gradient(
+        circle at 28% 35%,
+        rgba(255, 255, 255, 0.75),
+        transparent 12rem
+      ), linear-gradient(135deg, #dce4dc, #a7b6ac 62%, #76877c);
+    box-shadow: inset 0 0 2.5rem rgba(0, 0, 0, 0.45), inset 0 0 0 2px
+      rgba(255, 255, 255, 0.32);
+  }
+
+  .about-tv-screen::before,
+  .about-tv-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .about-tv-screen::before {
+    opacity: 0.18;
+    background-image: repeating-linear-gradient(
+        0deg,
+        rgba(15, 23, 42, 0.18) 0,
+        rgba(15, 23, 42, 0.18) 1px,
+        transparent 1px,
+        transparent 4px
+      ), radial-gradient(circle at 55% 45%, transparent, rgba(15, 23, 42, 0.24));
+    mix-blend-mode: multiply;
+  }
+
+  .about-tv-screen::after {
+    opacity: 0.08;
+    background-image: radial-gradient(
+        circle,
+        rgba(15, 23, 42, 0.55) 1px,
+        transparent 1px
+      ), radial-gradient(circle, rgba(255, 255, 255, 0.45) 1px, transparent 1px);
+    background-position: 0 0, 6px 6px;
+    background-size: 12px 12px;
+    animation: aboutStatic 900ms steps(2, end) infinite;
+  }
+
+  .about-tv-content {
+    position: relative;
+    z-index: 1;
+    max-height: calc(86vh - 10rem);
+    overflow-y: auto;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .about-tv-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    background: rgba(255, 255, 255, 0.55);
+    padding: 0.45rem 0.8rem;
+    color: rgba(15, 23, 42, 0.82);
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    backdrop-filter: blur(10px);
+  }
+
+  .about-tv-controls {
+    position: relative;
+    margin: 2.2rem 2.2rem 2.2rem 0;
+    border-radius: 1.2rem;
+    background: linear-gradient(180deg, #2b0504, #160202);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .about-tv-speaker {
+    position: absolute;
+    top: 1.5rem;
+    left: 50%;
+    width: 4.9rem;
+    height: 9.8rem;
+    transform: translateX(-50%);
+    border-radius: 0.6rem;
+    opacity: 0.85;
+    background-image: radial-gradient(circle, #050505 42%, transparent 43%);
+    background-size: 1rem 1rem;
+  }
+
+  .about-tv-knob {
+    position: absolute;
+    right: 2rem;
+    bottom: 3rem;
+    width: 4.2rem;
+    height: 4.2rem;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        transparent 48%,
+        rgba(255, 255, 255, 0.8) 49%,
+        rgba(255, 255, 255, 0.8) 51%,
+        transparent 52%
+      ), radial-gradient(circle at 35% 30%, #8f9692, #242424 70%);
+    box-shadow: 0 0.8rem 1.8rem rgba(0, 0, 0, 0.35), inset 0 0 0 0.25rem
+      rgba(255, 255, 255, 0.12);
+  }
+
+  .about-tv-small-knobs {
+    position: absolute;
+    right: 2.25rem;
+    bottom: 8.4rem;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .about-tv-small-knobs span {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    background: radial-gradient(circle at 35% 30%, #8f9692, #111 70%);
+    box-shadow: inset 0 0 0 0.2rem rgba(255, 255, 255, 0.08);
+  }
 }
 
 @layer utilities {
@@ -193,5 +354,47 @@
 
   .text-balance {
     text-wrap: balance;
+  }
+
+  @keyframes aboutTvPop {
+    0% {
+      opacity: 0;
+      transform: translate(-12vw, -10vh) scale(0.08);
+      clip-path: polygon(0 0, 16% 0, 0 22%);
+    }
+    55% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1.02);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+  }
+
+  @keyframes aboutStatic {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(2px, -1px);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .about-tv-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .about-tv-controls {
+      display: none;
+    }
+
+    .about-tv-screen {
+      margin: 1.5rem;
+    }
   }
 }

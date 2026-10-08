@@ -239,6 +239,7 @@ function getInitialContent(): PortfolioContent {
 export default function App() {
   useCallerUserRole();
   const [content, setContent] = useState<PortfolioContent>(getInitialContent);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const isAdmin =
     typeof window !== "undefined" &&
     window.location.pathname.startsWith("/admin");
@@ -265,7 +266,11 @@ export default function App() {
     <main className={`portfolio-shell min-h-screen ${template.className}`}>
       <AmbientBackdrop />
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-5 py-6 sm:px-8 lg:px-10">
-        <TopNav content={content} isAdmin={isAdmin} />
+        <TopNav
+          content={content}
+          isAdmin={isAdmin}
+          onOpenAbout={() => setIsAboutOpen(true)}
+        />
         {isAdmin ? (
           <AdminStudio
             content={content}
@@ -276,10 +281,16 @@ export default function App() {
         ) : (
           <PublicPortfolio
             content={content}
+            onOpenAbout={() => setIsAboutOpen(true)}
             template={template}
             updateContent={updateContent}
           />
         )}
+        <AboutTvModal
+          content={content}
+          isOpen={isAboutOpen}
+          onClose={() => setIsAboutOpen(false)}
+        />
       </div>
     </main>
   );
@@ -288,13 +299,15 @@ export default function App() {
 function TopNav({
   content,
   isAdmin,
+  onOpenAbout,
 }: {
   content: PortfolioContent;
   isAdmin: boolean;
+  onOpenAbout: () => void;
 }) {
   const hasLogo = Boolean(content.brandLogoImage || content.brandLogoText);
   const navItems = [
-    { href: "/#about", label: content.navApproachLabel },
+    { href: "#about", label: content.navApproachLabel, onClick: onOpenAbout },
     { href: "/#work", label: content.navWorkLabel },
     { href: "/#contact", label: content.navContactLabel },
     // Temporary while building: remove this item before public launch.
@@ -325,11 +338,22 @@ function TopNav({
         {content.brandLabel}
       </a>
       <div className="flex items-center gap-2">
-        {navItems.map((item) => (
-          <a className="nav-pill" href={item.href} key={item.href}>
-            {item.label}
-          </a>
-        ))}
+        {navItems.map((item) =>
+          item.onClick ? (
+            <button
+              className="nav-pill"
+              key={item.href}
+              onClick={item.onClick}
+              type="button"
+            >
+              {item.label}
+            </button>
+          ) : (
+            <a className="nav-pill" href={item.href} key={item.href}>
+              {item.label}
+            </a>
+          ),
+        )}
       </div>
     </nav>
   );
@@ -337,10 +361,12 @@ function TopNav({
 
 function PublicPortfolio({
   content,
+  onOpenAbout,
   template,
   updateContent,
 }: {
   content: PortfolioContent;
+  onOpenAbout: () => void;
   template: Template;
   updateContent: <K extends keyof PortfolioContent>(
     key: K,
@@ -365,7 +391,16 @@ function PublicPortfolio({
           {content.primaryCtaLabel || content.secondaryCtaLabel ? (
             <div className="mt-8 flex flex-wrap gap-3">
               {content.primaryCtaLabel ? (
-                <a className="primary-cta" href={content.primaryCtaHref}>
+                <a
+                  className="primary-cta"
+                  href={content.primaryCtaHref}
+                  onClick={(event) => {
+                    if (content.primaryCtaHref === "#about") {
+                      event.preventDefault();
+                      onOpenAbout();
+                    }
+                  }}
+                >
                   {content.primaryCtaLabel} <ArrowRight className="h-4 w-4" />
                 </a>
               ) : null}
@@ -386,7 +421,7 @@ function PublicPortfolio({
             case "proof":
               return <ProofStrip key={section.id} content={content} />;
             case "about":
-              return <ApproachSection key={section.id} content={content} />;
+              return null;
             case "capabilities":
               return <CapabilitiesSection key={section.id} content={content} />;
             case "projects":
@@ -503,6 +538,76 @@ function ApproachSection({ content }: { content: PortfolioContent }) {
         ))}
       </div>
     </section>
+  );
+}
+
+function AboutTvModal({
+  content,
+  isOpen,
+  onClose,
+}: {
+  content: PortfolioContent;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      aria-labelledby="about-modal-title"
+      aria-modal="true"
+      className="about-modal-backdrop"
+      role="dialog"
+    >
+      <button
+        aria-label="Close about modal"
+        className="absolute inset-0 h-full w-full cursor-default"
+        onClick={onClose}
+        type="button"
+      />
+      <div className="about-tv-shell">
+        <div className="about-tv-screen">
+          <button className="about-tv-close" onClick={onClose} type="button">
+            Close
+          </button>
+          <div className="about-tv-content">
+            <p className="text-xs font-black uppercase tracking-[0.4em] text-cyan-700/70">
+              About broadcast
+            </p>
+            <h2
+              className="mt-3 text-3xl font-black tracking-[-0.04em] text-slate-950 sm:text-4xl"
+              id="about-modal-title"
+            >
+              {content.name}
+            </h2>
+            <div className="mt-6 space-y-5 text-base leading-8 text-slate-900/80">
+              {content.about.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="about-tv-controls" aria-hidden="true">
+          <div className="about-tv-speaker" />
+          <div className="about-tv-knob" />
+          <div className="about-tv-small-knobs">
+            <span />
+            <span />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
