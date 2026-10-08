@@ -61,6 +61,18 @@ type PortfolioContent = {
   email: string;
   profileImage: string;
   profileImagePosition: string;
+  heroCardEyebrow: string;
+  heroCardFocusText: string;
+  workSectionHeading: string;
+  proofSectionHeading: string;
+  capabilitiesSectionHeading: string;
+  templateSectionHeading: string;
+  aboutWorkKicker: string;
+  aboutWorkTitle: string;
+  aboutPersonalKicker: string;
+  aboutPersonalTitle: string;
+  aboutSelectedWorkKicker: string;
+  aboutSelectedWorkTitle: string;
   proofPoints: string[];
   about: string[];
   capabilities: string[];
@@ -169,6 +181,20 @@ const defaultContent: PortfolioContent = {
   email: "terrbrutus@gmail.com",
   profileImage: "/assets/legacy/legacy-profile.png",
   profileImagePosition: "50% 42%",
+  heroCardEyebrow: "Selected impact",
+  heroCardFocusText:
+    "Current focus: technical enablement, customer adoption, accessible learning systems, and AI-assisted production workflows.",
+  workSectionHeading: "Evidence of scale, access, automation, and adoption",
+  proofSectionHeading: "Proof points from the work",
+  capabilitiesSectionHeading:
+    "Core strengths pulled from the work, not buzzwords",
+  templateSectionHeading: "A living portfolio that can keep evolving",
+  aboutWorkKicker: "Work channel",
+  aboutWorkTitle: "How I Got Here",
+  aboutPersonalKicker: "Personal channel",
+  aboutPersonalTitle: "Beyond The Work",
+  aboutSelectedWorkKicker: "Selected work",
+  aboutSelectedWorkTitle: "What I Build",
   proofPoints: [
     "8+ years in learning architecture and technical enablement",
     "158K+ defense learners supported through scalable training systems",
@@ -249,6 +275,15 @@ function getInitialContent(): PortfolioContent {
   } catch {
     return defaultContent;
   }
+}
+
+function getSectionLabel(content: PortfolioContent, sectionId: string) {
+  return (
+    content.sections.find((section) => section.id === sectionId)?.label ??
+    defaultContent.sections.find((section) => section.id === sectionId)
+      ?.label ??
+    sectionId
+  );
 }
 
 export default function App() {
@@ -489,7 +524,7 @@ function HeroCard({
             />
             <div>
               <p className="text-sm uppercase tracking-[0.32em] text-white/[0.45]">
-                Selected impact
+                {content.heroCardEyebrow}
               </p>
               <h2 className="text-2xl font-black text-white">{content.name}</h2>
               <p className="text-sm text-white/[0.55]">{content.location}</p>
@@ -511,8 +546,7 @@ function HeroCard({
             ))}
           </div>
           <div className="rounded-2xl border border-cyan-200/20 bg-cyan-200/[0.08] p-4 text-sm leading-6 text-white/[0.72]">
-            Current focus: technical enablement, customer adoption, accessible
-            learning systems, and AI-assisted production workflows.
+            {content.heroCardFocusText}
           </div>
         </div>
       </div>
@@ -522,16 +556,23 @@ function HeroCard({
 
 function ProofStrip({ content }: { content: PortfolioContent }) {
   return (
-    <section className="glass-panel grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-4">
-      {content.proofPoints.map((point) => (
-        <div
-          className="rounded-3xl border border-white/10 bg-black/20 p-5"
-          key={point}
-        >
-          <BadgeCheck className="mb-4 h-6 w-6 text-cyan-200" />
-          <p className="font-bold text-white">{point}</p>
-        </div>
-      ))}
+    <section className="glass-panel p-7">
+      <SectionHeader
+        icon={<BadgeCheck className="h-5 w-5" />}
+        eyebrow={getSectionLabel(content, "proof")}
+        title={content.proofSectionHeading}
+      />
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {content.proofPoints.map((point) => (
+          <div
+            className="rounded-3xl border border-white/10 bg-black/20 p-5"
+            key={point}
+          >
+            <BadgeCheck className="mb-4 h-6 w-6 text-cyan-200" />
+            <p className="font-bold text-white">{point}</p>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
@@ -574,18 +615,18 @@ function AboutTvModal({
     .join(" ");
   const slides = [
     {
-      kicker: "Work channel",
-      title: "How I Got Here",
+      kicker: content.aboutWorkKicker,
+      title: content.aboutWorkTitle,
       copy: workStory,
     },
     {
-      kicker: "Personal channel",
-      title: "Beyond The Work",
+      kicker: content.aboutPersonalKicker,
+      title: content.aboutPersonalTitle,
       copy: personalStory,
     },
     {
-      kicker: "Selected work",
-      title: "What I Build",
+      kicker: content.aboutSelectedWorkKicker,
+      title: content.aboutSelectedWorkTitle,
       copy: selectedWork,
     },
     {
@@ -696,8 +737,8 @@ function CapabilitiesSection({ content }: { content: PortfolioContent }) {
     <section className="glass-panel p-7">
       <SectionHeader
         icon={<Boxes className="h-5 w-5" />}
-        eyebrow="Capabilities"
-        title="Core strengths pulled from the work, not buzzwords"
+        eyebrow={getSectionLabel(content, "capabilities")}
+        title={content.capabilitiesSectionHeading}
       />
       <div className="mt-8 grid gap-3 md:grid-cols-2">
         {content.capabilities.map((capability) => (
@@ -719,8 +760,8 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
     <section id="work" className="glass-panel p-7">
       <SectionHeader
         icon={<BriefcaseBusiness className="h-5 w-5" />}
-        eyebrow="Selected Work"
-        title="Evidence of scale, access, automation, and adoption"
+        eyebrow={getSectionLabel(content, "projects")}
+        title={content.workSectionHeading}
       />
       <div className="mt-8 grid gap-5 lg:grid-cols-3">
         {content.projects.map((project, index) => (
@@ -771,7 +812,7 @@ function ContactSection({ content }: { content: PortfolioContent }) {
     <section id="contact" className="glass-panel p-7">
       <SectionHeader
         icon={<BriefcaseBusiness className="h-5 w-5" />}
-        eyebrow="Contact"
+        eyebrow={getSectionLabel(content, "contact")}
         title={content.contactHeading}
       />
       <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
@@ -787,6 +828,7 @@ function ContactSection({ content }: { content: PortfolioContent }) {
 }
 
 function TemplateSection({
+  content,
   template,
   updateContent,
 }: {
@@ -801,8 +843,8 @@ function TemplateSection({
     <section className="glass-panel p-7">
       <SectionHeader
         icon={<LayoutTemplate className="h-5 w-5" />}
-        eyebrow="Template System"
-        title="A living portfolio that can keep evolving"
+        eyebrow={getSectionLabel(content, "templates")}
+        title={content.templateSectionHeading}
       />
       <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         {templates.map((item) => (
@@ -879,10 +921,28 @@ function AdminStudio({
     updateContent("projects", projects);
   };
 
+  const updateSection = (index: number, section: PortfolioSection) => {
+    const sections = [...content.sections];
+    sections[index] = section;
+    updateContent("sections", sections);
+  };
+
   const updateAbout = (index: number, value: string) => {
     const about = [...content.about];
     about[index] = value;
     updateContent("about", about);
+  };
+
+  const updateProofPoint = (index: number, value: string) => {
+    const proofPoints = [...content.proofPoints];
+    proofPoints[index] = value;
+    updateContent("proofPoints", proofPoints);
+  };
+
+  const updateCapability = (index: number, value: string) => {
+    const capabilities = [...content.capabilities];
+    capabilities[index] = value;
+    updateContent("capabilities", capabilities);
   };
 
   const handleImageUpload = (file: File | undefined) => {
@@ -1126,46 +1186,90 @@ function AdminStudio({
         <div className="glass-panel p-6">
           <SectionHeader
             icon={<MousePointer2 className="h-5 w-5" />}
-            eyebrow="Layout"
-            title="Reorder and show/hide sections"
+            eyebrow="Pages & Sections"
+            title="Edit what appears, what it is called, and where it sits"
           />
           <div className="mt-6 space-y-3">
             {content.sections.map((section, index) => (
               <div
-                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/20 p-3"
+                className="grid gap-3 rounded-2xl border border-white/10 bg-black/20 p-3 md:grid-cols-[auto_1fr_auto_auto]"
                 key={section.id}
               >
                 <input
+                  aria-label={`Show ${section.label}`}
+                  className="mt-4"
                   checked={section.visible}
                   type="checkbox"
                   onChange={(event) => {
-                    const sections = [...content.sections];
-                    sections[index] = {
+                    updateSection(index, {
                       ...section,
                       visible: event.target.checked,
-                    };
-                    updateContent("sections", sections);
+                    });
                   }}
                 />
-                <span className="flex-1 font-bold text-white">
-                  {section.label}
-                </span>
-                <button
-                  className="icon-button"
-                  type="button"
-                  onClick={() => moveSection(index, -1)}
-                >
-                  <ChevronUp className="h-4 w-4" />
-                </button>
-                <button
-                  className="icon-button"
-                  type="button"
-                  onClick={() => moveSection(index, 1)}
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </button>
+                <AdminField
+                  label={`Section label: ${section.id}`}
+                  value={section.label}
+                  onChange={(value) =>
+                    updateSection(index, { ...section, label: value })
+                  }
+                />
+                <div className="flex gap-2 md:items-end">
+                  <button
+                    aria-label={`Move ${section.label} up`}
+                    className="icon-button"
+                    type="button"
+                    onClick={() => moveSection(index, -1)}
+                  >
+                    <ChevronUp className="h-4 w-4" />
+                  </button>
+                  <button
+                    aria-label={`Move ${section.label} down`}
+                    className="icon-button"
+                    type="button"
+                    onClick={() => moveSection(index, 1)}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             ))}
+          </div>
+          <div className="mt-6 grid gap-4">
+            <AdminField
+              label="Hero card eyebrow"
+              value={content.heroCardEyebrow}
+              onChange={(value) => updateContent("heroCardEyebrow", value)}
+            />
+            <AdminTextArea
+              label="Hero card focus text"
+              value={content.heroCardFocusText}
+              onChange={(value) => updateContent("heroCardFocusText", value)}
+            />
+            <AdminField
+              label="Selected work section heading"
+              value={content.workSectionHeading}
+              onChange={(value) => updateContent("workSectionHeading", value)}
+            />
+            <AdminField
+              label="Proof points section heading"
+              value={content.proofSectionHeading}
+              onChange={(value) => updateContent("proofSectionHeading", value)}
+            />
+            <AdminField
+              label="Capabilities section heading"
+              value={content.capabilitiesSectionHeading}
+              onChange={(value) =>
+                updateContent("capabilitiesSectionHeading", value)
+              }
+            />
+            <AdminField
+              label="Template section heading"
+              value={content.templateSectionHeading}
+              onChange={(value) =>
+                updateContent("templateSectionHeading", value)
+              }
+            />
           </div>
         </div>
 
@@ -1215,19 +1319,81 @@ function AdminStudio({
           <SectionHeader
             icon={<BookOpenCheck className="h-5 w-5" />}
             eyebrow="About Modal"
-            title="Short work and personal notes"
+            title="Edit the About Me TV carousel"
           />
-          <div className="mt-6 grid gap-4">
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <AdminField
+              label="Work slide kicker"
+              value={content.aboutWorkKicker}
+              onChange={(value) => updateContent("aboutWorkKicker", value)}
+            />
+            <AdminField
+              label="Work slide title"
+              value={content.aboutWorkTitle}
+              onChange={(value) => updateContent("aboutWorkTitle", value)}
+            />
             <AdminTextArea
-              label="Work channel copy"
+              label="Work slide copy"
               value={content.about[0] ?? ""}
               onChange={(value) => updateAbout(0, value)}
             />
+            <div />
+            <AdminField
+              label="Personal slide kicker"
+              value={content.aboutPersonalKicker}
+              onChange={(value) => updateContent("aboutPersonalKicker", value)}
+            />
+            <AdminField
+              label="Personal slide title"
+              value={content.aboutPersonalTitle}
+              onChange={(value) => updateContent("aboutPersonalTitle", value)}
+            />
             <AdminTextArea
-              label="Personal channel copy"
+              label="Personal slide copy"
               value={content.about[1] ?? ""}
               onChange={(value) => updateAbout(1, value)}
             />
+            <div />
+            <AdminField
+              label="Selected work slide kicker"
+              value={content.aboutSelectedWorkKicker}
+              onChange={(value) =>
+                updateContent("aboutSelectedWorkKicker", value)
+              }
+            />
+            <AdminField
+              label="Selected work slide title"
+              value={content.aboutSelectedWorkTitle}
+              onChange={(value) =>
+                updateContent("aboutSelectedWorkTitle", value)
+              }
+            />
+          </div>
+        </div>
+
+        <div className="glass-panel p-6">
+          <SectionHeader
+            icon={<BadgeCheck className="h-5 w-5" />}
+            eyebrow="Proof & Capabilities"
+            title="Edit the supporting evidence blocks"
+          />
+          <div className="mt-6 grid gap-4">
+            {content.proofPoints.map((point, index) => (
+              <AdminTextArea
+                key={`proof-${index}`}
+                label={`Proof point ${index + 1}`}
+                value={point}
+                onChange={(value) => updateProofPoint(index, value)}
+              />
+            ))}
+            {content.capabilities.map((capability, index) => (
+              <AdminTextArea
+                key={`capability-${index}`}
+                label={`Capability ${index + 1}`}
+                value={capability}
+                onChange={(value) => updateCapability(index, value)}
+              />
+            ))}
           </div>
         </div>
 

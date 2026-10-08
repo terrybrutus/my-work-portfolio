@@ -7,6 +7,7 @@ configure({ testIdAttribute: "data-ocid" });
 
 afterEach(() => {
   cleanup();
+  window.history.pushState({}, "", "/");
 });
 
 vi.mock("../hooks/useQueries", () => ({
@@ -26,6 +27,15 @@ describe("App default route", () => {
     expect(screen.getByText("TerryLXD")).toBeInTheDocument();
     expect(
       screen.getByText("Defense Workforce Learning Architecture"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the expanded admin page editor", () => {
+    window.history.pushState({}, "", "/admin");
+    render(<App />);
+    expect(screen.getByText("Pages & Sections")).toBeInTheDocument();
+    expect(
+      screen.getByText("Edit the About Me TV carousel"),
     ).toBeInTheDocument();
   });
 });
