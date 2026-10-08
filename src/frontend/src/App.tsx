@@ -20,7 +20,7 @@ import {
   Wand2,
 } from "lucide-react";
 import type React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCallerUserRole } from "./hooks/useQueries";
 
 type Project = {
@@ -36,6 +36,25 @@ type PortfolioSection = {
   id: string;
   label: string;
   visible: boolean;
+};
+
+type MaskPoint = {
+  x: number;
+  y: number;
+};
+
+type TvScreenConfig = {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  rotate: number;
+  points: MaskPoint[];
+};
+
+type TvScreenSettings = {
+  work: TvScreenConfig;
+  about: TvScreenConfig;
 };
 
 type PortfolioContent = {
@@ -67,6 +86,7 @@ type PortfolioContent = {
   projects: Project[];
   sections: PortfolioSection[];
   selectedTemplate: string;
+  tvScreens: TvScreenSettings;
 };
 
 type Template = {
@@ -78,6 +98,36 @@ type Template = {
 };
 
 const STORAGE_KEY = "terry-lxd-portfolio-draft-v4";
+
+const defaultTvScreens: TvScreenSettings = {
+  work: {
+    left: 37.4,
+    top: 15.1,
+    width: 30.5,
+    height: 25.1,
+    rotate: -0.9,
+    points: [
+      { x: 7, y: 10 },
+      { x: 82, y: 1 },
+      { x: 100, y: 17 },
+      { x: 91, y: 92 },
+      { x: 0, y: 100 },
+    ],
+  },
+  about: {
+    left: 29.1,
+    top: 56.9,
+    width: 32.8,
+    height: 27.2,
+    rotate: -1.1,
+    points: [
+      { x: 9, y: 7 },
+      { x: 90, y: 0 },
+      { x: 100, y: 76 },
+      { x: 0, y: 94 },
+    ],
+  },
+};
 
 const templates: Template[] = [
   {
@@ -223,6 +273,7 @@ const defaultContent: PortfolioContent = {
     { id: "templates", label: "Template System", visible: false },
   ],
   selectedTemplate: "systems-lab",
+  tvScreens: defaultTvScreens,
 };
 
 function getInitialContent(): PortfolioContent {
@@ -230,10 +281,45 @@ function getInitialContent(): PortfolioContent {
   const saved = window.localStorage.getItem(STORAGE_KEY);
   if (!saved) return defaultContent;
   try {
-    return { ...defaultContent, ...JSON.parse(saved) };
+    const parsed = JSON.parse(saved) as Partial<PortfolioContent>;
+    return {
+      ...defaultContent,
+      ...parsed,
+      tvScreens: {
+        work: {
+          ...defaultTvScreens.work,
+          ...parsed.tvScreens?.work,
+          points:
+            parsed.tvScreens?.work?.points ?? defaultTvScreens.work.points,
+        },
+        about: {
+          ...defaultTvScreens.about,
+          ...parsed.tvScreens?.about,
+          points:
+            parsed.tvScreens?.about?.points ?? defaultTvScreens.about.points,
+        },
+      },
+    };
   } catch {
     return defaultContent;
   }
+}
+
+function getTvClipPath(screen: TvScreenConfig) {
+  return `polygon(${screen.points
+    .map((point) => `${point.x}% ${point.y}%`)
+    .join(", ")})`;
+}
+
+function getTvScreenStyle(screen: TvScreenConfig): React.CSSProperties {
+  return {
+    left: `${screen.left}%`,
+    top: `${screen.top}%`,
+    width: `${screen.width}%`,
+    height: `${screen.height}%`,
+    transform: `rotate(${screen.rotate}deg)`,
+    clipPath: getTvClipPath(screen),
+  };
 }
 
 export default function App() {
@@ -599,6 +685,7 @@ function AboutTvModal({
             activeChannel === "work" ? "is-active" : ""
           }`}
           onClick={() => setActiveChannel("work")}
+          style={getTvScreenStyle(content.tvScreens.work)}
           type="button"
         >
           <span className="retro-tv-screen-inner">
@@ -617,6 +704,7 @@ function AboutTvModal({
             activeChannel === "about" ? "is-active" : ""
           }`}
           onClick={() => setActiveChannel("about")}
+          style={getTvScreenStyle(content.tvScreens.about)}
           type="button"
         >
           <span className="retro-tv-screen-inner">
@@ -1067,6 +1155,8 @@ function AdminStudio({
           </div>
         </div>
 
+        <TvMaskEditor content={content} updateContent={updateContent} />
+
         <div className="glass-panel p-6">
           <SectionHeader
             icon={<MousePointer2 className="h-5 w-5" />}
@@ -1255,6 +1345,219 @@ function AdminStudio({
   );
 }
 
+function TvMaskEditor({
+  content,
+  updateContent,
+}: {
+  content: PortfolioContent;
+  updateContent: <K extends keyof PortfolioContent>(
+    key: K,
+    value: PortfolioContent[K],
+  ) => void;
+}) {
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const [activePoint, setActivePoint] = useState<{
+    channel: keyof TvScreenSettings;
+    index: number;
+  } | null>(null);
+
+  const updateScreen = (
+    channel: keyof TvScreenSettings,
+    patch: Partial<TvScreenConfig>,
+  ) => {
+    updateContent("tvScreens", {
+      ...content.tvScreens,
+      [channel]: { ...content.tvScreens[channel], ...patch },
+    });
+  };
+
+  const updatePoint = (
+    channel: keyof TvScreenSettings,
+    index: number,
+    point: MaskPoint,
+  ) => {
+    const screen = content.tvScreens[channel];
+    updateScreen(channel, {
+      points: screen.points.map((current, currentIndex) =>
+        currentIndex === index ? point : current,
+      ),
+    });
+  };
+
+  const moveActivePoint = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!activePoint || !previewRef.current) return;
+    const previewBox = previewRef.current.getBoundingClientRect();
+    const screen = content.tvScreens[activePoint.channel];
+    const previewX =
+      ((event.clientX - previewBox.left) / previewBox.width) * 100;
+    const previewY =
+      ((event.clientY - previewBox.top) / previewBox.height) * 100;
+    const nextPoint = {
+      x: Number(
+        Math.max(
+          -20,
+          Math.min(120, ((previewX - screen.left) / screen.width) * 100),
+        ).toFixed(1),
+      ),
+      y: Number(
+        Math.max(
+          -20,
+          Math.min(120, ((previewY - screen.top) / screen.height) * 100),
+        ).toFixed(1),
+      ),
+    };
+    updatePoint(activePoint.channel, activePoint.index, nextPoint);
+  };
+
+  const addPoint = (channel: keyof TvScreenSettings) => {
+    const screen = content.tvScreens[channel];
+    updateScreen(channel, {
+      points: [...screen.points, { x: 50, y: 50 }],
+    });
+  };
+
+  const removePoint = (channel: keyof TvScreenSettings) => {
+    const screen = content.tvScreens[channel];
+    if (screen.points.length <= 3) return;
+    updateScreen(channel, {
+      points: screen.points.slice(0, -1),
+    });
+  };
+
+  const renderScreen = (channel: keyof TvScreenSettings, label: string) => {
+    const screen = content.tvScreens[channel];
+    return (
+      <div
+        className={`tv-mask-editor-screen tv-mask-editor-screen-${channel}`}
+        style={getTvScreenStyle(screen)}
+      >
+        <div
+          className="tv-mask-editor-fill"
+          style={{ clipPath: getTvClipPath(screen) }}
+        >
+          {label}
+        </div>
+        {screen.points.map((point, index) => (
+          <button
+            aria-label={`${label} mask point ${index + 1}`}
+            className="tv-mask-point"
+            key={`${channel}-${index}`}
+            onPointerDown={(event) => {
+              event.currentTarget.setPointerCapture(event.pointerId);
+              setActivePoint({ channel, index });
+              event.preventDefault();
+            }}
+            style={{ left: `${point.x}%`, top: `${point.y}%` }}
+            type="button"
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="glass-panel p-6">
+      <SectionHeader
+        icon={<MousePointer2 className="h-5 w-5" />}
+        eyebrow="TV Screen Masks"
+        title="Tune the clickable glass areas"
+      />
+      <p className="mt-4 text-sm leading-6 text-white/[0.62]">
+        Drag the numbered points to reshape each screen. Use position, size, and
+        rotate for the broader perspective fit. This is the corner-tuning layer;
+        a full warp mesh can build on this next.
+      </p>
+      <div
+        className="tv-mask-editor-preview mt-6"
+        ref={previewRef}
+        onPointerMove={moveActivePoint}
+        onPointerUp={() => setActivePoint(null)}
+        onPointerLeave={() => setActivePoint(null)}
+      >
+        <img
+          alt=""
+          className="retro-tv-photo"
+          src="/assets/legacy/retro-tv-stack.jpg"
+        />
+        {renderScreen("work", "Work")}
+        {renderScreen("about", "About")}
+      </div>
+      <div className="mt-6 grid gap-4 xl:grid-cols-2">
+        {(["work", "about"] as const).map((channel) => (
+          <div
+            className="rounded-3xl border border-white/10 bg-black/20 p-4"
+            key={channel}
+          >
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-black uppercase tracking-[0.18em] text-cyan-100/70">
+                  {channel === "work" ? "Red TV / Work" : "Black TV / About"}
+                </p>
+                <p className="text-xs text-white/45">
+                  Clip: {getTvClipPath(content.tvScreens[channel])}
+                </p>
+              </div>
+              <button
+                className="admin-button px-3 py-2"
+                type="button"
+                onClick={() => updateScreen(channel, defaultTvScreens[channel])}
+              >
+                Reset
+              </button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <AdminNumberField
+                label="X position"
+                value={content.tvScreens[channel].left}
+                onChange={(value) => updateScreen(channel, { left: value })}
+              />
+              <AdminNumberField
+                label="Y position"
+                value={content.tvScreens[channel].top}
+                onChange={(value) => updateScreen(channel, { top: value })}
+              />
+              <AdminNumberField
+                label="Width"
+                value={content.tvScreens[channel].width}
+                onChange={(value) => updateScreen(channel, { width: value })}
+              />
+              <AdminNumberField
+                label="Height"
+                value={content.tvScreens[channel].height}
+                onChange={(value) => updateScreen(channel, { height: value })}
+              />
+              <AdminNumberField
+                label="Rotate"
+                step={0.1}
+                value={content.tvScreens[channel].rotate}
+                onChange={(value) => updateScreen(channel, { rotate: value })}
+              />
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                className="admin-button px-3 py-2"
+                type="button"
+                onClick={() => addPoint(channel)}
+              >
+                Add point
+              </button>
+              <button
+                className="admin-button px-3 py-2"
+                type="button"
+                onClick={() => removePoint(channel)}
+              >
+                Remove last point
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function AdminField({
   label,
   value,
@@ -1267,6 +1570,31 @@ function AdminField({
         className="admin-input"
         value={value}
         onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
+
+function AdminNumberField({
+  label,
+  value,
+  onChange,
+  step = 0.1,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  step?: number;
+}) {
+  return (
+    <label className="grid gap-2 text-sm font-semibold text-white/[0.65]">
+      {label}
+      <input
+        className="admin-input"
+        step={step}
+        type="number"
+        value={value}
+        onChange={(event) => onChange(Number(event.target.value))}
       />
     </label>
   );
