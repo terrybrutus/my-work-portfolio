@@ -79,6 +79,11 @@ type Template = {
 
 const STORAGE_KEY = "terry-lxd-portfolio-draft-v4";
 
+const legacyAboutCopy = [
+  "My work lives between learning strategy, customer adoption, technical enablement, and operational workflow design. I help teams move from scattered stakeholder requests to structured learning systems that can be delivered, measured, maintained, and trusted.",
+  "Across federal, enterprise, municipal, SaaS, healthcare, sales, and technical environments, I focus on the part that matters most: making complex work easier for real people to perform without burying them in generic training.",
+];
+
 const templates: Template[] = [
   {
     id: "systems-lab",
@@ -171,8 +176,8 @@ const defaultContent: PortfolioContent = {
     "AI-assisted workflows reducing review time by up to 90%",
   ],
   about: [
-    "My work lives between learning strategy, customer adoption, technical enablement, and operational workflow design. I help teams move from scattered stakeholder requests to structured learning systems that can be delivered, measured, maintained, and trusted.",
-    "Across federal, enterprise, municipal, SaaS, healthcare, sales, and technical environments, I focus on the part that matters most: making complex work easier for real people to perform without burying them in generic training.",
+    "I help teams turn messy adoption, training, and workflow problems into learning systems people can actually use. My path has moved through defense, enterprise, municipal, SaaS, healthcare, sales, and technical environments, which taught me to design for real constraints instead of ideal conditions.",
+    "Outside the work, I am drawn to systems, stories, games, music, visual design, and the way people learn when something finally clicks. That curiosity is a big part of my portfolio: I like building experiences that feel useful, human, and a little more alive than a standard resume.",
   ],
   capabilities: [
     "Translate stakeholder goals and operational priorities into scalable learning strategies",
@@ -230,7 +235,17 @@ function getInitialContent(): PortfolioContent {
   const saved = window.localStorage.getItem(STORAGE_KEY);
   if (!saved) return defaultContent;
   try {
-    return { ...defaultContent, ...JSON.parse(saved) };
+    const parsed = JSON.parse(saved) as Partial<PortfolioContent>;
+    const shouldUpgradeAbout =
+      parsed.about?.[0] === legacyAboutCopy[0] &&
+      parsed.about?.[1] === legacyAboutCopy[1];
+    return {
+      ...defaultContent,
+      ...parsed,
+      about: shouldUpgradeAbout
+        ? defaultContent.about
+        : (parsed.about ?? defaultContent.about),
+    };
   } catch {
     return defaultContent;
   }
@@ -551,7 +566,8 @@ function AboutTvModal({
   onClose: () => void;
 }) {
   const [activeChannel, setActiveChannel] = useState<"about" | "work">("about");
-  const featuredProjects = content.projects.slice(0, 3);
+  const workStory = content.about[0] ?? "";
+  const personalStory = content.about[1] ?? content.about[0] ?? "";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -603,11 +619,9 @@ function AboutTvModal({
         >
           <span className="retro-tv-screen-inner">
             <span className="retro-tv-kicker">Work channel</span>
-            <span className="retro-tv-title">Selected Work</span>
-            <span className="retro-tv-copy">
-              {featuredProjects.map((project) => project.title).join(" / ")}
-            </span>
-            <span className="retro-tv-hint">Click to tune work</span>
+            <span className="retro-tv-title">How I Got Here</span>
+            <span className="retro-tv-copy">{workStory}</span>
+            <span className="retro-tv-hint">Work story</span>
           </span>
         </button>
 
@@ -622,20 +636,16 @@ function AboutTvModal({
           <span className="retro-tv-screen-inner">
             <span className="retro-tv-kicker">Personal channel</span>
             <span className="retro-tv-title" id="about-modal-title">
-              {content.name}
+              Beyond The Work
             </span>
-            <span className="retro-tv-copy">{content.about[0]}</span>
-            <span className="retro-tv-hint">Click to tune about</span>
+            <span className="retro-tv-copy">{personalStory}</span>
+            <span className="retro-tv-hint">Personal note</span>
           </span>
         </button>
 
         <div className="sr-only">
           <h2>{activeChannel === "work" ? "Selected work" : content.name}</h2>
-          <p>
-            {activeChannel === "work"
-              ? featuredProjects.map((project) => project.title).join(", ")
-              : content.about.join(" ")}
-          </p>
+          <p>{activeChannel === "work" ? workStory : personalStory}</p>
         </div>
       </div>
     </div>
@@ -827,6 +837,12 @@ function AdminStudio({
     const projects = [...content.projects];
     projects[index] = project;
     updateContent("projects", projects);
+  };
+
+  const updateAbout = (index: number, value: string) => {
+    const about = [...content.about];
+    about[index] = value;
+    updateContent("about", about);
   };
 
   const handleImageUpload = (file: File | undefined) => {
@@ -1151,6 +1167,26 @@ function AdminStudio({
               label="Contact text"
               value={content.contactText}
               onChange={(value) => updateContent("contactText", value)}
+            />
+          </div>
+        </div>
+
+        <div className="glass-panel p-6">
+          <SectionHeader
+            icon={<BookOpenCheck className="h-5 w-5" />}
+            eyebrow="About Modal"
+            title="Short work and personal notes"
+          />
+          <div className="mt-6 grid gap-4">
+            <AdminTextArea
+              label="Work channel copy"
+              value={content.about[0] ?? ""}
+              onChange={(value) => updateAbout(0, value)}
+            />
+            <AdminTextArea
+              label="Personal channel copy"
+              value={content.about[1] ?? ""}
+              onChange={(value) => updateAbout(1, value)}
             />
           </div>
         </div>
