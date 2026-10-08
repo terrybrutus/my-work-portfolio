@@ -550,6 +550,9 @@ function AboutTvModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const [activeChannel, setActiveChannel] = useState<"about" | "work">("about");
+  const featuredProjects = content.projects.slice(0, 3);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -560,6 +563,10 @@ function AboutTvModal({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (isOpen) setActiveChannel("about");
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -576,41 +583,64 @@ function AboutTvModal({
         onClick={onClose}
         type="button"
       />
-      <div className="about-tv-shell">
-        <div className="about-tv-screen">
-          <button className="about-tv-close" onClick={onClose} type="button">
-            Close
-          </button>
-          <div className="about-tv-content">
-            <p className="text-xs font-black uppercase tracking-[0.4em] text-cyan-700/70">
-              About Me
-            </p>
-            <h2
-              className="mt-3 text-3xl font-black tracking-[-0.04em] text-slate-950 sm:text-4xl"
-              id="about-modal-title"
-            >
+      <div className="retro-tv-photo-shell">
+        <img
+          alt="Stacked vintage televisions used as interactive portfolio screens"
+          className="retro-tv-photo"
+          src="/assets/legacy/retro-tv-stack.jpg"
+        />
+        <button className="retro-tv-close" onClick={onClose} type="button">
+          Close
+        </button>
+
+        <button
+          aria-pressed={activeChannel === "work"}
+          className={`retro-tv-screen retro-tv-screen-work ${
+            activeChannel === "work" ? "is-active" : ""
+          }`}
+          onClick={() => setActiveChannel("work")}
+          type="button"
+        >
+          <span className="retro-tv-screen-inner">
+            <span className="retro-tv-kicker">Work channel</span>
+            <span className="retro-tv-title">Selected Work</span>
+            <span className="retro-tv-copy">
+              {featuredProjects.map((project) => project.title).join(" / ")}
+            </span>
+            <span className="retro-tv-hint">Click to tune work</span>
+          </span>
+        </button>
+
+        <button
+          aria-pressed={activeChannel === "about"}
+          className={`retro-tv-screen retro-tv-screen-about ${
+            activeChannel === "about" ? "is-active" : ""
+          }`}
+          onClick={() => setActiveChannel("about")}
+          type="button"
+        >
+          <span className="retro-tv-screen-inner">
+            <span className="retro-tv-kicker">Personal channel</span>
+            <span className="retro-tv-title" id="about-modal-title">
               {content.name}
-            </h2>
-            <div className="mt-6 space-y-5 text-base leading-8 text-slate-900/80">
-              {content.about.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="about-tv-controls" aria-hidden="true">
-          <div className="about-tv-speaker" />
-          <div className="about-tv-knob" />
-          <div className="about-tv-small-knobs">
-            <span />
-            <span />
-          </div>
+            </span>
+            <span className="retro-tv-copy">{content.about[0]}</span>
+            <span className="retro-tv-hint">Click to tune about</span>
+          </span>
+        </button>
+
+        <div className="sr-only">
+          <h2>{activeChannel === "work" ? "Selected work" : content.name}</h2>
+          <p>
+            {activeChannel === "work"
+              ? featuredProjects.map((project) => project.title).join(", ")
+              : content.about.join(" ")}
+          </p>
         </div>
       </div>
     </div>
   );
 }
-
 function CapabilitiesSection({ content }: { content: PortfolioContent }) {
   return (
     <section className="glass-panel p-7">
