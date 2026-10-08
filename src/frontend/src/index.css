@@ -365,8 +365,8 @@
 
   .retro-tv-photo-shell {
     position: relative;
-    width: min(72rem, 96vw, calc(90vh * 1800 / 1325));
-    aspect-ratio: 1800 / 1325;
+    width: min(86rem, 96vw, calc(90vh * 2697 / 1427));
+    aspect-ratio: 2697 / 1427;
     overflow: hidden;
     border-radius: 1.4rem;
     background: #090f1e;
@@ -381,6 +381,8 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transform: scale(1.34);
+    transform-origin: 50% 57%;
   }
 
   .retro-tv-close {
@@ -402,37 +404,18 @@
 
   .retro-tv-screen {
     position: absolute;
+    top: 28.2%;
+    left: 23.25%;
     z-index: 2;
-    border: 0;
+    width: 29.4%;
+    height: 50.8%;
+    overflow: hidden;
+    border: 1px solid rgba(103, 232, 249, 0.1);
     color: #dcecff;
     text-align: left;
     background: transparent;
-    cursor: pointer;
-    filter: saturate(0.86) brightness(0.82);
-    transition: filter 180ms ease, transform 180ms ease;
-  }
-
-  .retro-tv-screen:hover,
-  .retro-tv-screen.is-active {
-    filter: saturate(1.18) brightness(1.08);
-  }
-
-  .retro-tv-screen-work {
-    top: 15.1%;
-    left: 37.4%;
-    width: 30.5%;
-    height: 25.1%;
-    transform: rotate(-0.9deg);
-    clip-path: polygon(7% 10%, 82% 1%, 100% 17%, 91% 92%, 0 100%);
-  }
-
-  .retro-tv-screen-about {
-    top: 56.9%;
-    left: 29.1%;
-    width: 32.8%;
-    height: 27.2%;
-    transform: rotate(-1.1deg);
-    clip-path: polygon(9% 7%, 90% 0, 100% 76%, 0 94%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 94%);
+    filter: saturate(0.96) brightness(0.9);
   }
 
   .retro-tv-screen-inner {
@@ -444,30 +427,17 @@
     justify-content: center;
     gap: clamp(0.15rem, 0.5vw, 0.45rem);
     overflow: hidden;
-    padding: clamp(0.65rem, 1.5vw, 1.35rem);
+    padding: clamp(0.7rem, 1.35vw, 1.25rem);
     background: radial-gradient(
         circle at 24% 24%,
         rgba(255, 255, 255, 0.5),
         transparent 20%
-      ),
-      linear-gradient(135deg, rgba(62, 121, 141, 0.74), rgba(6, 24, 47, 0.86));
+      ), linear-gradient(135deg, rgba(72, 112, 108, 0.7), rgba(5, 18, 31, 0.92));
     box-shadow: inset 0 0 2.6rem rgba(255, 255, 255, 0.13), inset 0 0 2.4rem
       rgba(4, 10, 22, 0.82);
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.72);
-  }
-
-  .retro-tv-screen-about .retro-tv-screen-inner {
-    padding: clamp(0.9rem, 1.8vw, 1.65rem);
-    background: radial-gradient(
-        circle at 20% 18%,
-        rgba(255, 255, 255, 0.42),
-        transparent 22%
-      ), linear-gradient(135deg, rgba(73, 107, 98, 0.78), rgba(8, 18, 26, 0.88));
-  }
-
-  .retro-tv-screen-about .retro-tv-copy {
-    font-size: clamp(0.42rem, 0.82vw, 0.72rem);
-    -webkit-line-clamp: 4;
+    transform: perspective(34rem) rotateY(-7deg) skewY(0.45deg) scaleX(1.06);
+    transform-origin: 100% 50%;
   }
 
   .retro-tv-screen-inner::before,
@@ -520,21 +490,21 @@
 
   .retro-tv-title {
     color: white;
-    font-size: clamp(0.95rem, 2vw, 1.9rem);
+    font-size: clamp(1rem, 1.58vw, 1.75rem);
     font-weight: 950;
-    line-height: 0.95;
-    letter-spacing: -0.05em;
+    line-height: 1;
+    letter-spacing: -0.025em;
   }
 
   .retro-tv-copy {
     display: -webkit-box;
     overflow: hidden;
     color: rgba(236, 248, 255, 0.84);
-    font-size: clamp(0.45rem, 0.95vw, 0.8rem);
+    font-size: clamp(0.5rem, 0.82vw, 0.86rem);
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.32;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 6;
   }
 
   .retro-tv-hint {
@@ -544,6 +514,54 @@
     font-weight: 900;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+  }
+
+  .retro-tv-nav,
+  .retro-tv-dots {
+    position: absolute;
+    z-index: 4;
+  }
+
+  .retro-tv-nav {
+    bottom: clamp(1rem, 2.8vw, 2rem);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(8, 13, 25, 0.66);
+    padding: 0.55rem 0.85rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    backdrop-filter: blur(12px);
+  }
+
+  .retro-tv-nav-prev {
+    left: clamp(1rem, 2.8vw, 2rem);
+  }
+
+  .retro-tv-nav-next {
+    right: clamp(1rem, 2.8vw, 2rem);
+  }
+
+  .retro-tv-dots {
+    right: 31.6%;
+    bottom: 15%;
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .retro-tv-dots button {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.32);
+    transition: background 160ms ease, transform 160ms ease;
+  }
+
+  .retro-tv-dots button.is-active {
+    background: rgba(125, 211, 252, 0.92);
+    transform: scale(1.45);
   }
 }
 

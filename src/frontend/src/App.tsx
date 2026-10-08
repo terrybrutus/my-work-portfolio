@@ -565,23 +565,57 @@ function AboutTvModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const [activeChannel, setActiveChannel] = useState<"about" | "work">("about");
+  const [activeSlide, setActiveSlide] = useState(0);
   const workStory = content.about[0] ?? "";
   const personalStory = content.about[1] ?? content.about[0] ?? "";
+  const selectedWork = content.projects
+    .slice(0, 3)
+    .map((project) => `${project.title}: ${project.result}`)
+    .join(" ");
+  const slides = [
+    {
+      kicker: "Work channel",
+      title: "How I Got Here",
+      copy: workStory,
+    },
+    {
+      kicker: "Personal channel",
+      title: "Beyond The Work",
+      copy: personalStory,
+    },
+    {
+      kicker: "Selected work",
+      title: "What I Build",
+      copy: selectedWork,
+    },
+    {
+      kicker: "Contact",
+      title: content.contactHeading,
+      copy: content.contactText,
+    },
+  ];
+  const activeTvSlide = slides[activeSlide] ?? slides[0];
+  const goToSlide = (direction: -1 | 1) => {
+    setActiveSlide(
+      (current) => (current + direction + slides.length) % slides.length,
+    );
+  };
 
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
+      if (event.key === "ArrowLeft") goToSlide(-1);
+      if (event.key === "ArrowRight") goToSlide(1);
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, slides.length]);
 
   useEffect(() => {
-    if (isOpen) setActiveChannel("about");
+    if (isOpen) setActiveSlide(0);
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -601,51 +635,57 @@ function AboutTvModal({
       />
       <div className="retro-tv-photo-shell">
         <img
-          alt="Stacked vintage televisions used as interactive portfolio screens"
+          alt="Vintage television used as an interactive portfolio screen"
           className="retro-tv-photo"
-          src="/assets/legacy/retro-tv-stack.jpg"
+          src="/assets/legacy/single-retro-tv.jpg"
         />
         <button className="retro-tv-close" onClick={onClose} type="button">
           Close
         </button>
 
-        <button
-          aria-pressed={activeChannel === "work"}
-          className={`retro-tv-screen retro-tv-screen-work ${
-            activeChannel === "work" ? "is-active" : ""
-          }`}
-          onClick={() => setActiveChannel("work")}
-          type="button"
-        >
+        <div className="retro-tv-screen" aria-live="polite">
           <span className="retro-tv-screen-inner">
-            <span className="retro-tv-kicker">Work channel</span>
-            <span className="retro-tv-title">How I Got Here</span>
-            <span className="retro-tv-copy">{workStory}</span>
-            <span className="retro-tv-hint">Work story</span>
+            <span className="retro-tv-kicker">{activeTvSlide.kicker}</span>
+            <span className="retro-tv-title" id="about-modal-title">
+              {activeTvSlide.title}
+            </span>
+            <span className="retro-tv-copy">{activeTvSlide.copy}</span>
+            <span className="retro-tv-hint">
+              {activeSlide + 1} / {slides.length}
+            </span>
           </span>
-        </button>
+        </div>
 
         <button
-          aria-pressed={activeChannel === "about"}
-          className={`retro-tv-screen retro-tv-screen-about ${
-            activeChannel === "about" ? "is-active" : ""
-          }`}
-          onClick={() => setActiveChannel("about")}
+          className="retro-tv-nav retro-tv-nav-prev"
+          onClick={() => goToSlide(-1)}
           type="button"
         >
-          <span className="retro-tv-screen-inner">
-            <span className="retro-tv-kicker">Personal channel</span>
-            <span className="retro-tv-title" id="about-modal-title">
-              Beyond The Work
-            </span>
-            <span className="retro-tv-copy">{personalStory}</span>
-            <span className="retro-tv-hint">Personal note</span>
-          </span>
+          Prev
         </button>
+        <button
+          className="retro-tv-nav retro-tv-nav-next"
+          onClick={() => goToSlide(1)}
+          type="button"
+        >
+          Next
+        </button>
+        <div className="retro-tv-dots" aria-label="TV carousel sections">
+          {slides.map((slide, index) => (
+            <button
+              aria-label={`Show ${slide.title}`}
+              aria-pressed={activeSlide === index}
+              className={activeSlide === index ? "is-active" : ""}
+              key={slide.title}
+              onClick={() => setActiveSlide(index)}
+              type="button"
+            />
+          ))}
+        </div>
 
         <div className="sr-only">
-          <h2>{activeChannel === "work" ? "Selected work" : content.name}</h2>
-          <p>{activeChannel === "work" ? workStory : personalStory}</p>
+          <h2>{activeTvSlide.title}</h2>
+          <p>{activeTvSlide.copy}</p>
         </div>
       </div>
     </div>
