@@ -102,6 +102,12 @@ const legacyProjectTitles = [
   "Distributed Onboarding & Compliance Systems",
 ];
 
+const importedTerryLxdProjectTitles = [
+  "AI & The Future of Work",
+  "Don't Get Hooked: A Course on Phishing",
+  "Why Blockchain Actually Matters",
+];
+
 const templates: Template[] = [
   {
     id: "systems-lab",
@@ -221,6 +227,20 @@ const defaultContent: PortfolioContent = {
   ],
   projects: [
     {
+      title: "Enablement Quest: The Learning Systems Lab",
+      summary:
+        "A browser-based RPG-style learning simulation where players investigate workplace performance problems, inspect evidence, talk to stakeholders, and decide whether training is really the right answer.",
+      result:
+        "Demonstrates performance consulting judgment through two playable cases: new-hire ramp and stalled sales demo conversion, with earned business-impact canvases and reviewer-facing evidence boundaries.",
+      tags: [
+        "Performance consulting",
+        "Sales enablement",
+        "RPG learning simulation",
+      ],
+      image: "/assets/projects/enablement-quest.png",
+      url: "",
+    },
+    {
       title: "AI & The Future of Work",
       summary:
         "A RISE 360 microlearning course about how AI is changing work, framed for learners who may be curious, skeptical, or worried about what the technology means for their role.",
@@ -250,6 +270,46 @@ const defaultContent: PortfolioContent = {
       image: "/assets/projects/blockchain-matters.gif",
       url: "https://whyblockchainmatters-by-terrybrutus.netlify.app/",
     },
+    {
+      title: "ADDIE in Action: CON 7020",
+      summary:
+        "A full instructional design process example that translated technical government contracting documentation into a structured online learning experience.",
+      result:
+        "Shows needs analysis, learning-objective mapping, storyboard design, interactive scenario planning, development, and implementation thinking for a complex 6-10 hour course.",
+      tags: ["ADDIE", "Government training", "Course architecture"],
+      image: "",
+      url: "https://sites.google.com/view/instructionaldesignbyterry/projects/addie-in-action",
+    },
+    {
+      title: "Quality Assurance Review System",
+      summary:
+        "A QA commentary workflow for a 50+ screen government eLearning course, documenting structural, instructional, formatting, and compliance issues for the production team.",
+      result:
+        "Highlights a systematic review practice across instructional quality, user experience, Section 508/WCAG expectations, and contractual standards.",
+      tags: ["QA", "Accessibility", "Learning operations"],
+      image: "",
+      url: "https://sites.google.com/view/instructionaldesignbyterry/projects/conducting-qa",
+    },
+    {
+      title: "Job Aid Template System",
+      summary:
+        "Performance-support templates created to turn dense regulatory and technical content into clearer job aids for DOD acquisition professionals.",
+      result:
+        "Demonstrates information architecture, visual hierarchy, essential-resource curation, and reusable template thinking for on-the-job support.",
+      tags: ["Job aids", "Performance support", "Template design"],
+      image: "",
+      url: "https://sites.google.com/view/instructionaldesignbyterry/projects/job-aid-template",
+    },
+    {
+      title: "Facilitator Guide Adaptation",
+      summary:
+        "A facilitator guide that adapted asynchronous online training into a synchronous instructor-led session using Gagne's Nine Events of Instruction.",
+      result:
+        "Shows how the same content can be redesigned across modalities while preserving instructional intent, timing, materials, and facilitation strategy.",
+      tags: ["Facilitator guide", "ILT", "Modality conversion"],
+      image: "",
+      url: "https://sites.google.com/view/instructionaldesignbyterry/projects/facilitator-guide",
+    },
   ],
   sections: [
     { id: "about", label: "Approach", visible: true },
@@ -272,10 +332,15 @@ function getInitialContent(): PortfolioContent {
       parsed.about?.[0] === legacyAboutCopy[0] &&
       parsed.about?.[1] === legacyAboutCopy[1];
     const shouldUpgradeProjects =
-      parsed.projects?.length === legacyProjectTitles.length &&
-      parsed.projects.every(
-        (project, index) => project.title === legacyProjectTitles[index],
-      );
+      (parsed.projects?.length === legacyProjectTitles.length &&
+        parsed.projects.every(
+          (project, index) => project.title === legacyProjectTitles[index],
+        )) ||
+      (parsed.projects?.length === importedTerryLxdProjectTitles.length &&
+        parsed.projects.every(
+          (project, index) =>
+            project.title === importedTerryLxdProjectTitles[index],
+        ));
     return {
       ...defaultContent,
       ...parsed,
@@ -770,6 +835,13 @@ function CapabilitiesSection({ content }: { content: PortfolioContent }) {
 }
 
 function ProjectSection({ content }: { content: PortfolioContent }) {
+  const [activeProjectIndex, setActiveProjectIndex] = useState<number | null>(
+    null,
+  );
+  const featuredProjects = content.projects.slice(0, 3);
+  const activeProject =
+    activeProjectIndex === null ? null : content.projects[activeProjectIndex];
+
   return (
     <section id="work" className="glass-panel p-7">
       <SectionHeader
@@ -778,7 +850,7 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
         title={content.workSectionHeading}
       />
       <div className="mt-8 grid gap-5 lg:grid-cols-3">
-        {content.projects.map((project, index) => (
+        {featuredProjects.map((project, index) => (
           <article className="project-card group" key={project.title}>
             {project.image ? (
               <div className="mb-5 aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black/25">
@@ -814,10 +886,158 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
                 Open project <ArrowRight className="ml-2 h-4 w-4" />
               </a>
             ) : null}
+            <button
+              className="mt-5 inline-flex text-sm font-bold text-white/[0.72] transition hover:text-white"
+              onClick={() => setActiveProjectIndex(index)}
+              type="button"
+            >
+              View details <ArrowRight className="ml-2 h-4 w-4" />
+            </button>
           </article>
         ))}
       </div>
+      {content.projects.length > 3 ? (
+        <div className="mt-8 flex justify-center">
+          <button
+            className="secondary-cta"
+            onClick={() => setActiveProjectIndex(0)}
+            type="button"
+          >
+            See more work <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      ) : null}
+      <ProjectShowcaseModal
+        activeIndex={activeProjectIndex ?? 0}
+        isOpen={Boolean(activeProject)}
+        onClose={() => setActiveProjectIndex(null)}
+        onSelect={setActiveProjectIndex}
+        projects={content.projects}
+      />
     </section>
+  );
+}
+
+function ProjectShowcaseModal({
+  activeIndex,
+  isOpen,
+  onClose,
+  onSelect,
+  projects,
+}: {
+  activeIndex: number;
+  isOpen: boolean;
+  onClose: () => void;
+  onSelect: (index: number) => void;
+  projects: Project[];
+}) {
+  const activeProject = projects[activeIndex] ?? projects[0];
+  const goToProject = (direction: -1 | 1) => {
+    onSelect((activeIndex + direction + projects.length) % projects.length);
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+      if (event.key === "ArrowLeft") goToProject(-1);
+      if (event.key === "ArrowRight") goToProject(1);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeIndex, isOpen, onClose, projects.length]);
+
+  if (!isOpen || !activeProject) return null;
+
+  return (
+    <div
+      aria-labelledby="project-modal-title"
+      aria-modal="true"
+      className="about-modal-backdrop"
+      role="dialog"
+    >
+      <button
+        aria-label="Close project carousel"
+        className="absolute inset-0 h-full w-full cursor-default"
+        onClick={onClose}
+        type="button"
+      />
+      <div className="project-modal-shell">
+        <button className="retro-tv-close" onClick={onClose} type="button">
+          Close
+        </button>
+        <div className="project-modal-media">
+          {activeProject.image ? (
+            <img alt="" src={activeProject.image} />
+          ) : (
+            <div className="project-modal-placeholder">
+              {activeProject.title}
+            </div>
+          )}
+        </div>
+        <div className="project-modal-content">
+          <p className="retro-tv-kicker">
+            Work {String(activeIndex + 1).padStart(2, "0")} /{" "}
+            {String(projects.length).padStart(2, "0")}
+          </p>
+          <h2 id="project-modal-title">{activeProject.title}</h2>
+          <p>{activeProject.summary}</p>
+          <div className="project-modal-result">{activeProject.result}</div>
+          <div className="project-modal-tags">
+            {activeProject.tags.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {activeProject.url ? (
+              <a
+                className="primary-cta"
+                href={activeProject.url}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Open project <ArrowRight className="h-4 w-4" />
+              </a>
+            ) : null}
+            <button
+              className="secondary-cta"
+              onClick={() => goToProject(1)}
+              type="button"
+            >
+              Next project <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+        <button
+          className="retro-tv-nav retro-tv-nav-prev"
+          onClick={() => goToProject(-1)}
+          type="button"
+        >
+          Prev
+        </button>
+        <button
+          className="retro-tv-nav retro-tv-nav-next"
+          onClick={() => goToProject(1)}
+          type="button"
+        >
+          Next
+        </button>
+        <div className="retro-tv-dots" aria-label="Project carousel sections">
+          {projects.map((project, index) => (
+            <button
+              aria-label={`Show ${project.title}`}
+              aria-pressed={activeIndex === index}
+              className={activeIndex === index ? "is-active" : ""}
+              key={project.title}
+              onClick={() => onSelect(index)}
+              type="button"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
