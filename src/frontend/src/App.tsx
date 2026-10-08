@@ -96,6 +96,12 @@ const legacyAboutCopy = [
   "Across federal, enterprise, municipal, SaaS, healthcare, sales, and technical environments, I focus on the part that matters most: making complex work easier for real people to perform without burying them in generic training.",
 ];
 
+const legacyProjectTitles = [
+  "Defense Workforce Learning Architecture",
+  "AI-Assisted Production Workflow",
+  "Distributed Onboarding & Compliance Systems",
+];
+
 const templates: Template[] = [
   {
     id: "systems-lab",
@@ -215,34 +221,34 @@ const defaultContent: PortfolioContent = {
   ],
   projects: [
     {
-      title: "Defense Workforce Learning Architecture",
+      title: "AI & The Future of Work",
       summary:
-        "Learning architecture and technical enablement for a 158,000-person defense acquisition workforce, translating stakeholder needs into scalable readiness solutions.",
+        "A RISE 360 microlearning course about how AI is changing work, framed for learners who may be curious, skeptical, or worried about what the technology means for their role.",
       result:
-        "Improved delivery quality, governed 122+ accessible assets, and contributed to expanded client confidence and engagement scope.",
-      tags: ["Federal learning", "Technical enablement", "Accessibility"],
-      image: "/assets/legacy/legacy-motion.gif",
-      url: "",
+        "Turns a broad technology topic into a short, approachable learning experience that helps people understand the shift without fear-first messaging.",
+      tags: ["RISE 360", "AI literacy", "Microlearning"],
+      image: "/assets/projects/ai-future-of-work.gif",
+      url: "https://terrybrutus-aiandthefuture-sample.netlify.app/",
     },
     {
-      title: "AI-Assisted Production Workflow",
+      title: "Don't Get Hooked: A Course on Phishing",
       summary:
-        "A content analysis and skills-alignment workflow that uses AI to accelerate review, QA, and production decisions across large learning asset sets.",
+        "A Storyline 360 microlearning course created from a real phishing attempt, designed to make cybersecurity awareness feel immediate and practical.",
       result:
-        "Cut per-deliverable processing from roughly 1.5 hours to 9.5 minutes across 100+ assets and became a documented production standard.",
-      tags: ["AI workflow automation", "Learning operations", "QA"],
-      image: "",
-      url: "",
+        "Uses a real-world trigger to help learners recognize phishing behavior and connect security guidance to decisions they actually make.",
+      tags: ["Storyline 360", "Cybersecurity", "Scenario learning"],
+      image: "/assets/projects/phishing-course.png",
+      url: "https://phishingcourse-by-terrybrutus.netlify.app/story.html",
     },
     {
-      title: "Distributed Onboarding & Compliance Systems",
+      title: "Why Blockchain Actually Matters",
       summary:
-        "Consulting work across enterprise and municipal contexts, including onboarding for distributed selling communities and compliance enablement without traditional LMS infrastructure.",
+        "A RISE 360 microlearning course that explains blockchain basics and why the technology matters beyond hype or legacy-banking arguments.",
       result:
-        "Standardized enablement delivery across 400+ selling communities and created audit-ready compliance coverage for 1,750+ employees.",
-      tags: ["Customer adoption", "Compliance", "Program design"],
-      image: "",
-      url: "",
+        "Makes a complex technical topic easier to understand by connecting blockchain to practical uses, transaction speed, security, and operational efficiency.",
+      tags: ["RISE 360", "Blockchain", "Technical explainer"],
+      image: "/assets/projects/blockchain-matters.gif",
+      url: "https://whyblockchainmatters-by-terrybrutus.netlify.app/",
     },
   ],
   sections: [
@@ -265,12 +271,20 @@ function getInitialContent(): PortfolioContent {
     const shouldUpgradeAbout =
       parsed.about?.[0] === legacyAboutCopy[0] &&
       parsed.about?.[1] === legacyAboutCopy[1];
+    const shouldUpgradeProjects =
+      parsed.projects?.length === legacyProjectTitles.length &&
+      parsed.projects.every(
+        (project, index) => project.title === legacyProjectTitles[index],
+      );
     return {
       ...defaultContent,
       ...parsed,
       about: shouldUpgradeAbout
         ? defaultContent.about
         : (parsed.about ?? defaultContent.about),
+      projects: shouldUpgradeProjects
+        ? defaultContent.projects
+        : (parsed.projects ?? defaultContent.projects),
     };
   } catch {
     return defaultContent;
