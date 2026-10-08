@@ -297,7 +297,11 @@ function TopNav({
     { href: "/#about", label: content.navApproachLabel },
     { href: "/#work", label: content.navWorkLabel },
     { href: "/#contact", label: content.navContactLabel },
-    ...(isAdmin ? [{ href: "/", label: content.navPreviewLabel }] : []),
+    // Temporary while building: remove this item before public launch.
+    {
+      href: isAdmin ? "/" : "/admin",
+      label: isAdmin ? content.navPreviewLabel : content.navAdminLabel,
+    },
   ]
     .map((item) => ({ ...item, label: item.label.trim() }))
     .filter((item) => item.label.length > 0);
