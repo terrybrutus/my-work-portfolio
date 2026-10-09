@@ -237,7 +237,7 @@ const defaultContent: PortfolioContent = {
         "Sales enablement",
         "RPG learning simulation",
       ],
-      image: "/assets/projects/enablement-quest.png",
+      image: "/assets/projects/enablement-quest.gif",
       url: "",
     },
     {
