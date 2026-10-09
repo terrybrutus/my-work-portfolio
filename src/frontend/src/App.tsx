@@ -108,6 +108,12 @@ const importedTerryLxdProjectTitles = [
   "Why Blockchain Actually Matters",
 ];
 
+const legacyHeroEyebrow =
+  "Learning & Enablement Architect | AI Workflow Automation";
+const legacyHeroCardEyebrow = "Selected impact";
+const legacyHeroFocusText =
+  "Current focus: technical enablement, customer adoption, accessible learning systems, and AI-assisted production workflows.";
+
 const templates: Template[] = [
   {
     id: "systems-lab",
@@ -184,7 +190,7 @@ const defaultContent: PortfolioContent = {
   contactText:
     "If you are looking for someone who can connect learning strategy, technical enablement, AI-assisted workflows, and practical adoption systems, I would be glad to talk.",
   name: "Terry Brutus",
-  eyebrow: "Learning & Enablement Architect | AI Workflow Automation",
+  eyebrow: "Learning Systems | Enablement Strategy | Performance Support",
   headline:
     "I build scalable learning systems that make complex work easier to adopt.",
   subheadline:
@@ -193,10 +199,11 @@ const defaultContent: PortfolioContent = {
   email: "terrbrutus@gmail.com",
   profileImage: "/assets/legacy/legacy-profile.png",
   profileImagePosition: "50% 42%",
-  heroCardEyebrow: "Selected impact",
+  heroCardEyebrow: "Portfolio snapshot",
   heroCardFocusText:
-    "Current focus: technical enablement, customer adoption, accessible learning systems, and AI-assisted production workflows.",
-  workSectionHeading: "Evidence of scale, access, automation, and adoption",
+    "I work across the messy middle between business goals, learner needs, technical constraints, and adoption. The throughline is simple: make complex work easier to understand, practice, and sustain.",
+  workSectionHeading:
+    "Selected work across learning, enablement, and systems design",
   proofSectionHeading: "Proof points from the work",
   capabilitiesSectionHeading:
     "Core strengths pulled from the work, not buzzwords",
@@ -344,6 +351,23 @@ function getInitialContent(): PortfolioContent {
     return {
       ...defaultContent,
       ...parsed,
+      eyebrow:
+        parsed.eyebrow === legacyHeroEyebrow
+          ? defaultContent.eyebrow
+          : (parsed.eyebrow ?? defaultContent.eyebrow),
+      heroCardEyebrow:
+        parsed.heroCardEyebrow === legacyHeroCardEyebrow
+          ? defaultContent.heroCardEyebrow
+          : (parsed.heroCardEyebrow ?? defaultContent.heroCardEyebrow),
+      heroCardFocusText:
+        parsed.heroCardFocusText === legacyHeroFocusText
+          ? defaultContent.heroCardFocusText
+          : (parsed.heroCardFocusText ?? defaultContent.heroCardFocusText),
+      workSectionHeading:
+        parsed.workSectionHeading ===
+        "Evidence of scale, access, automation, and adoption"
+          ? defaultContent.workSectionHeading
+          : (parsed.workSectionHeading ?? defaultContent.workSectionHeading),
       about: shouldUpgradeAbout
         ? defaultContent.about
         : (parsed.about ?? defaultContent.about),
@@ -502,10 +526,31 @@ function PublicPortfolio({
     value: PortfolioContent[K],
   ) => void;
 }) {
+  const [isSlideView, setIsSlideView] = useState(false);
   const visibleSections = content.sections.filter((section) => section.visible);
+
+  if (isSlideView) {
+    return (
+      <HorizontalPortfolioPreview
+        content={content}
+        onOpenAbout={onOpenAbout}
+        onReturnToClassic={() => setIsSlideView(false)}
+        template={template}
+      />
+    );
+  }
 
   return (
     <>
+      <div className="mb-4 flex justify-end">
+        <button
+          className="slide-view-toggle"
+          onClick={() => setIsSlideView(true)}
+          type="button"
+        >
+          Try slide view <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
       <section className="grid min-h-[72vh] items-start gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-sm font-medium text-white/[0.80] backdrop-blur">
@@ -575,15 +620,77 @@ function PublicPortfolio({
   );
 }
 
+function HorizontalPortfolioPreview({
+  content,
+  onOpenAbout,
+  onReturnToClassic,
+  template,
+}: {
+  content: PortfolioContent;
+  onOpenAbout: () => void;
+  onReturnToClassic: () => void;
+  template: Template;
+}) {
+  return (
+    <div className="slide-preview-shell">
+      <div className="slide-preview-toolbar">
+        <p>Experimental slide view</p>
+        <button type="button" onClick={onReturnToClassic}>
+          Return to classic page
+        </button>
+      </div>
+      <div className="slide-preview-track" aria-label="Portfolio slide preview">
+        <section className="portfolio-slide portfolio-slide-hero">
+          <div>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-sm font-medium text-white/[0.80] backdrop-blur">
+              {content.eyebrow}
+            </div>
+            <h1 className="max-w-4xl text-balance text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
+              {content.headline}
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-white/[0.72]">
+              {content.subheadline}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <button
+                className="primary-cta"
+                onClick={onOpenAbout}
+                type="button"
+              >
+                {content.primaryCtaLabel || "About me"}
+                <ArrowRight className="h-4 w-4" />
+              </button>
+              {content.secondaryCtaLabel ? (
+                <a className="secondary-cta" href={content.secondaryCtaHref}>
+                  {content.secondaryCtaLabel}
+                </a>
+              ) : null}
+            </div>
+          </div>
+          <HeroCard content={content} template={template} />
+        </section>
+
+        <section className="portfolio-slide portfolio-slide-work">
+          <ProjectSection content={content} />
+        </section>
+
+        <section className="portfolio-slide portfolio-slide-contact">
+          <ContactSection content={content} />
+        </section>
+      </div>
+    </div>
+  );
+}
+
 function HeroCard({
   content,
   template,
 }: { content: PortfolioContent; template: Template }) {
   const impactStats = [
-    ["8+ yrs", "learning architecture"],
-    ["158K+", "defense learners"],
-    ["122+", "accessible assets"],
-    ["90%", "review-time reduction"],
+    ["Learning systems", "Structure complex knowledge into usable journeys"],
+    ["Enablement strategy", "Connect business goals to practical adoption"],
+    ["Workflow design", "Reduce production friction without losing quality"],
+    ["Accessibility & QA", "Build cleaner, more usable learning assets"],
   ];
 
   return (
@@ -615,10 +722,10 @@ function HeroCard({
                 className="rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-4"
                 key={label}
               >
-                <span className="block text-2xl font-black tracking-tight text-white">
+                <span className="block text-sm font-black uppercase tracking-[0.14em] text-cyan-100">
                   {label}
                 </span>
-                <span className="mt-1 block text-sm leading-5 text-white/[0.62]">
+                <span className="mt-2 block text-sm leading-5 text-white/[0.68]">
                   {value}
                 </span>
               </div>
@@ -1217,7 +1324,7 @@ function AdminStudio({
 
   return (
     <section className="grid gap-6 pb-20 lg:grid-cols-[0.9fr_1.1fr]">
-      <div className="glass-panel sticky top-6 h-fit p-6">
+      <div className="glass-panel admin-sidebar p-6">
         <div className="mb-6 flex items-center gap-3">
           <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
             <Lock className="h-5 w-5" />

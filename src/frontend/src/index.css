@@ -176,6 +176,48 @@
     @apply rounded-full border border-white/10 px-4 py-2.5 text-xs font-bold text-cyan-100/80 transition hover:border-cyan-100/35 hover:bg-white/[0.08] hover:text-white;
   }
 
+  .slide-view-toggle {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-white/70 transition hover:-translate-y-0.5 hover:bg-white/[0.14] hover:text-white;
+  }
+
+  .slide-preview-shell {
+    @apply pb-10;
+  }
+
+  .slide-preview-toolbar {
+    @apply sticky top-24 z-30 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-full border border-white/10 bg-slate-950/70 px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-white/65 shadow-xl shadow-black/20 backdrop-blur-2xl;
+  }
+
+  .slide-preview-toolbar button {
+    @apply rounded-full bg-white px-4 py-2 text-slate-950 transition hover:-translate-y-0.5;
+  }
+
+  .slide-preview-track {
+    @apply flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain pb-6;
+    scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.08);
+  }
+
+  .portfolio-slide {
+    @apply min-h-[calc(100vh-11rem)] w-full min-w-full snap-start rounded-[2.25rem] border border-white/10 bg-white/[0.055] p-6 shadow-2xl shadow-black/25 backdrop-blur-2xl;
+  }
+
+  .portfolio-slide-hero {
+    @apply grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr];
+  }
+
+  .portfolio-slide-work {
+    @apply overflow-y-auto;
+  }
+
+  .portfolio-slide-work > .glass-panel,
+  .portfolio-slide-contact > .glass-panel {
+    @apply border-0 bg-transparent p-0 shadow-none backdrop-blur-0;
+  }
+
+  .portfolio-slide-contact {
+    @apply grid items-center;
+  }
+
   .template-card {
     @apply rounded-[1.5rem] border border-white/10 bg-black/20 p-5 transition duration-300 hover:-translate-y-1 hover:bg-white/10;
   }
@@ -187,6 +229,11 @@
   .admin-input,
   .admin-textarea {
     @apply w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-cyan-200/60 focus:ring-2 focus:ring-cyan-200/20;
+  }
+
+  .admin-sidebar {
+    @apply lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto lg:pr-5;
+    scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.08);
   }
 
   .admin-textarea {
