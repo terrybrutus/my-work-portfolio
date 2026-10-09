@@ -164,6 +164,18 @@
     @apply rounded-[1.75rem] border border-white/10 bg-black/20 p-6 shadow-xl shadow-black/20 transition duration-300 hover:-translate-y-1 hover:bg-white/10;
   }
 
+  .project-card-actions {
+    @apply mt-6 flex flex-wrap items-center gap-3;
+  }
+
+  .project-detail-button {
+    @apply rounded-full bg-white px-4 py-2.5 text-xs font-black text-slate-950 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:shadow-xl;
+  }
+
+  .project-live-link {
+    @apply rounded-full border border-white/10 px-4 py-2.5 text-xs font-bold text-cyan-100/80 transition hover:border-cyan-100/35 hover:bg-white/[0.08] hover:text-white;
+  }
+
   .template-card {
     @apply rounded-[1.5rem] border border-white/10 bg-black/20 p-5 transition duration-300 hover:-translate-y-1 hover:bg-white/10;
   }

@@ -876,23 +876,25 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
             <p className="mt-5 rounded-2xl bg-black/[0.25] p-4 text-sm leading-6 text-white/[0.75]">
               {project.result}
             </p>
-            {project.url ? (
-              <a
-                className="mt-5 inline-flex text-sm font-bold text-cyan-200 transition hover:text-white"
-                href={project.url}
-                rel="noreferrer"
-                target="_blank"
+            <div className="project-card-actions">
+              <button
+                className="project-detail-button"
+                onClick={() => setActiveProjectIndex(index)}
+                type="button"
               >
-                Open project <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            ) : null}
-            <button
-              className="mt-5 inline-flex text-sm font-bold text-white/[0.72] transition hover:text-white"
-              onClick={() => setActiveProjectIndex(index)}
-              type="button"
-            >
-              View details <ArrowRight className="ml-2 h-4 w-4" />
-            </button>
+                View details
+              </button>
+              {project.url ? (
+                <a
+                  className="project-live-link"
+                  href={project.url}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  Open project
+                </a>
+              ) : null}
+            </div>
           </article>
         ))}
       </div>
