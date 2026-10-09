@@ -985,11 +985,6 @@ function ProjectShowcaseModal({
           <h2 id="project-modal-title">{activeProject.title}</h2>
           <p>{activeProject.summary}</p>
           <div className="project-modal-result">{activeProject.result}</div>
-          <div className="project-modal-tags">
-            {activeProject.tags.map((tag) => (
-              <span key={tag}>{tag}</span>
-            ))}
-          </div>
           <div className="mt-6 flex flex-wrap gap-3">
             {activeProject.url ? (
               <a
@@ -1001,13 +996,6 @@ function ProjectShowcaseModal({
                 Open project <ArrowRight className="h-4 w-4" />
               </a>
             ) : null}
-            <button
-              className="secondary-cta"
-              onClick={() => goToProject(1)}
-              type="button"
-            >
-              Next project <ArrowRight className="h-4 w-4" />
-            </button>
           </div>
         </div>
         <button
@@ -1024,7 +1012,10 @@ function ProjectShowcaseModal({
         >
           Next
         </button>
-        <div className="retro-tv-dots" aria-label="Project carousel sections">
+        <div
+          className="project-carousel-dots"
+          aria-label="Project carousel sections"
+        >
           {projects.map((project, index) => (
             <button
               aria-label={`Show ${project.title}`}
