@@ -348,6 +348,12 @@ function getInitialContent(): PortfolioContent {
           (project, index) =>
             project.title === importedTerryLxdProjectTitles[index],
         ));
+    const normalizeProjectPreviews = (projects: Project[]) =>
+      projects.map((project) =>
+        project.title.toLowerCase().includes("enablement quest")
+          ? { ...project, image: "/assets/projects/enablement-quest.gif" }
+          : project,
+      );
     return {
       ...defaultContent,
       ...parsed,
@@ -372,8 +378,8 @@ function getInitialContent(): PortfolioContent {
         ? defaultContent.about
         : (parsed.about ?? defaultContent.about),
       projects: shouldUpgradeProjects
-        ? defaultContent.projects
-        : (parsed.projects ?? defaultContent.projects),
+        ? normalizeProjectPreviews(defaultContent.projects)
+        : normalizeProjectPreviews(parsed.projects ?? defaultContent.projects),
     };
   } catch {
     return defaultContent;
@@ -877,7 +883,7 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
         {featuredProjects.map((project, index) => (
           <article className="project-card group" key={project.title}>
             {project.image ? (
-              <div className="mb-5 aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black/25">
+              <div className="project-card-media">
                 <img
                   alt=""
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
@@ -891,15 +897,9 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
               </span>
               <BarChart3 className="h-5 w-5 text-white/[0.45] transition group-hover:text-white" />
             </div>
-            <h3 className="text-2xl font-black tracking-tight text-white">
-              {project.title}
-            </h3>
-            <p className="mt-4 text-sm leading-6 text-white/[0.65]">
-              {project.summary}
-            </p>
-            <p className="mt-5 rounded-2xl bg-black/[0.25] p-4 text-sm leading-6 text-white/[0.75]">
-              {project.result}
-            </p>
+            <h3 className="project-card-title">{project.title}</h3>
+            <p className="project-card-summary">{project.summary}</p>
+            <p className="project-card-result">{project.result}</p>
             <div className="project-card-actions">
               <button
                 className="project-detail-button"
