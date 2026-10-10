@@ -228,6 +228,10 @@
     @apply fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-slate-950/75 p-4 backdrop-blur-md;
   }
 
+  .project-modal-backdrop {
+    @apply fixed inset-0 z-50 grid place-items-center overflow-hidden bg-slate-950/75 p-4 backdrop-blur-md;
+  }
+
   .about-tv-shell {
     position: relative;
     display: grid;
@@ -607,7 +611,8 @@
     position: relative;
     display: grid;
     width: min(72rem, 94vw);
-    max-height: min(52rem, 90vh);
+    height: min(44rem, calc(100vh - 2rem));
+    max-height: calc(100vh - 2rem);
     grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
     gap: clamp(1rem, 2.4vw, 2rem);
     overflow: hidden;
@@ -625,7 +630,8 @@
   }
 
   .project-modal-media {
-    min-height: 22rem;
+    height: 100%;
+    min-height: 0;
     overflow: hidden;
     border-radius: 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -635,13 +641,13 @@
   .project-modal-media img {
     width: 100%;
     height: 100%;
-    min-height: 22rem;
     object-fit: cover;
   }
 
   .project-modal-placeholder {
     display: grid;
-    min-height: 22rem;
+    height: 100%;
+    min-height: 0;
     place-items: center;
     padding: 2rem;
     background: radial-gradient(
@@ -658,38 +664,62 @@
   }
 
   .project-modal-content {
-    display: flex;
-    min-height: 22rem;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    min-height: 0;
+    grid-template-rows: auto minmax(9.25rem, auto) minmax(8rem, auto) minmax(
+        8.4rem,
+        auto
+      ) 3rem;
+    align-content: center;
     padding: clamp(0.5rem, 1vw, 1rem);
   }
 
   .project-modal-content h2 {
     margin-top: 0.6rem;
+    overflow: hidden;
     color: white;
     font-size: clamp(2rem, 4vw, 4.2rem);
     font-weight: 900;
     letter-spacing: -0.065em;
     line-height: 0.95;
     text-wrap: balance;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 
-  .project-modal-content p {
+  .project-modal-summary {
     margin-top: 1.25rem;
+    overflow: hidden;
     color: rgba(255, 255, 255, 0.72);
     font-size: 1rem;
     line-height: 1.75;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
   }
 
   .project-modal-result {
     margin-top: 1.25rem;
+    overflow: hidden;
     border-radius: 1.25rem;
     background: rgba(0, 0, 0, 0.25);
     padding: 1rem;
     color: rgba(255, 255, 255, 0.8);
     font-size: 0.95rem;
     line-height: 1.65;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  .project-modal-actions {
+    display: flex;
+    min-height: 3rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    align-items: flex-start;
   }
 
   .project-carousel-dots {
@@ -767,19 +797,24 @@
     }
 
     .project-modal-shell {
-      max-height: 92vh;
+      height: calc(100vh - 2rem);
       grid-template-columns: 1fr;
-      overflow-y: auto;
+      grid-template-rows: 14rem minmax(0, 1fr);
     }
 
     .project-modal-media,
     .project-modal-media img,
     .project-modal-placeholder {
-      min-height: 14rem;
+      height: 14rem;
+      min-height: 0;
     }
 
     .project-modal-content {
       min-height: auto;
+      overflow-y: auto;
+      align-content: start;
+      grid-template-rows: auto auto auto auto 3rem;
+      padding-bottom: 0.75rem;
     }
   }
 }

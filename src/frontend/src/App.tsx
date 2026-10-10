@@ -981,7 +981,7 @@ function ProjectShowcaseModal({
     <div
       aria-labelledby="project-modal-title"
       aria-modal="true"
-      className="about-modal-backdrop"
+      className="project-modal-backdrop"
       role="dialog"
     >
       <button
@@ -1009,9 +1009,9 @@ function ProjectShowcaseModal({
             {String(projects.length).padStart(2, "0")}
           </p>
           <h2 id="project-modal-title">{activeProject.title}</h2>
-          <p>{activeProject.summary}</p>
+          <p className="project-modal-summary">{activeProject.summary}</p>
           <div className="project-modal-result">{activeProject.result}</div>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="project-modal-actions">
             {activeProject.url ? (
               <a
                 className="primary-cta"
