@@ -665,18 +665,21 @@
 
   .project-modal-content {
     display: grid;
+    height: 100%;
     min-height: 0;
-    grid-template-rows: auto minmax(9.25rem, auto) minmax(8rem, auto) minmax(
-        8.4rem,
-        auto
-      ) 3rem;
+    grid-template-rows: 1.35rem 12rem 7.4rem 8.6rem 4.4rem;
     align-content: center;
     padding: clamp(0.5rem, 1vw, 1rem);
   }
 
+  .project-modal-content .retro-tv-kicker {
+    align-self: end;
+  }
+
   .project-modal-content h2 {
-    margin-top: 0.6rem;
+    margin: 0;
     overflow: hidden;
+    align-self: start;
     color: white;
     font-size: clamp(2rem, 4vw, 4.2rem);
     font-weight: 900;
@@ -689,8 +692,9 @@
   }
 
   .project-modal-summary {
-    margin-top: 1.25rem;
+    margin: 0;
     overflow: hidden;
+    align-self: start;
     color: rgba(255, 255, 255, 0.72);
     font-size: 1rem;
     line-height: 1.75;
@@ -700,8 +704,9 @@
   }
 
   .project-modal-result {
-    margin-top: 1.25rem;
+    margin: 0;
     overflow: hidden;
+    align-self: start;
     border-radius: 1.25rem;
     background: rgba(0, 0, 0, 0.25);
     padding: 1rem;
@@ -715,11 +720,11 @@
 
   .project-modal-actions {
     display: flex;
-    min-height: 3rem;
+    min-height: 0;
     flex-wrap: wrap;
     gap: 0.75rem;
-    padding-top: 1.5rem;
-    align-items: flex-start;
+    padding-top: 1.35rem;
+    align-items: start;
   }
 
   .project-carousel-dots {
@@ -813,7 +818,7 @@
       min-height: auto;
       overflow-y: auto;
       align-content: start;
-      grid-template-rows: auto auto auto auto 3rem;
+      grid-template-rows: 1.25rem 8.75rem 7rem 8rem 4rem;
       padding-bottom: 0.75rem;
     }
   }
