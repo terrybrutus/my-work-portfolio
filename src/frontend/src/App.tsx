@@ -20,7 +20,7 @@ import {
   Wand2,
 } from "lucide-react";
 import type React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCallerUserRole } from "./hooks/useQueries";
 
 type Project = {
@@ -631,6 +631,25 @@ function HorizontalPortfolioPreview({
   onReturnToClassic: () => void;
   template: Template;
 }) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const handleWheel = (event: WheelEvent) => {
+      const horizontalIntent = Math.abs(event.deltaX) > Math.abs(event.deltaY);
+      const distance = horizontalIntent ? event.deltaX : event.deltaY;
+      if (!distance) return;
+
+      event.preventDefault();
+      track.scrollBy({ left: distance, behavior: "smooth" });
+    };
+
+    track.addEventListener("wheel", handleWheel, { passive: false });
+    return () => track.removeEventListener("wheel", handleWheel);
+  }, []);
+
   return (
     <div className="slide-preview-shell">
       <div className="slide-preview-toolbar">
@@ -639,7 +658,11 @@ function HorizontalPortfolioPreview({
           Return to classic page
         </button>
       </div>
-      <div className="slide-preview-track" aria-label="Portfolio slide preview">
+      <div
+        className="slide-preview-track"
+        aria-label="Portfolio slide preview"
+        ref={trackRef}
+      >
         <section className="portfolio-slide portfolio-slide-hero">
           <div>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-sm font-medium text-white/[0.80] backdrop-blur">

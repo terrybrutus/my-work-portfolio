@@ -181,11 +181,13 @@
   }
 
   .slide-preview-shell {
-    @apply pb-10;
+    height: calc(100dvh - 8.5rem);
+    min-height: 34rem;
+    overflow: hidden;
   }
 
   .slide-preview-toolbar {
-    @apply sticky top-24 z-30 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-full border border-white/10 bg-slate-950/70 px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-white/65 shadow-xl shadow-black/20 backdrop-blur-2xl;
+    @apply mb-4 flex flex-wrap items-center justify-between gap-3 rounded-full border border-white/10 bg-slate-950/70 px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-white/65 shadow-xl shadow-black/20 backdrop-blur-2xl;
   }
 
   .slide-preview-toolbar button {
@@ -193,12 +195,13 @@
   }
 
   .slide-preview-track {
-    @apply flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain pb-6;
+    @apply flex h-[calc(100%-4.25rem)] snap-x snap-mandatory gap-6 overflow-x-auto overflow-y-hidden overscroll-x-contain pb-4;
     scrollbar-color: rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.08);
+    touch-action: pan-x;
   }
 
   .portfolio-slide {
-    @apply min-h-[calc(100vh-11rem)] w-full min-w-full snap-start rounded-[2.25rem] border border-white/10 bg-white/[0.055] p-6 shadow-2xl shadow-black/25 backdrop-blur-2xl;
+    @apply h-full min-h-0 w-full min-w-full snap-start overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.055] p-6 shadow-2xl shadow-black/25 backdrop-blur-2xl;
   }
 
   .portfolio-slide-hero {
@@ -206,7 +209,7 @@
   }
 
   .portfolio-slide-work {
-    @apply overflow-y-auto;
+    @apply overflow-hidden;
   }
 
   .portfolio-slide-work > .glass-panel,
@@ -216,6 +219,37 @@
 
   .portfolio-slide-contact {
     @apply grid items-center;
+  }
+
+  .portfolio-slide-work .project-card {
+    @apply p-4;
+  }
+
+  .portfolio-slide-work .project-card > div:first-child {
+    @apply mb-4;
+  }
+
+  .portfolio-slide-work .project-card h3 {
+    @apply text-xl;
+  }
+
+  .portfolio-slide-work .project-card > p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+
+  .portfolio-slide-work .project-card > p + p {
+    -webkit-line-clamp: 5;
+    margin-top: 1rem;
+    padding: 0.9rem;
+  }
+
+  .portfolio-slide-work .project-card-actions {
+    @apply mt-4;
   }
 
   .template-card {
