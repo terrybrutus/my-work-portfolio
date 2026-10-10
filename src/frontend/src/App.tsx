@@ -20,7 +20,7 @@ import {
   Wand2,
 } from "lucide-react";
 import type React from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCallerUserRole } from "./hooks/useQueries";
 
 type Project = {
@@ -526,31 +526,10 @@ function PublicPortfolio({
     value: PortfolioContent[K],
   ) => void;
 }) {
-  const [isSlideView, setIsSlideView] = useState(false);
   const visibleSections = content.sections.filter((section) => section.visible);
-
-  if (isSlideView) {
-    return (
-      <HorizontalPortfolioPreview
-        content={content}
-        onOpenAbout={onOpenAbout}
-        onReturnToClassic={() => setIsSlideView(false)}
-        template={template}
-      />
-    );
-  }
 
   return (
     <>
-      <div className="mb-4 flex justify-end">
-        <button
-          className="slide-view-toggle"
-          onClick={() => setIsSlideView(true)}
-          type="button"
-        >
-          Try slide view <ArrowRight className="h-4 w-4" />
-        </button>
-      </div>
       <section className="grid min-h-[72vh] items-start gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-sm font-medium text-white/[0.80] backdrop-blur">
@@ -617,116 +596,6 @@ function PublicPortfolio({
         })}
       </div>
     </>
-  );
-}
-
-function HorizontalPortfolioPreview({
-  content,
-  onOpenAbout,
-  onReturnToClassic,
-  template,
-}: {
-  content: PortfolioContent;
-  onOpenAbout: () => void;
-  onReturnToClassic: () => void;
-  template: Template;
-}) {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    let settleTimer: number | undefined;
-
-    const settleToNearestSlide = () => {
-      const firstSlide = track.children[0] as HTMLElement | undefined;
-      const secondSlide = track.children[1] as HTMLElement | undefined;
-      const slideStep = secondSlide
-        ? secondSlide.offsetLeft - (firstSlide?.offsetLeft ?? 0)
-        : track.clientWidth;
-      if (!slideStep) return;
-
-      const targetIndex = Math.round(track.scrollLeft / slideStep);
-      track.classList.remove("is-wheel-scrolling");
-      track.scrollTo({
-        left: targetIndex * slideStep,
-        behavior: "smooth",
-      });
-    };
-
-    const handleWheel = (event: WheelEvent) => {
-      const horizontalIntent = Math.abs(event.deltaX) > Math.abs(event.deltaY);
-      const distance = (horizontalIntent ? event.deltaX : event.deltaY) * 1.15;
-      if (!distance) return;
-
-      event.preventDefault();
-      track.classList.add("is-wheel-scrolling");
-      track.scrollLeft += distance;
-
-      if (settleTimer) window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(settleToNearestSlide, 140);
-    };
-
-    track.addEventListener("wheel", handleWheel, { passive: false });
-    return () => {
-      if (settleTimer) window.clearTimeout(settleTimer);
-      track.removeEventListener("wheel", handleWheel);
-    };
-  }, []);
-
-  return (
-    <div className="slide-preview-shell">
-      <div className="slide-preview-toolbar">
-        <p>Experimental slide view</p>
-        <button type="button" onClick={onReturnToClassic}>
-          Return to classic page
-        </button>
-      </div>
-      <div
-        className="slide-preview-track"
-        aria-label="Portfolio slide preview"
-        ref={trackRef}
-      >
-        <section className="portfolio-slide portfolio-slide-hero">
-          <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-sm font-medium text-white/[0.80] backdrop-blur">
-              {content.eyebrow}
-            </div>
-            <h1 className="max-w-4xl text-balance text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
-              {content.headline}
-            </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-white/[0.72]">
-              {content.subheadline}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <button
-                className="primary-cta"
-                onClick={onOpenAbout}
-                type="button"
-              >
-                {content.primaryCtaLabel || "About me"}
-                <ArrowRight className="h-4 w-4" />
-              </button>
-              {content.secondaryCtaLabel ? (
-                <a className="secondary-cta" href={content.secondaryCtaHref}>
-                  {content.secondaryCtaLabel}
-                </a>
-              ) : null}
-            </div>
-          </div>
-          <HeroCard content={content} template={template} />
-        </section>
-
-        <section className="portfolio-slide portfolio-slide-work">
-          <ProjectSection content={content} />
-        </section>
-
-        <section className="portfolio-slide portfolio-slide-contact">
-          <ContactSection content={content} />
-        </section>
-      </div>
-    </div>
   );
 }
 
