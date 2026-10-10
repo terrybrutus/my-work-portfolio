@@ -110,9 +110,20 @@ const importedTerryLxdProjectTitles = [
 
 const legacyHeroEyebrow =
   "Learning & Enablement Architect | AI Workflow Automation";
+const legacyHeroEyebrowV2 =
+  "Learning Systems | Enablement Strategy | Performance Support";
 const legacyHeroCardEyebrow = "Selected impact";
+const legacyHeroCardEyebrowV2 = "Portfolio snapshot";
 const legacyHeroFocusText =
   "Current focus: technical enablement, customer adoption, accessible learning systems, and AI-assisted production workflows.";
+const legacyHeroFocusTextV2 =
+  "I work across the messy middle between business goals, learner needs, technical constraints, and adoption. The throughline is simple: make complex work easier to understand, practice, and sustain.";
+const legacyHeadlineV2 =
+  "I build scalable learning systems that make complex work easier to adopt.";
+const legacySubheadlineV2 =
+  "I translate stakeholder goals, skill gaps, and adoption blockers into practical enablement workflows, compliance-ready learning assets, and AI-assisted operations for federal, enterprise, SaaS, healthcare, sales, and technical teams.";
+const legacyContactTextV2 =
+  "If you are looking for someone who can connect learning strategy, technical enablement, AI-assisted workflows, and practical adoption systems, I would be glad to talk.";
 
 const templates: Template[] = [
   {
@@ -188,20 +199,21 @@ const defaultContent: PortfolioContent = {
   secondaryCtaHref: "mailto:terrbrutus@gmail.com",
   contactHeading: "Let's connect",
   contactText:
-    "If you are looking for someone who can connect learning strategy, technical enablement, AI-assisted workflows, and practical adoption systems, I would be glad to talk.",
+    "If you are looking for someone who can translate complex work into clear learning, enablement, or performance-support systems, I would be glad to talk.",
   name: "Terry Brutus",
-  eyebrow: "Learning Systems | Enablement Strategy | Performance Support",
+  eyebrow:
+    "Learning Experience Design | Enablement Systems | Performance Support",
   headline:
-    "I build scalable learning systems that make complex work easier to adopt.",
+    "I turn complex work into learning experiences people can actually use.",
   subheadline:
-    "I translate stakeholder goals, skill gaps, and adoption blockers into practical enablement workflows, compliance-ready learning assets, and AI-assisted operations for federal, enterprise, SaaS, healthcare, sales, and technical teams.",
+    "I connect instructional design, enablement strategy, accessibility, and workflow thinking to help teams learn faster, adopt tools with less friction, and perform with more confidence.",
   location: "Leland, North Carolina",
   email: "terrbrutus@gmail.com",
   profileImage: "/assets/legacy/legacy-profile.png",
   profileImagePosition: "50% 42%",
-  heroCardEyebrow: "Portfolio snapshot",
+  heroCardEyebrow: "Practice snapshot",
   heroCardFocusText:
-    "I work across the messy middle between business goals, learner needs, technical constraints, and adoption. The throughline is simple: make complex work easier to understand, practice, and sustain.",
+    "My work sits at the intersection of learning design, performance consulting, content systems, and practical adoption. The goal is not just to publish training. It is to help people do the work better.",
   workSectionHeading:
     "Selected work across learning, enablement, and systems design",
   proofSectionHeading: "Proof points from the work",
@@ -215,10 +227,10 @@ const defaultContent: PortfolioContent = {
   aboutSelectedWorkKicker: "Selected work",
   aboutSelectedWorkTitle: "What I Build",
   proofPoints: [
-    "8+ years in learning architecture and technical enablement",
-    "158K+ defense learners supported through scalable training systems",
-    "122+ enterprise learning assets governed for Section 508/WCAG",
-    "AI-assisted workflows reducing review time by up to 90%",
+    "Learning experiences built for federal, enterprise, SaaS, healthcare, sales, and technical audiences",
+    "Scenario-based courses, job aids, QA systems, and enablement workflows",
+    "Accessibility-aware design across Section 508/WCAG learning assets",
+    "AI-assisted review and production workflows used to reduce manual rework",
   ],
   about: [
     "I help teams turn messy adoption, training, and workflow problems into learning systems people can actually use. My path has moved through defense, enterprise, municipal, SaaS, healthcare, sales, and technical environments, which taught me to design for real constraints instead of ideal conditions.",
@@ -358,15 +370,30 @@ function getInitialContent(): PortfolioContent {
       ...defaultContent,
       ...parsed,
       eyebrow:
-        parsed.eyebrow === legacyHeroEyebrow
+        parsed.eyebrow === legacyHeroEyebrow ||
+        parsed.eyebrow === legacyHeroEyebrowV2
           ? defaultContent.eyebrow
           : (parsed.eyebrow ?? defaultContent.eyebrow),
+      headline:
+        parsed.headline === legacyHeadlineV2
+          ? defaultContent.headline
+          : (parsed.headline ?? defaultContent.headline),
+      subheadline:
+        parsed.subheadline === legacySubheadlineV2
+          ? defaultContent.subheadline
+          : (parsed.subheadline ?? defaultContent.subheadline),
+      contactText:
+        parsed.contactText === legacyContactTextV2
+          ? defaultContent.contactText
+          : (parsed.contactText ?? defaultContent.contactText),
       heroCardEyebrow:
-        parsed.heroCardEyebrow === legacyHeroCardEyebrow
+        parsed.heroCardEyebrow === legacyHeroCardEyebrow ||
+        parsed.heroCardEyebrow === legacyHeroCardEyebrowV2
           ? defaultContent.heroCardEyebrow
           : (parsed.heroCardEyebrow ?? defaultContent.heroCardEyebrow),
       heroCardFocusText:
-        parsed.heroCardFocusText === legacyHeroFocusText
+        parsed.heroCardFocusText === legacyHeroFocusText ||
+        parsed.heroCardFocusText === legacyHeroFocusTextV2
           ? defaultContent.heroCardFocusText
           : (parsed.heroCardFocusText ?? defaultContent.heroCardFocusText),
       workSectionHeading:
@@ -610,10 +637,10 @@ function HeroCard({
   template,
 }: { content: PortfolioContent; template: Template }) {
   const impactStats = [
-    ["Learning systems", "Structure complex knowledge into usable journeys"],
-    ["Enablement strategy", "Connect business goals to practical adoption"],
-    ["Workflow design", "Reduce production friction without losing quality"],
-    ["Accessibility & QA", "Build cleaner, more usable learning assets"],
+    ["Learning architecture", "Turn complex content into clear learner paths"],
+    ["Enablement strategy", "Connect business goals to behavior change"],
+    ["Performance support", "Create tools people can use in the flow of work"],
+    ["Accessible delivery", "Design cleaner assets with QA and access in mind"],
   ];
 
   return (

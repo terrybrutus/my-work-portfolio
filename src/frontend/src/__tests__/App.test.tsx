@@ -18,7 +18,7 @@ describe("App default route", () => {
   it("renders the TerryLXD portfolio instead of a blank screen", () => {
     render(<App />);
     expect(
-      screen.getByText(/I build scalable learning systems/i),
+      screen.getByText(/I turn complex work into learning experiences/i),
     ).toBeInTheDocument();
   });
 
