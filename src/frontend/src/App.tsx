@@ -637,17 +637,42 @@ function HorizontalPortfolioPreview({
     const track = trackRef.current;
     if (!track) return;
 
+    let settleTimer: number | undefined;
+
+    const settleToNearestSlide = () => {
+      const firstSlide = track.children[0] as HTMLElement | undefined;
+      const secondSlide = track.children[1] as HTMLElement | undefined;
+      const slideStep = secondSlide
+        ? secondSlide.offsetLeft - (firstSlide?.offsetLeft ?? 0)
+        : track.clientWidth;
+      if (!slideStep) return;
+
+      const targetIndex = Math.round(track.scrollLeft / slideStep);
+      track.classList.remove("is-wheel-scrolling");
+      track.scrollTo({
+        left: targetIndex * slideStep,
+        behavior: "smooth",
+      });
+    };
+
     const handleWheel = (event: WheelEvent) => {
       const horizontalIntent = Math.abs(event.deltaX) > Math.abs(event.deltaY);
-      const distance = horizontalIntent ? event.deltaX : event.deltaY;
+      const distance = (horizontalIntent ? event.deltaX : event.deltaY) * 1.15;
       if (!distance) return;
 
       event.preventDefault();
-      track.scrollBy({ left: distance, behavior: "smooth" });
+      track.classList.add("is-wheel-scrolling");
+      track.scrollLeft += distance;
+
+      if (settleTimer) window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(settleToNearestSlide, 140);
     };
 
     track.addEventListener("wheel", handleWheel, { passive: false });
-    return () => track.removeEventListener("wheel", handleWheel);
+    return () => {
+      if (settleTimer) window.clearTimeout(settleTimer);
+      track.removeEventListener("wheel", handleWheel);
+    };
   }, []);
 
   return (
