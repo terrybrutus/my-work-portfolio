@@ -118,6 +118,8 @@ const legacyHeroFocusText =
   "Current focus: technical enablement, customer adoption, accessible learning systems, and AI-assisted production workflows.";
 const legacyHeroFocusTextV2 =
   "I work across the messy middle between business goals, learner needs, technical constraints, and adoption. The throughline is simple: make complex work easier to understand, practice, and sustain.";
+const legacyHeroFocusTextV3 =
+  "My work sits at the intersection of learning design, performance consulting, content systems, and practical adoption. The goal is not just to publish training. It is to help people do the work better.";
 const legacyHeadlineV2 =
   "I build scalable learning systems that make complex work easier to adopt.";
 const legacyHeadlineV3 =
@@ -215,7 +217,7 @@ const defaultContent: PortfolioContent = {
   profileImagePosition: "50% 42%",
   heroCardEyebrow: "Practice snapshot",
   heroCardFocusText:
-    "My work sits at the intersection of learning design, performance consulting, content systems, and practical adoption. The goal is not just to publish training. It is to help people do the work better.",
+    "My work sits at the intersection of learning design, performance consulting, content systems, and practical adoption. I care about whether people can use what I build when the work gets messy.",
   workSectionHeading:
     "Selected work across learning, enablement, and systems design",
   proofSectionHeading: "Proof points from the work",
@@ -396,7 +398,8 @@ function getInitialContent(): PortfolioContent {
           : (parsed.heroCardEyebrow ?? defaultContent.heroCardEyebrow),
       heroCardFocusText:
         parsed.heroCardFocusText === legacyHeroFocusText ||
-        parsed.heroCardFocusText === legacyHeroFocusTextV2
+        parsed.heroCardFocusText === legacyHeroFocusTextV2 ||
+        parsed.heroCardFocusText === legacyHeroFocusTextV3
           ? defaultContent.heroCardFocusText
           : (parsed.heroCardFocusText ?? defaultContent.heroCardFocusText),
       workSectionHeading:
