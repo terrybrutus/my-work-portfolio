@@ -120,6 +120,8 @@ const legacyHeroFocusTextV2 =
   "I work across the messy middle between business goals, learner needs, technical constraints, and adoption. The throughline is simple: make complex work easier to understand, practice, and sustain.";
 const legacyHeadlineV2 =
   "I build scalable learning systems that make complex work easier to adopt.";
+const legacyHeadlineV3 =
+  "Building scalable learning systems that make complex work easier to adopt.";
 const legacySubheadlineV2 =
   "I translate stakeholder goals, skill gaps, and adoption blockers into practical enablement workflows, compliance-ready learning assets, and AI-assisted operations for federal, enterprise, SaaS, healthcare, sales, and technical teams.";
 const legacyContactTextV2 =
@@ -375,7 +377,8 @@ function getInitialContent(): PortfolioContent {
           ? defaultContent.eyebrow
           : (parsed.eyebrow ?? defaultContent.eyebrow),
       headline:
-        parsed.headline === legacyHeadlineV2
+        parsed.headline === legacyHeadlineV2 ||
+        parsed.headline === legacyHeadlineV3
           ? defaultContent.headline
           : (parsed.headline ?? defaultContent.headline),
       subheadline:
@@ -452,11 +455,7 @@ export default function App() {
     <main className={`portfolio-shell min-h-screen ${template.className}`}>
       <AmbientBackdrop />
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-5 py-6 sm:px-8 lg:px-10">
-        <TopNav
-          content={content}
-          isAdmin={isAdmin}
-          onOpenAbout={() => setIsAboutOpen(true)}
-        />
+        <TopNav content={content} onOpenAbout={() => setIsAboutOpen(true)} />
         {isAdmin ? (
           <AdminStudio
             content={content}
@@ -484,11 +483,9 @@ export default function App() {
 
 function TopNav({
   content,
-  isAdmin,
   onOpenAbout,
 }: {
   content: PortfolioContent;
-  isAdmin: boolean;
   onOpenAbout: () => void;
 }) {
   const hasLogo = Boolean(content.brandLogoImage || content.brandLogoText);
@@ -496,11 +493,6 @@ function TopNav({
     { href: "#about", label: content.navApproachLabel, onClick: onOpenAbout },
     { href: "/#work", label: content.navWorkLabel },
     { href: "/#contact", label: content.navContactLabel },
-    // Temporary while building: remove this item before public launch.
-    {
-      href: isAdmin ? "/" : "/admin",
-      label: isAdmin ? content.navPreviewLabel : content.navAdminLabel,
-    },
   ]
     .map((item) => ({ ...item, label: item.label.trim() }))
     .filter((item) => item.label.length > 0);
@@ -1341,11 +1333,6 @@ function AdminStudio({
               label="Contact link text (leave blank to remove)"
               value={content.navContactLabel}
               onChange={(value) => updateContent("navContactLabel", value)}
-            />
-            <AdminField
-              label="Preview link text for admin view"
-              value={content.navPreviewLabel}
-              onChange={(value) => updateContent("navPreviewLabel", value)}
             />
           </div>
           <input

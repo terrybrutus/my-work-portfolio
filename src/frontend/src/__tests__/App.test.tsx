@@ -25,6 +25,9 @@ describe("App default route", () => {
   it("renders portfolio navigation and work section", () => {
     render(<App />);
     expect(screen.getByText("TerryLXD")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Admin" }),
+    ).not.toBeInTheDocument();
     expect(screen.getByText("AI & The Future of Work")).toBeInTheDocument();
   });
 
