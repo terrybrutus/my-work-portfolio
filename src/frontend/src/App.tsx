@@ -112,7 +112,7 @@ const legacyHeroEyebrow =
 const legacyHeroEyebrowV2 =
   "Learning Systems | Enablement Strategy | Performance Support";
 const legacyHeroCardEyebrow = "Selected impact";
-const legacyHeroCardEyebrowV2 = "Portfolio snapshot";
+const legacyHeroCardEyebrowV2 = "Practice snapshot";
 const legacyHeroFocusText =
   "Current focus: technical enablement, customer adoption, accessible learning systems, and AI-assisted production workflows.";
 const legacyHeroFocusTextV2 =
@@ -214,7 +214,7 @@ const defaultContent: PortfolioContent = {
   email: "terrbrutus@gmail.com",
   profileImage: "/assets/legacy/legacy-profile.png",
   profileImagePosition: "50% 42%",
-  heroCardEyebrow: "Practice snapshot",
+  heroCardEyebrow: "Portfolio snapshot",
   heroCardFocusText:
     "My work sits at the intersection of learning design, performance consulting, content systems, and practical adoption. I care about whether people can use what I build when the work gets messy.",
   workSectionHeading:
