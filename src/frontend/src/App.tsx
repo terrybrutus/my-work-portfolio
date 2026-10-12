@@ -6,16 +6,12 @@ import {
   Boxes,
   BrainCircuit,
   BriefcaseBusiness,
-  ChevronDown,
-  ChevronUp,
   ClipboardCheck,
   Download,
   Eye,
   ImagePlus,
   LayoutTemplate,
   Lock,
-  MousePointer2,
-  Palette,
   Save,
   Wand2,
 } from "lucide-react";
@@ -225,9 +221,9 @@ const defaultContent: PortfolioContent = {
   capabilitiesSectionHeading:
     "Core strengths pulled from the work, not buzzwords",
   templateSectionHeading: "A living portfolio that can keep evolving",
-  aboutWorkKicker: "Work channel",
+  aboutWorkKicker: "Work snapshot",
   aboutWorkTitle: "How I Got Here",
-  aboutPersonalKicker: "Personal channel",
+  aboutPersonalKicker: "Personal snapshot",
   aboutPersonalTitle: "Beyond The Work",
   aboutSelectedWorkKicker: "Selected work",
   aboutSelectedWorkTitle: "What I Build",
@@ -408,6 +404,14 @@ function getInitialContent(): PortfolioContent {
         "Evidence of scale, access, automation, and adoption"
           ? defaultContent.workSectionHeading
           : (parsed.workSectionHeading ?? defaultContent.workSectionHeading),
+      aboutWorkKicker:
+        parsed.aboutWorkKicker === "Work channel"
+          ? defaultContent.aboutWorkKicker
+          : (parsed.aboutWorkKicker ?? defaultContent.aboutWorkKicker),
+      aboutPersonalKicker:
+        parsed.aboutPersonalKicker === "Personal channel"
+          ? defaultContent.aboutPersonalKicker
+          : (parsed.aboutPersonalKicker ?? defaultContent.aboutPersonalKicker),
       about: shouldUpgradeAbout
         ? defaultContent.about
         : (parsed.about ?? defaultContent.about),
@@ -463,7 +467,6 @@ export default function App() {
         {isAdmin ? (
           <AdminStudio
             content={content}
-            template={template}
             updateContent={updateContent}
             setContent={setContent}
           />
@@ -1165,12 +1168,10 @@ function SectionHeader({
 
 function AdminStudio({
   content,
-  template,
   updateContent,
   setContent,
 }: {
   content: PortfolioContent;
-  template: Template;
   updateContent: <K extends keyof PortfolioContent>(
     key: K,
     value: PortfolioContent[K],
@@ -1180,42 +1181,16 @@ function AdminStudio({
   const [exported, setExported] = useState("");
   const [saveStatus, setSaveStatus] = useState("Autosaves in this browser.");
 
-  const moveSection = (index: number, direction: -1 | 1) => {
-    const next = [...content.sections];
-    const target = index + direction;
-    if (target < 0 || target >= next.length) return;
-    [next[index], next[target]] = [next[target], next[index]];
-    updateContent("sections", next);
-  };
-
   const updateProject = (index: number, project: Project) => {
     const projects = [...content.projects];
     projects[index] = project;
     updateContent("projects", projects);
   };
 
-  const updateSection = (index: number, section: PortfolioSection) => {
-    const sections = [...content.sections];
-    sections[index] = section;
-    updateContent("sections", sections);
-  };
-
   const updateAbout = (index: number, value: string) => {
     const about = [...content.about];
     about[index] = value;
     updateContent("about", about);
-  };
-
-  const updateProofPoint = (index: number, value: string) => {
-    const proofPoints = [...content.proofPoints];
-    proofPoints[index] = value;
-    updateContent("proofPoints", proofPoints);
-  };
-
-  const updateCapability = (index: number, value: string) => {
-    const capabilities = [...content.capabilities];
-    capabilities[index] = value;
-    updateContent("capabilities", capabilities);
   };
 
   const handleImageUpload = (file: File | undefined) => {
@@ -1262,8 +1237,8 @@ function AdminStudio({
   };
 
   return (
-    <section className="grid gap-6 pb-20 lg:grid-cols-[0.9fr_1.1fr]">
-      <div className="glass-panel admin-sidebar p-6">
+    <section className="space-y-6 pb-20">
+      <div className="glass-panel p-6">
         <div className="mb-6 flex items-center gap-3">
           <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
             <Lock className="h-5 w-5" />
@@ -1424,85 +1399,12 @@ function AdminStudio({
         </p>
       </div>
 
-      <div className="space-y-6">
-        <div className="glass-panel p-6">
+      <div className="glass-panel p-6">
           <SectionHeader
-            icon={<Palette className="h-5 w-5" />}
-            eyebrow="Templates"
-            title="Choose a starting direction"
+            icon={<BookOpenCheck className="h-5 w-5" />}
+            eyebrow="Homepage copy"
+            title="Edit the visible hero and selected work framing"
           />
-          <div className="mt-6 grid gap-3 md:grid-cols-2">
-            {templates.map((item) => (
-              <button
-                type="button"
-                className={`template-card text-left ${item.id === template.id ? "is-active" : ""}`}
-                key={item.id}
-                onClick={() => updateContent("selectedTemplate", item.id)}
-              >
-                <span
-                  className={`mb-4 block h-2 rounded-full bg-gradient-to-r ${item.accent}`}
-                />
-                <span className="block font-black text-white">{item.name}</span>
-                <span className="mt-2 block text-sm leading-5 text-white/[0.58]">
-                  {item.description}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="glass-panel p-6">
-          <SectionHeader
-            icon={<MousePointer2 className="h-5 w-5" />}
-            eyebrow="Pages & Sections"
-            title="Edit what appears, what it is called, and where it sits"
-          />
-          <div className="mt-6 space-y-3">
-            {content.sections.map((section, index) => (
-              <div
-                className="grid gap-3 rounded-2xl border border-white/10 bg-black/20 p-3 md:grid-cols-[auto_1fr_auto_auto]"
-                key={section.id}
-              >
-                <input
-                  aria-label={`Show ${section.label}`}
-                  className="mt-4"
-                  checked={section.visible}
-                  type="checkbox"
-                  onChange={(event) => {
-                    updateSection(index, {
-                      ...section,
-                      visible: event.target.checked,
-                    });
-                  }}
-                />
-                <AdminField
-                  label={`Section label: ${section.id}`}
-                  value={section.label}
-                  onChange={(value) =>
-                    updateSection(index, { ...section, label: value })
-                  }
-                />
-                <div className="flex gap-2 md:items-end">
-                  <button
-                    aria-label={`Move ${section.label} up`}
-                    className="icon-button"
-                    type="button"
-                    onClick={() => moveSection(index, -1)}
-                  >
-                    <ChevronUp className="h-4 w-4" />
-                  </button>
-                  <button
-                    aria-label={`Move ${section.label} down`}
-                    className="icon-button"
-                    type="button"
-                    onClick={() => moveSection(index, 1)}
-                  >
-                    <ChevronDown className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
           <div className="mt-6 grid gap-4">
             <AdminField
               label="Hero card eyebrow"
@@ -1518,25 +1420,6 @@ function AdminStudio({
               label="Selected work section heading"
               value={content.workSectionHeading}
               onChange={(value) => updateContent("workSectionHeading", value)}
-            />
-            <AdminField
-              label="Proof points section heading"
-              value={content.proofSectionHeading}
-              onChange={(value) => updateContent("proofSectionHeading", value)}
-            />
-            <AdminField
-              label="Capabilities section heading"
-              value={content.capabilitiesSectionHeading}
-              onChange={(value) =>
-                updateContent("capabilitiesSectionHeading", value)
-              }
-            />
-            <AdminField
-              label="Template section heading"
-              value={content.templateSectionHeading}
-              onChange={(value) =>
-                updateContent("templateSectionHeading", value)
-              }
             />
           </div>
         </div>
@@ -1641,32 +1524,6 @@ function AdminStudio({
 
         <div className="glass-panel p-6">
           <SectionHeader
-            icon={<BadgeCheck className="h-5 w-5" />}
-            eyebrow="Proof & Capabilities"
-            title="Edit the supporting evidence blocks"
-          />
-          <div className="mt-6 grid gap-4">
-            {content.proofPoints.map((point, index) => (
-              <AdminTextArea
-                key={`proof-${index}`}
-                label={`Proof point ${index + 1}`}
-                value={point}
-                onChange={(value) => updateProofPoint(index, value)}
-              />
-            ))}
-            {content.capabilities.map((capability, index) => (
-              <AdminTextArea
-                key={`capability-${index}`}
-                label={`Capability ${index + 1}`}
-                value={capability}
-                onChange={(value) => updateCapability(index, value)}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className="glass-panel p-6">
-          <SectionHeader
             icon={<BookOpenCheck className="h-5 w-5" />}
             eyebrow="Content"
             title="Project cards"
@@ -1760,7 +1617,6 @@ function AdminStudio({
             />
           </div>
         ) : null}
-      </div>
     </section>
   );
 }

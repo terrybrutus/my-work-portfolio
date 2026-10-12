@@ -34,7 +34,8 @@ describe("App default route", () => {
   it("renders the expanded admin page editor", () => {
     window.history.pushState({}, "", "/admin");
     render(<App />);
-    expect(screen.getByText("Pages & Sections")).toBeInTheDocument();
+    expect(screen.getByText("Homepage copy")).toBeInTheDocument();
+    expect(screen.queryByText("Pages & Sections")).not.toBeInTheDocument();
     expect(
       screen.getByText("Edit the About Me TV carousel"),
     ).toBeInTheDocument();
