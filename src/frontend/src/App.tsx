@@ -658,12 +658,8 @@ function HeroCard({
           <div className="hero-stat-grid">
             {impactStats.map(([label, value]) => (
               <div className="hero-stat-card" key={label}>
-                <span className="block text-sm font-black uppercase tracking-[0.14em] text-cyan-100">
-                  {label}
-                </span>
-                <span className="mt-2 block text-sm leading-5 text-white/[0.68]">
-                  {value}
-                </span>
+                <span className="hero-stat-label">{label}</span>
+                <span className="hero-stat-value">{value}</span>
               </div>
             ))}
           </div>
