@@ -821,17 +821,14 @@
 
   .project-modal-content h2 {
     margin: 0;
-    overflow: hidden;
     align-self: start;
     color: white;
-    font-size: clamp(2rem, 4vw, 4.2rem);
+    font-size: clamp(1.9rem, 3.55vw, 3.8rem);
     font-weight: 900;
     letter-spacing: -0.065em;
     line-height: 0.95;
     text-wrap: balance;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    overflow-wrap: anywhere;
   }
 
   .project-modal-summary {
@@ -965,9 +962,8 @@
     }
 
     .project-modal-content h2 {
-      font-size: clamp(1.8rem, 5vw, 2.6rem);
-      line-height: 1;
-      -webkit-line-clamp: 2;
+      font-size: clamp(1.6rem, 4.55vw, 2.35rem);
+      line-height: 1.02;
     }
 
     .project-modal-summary {
