@@ -6,6 +6,7 @@ import {
   Boxes,
   BrainCircuit,
   BriefcaseBusiness,
+  ChevronDown,
   ClipboardCheck,
   Download,
   Eye,
@@ -1238,21 +1239,13 @@ function AdminStudio({
 
   return (
     <section className="space-y-6 pb-20">
-      <div className="glass-panel p-6">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
-            <Lock className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-black text-white">
-              Portfolio Admin Studio
-            </h1>
-            <p className="text-sm text-white/[0.55]">
-              Local draft editor now. Auth/publish next.
-            </p>
-          </div>
-        </div>
-
+      <AdminPanel
+        defaultOpen
+        description="Local draft editor now. Auth/publish next."
+        eyebrow="Admin"
+        icon={<Lock className="h-5 w-5" />}
+        title="Portfolio Admin Studio"
+      >
         <div className="grid gap-3">
           <AdminField
             label="Name"
@@ -1397,14 +1390,13 @@ function AdminStudio({
         <p className="mt-3 text-xs font-semibold text-white/[0.50]">
           {saveStatus}
         </p>
-      </div>
+      </AdminPanel>
 
-      <div className="glass-panel p-6">
-          <SectionHeader
-            icon={<BookOpenCheck className="h-5 w-5" />}
-            eyebrow="Homepage copy"
-            title="Edit the visible hero and selected work framing"
-          />
+      <AdminPanel
+        icon={<BookOpenCheck className="h-5 w-5" />}
+        eyebrow="Homepage copy"
+        title="Edit the visible hero and selected work framing"
+      >
           <div className="mt-6 grid gap-4">
             <AdminField
               label="Hero card eyebrow"
@@ -1422,14 +1414,13 @@ function AdminStudio({
               onChange={(value) => updateContent("workSectionHeading", value)}
             />
           </div>
-        </div>
+        </AdminPanel>
 
-        <div className="glass-panel p-6">
-          <SectionHeader
-            icon={<ArrowRight className="h-5 w-5" />}
-            eyebrow="Calls To Action"
-            title="Hero buttons and contact block"
-          />
+        <AdminPanel
+          icon={<ArrowRight className="h-5 w-5" />}
+          eyebrow="Calls To Action"
+          title="Hero buttons and contact block"
+        >
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <AdminField
               label="Primary button text (blank hides it)"
@@ -1464,14 +1455,13 @@ function AdminStudio({
               onChange={(value) => updateContent("contactText", value)}
             />
           </div>
-        </div>
+        </AdminPanel>
 
-        <div className="glass-panel p-6">
-          <SectionHeader
-            icon={<BookOpenCheck className="h-5 w-5" />}
-            eyebrow="About Modal"
-            title="Edit the About Me TV carousel"
-          />
+        <AdminPanel
+          icon={<BookOpenCheck className="h-5 w-5" />}
+          eyebrow="About Modal"
+          title="Edit the About Me TV carousel"
+        >
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <AdminField
               label="Work slide kicker"
@@ -1520,14 +1510,14 @@ function AdminStudio({
               }
             />
           </div>
-        </div>
+        </AdminPanel>
 
-        <div className="glass-panel p-6">
-          <SectionHeader
-            icon={<BookOpenCheck className="h-5 w-5" />}
-            eyebrow="Content"
-            title="Project cards"
-          />
+        <AdminPanel
+          defaultOpen
+          icon={<BookOpenCheck className="h-5 w-5" />}
+          eyebrow="Content"
+          title="Project cards"
+        >
           <div className="mt-6 space-y-4">
             {content.projects.map((project, index) => (
               <div
@@ -1602,10 +1592,15 @@ function AdminStudio({
               </div>
             ))}
           </div>
-        </div>
+        </AdminPanel>
 
         {exported ? (
-          <div className="glass-panel p-6">
+          <AdminPanel
+            defaultOpen
+            icon={<Save className="h-5 w-5" />}
+            eyebrow="Backup"
+            title="Exported draft"
+          >
             <div className="mb-3 flex items-center gap-2 font-bold text-white">
               <Save className="h-5 w-5" />
               Exported draft
@@ -1615,9 +1610,48 @@ function AdminStudio({
               value={exported}
               readOnly
             />
-          </div>
+          </AdminPanel>
         ) : null}
     </section>
+  );
+}
+
+function AdminPanel({
+  children,
+  defaultOpen = false,
+  description,
+  eyebrow,
+  icon,
+  title,
+}: {
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+  description?: string;
+  eyebrow: string;
+  icon: React.ReactNode;
+  title: string;
+}) {
+  return (
+    <details className="admin-panel glass-panel group overflow-hidden" open={defaultOpen}>
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-6">
+        <div className="flex items-center gap-3">
+          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
+            {icon}
+          </div>
+          <div>
+            <p className="mb-1 text-xs font-black uppercase tracking-[0.16em] text-cyan-100/70">
+              {eyebrow}
+            </p>
+            <h2 className="text-2xl font-black text-white">{title}</h2>
+            {description ? (
+              <p className="mt-1 text-sm text-white/[0.55]">{description}</p>
+            ) : null}
+          </div>
+        </div>
+        <ChevronDown className="h-5 w-5 shrink-0 text-white/60 transition group-open:rotate-180" />
+      </summary>
+      <div className="px-6 pb-6">{children}</div>
+    </details>
   );
 }
 
