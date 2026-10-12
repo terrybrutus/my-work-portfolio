@@ -501,7 +501,7 @@ function TopNav({
     .filter((item) => item.label.length > 0);
 
   return (
-    <nav className="mb-10 flex items-center justify-between rounded-full border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/[0.80] shadow-2xl shadow-black/20 backdrop-blur-xl">
+    <nav className="site-nav flex items-center justify-between rounded-full border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/[0.80] shadow-2xl shadow-black/20 backdrop-blur-xl">
       <a href="/" className="flex items-center gap-2 font-semibold text-white">
         {hasLogo ? (
           <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-white text-slate-950">

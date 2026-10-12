@@ -147,12 +147,16 @@
     @apply rounded-[2rem] border border-white/10 bg-white/[0.07] shadow-2xl shadow-black/30 backdrop-blur-2xl;
   }
 
+  .site-nav {
+    margin-bottom: clamp(0.85rem, 2.4vw, 1.6rem);
+  }
+
   .hero-section {
     display: grid;
     min-height: min(72vh, 46rem);
     align-items: start;
     gap: clamp(1.75rem, 4vw, 3.25rem);
-    padding-block: clamp(2rem, 5vw, 3.5rem);
+    padding-block: clamp(0.6rem, 1.7vw, 1.4rem) clamp(2rem, 5vw, 3.5rem);
   }
 
   .hero-eyebrow {
