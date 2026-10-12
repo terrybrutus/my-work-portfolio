@@ -558,19 +558,13 @@ function PublicPortfolio({
 
   return (
     <>
-      <section className="grid min-h-[72vh] items-start gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr]">
+      <section className="hero-section">
         <div>
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-sm font-medium text-white/[0.80] backdrop-blur">
-            {content.eyebrow}
-          </div>
-          <h1 className="max-w-4xl text-balance text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
-            {content.headline}
-          </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-white/[0.72]">
-            {content.subheadline}
-          </p>
+          <div className="hero-eyebrow">{content.eyebrow}</div>
+          <h1 className="hero-title">{content.headline}</h1>
+          <p className="hero-subheadline">{content.subheadline}</p>
           {content.primaryCtaLabel || content.secondaryCtaLabel ? (
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="hero-actions">
               {content.primaryCtaLabel ? (
                 <a
                   className="primary-cta"
@@ -639,7 +633,7 @@ function HeroCard({
   ];
 
   return (
-    <div className="hero-orb relative mx-auto w-full max-w-[35rem] rounded-[2rem] border border-white/10 bg-white/10 p-5 shadow-2xl shadow-black/40 backdrop-blur-2xl lg:mt-4">
+    <div className="hero-orb hero-card-shell">
       <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-cyan-300/20 blur-3xl" />
       <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-fuchsia-300/20 blur-3xl" />
       <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950">
@@ -661,12 +655,9 @@ function HeroCard({
               <p className="text-sm text-white/[0.55]">{content.location}</p>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="hero-stat-grid">
             {impactStats.map(([label, value]) => (
-              <div
-                className="rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-4"
-                key={label}
-              >
+              <div className="hero-stat-card" key={label}>
                 <span className="block text-sm font-black uppercase tracking-[0.14em] text-cyan-100">
                   {label}
                 </span>
@@ -901,7 +892,7 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
         eyebrow={getSectionLabel(content, "projects")}
         title={content.workSectionHeading}
       />
-      <div className="mt-8 grid gap-5 lg:grid-cols-3">
+      <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {featuredProjects.map((project, index) => (
           <article className="project-card group" key={project.title}>
             {project.image ? (
