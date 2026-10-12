@@ -941,11 +941,11 @@
       width: min(100%, calc(100vw - 1.5rem));
       height: calc(100vh - 1.5rem);
       grid-template-columns: 1fr;
-      grid-template-rows: minmax(14rem, 45%) minmax(0, 1fr);
-      gap: 1rem;
+      grid-template-rows: minmax(12rem, 36%) minmax(0, 1fr);
+      gap: 0.75rem;
       border-radius: 1.55rem;
       padding: 1rem;
-      padding-bottom: 4.75rem;
+      padding-bottom: 3.65rem;
     }
 
     .project-modal-media,
@@ -960,12 +960,12 @@
       min-height: 0;
       overflow: hidden;
       align-content: start;
-      grid-template-rows: 1.15rem 5.65rem 5.5rem 6.75rem 3.6rem;
+      grid-template-rows: 1rem 4.8rem 4.6rem 5.7rem 3rem;
       padding: 0.15rem 0.25rem 0.25rem;
     }
 
     .project-modal-content h2 {
-      font-size: clamp(2rem, 6vw, 3rem);
+      font-size: clamp(1.9rem, 5.5vw, 2.75rem);
       -webkit-line-clamp: 2;
     }
 
@@ -984,7 +984,15 @@
     }
 
     .project-modal-actions {
-      padding-top: 1rem;
+      padding-top: 0.7rem;
+    }
+
+    .project-carousel-dots {
+      bottom: 1.35rem;
+    }
+
+    .retro-tv-nav {
+      bottom: 1rem;
     }
   }
 
@@ -1002,15 +1010,15 @@
     }
 
     .project-modal-shell {
-      height: calc(100vh - 2rem);
+      height: calc(100vh - 1.5rem);
       grid-template-columns: 1fr;
-      grid-template-rows: 14rem minmax(0, 1fr);
+      grid-template-rows: 12rem minmax(0, 1fr);
     }
 
     .project-modal-media,
     .project-modal-media img,
     .project-modal-placeholder {
-      height: 14rem;
+      height: 12rem;
       min-height: 0;
     }
 
@@ -1018,7 +1026,7 @@
       min-height: auto;
       overflow-y: auto;
       align-content: start;
-      grid-template-rows: 1.25rem 8.75rem 7rem 8rem 4rem;
+      grid-template-rows: 1rem 5rem 5rem 6rem 3rem;
       padding-bottom: 0.75rem;
     }
   }
