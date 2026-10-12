@@ -7,6 +7,7 @@ import {
   BrainCircuit,
   BriefcaseBusiness,
   ChevronDown,
+  ChevronUp,
   ClipboardCheck,
   Download,
   Eye,
@@ -1188,6 +1189,15 @@ function AdminStudio({
     updateContent("projects", projects);
   };
 
+  const moveProject = (index: number, direction: -1 | 1) => {
+    const target = index + direction;
+    if (target < 0 || target >= content.projects.length) return;
+
+    const projects = [...content.projects];
+    [projects[index], projects[target]] = [projects[target], projects[index]];
+    updateContent("projects", projects);
+  };
+
   const updateAbout = (index: number, value: string) => {
     const about = [...content.about];
     about[index] = value;
@@ -1524,6 +1534,36 @@ function AdminStudio({
                 className="rounded-3xl border border-white/10 bg-black/20 p-4"
                 key={project.title}
               >
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-100/70">
+                      Project {String(index + 1).padStart(2, "0")}
+                    </p>
+                    <p className="mt-1 text-sm font-bold text-white/70">
+                      {project.title}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      aria-label={`Move ${project.title} up`}
+                      className="icon-button disabled:cursor-not-allowed disabled:opacity-35"
+                      disabled={index === 0}
+                      type="button"
+                      onClick={() => moveProject(index, -1)}
+                    >
+                      <ChevronUp className="h-4 w-4" />
+                    </button>
+                    <button
+                      aria-label={`Move ${project.title} down`}
+                      className="icon-button disabled:cursor-not-allowed disabled:opacity-35"
+                      disabled={index === content.projects.length - 1}
+                      type="button"
+                      onClick={() => moveProject(index, 1)}
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
                 <AdminField
                   label="Title"
                   value={project.title}
