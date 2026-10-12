@@ -20,6 +20,7 @@ import {
   Wand2,
 } from "lucide-react";
 import type React from "react";
+import { createPortal } from "react-dom";
 import { useEffect, useMemo, useState } from "react";
 import { useCallerUserRole } from "./hooks/useQueries";
 
@@ -997,7 +998,7 @@ function ProjectShowcaseModal({
 
   if (!isOpen || !activeProject) return null;
 
-  return (
+  return createPortal(
     <div
       aria-labelledby="project-modal-title"
       aria-modal="true"
@@ -1074,7 +1075,8 @@ function ProjectShowcaseModal({
           ))}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
