@@ -31,6 +31,19 @@ type Project = {
   slug?: string;
   contextUrl?: string;
   contextLabel?: string;
+  detailIntro?: string;
+  detailSections?: ProjectDetailSection[];
+  detailLinks?: ProjectDetailLink[];
+};
+
+type ProjectDetailSection = {
+  title: string;
+  body: string;
+};
+
+type ProjectDetailLink = {
+  label: string;
+  href: string;
 };
 
 type PortfolioSection = {
@@ -72,8 +85,6 @@ type PortfolioContent = {
   aboutWorkTitle: string;
   aboutPersonalKicker: string;
   aboutPersonalTitle: string;
-  aboutSelectedWorkKicker: string;
-  aboutSelectedWorkTitle: string;
   proofPoints: string[];
   about: string[];
   capabilities: string[];
@@ -142,7 +153,7 @@ const firstPartyProjectPages: Record<string, Partial<Project>> = {
     {
       title: "ADDIE Model From Start to Finish",
       summary:
-        "A full instructional design process example for CON 7020, translating technical contracting documentation into a structured online learning experience.",
+        "A full instructional design process example for CON 7020, a Defense Acquisition University course on Overhead Should Cost Review, translating technical contracting documentation into a structured online learning experience.",
       result:
         "Shows analysis, learning-objective mapping, storyboard design, interactive scenario planning, development, and implementation thinking across the full ADDIE process.",
       image: "/assets/con-7020-thumbnail.png",
@@ -155,16 +166,19 @@ const firstPartyProjectPages: Record<string, Partial<Project>> = {
     {
       slug: "quality-assurance-review-system",
       url: "/work/quality-assurance-review-system",
+      image: "/assets/projects/qa-review-system.png",
     },
   "https://sites.google.com/view/instructionaldesignbyterry/projects/job-aid-template":
     {
       slug: "job-aid-template-system",
       url: "/work/job-aid-template-system",
+      image: "/assets/projects/job-aid-template-system.png",
     },
   "https://sites.google.com/view/instructionaldesignbyterry/projects/facilitator-guide":
     {
       slug: "facilitator-guide-adaptation",
       url: "/work/facilitator-guide-adaptation",
+      image: "/assets/projects/facilitator-guide-adaptation.png",
     },
 };
 
@@ -267,8 +281,6 @@ const defaultContent: PortfolioContent = {
   aboutWorkTitle: "How I Got Here",
   aboutPersonalKicker: "Personal snapshot",
   aboutPersonalTitle: "Beyond The Work",
-  aboutSelectedWorkKicker: "Selected work",
-  aboutSelectedWorkTitle: "What I Build",
   proofPoints: [
     "Learning experiences built for federal, enterprise, SaaS, healthcare, sales, and technical audiences",
     "Scenario-based courses, job aids, QA systems, and enablement workflows",
@@ -276,8 +288,9 @@ const defaultContent: PortfolioContent = {
     "AI-assisted review and production workflows used to reduce manual rework",
   ],
   about: [
-    "I help teams turn messy adoption, training, and workflow problems into learning systems people can actually use. My path has moved through defense, enterprise, municipal, SaaS, healthcare, sales, and technical environments, which taught me to design for real constraints instead of ideal conditions.",
-    "Before this work, basketball shaped a lot of how I think: prepare seriously, read the room quickly, and keep moving when the play changes. I still bring that athlete's mix of discipline, curiosity, and competitiveness into the systems I build.",
+    "I got here through sport, teaching, technical problem-solving, and production work. Basketball taught me preparation, feedback, and team accountability; instructional design gave me a way to turn that discipline into practical systems.",
+    "I was a student-athlete at Ole Miss, and that still shapes how I work: study the film, understand the assignment, adjust fast, and keep moving when the play changes.",
+    "I am curious about games, music, visual design, technology, and how hard ideas finally click. I like building work that feels useful, clear, and more alive than a standard document.",
   ],
   capabilities: [
     "Translate stakeholder goals and operational priorities into scalable learning strategies",
@@ -335,7 +348,7 @@ const defaultContent: PortfolioContent = {
     {
       title: "ADDIE Model From Start to Finish",
       summary:
-        "A full instructional design process example for CON 7020, translating technical contracting documentation into a structured online learning experience.",
+        "A full instructional design process example for CON 7020, a Defense Acquisition University course on Overhead Should Cost Review, translating technical contracting documentation into a structured online learning experience.",
       result:
         "Shows analysis, learning-objective mapping, storyboard design, interactive scenario planning, development, and implementation thinking across the full ADDIE process.",
       tags: ["ADDIE", "Government training", "Course architecture"],
@@ -344,6 +357,22 @@ const defaultContent: PortfolioContent = {
       url: "/work/addie-model-from-start-to-finish",
       contextUrl: "https://icatalog.waru.edu/CourseDetail/12795",
       contextLabel: "View CON 7020 course context",
+      detailIntro:
+        "CON 7020 is a Defense Acquisition University course focused on Overhead Should Cost Review. The portfolio value here is not the old course link itself; it is the instructional design trail: how dense contracting material became objectives, structure, screens, interactions, checks, and implementation decisions.",
+      detailSections: [
+        {
+          title: "What This Project Shows",
+          body: "A complete ADDIE workflow: analysis of source content, audience needs, learning-objective mapping, storyboard planning, interaction design, development thinking, review cycles, and implementation considerations.",
+        },
+        {
+          title: "Why It Matters",
+          body: "A recruiter who is not familiar with government contracting can still see the core skill: taking complex technical material and turning it into a learnable experience with structure, sequencing, practice, and clear learner support.",
+        },
+        {
+          title: "Artifact Note",
+          body: "The previously implemented public course link is no longer available, but the course context remains available through the course catalog link.",
+        },
+      ],
     },
     {
       title: "Quality Assurance Review System",
@@ -352,9 +381,25 @@ const defaultContent: PortfolioContent = {
       result:
         "Highlights a systematic review practice across instructional quality, user experience, Section 508/WCAG expectations, and contractual standards.",
       tags: ["QA", "Accessibility", "Learning operations"],
-      image: "",
+      image: "/assets/projects/qa-review-system.png",
       slug: "quality-assurance-review-system",
       url: "/work/quality-assurance-review-system",
+      detailIntro:
+        "This project shows quality assurance as a learning-operations practice, not a last-minute spelling check. The work involved reviewing a large eLearning lesson and documenting issues in a way the production team could act on.",
+      detailSections: [
+        {
+          title: "What Was Reviewed",
+          body: "Course structure, slide flow, learner instructions, interface consistency, visual formatting, feedback clarity, accessibility considerations, and alignment with the expected review standards.",
+        },
+        {
+          title: "What It Demonstrates",
+          body: "The ability to inspect learning assets like a system: find friction, explain the impact, preserve the instructional intent, and give production-ready notes that make revision easier.",
+        },
+        {
+          title: "Why It Belongs Here",
+          body: "QA work is often invisible, but it is one of the places where polished learning experiences are made. This artifact makes that review judgment visible.",
+        },
+      ],
     },
     {
       title: "Job Aid Template System",
@@ -363,9 +408,25 @@ const defaultContent: PortfolioContent = {
       result:
         "Demonstrates information architecture, visual hierarchy, essential-resource curation, and reusable template thinking for on-the-job support.",
       tags: ["Job aids", "Performance support", "Template design"],
-      image: "",
+      image: "/assets/projects/job-aid-template-system.png",
       slug: "job-aid-template-system",
       url: "/work/job-aid-template-system",
+      detailIntro:
+        "This project focuses on the part of learning that happens after a course: quick-reference support people can use while doing the job.",
+      detailSections: [
+        {
+          title: "Design Problem",
+          body: "Dense acquisition and regulatory content needed to become a reusable support format that helped people find the right information faster without reopening an entire course.",
+        },
+        {
+          title: "What It Demonstrates",
+          body: "Information architecture, template design, visual hierarchy, plain-language reduction, and performance-support thinking for technical audiences.",
+        },
+        {
+          title: "Portfolio Signal",
+          body: "It shows that the work is not limited to courses. It also includes tools, references, and systems that support performance in the flow of work.",
+        },
+      ],
     },
     {
       title: "Facilitator Guide Adaptation",
@@ -374,9 +435,25 @@ const defaultContent: PortfolioContent = {
       result:
         "Shows how the same content can be redesigned across modalities while preserving instructional intent, timing, materials, and facilitation strategy.",
       tags: ["Facilitator guide", "ILT", "Modality conversion"],
-      image: "",
+      image: "/assets/projects/facilitator-guide-adaptation.png",
       slug: "facilitator-guide-adaptation",
       url: "/work/facilitator-guide-adaptation",
+      detailIntro:
+        "This project shows a modality shift: taking training content built for one delivery format and adapting it into an instructor-led facilitation plan.",
+      detailSections: [
+        {
+          title: "What Changed",
+          body: "The experience needed timing, materials, facilitator notes, learner activities, room/setup considerations, and a sequence an instructor could actually run.",
+        },
+        {
+          title: "Instructional Lens",
+          body: "The guide uses Gagne's Nine Events as a planning structure while keeping the facilitator focused on pacing, learner attention, practice, and transition points.",
+        },
+        {
+          title: "Why It Matters",
+          body: "It demonstrates that the same learning goal can be rebuilt for a different environment without losing instructional logic.",
+        },
+      ],
     },
   ],
   sections: [
@@ -405,12 +482,29 @@ function normalizeProject(project: Project): Project {
     ...legacyProjectPage,
     ...legacyTitleUpgrade,
   };
+  const defaultProject = defaultContent.projects.find(
+    (defaultItem) => defaultItem.title === nextProject.title,
+  );
+  const upgradedProject = defaultProject
+    ? {
+        ...nextProject,
+        image: nextProject.image || defaultProject.image,
+        slug: nextProject.slug ?? defaultProject.slug,
+        url: nextProject.url ?? defaultProject.url,
+        contextUrl: nextProject.contextUrl ?? defaultProject.contextUrl,
+        contextLabel: nextProject.contextLabel ?? defaultProject.contextLabel,
+        detailIntro: nextProject.detailIntro ?? defaultProject.detailIntro,
+        detailSections:
+          nextProject.detailSections ?? defaultProject.detailSections,
+        detailLinks: nextProject.detailLinks ?? defaultProject.detailLinks,
+      }
+    : nextProject;
 
-  if (nextProject.title.toLowerCase().includes("enablement quest")) {
-    return { ...nextProject, image: "/assets/projects/enablement-quest.gif" };
+  if (upgradedProject.title.toLowerCase().includes("enablement quest")) {
+    return { ...upgradedProject, image: "/assets/projects/enablement-quest.gif" };
   }
 
-  return nextProject;
+  return upgradedProject;
 }
 
 function normalizeProjects(projects: Project[]) {
@@ -421,6 +515,9 @@ function normalizeAbout(about: string[]) {
   const nextAbout = [...about];
   if (nextAbout[1] === previousPersonalAboutCopy) {
     nextAbout[1] = defaultContent.about[1];
+  }
+  if (!nextAbout[2]) {
+    nextAbout[2] = defaultContent.about[2];
   }
 
   return nextAbout;
@@ -775,9 +872,17 @@ function ProjectDetailPage({
   project: Project;
   projectIndex: number;
 }) {
+  const detailSections =
+    project.detailSections?.length
+      ? project.detailSections
+      : [
+          { title: "Project Overview", body: project.summary },
+          { title: "Portfolio Signal", body: project.result },
+        ];
+
   return (
     <section className="glass-panel project-detail-page">
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:items-center">
+      <div className="project-detail-hero-grid">
         <div className="project-detail-media">
           {project.image ? (
             <img alt="" src={project.image} />
@@ -792,7 +897,11 @@ function ProjectDetailPage({
           </p>
           <h1>{project.title}</h1>
           <p className="project-detail-summary">{project.summary}</p>
-          <div className="project-detail-result">{project.result}</div>
+          {project.detailIntro ? (
+            <div className="project-detail-result">{project.detailIntro}</div>
+          ) : (
+            <div className="project-detail-result">{project.result}</div>
+          )}
           <div className="project-detail-actions">
             <a className="secondary-cta" href="/#work">
               Back to selected work
@@ -808,6 +917,27 @@ function ProjectDetailPage({
           </div>
         </div>
       </div>
+      <div className="project-detail-section-grid">
+        {detailSections.map((section) => (
+          <article className="project-detail-section-card" key={section.title}>
+            <h2>{section.title}</h2>
+            <p>{section.body}</p>
+          </article>
+        ))}
+      </div>
+      {project.detailLinks?.length ? (
+        <div className="project-detail-resource-row">
+          {project.detailLinks.map((link) => (
+            <ProjectLink
+              className="project-live-link"
+              href={link.href}
+              key={link.href}
+            >
+              {link.label}
+            </ProjectLink>
+          ))}
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -898,10 +1028,7 @@ function AboutTvModal({
   const [activeSlide, setActiveSlide] = useState(0);
   const workStory = content.about[0] ?? "";
   const personalStory = content.about[1] ?? content.about[0] ?? "";
-  const selectedWork = content.projects
-    .slice(0, 3)
-    .map((project) => `${project.title}: ${project.result}`)
-    .join(" ");
+  const curiosityStory = content.about[2] ?? "";
   const slides = [
     {
       kicker: content.aboutWorkKicker,
@@ -916,14 +1043,9 @@ function AboutTvModal({
       imageAlt: "Terry Brutus playing basketball for Ole Miss",
     },
     {
-      kicker: content.aboutSelectedWorkKicker,
-      title: content.aboutSelectedWorkTitle,
-      copy: selectedWork,
-    },
-    {
-      kicker: "Contact",
-      title: content.contactHeading,
-      copy: content.contactText,
+      kicker: "Outside the title",
+      title: "What I Pay Attention To",
+      copy: curiosityStory,
     },
   ];
   const activeTvSlide = slides[activeSlide] ?? slides[0];
@@ -1350,7 +1472,9 @@ function AdminStudio({
   setContent: React.Dispatch<React.SetStateAction<PortfolioContent>>;
 }) {
   const [exported, setExported] = useState("");
-  const [saveStatus, setSaveStatus] = useState("Autosaves in this browser.");
+  const [saveStatus, setSaveStatus] = useState(
+    "Browser draft ready. Public site changes still need committed source updates.",
+  );
 
   const updateProject = (index: number, project: Project) => {
     const projects = [...content.projects];
@@ -1378,7 +1502,9 @@ function AdminStudio({
     const reader = new FileReader();
     reader.onload = () => {
       updateContent("profileImage", String(reader.result));
-      setSaveStatus("Profile image added to this browser draft.");
+      setSaveStatus(
+        "Profile image received in this browser draft. Use Save browser draft to keep it here; it is not public until committed.",
+      );
     };
     reader.readAsDataURL(file);
   };
@@ -1388,7 +1514,9 @@ function AdminStudio({
     const reader = new FileReader();
     reader.onload = () => {
       updateContent("brandLogoImage", String(reader.result));
-      setSaveStatus("Logo image added to this browser draft.");
+      setSaveStatus(
+        "Logo image received in this browser draft. Use Save browser draft to keep it here; it is not public until committed.",
+      );
     };
     reader.readAsDataURL(file);
   };
@@ -1400,7 +1528,7 @@ function AdminStudio({
       const project = content.projects[index];
       updateProject(index, { ...project, image: String(reader.result) });
       setSaveStatus(
-        "Project image added to this browser draft. Download a backup before switching devices.",
+        `${project.title} image received in this browser draft. Use Save browser draft to persist locally; public deployment needs a committed asset path.`,
       );
     };
     reader.readAsDataURL(file);
@@ -1409,7 +1537,9 @@ function AdminStudio({
   const saveDraft = () => {
     try {
       saveLocalDraft(content);
-      setSaveStatus(`Saved locally at ${new Date().toLocaleTimeString()}.`);
+      setSaveStatus(
+        `Saved to this browser at ${new Date().toLocaleTimeString()}. Public site still requires committed source changes.`,
+      );
     } catch {
       setSaveStatus(
         "Could not save locally. The uploaded image may be too large for browser storage. Use Download backup before leaving this page.",
@@ -1558,7 +1688,7 @@ function AdminStudio({
 
         <div className="mt-6 flex flex-wrap gap-3">
           <button className="admin-button" type="button" onClick={saveDraft}>
-            <Save className="h-4 w-4" /> Save draft
+            <Save className="h-4 w-4" /> Save browser draft
           </button>
           <button
             className="admin-button"
@@ -1693,17 +1823,10 @@ function AdminStudio({
             onChange={(value) => updateAbout(1, value)}
           />
           <div />
-          <AdminField
-            label="Selected work slide kicker"
-            value={content.aboutSelectedWorkKicker}
-            onChange={(value) =>
-              updateContent("aboutSelectedWorkKicker", value)
-            }
-          />
-          <AdminField
-            label="Selected work slide title"
-            value={content.aboutSelectedWorkTitle}
-            onChange={(value) => updateContent("aboutSelectedWorkTitle", value)}
+          <AdminTextArea
+            label="Third about slide copy"
+            value={content.about[2] ?? ""}
+            onChange={(value) => updateAbout(2, value)}
           />
         </div>
       </AdminPanel>

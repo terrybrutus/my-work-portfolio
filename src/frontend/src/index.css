@@ -265,6 +265,11 @@
     padding: clamp(1.25rem, 3vw, 2.5rem);
   }
 
+  .project-detail-hero-grid {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
   .project-detail-media {
     @apply overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/25 shadow-2xl shadow-black/25;
   }
@@ -299,9 +304,40 @@
     @apply mt-7 flex flex-wrap items-center gap-3;
   }
 
+  .project-detail-section-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .project-detail-section-card {
+    @apply rounded-[1.35rem] border border-white/10 bg-black/[0.22] p-5;
+  }
+
+  .project-detail-section-card h2 {
+    @apply text-sm font-black uppercase tracking-[0.18em] text-cyan-100/80;
+  }
+
+  .project-detail-section-card p {
+    @apply mt-3 text-base leading-7 text-white/[0.74];
+  }
+
+  .project-detail-resource-row {
+    @apply mt-6 flex flex-wrap gap-3;
+  }
+
   @media (min-width: 900px) {
     .hero-section {
       grid-template-columns: minmax(0, 1.04fr) minmax(20rem, 0.96fr);
+    }
+
+    .project-detail-hero-grid {
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      align-items: center;
+    }
+
+    .project-detail-section-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .hero-title {
@@ -766,8 +802,8 @@
   .retro-tv-slide-image-frame img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: 62% 42%;
+    object-fit: contain;
+    object-position: center;
     filter: saturate(0.9) contrast(1.04) brightness(0.78);
   }
 
