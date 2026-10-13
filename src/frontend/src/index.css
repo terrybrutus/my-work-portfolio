@@ -720,6 +720,12 @@
     transform-origin: 100% 50%;
   }
 
+  .retro-tv-screen-inner.has-slide-image {
+    justify-content: flex-start;
+    gap: clamp(0.12rem, 0.35vw, 0.28rem);
+    padding: clamp(0.55rem, 1.05vw, 0.95rem);
+  }
+
   .retro-tv-screen-inner::before,
   .retro-tv-screen-inner::after {
     content: "";
@@ -776,6 +782,14 @@
     letter-spacing: -0.025em;
   }
 
+  .retro-tv-screen-inner.has-slide-image .retro-tv-title {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: clamp(0.9rem, 1.36vw, 1.48rem);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
   .retro-tv-copy {
     display: -webkit-box;
     overflow: hidden;
@@ -791,7 +805,9 @@
     position: relative;
     z-index: 1;
     display: block;
-    aspect-ratio: 16 / 9;
+    width: 100%;
+    height: min(38%, 8.4rem);
+    min-height: 0;
     overflow: hidden;
     border: 1px solid rgba(198, 239, 255, 0.24);
     border-radius: 0.65rem;
@@ -808,6 +824,10 @@
   }
 
   .retro-tv-slide-image-frame + .retro-tv-copy {
+    flex: 0 1 auto;
+    max-height: 3.8em;
+    font-size: clamp(0.44rem, 0.7vw, 0.74rem);
+    line-height: 1.28;
     -webkit-line-clamp: 3;
   }
 
@@ -818,6 +838,10 @@
     font-weight: 900;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+  }
+
+  .retro-tv-screen-inner.has-slide-image .retro-tv-hint {
+    margin-top: 0;
   }
 
   .retro-tv-nav,

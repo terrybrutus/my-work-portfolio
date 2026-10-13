@@ -1113,7 +1113,11 @@ function AboutTvModal({
         </button>
 
         <div className="retro-tv-screen" aria-live="polite">
-          <span className="retro-tv-screen-inner">
+          <span
+            className={`retro-tv-screen-inner ${
+              activeTvSlide.image ? "has-slide-image" : ""
+            }`}
+          >
             <span className="retro-tv-kicker">{activeTvSlide.kicker}</span>
             <span className="retro-tv-title" id="about-modal-title">
               {activeTvSlide.title}
