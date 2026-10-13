@@ -4,7 +4,6 @@ import {
   BarChart3,
   BookOpenCheck,
   Boxes,
-  BrainCircuit,
   BriefcaseBusiness,
   ChevronDown,
   ChevronUp,
@@ -18,8 +17,8 @@ import {
   Wand2,
 } from "lucide-react";
 import type React from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { useEffect, useMemo, useState } from "react";
 import { useCallerUserRole } from "./hooks/useQueries";
 
 type Project = {
@@ -29,6 +28,9 @@ type Project = {
   tags: string[];
   image?: string;
   url?: string;
+  slug?: string;
+  contextUrl?: string;
+  contextLabel?: string;
 };
 
 type PortfolioSection = {
@@ -131,6 +133,38 @@ const legacySubheadlineV2 =
   "I translate stakeholder goals, skill gaps, and adoption blockers into practical enablement workflows, compliance-ready learning assets, and AI-assisted operations for federal, enterprise, SaaS, healthcare, sales, and technical teams.";
 const legacyContactTextV2 =
   "If you are looking for someone who can connect learning strategy, technical enablement, AI-assisted workflows, and practical adoption systems, I would be glad to talk.";
+const legacyAddieProjectTitle = "ADDIE in Action: CON 7020";
+
+const firstPartyProjectPages: Record<string, Partial<Project>> = {
+  "https://sites.google.com/view/instructionaldesignbyterry/projects/addie-in-action":
+    {
+      title: "ADDIE Model From Start to Finish",
+      summary:
+        "A full instructional design process example for CON 7020, translating technical contracting documentation into a structured online learning experience.",
+      result:
+        "Shows analysis, learning-objective mapping, storyboard design, interactive scenario planning, development, and implementation thinking across the full ADDIE process.",
+      image: "/assets/con-7020-thumbnail.png",
+      slug: "addie-model-from-start-to-finish",
+      url: "/work/addie-model-from-start-to-finish",
+      contextUrl: "https://icatalog.waru.edu/CourseDetail/12795",
+      contextLabel: "View CON 7020 course context",
+    },
+  "https://sites.google.com/view/instructionaldesignbyterry/projects/conducting-qa":
+    {
+      slug: "quality-assurance-review-system",
+      url: "/work/quality-assurance-review-system",
+    },
+  "https://sites.google.com/view/instructionaldesignbyterry/projects/job-aid-template":
+    {
+      slug: "job-aid-template-system",
+      url: "/work/job-aid-template-system",
+    },
+  "https://sites.google.com/view/instructionaldesignbyterry/projects/facilitator-guide":
+    {
+      slug: "facilitator-guide-adaptation",
+      url: "/work/facilitator-guide-adaptation",
+    },
+};
 
 const templates: Template[] = [
   {
@@ -297,14 +331,17 @@ const defaultContent: PortfolioContent = {
       url: "https://whyblockchainmatters-by-terrybrutus.netlify.app/",
     },
     {
-      title: "ADDIE in Action: CON 7020",
+      title: "ADDIE Model From Start to Finish",
       summary:
-        "A full instructional design process example that translated technical government contracting documentation into a structured online learning experience.",
+        "A full instructional design process example for CON 7020, translating technical contracting documentation into a structured online learning experience.",
       result:
-        "Shows needs analysis, learning-objective mapping, storyboard design, interactive scenario planning, development, and implementation thinking for a complex 6-10 hour course.",
+        "Shows analysis, learning-objective mapping, storyboard design, interactive scenario planning, development, and implementation thinking across the full ADDIE process.",
       tags: ["ADDIE", "Government training", "Course architecture"],
-      image: "",
-      url: "https://sites.google.com/view/instructionaldesignbyterry/projects/addie-in-action",
+      image: "/assets/con-7020-thumbnail.png",
+      slug: "addie-model-from-start-to-finish",
+      url: "/work/addie-model-from-start-to-finish",
+      contextUrl: "https://icatalog.waru.edu/CourseDetail/12795",
+      contextLabel: "View CON 7020 course context",
     },
     {
       title: "Quality Assurance Review System",
@@ -314,7 +351,8 @@ const defaultContent: PortfolioContent = {
         "Highlights a systematic review practice across instructional quality, user experience, Section 508/WCAG expectations, and contractual standards.",
       tags: ["QA", "Accessibility", "Learning operations"],
       image: "",
-      url: "https://sites.google.com/view/instructionaldesignbyterry/projects/conducting-qa",
+      slug: "quality-assurance-review-system",
+      url: "/work/quality-assurance-review-system",
     },
     {
       title: "Job Aid Template System",
@@ -324,7 +362,8 @@ const defaultContent: PortfolioContent = {
         "Demonstrates information architecture, visual hierarchy, essential-resource curation, and reusable template thinking for on-the-job support.",
       tags: ["Job aids", "Performance support", "Template design"],
       image: "",
-      url: "https://sites.google.com/view/instructionaldesignbyterry/projects/job-aid-template",
+      slug: "job-aid-template-system",
+      url: "/work/job-aid-template-system",
     },
     {
       title: "Facilitator Guide Adaptation",
@@ -334,7 +373,8 @@ const defaultContent: PortfolioContent = {
         "Shows how the same content can be redesigned across modalities while preserving instructional intent, timing, materials, and facilitation strategy.",
       tags: ["Facilitator guide", "ILT", "Modality conversion"],
       image: "",
-      url: "https://sites.google.com/view/instructionaldesignbyterry/projects/facilitator-guide",
+      slug: "facilitator-guide-adaptation",
+      url: "/work/facilitator-guide-adaptation",
     },
   ],
   sections: [
@@ -347,6 +387,85 @@ const defaultContent: PortfolioContent = {
   ],
   selectedTemplate: "systems-lab",
 };
+
+function normalizeProject(project: Project): Project {
+  const legacyProjectPage = project.url
+    ? firstPartyProjectPages[project.url]
+    : undefined;
+  const legacyTitleUpgrade =
+    project.title === legacyAddieProjectTitle
+      ? firstPartyProjectPages[
+          "https://sites.google.com/view/instructionaldesignbyterry/projects/addie-in-action"
+        ]
+      : undefined;
+  const nextProject = {
+    ...project,
+    ...legacyProjectPage,
+    ...legacyTitleUpgrade,
+  };
+
+  if (nextProject.title.toLowerCase().includes("enablement quest")) {
+    return { ...nextProject, image: "/assets/projects/enablement-quest.gif" };
+  }
+
+  return nextProject;
+}
+
+function normalizeProjects(projects: Project[]) {
+  return projects.map(normalizeProject);
+}
+
+function isExternalHref(href: string) {
+  return /^https?:\/\//i.test(href) || href.startsWith("mailto:");
+}
+
+function getProjectSlug(project: Project) {
+  if (project.slug) return project.slug;
+  if (project.url?.startsWith("/work/"))
+    return project.url.replace("/work/", "");
+
+  return project.title
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function getProjectPage(content: PortfolioContent) {
+  if (typeof window === "undefined") return null;
+  const match = window.location.pathname.match(/^\/work\/([^/?#]+)/);
+  if (!match) return null;
+  const slug = decodeURIComponent(match[1]);
+  const index = content.projects.findIndex(
+    (project) => getProjectSlug(project) === slug,
+  );
+
+  if (index < 0) return null;
+  return { index, project: content.projects[index] };
+}
+
+function ProjectLink({
+  children,
+  className,
+  href,
+}: {
+  children: React.ReactNode;
+  className: string;
+  href: string;
+}) {
+  const external = isExternalHref(href);
+
+  return (
+    <a
+      className={className}
+      href={href}
+      rel={external ? "noreferrer" : undefined}
+      target={external ? "_blank" : undefined}
+    >
+      {children}
+    </a>
+  );
+}
 
 function getInitialContent(): PortfolioContent {
   if (typeof window === "undefined") return defaultContent;
@@ -367,12 +486,6 @@ function getInitialContent(): PortfolioContent {
           (project, index) =>
             project.title === importedTerryLxdProjectTitles[index],
         ));
-    const normalizeProjectPreviews = (projects: Project[]) =>
-      projects.map((project) =>
-        project.title.toLowerCase().includes("enablement quest")
-          ? { ...project, image: "/assets/projects/enablement-quest.gif" }
-          : project,
-      );
     return {
       ...defaultContent,
       ...parsed,
@@ -422,8 +535,8 @@ function getInitialContent(): PortfolioContent {
         ? defaultContent.about
         : (parsed.about ?? defaultContent.about),
       projects: shouldUpgradeProjects
-        ? normalizeProjectPreviews(defaultContent.projects)
-        : normalizeProjectPreviews(parsed.projects ?? defaultContent.projects),
+        ? normalizeProjects(defaultContent.projects)
+        : normalizeProjects(parsed.projects ?? defaultContent.projects),
     };
   } catch {
     return defaultContent;
@@ -461,6 +574,7 @@ export default function App() {
       templates[0],
     [content.selectedTemplate],
   );
+  const activeProjectPage = useMemo(() => getProjectPage(content), [content]);
 
   const updateContent = <K extends keyof PortfolioContent>(
     key: K,
@@ -479,6 +593,12 @@ export default function App() {
             content={content}
             updateContent={updateContent}
             setContent={setContent}
+          />
+        ) : activeProjectPage ? (
+          <ProjectDetailPage
+            content={content}
+            project={activeProjectPage.project}
+            projectIndex={activeProjectPage.index}
           />
         ) : (
           <PublicPortfolio
@@ -635,6 +755,52 @@ function PublicPortfolio({
   );
 }
 
+function ProjectDetailPage({
+  content,
+  project,
+  projectIndex,
+}: {
+  content: PortfolioContent;
+  project: Project;
+  projectIndex: number;
+}) {
+  return (
+    <section className="glass-panel project-detail-page">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:items-center">
+        <div className="project-detail-media">
+          {project.image ? (
+            <img alt="" src={project.image} />
+          ) : (
+            <div className="project-modal-placeholder">{project.title}</div>
+          )}
+        </div>
+        <div className="project-detail-copy">
+          <p className="retro-tv-kicker">
+            Work {String(projectIndex + 1).padStart(2, "0")} /{" "}
+            {String(content.projects.length).padStart(2, "0")}
+          </p>
+          <h1>{project.title}</h1>
+          <p className="project-detail-summary">{project.summary}</p>
+          <div className="project-detail-result">{project.result}</div>
+          <div className="project-detail-actions">
+            <a className="secondary-cta" href="/#work">
+              Back to selected work
+            </a>
+            {project.contextUrl ? (
+              <ProjectLink
+                className="project-live-link"
+                href={project.contextUrl}
+              >
+                {project.contextLabel ?? "View context"}
+              </ProjectLink>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HeroCard({
   content,
   template,
@@ -709,26 +875,6 @@ function ProofStrip({ content }: { content: PortfolioContent }) {
   );
 }
 
-function ApproachSection({ content }: { content: PortfolioContent }) {
-  return (
-    <section
-      id="about"
-      className="glass-panel grid gap-8 p-7 lg:grid-cols-[0.65fr_1fr]"
-    >
-      <SectionHeader
-        icon={<BrainCircuit className="h-5 w-5" />}
-        eyebrow="Approach"
-        title="I connect business needs to learning systems people can actually use."
-      />
-      <div className="space-y-5 text-lg leading-8 text-white/[0.72]">
-        {content.about.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function AboutTvModal({
   content,
   isOpen,
@@ -768,11 +914,14 @@ function AboutTvModal({
     },
   ];
   const activeTvSlide = slides[activeSlide] ?? slides[0];
-  const goToSlide = (direction: -1 | 1) => {
-    setActiveSlide(
-      (current) => (current + direction + slides.length) % slides.length,
-    );
-  };
+  const goToSlide = useCallback(
+    (direction: -1 | 1) => {
+      setActiveSlide(
+        (current) => (current + direction + slides.length) % slides.length,
+      );
+    },
+    [slides.length],
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -785,7 +934,7 @@ function AboutTvModal({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose, slides.length]);
+  }, [goToSlide, isOpen, onClose]);
 
   useEffect(() => {
     if (isOpen) setActiveSlide(0);
@@ -794,11 +943,10 @@ function AboutTvModal({
   if (!isOpen) return null;
 
   return (
-    <div
+    <dialog
       aria-labelledby="about-modal-title"
-      aria-modal="true"
       className="about-modal-backdrop"
-      role="dialog"
+      open
     >
       <button
         aria-label="Close about modal"
@@ -861,7 +1009,7 @@ function AboutTvModal({
           <p>{activeTvSlide.copy}</p>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }
 function CapabilitiesSection({ content }: { content: PortfolioContent }) {
@@ -932,14 +1080,9 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
                 View details
               </button>
               {project.url ? (
-                <a
-                  className="project-live-link"
-                  href={project.url}
-                  rel="noreferrer"
-                  target="_blank"
-                >
+                <ProjectLink className="project-live-link" href={project.url}>
                   Open project
-                </a>
+                </ProjectLink>
               ) : null}
             </div>
           </article>
@@ -981,9 +1124,12 @@ function ProjectShowcaseModal({
   projects: Project[];
 }) {
   const activeProject = projects[activeIndex] ?? projects[0];
-  const goToProject = (direction: -1 | 1) => {
-    onSelect((activeIndex + direction + projects.length) % projects.length);
-  };
+  const goToProject = useCallback(
+    (direction: -1 | 1) => {
+      onSelect((activeIndex + direction + projects.length) % projects.length);
+    },
+    [activeIndex, onSelect, projects.length],
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -1007,16 +1153,15 @@ function ProjectShowcaseModal({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeIndex, isOpen, onClose, projects.length]);
+  }, [goToProject, isOpen, onClose]);
 
   if (!isOpen || !activeProject) return null;
 
   return createPortal(
-    <div
+    <dialog
       aria-labelledby="project-modal-title"
-      aria-modal="true"
       className="project-modal-backdrop"
-      role="dialog"
+      open
     >
       <button
         aria-label="Close project carousel"
@@ -1047,14 +1192,9 @@ function ProjectShowcaseModal({
           <div className="project-modal-result">{activeProject.result}</div>
           <div className="project-modal-actions">
             {activeProject.url ? (
-              <a
-                className="primary-cta"
-                href={activeProject.url}
-                rel="noreferrer"
-                target="_blank"
-              >
+              <ProjectLink className="primary-cta" href={activeProject.url}>
                 Open project <ArrowRight className="h-4 w-4" />
-              </a>
+              </ProjectLink>
             ) : null}
           </div>
         </div>
@@ -1088,7 +1228,7 @@ function ProjectShowcaseModal({
           ))}
         </div>
       </div>
-    </div>,
+    </dialog>,
     document.body,
   );
 }
@@ -1434,255 +1574,251 @@ function AdminStudio({
         eyebrow="Homepage copy"
         title="Edit the visible hero and selected work framing"
       >
-          <div className="mt-6 grid gap-4">
-            <AdminField
-              label="Hero card eyebrow"
-              value={content.heroCardEyebrow}
-              onChange={(value) => updateContent("heroCardEyebrow", value)}
-            />
-            <AdminTextArea
-              label="Hero card focus text"
-              value={content.heroCardFocusText}
-              onChange={(value) => updateContent("heroCardFocusText", value)}
-            />
-            <AdminField
-              label="Selected work section heading"
-              value={content.workSectionHeading}
-              onChange={(value) => updateContent("workSectionHeading", value)}
-            />
-          </div>
-        </AdminPanel>
+        <div className="mt-6 grid gap-4">
+          <AdminField
+            label="Hero card eyebrow"
+            value={content.heroCardEyebrow}
+            onChange={(value) => updateContent("heroCardEyebrow", value)}
+          />
+          <AdminTextArea
+            label="Hero card focus text"
+            value={content.heroCardFocusText}
+            onChange={(value) => updateContent("heroCardFocusText", value)}
+          />
+          <AdminField
+            label="Selected work section heading"
+            value={content.workSectionHeading}
+            onChange={(value) => updateContent("workSectionHeading", value)}
+          />
+        </div>
+      </AdminPanel>
 
-        <AdminPanel
-          icon={<ArrowRight className="h-5 w-5" />}
-          eyebrow="Calls To Action"
-          title="Hero buttons and contact block"
-        >
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            <AdminField
-              label="Primary button text (blank hides it)"
-              value={content.primaryCtaLabel}
-              onChange={(value) => updateContent("primaryCtaLabel", value)}
-            />
-            <AdminField
-              label="Primary button link"
-              value={content.primaryCtaHref}
-              onChange={(value) => updateContent("primaryCtaHref", value)}
-            />
-            <AdminField
-              label="Secondary button text (blank hides it)"
-              value={content.secondaryCtaLabel}
-              onChange={(value) => updateContent("secondaryCtaLabel", value)}
-            />
-            <AdminField
-              label="Secondary button link"
-              value={content.secondaryCtaHref}
-              onChange={(value) => updateContent("secondaryCtaHref", value)}
-            />
-          </div>
-          <div className="mt-4 grid gap-4">
-            <AdminField
-              label="Contact heading"
-              value={content.contactHeading}
-              onChange={(value) => updateContent("contactHeading", value)}
-            />
-            <AdminTextArea
-              label="Contact text"
-              value={content.contactText}
-              onChange={(value) => updateContent("contactText", value)}
-            />
-          </div>
-        </AdminPanel>
+      <AdminPanel
+        icon={<ArrowRight className="h-5 w-5" />}
+        eyebrow="Calls To Action"
+        title="Hero buttons and contact block"
+      >
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <AdminField
+            label="Primary button text (blank hides it)"
+            value={content.primaryCtaLabel}
+            onChange={(value) => updateContent("primaryCtaLabel", value)}
+          />
+          <AdminField
+            label="Primary button link"
+            value={content.primaryCtaHref}
+            onChange={(value) => updateContent("primaryCtaHref", value)}
+          />
+          <AdminField
+            label="Secondary button text (blank hides it)"
+            value={content.secondaryCtaLabel}
+            onChange={(value) => updateContent("secondaryCtaLabel", value)}
+          />
+          <AdminField
+            label="Secondary button link"
+            value={content.secondaryCtaHref}
+            onChange={(value) => updateContent("secondaryCtaHref", value)}
+          />
+        </div>
+        <div className="mt-4 grid gap-4">
+          <AdminField
+            label="Contact heading"
+            value={content.contactHeading}
+            onChange={(value) => updateContent("contactHeading", value)}
+          />
+          <AdminTextArea
+            label="Contact text"
+            value={content.contactText}
+            onChange={(value) => updateContent("contactText", value)}
+          />
+        </div>
+      </AdminPanel>
 
-        <AdminPanel
-          icon={<BookOpenCheck className="h-5 w-5" />}
-          eyebrow="About Modal"
-          title="Edit the About Me TV carousel"
-        >
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            <AdminField
-              label="Work slide kicker"
-              value={content.aboutWorkKicker}
-              onChange={(value) => updateContent("aboutWorkKicker", value)}
-            />
-            <AdminField
-              label="Work slide title"
-              value={content.aboutWorkTitle}
-              onChange={(value) => updateContent("aboutWorkTitle", value)}
-            />
-            <AdminTextArea
-              label="Work slide copy"
-              value={content.about[0] ?? ""}
-              onChange={(value) => updateAbout(0, value)}
-            />
-            <div />
-            <AdminField
-              label="Personal slide kicker"
-              value={content.aboutPersonalKicker}
-              onChange={(value) => updateContent("aboutPersonalKicker", value)}
-            />
-            <AdminField
-              label="Personal slide title"
-              value={content.aboutPersonalTitle}
-              onChange={(value) => updateContent("aboutPersonalTitle", value)}
-            />
-            <AdminTextArea
-              label="Personal slide copy"
-              value={content.about[1] ?? ""}
-              onChange={(value) => updateAbout(1, value)}
-            />
-            <div />
-            <AdminField
-              label="Selected work slide kicker"
-              value={content.aboutSelectedWorkKicker}
-              onChange={(value) =>
-                updateContent("aboutSelectedWorkKicker", value)
-              }
-            />
-            <AdminField
-              label="Selected work slide title"
-              value={content.aboutSelectedWorkTitle}
-              onChange={(value) =>
-                updateContent("aboutSelectedWorkTitle", value)
-              }
-            />
-          </div>
-        </AdminPanel>
+      <AdminPanel
+        icon={<BookOpenCheck className="h-5 w-5" />}
+        eyebrow="About Modal"
+        title="Edit the About Me TV carousel"
+      >
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <AdminField
+            label="Work slide kicker"
+            value={content.aboutWorkKicker}
+            onChange={(value) => updateContent("aboutWorkKicker", value)}
+          />
+          <AdminField
+            label="Work slide title"
+            value={content.aboutWorkTitle}
+            onChange={(value) => updateContent("aboutWorkTitle", value)}
+          />
+          <AdminTextArea
+            label="Work slide copy"
+            value={content.about[0] ?? ""}
+            onChange={(value) => updateAbout(0, value)}
+          />
+          <div />
+          <AdminField
+            label="Personal slide kicker"
+            value={content.aboutPersonalKicker}
+            onChange={(value) => updateContent("aboutPersonalKicker", value)}
+          />
+          <AdminField
+            label="Personal slide title"
+            value={content.aboutPersonalTitle}
+            onChange={(value) => updateContent("aboutPersonalTitle", value)}
+          />
+          <AdminTextArea
+            label="Personal slide copy"
+            value={content.about[1] ?? ""}
+            onChange={(value) => updateAbout(1, value)}
+          />
+          <div />
+          <AdminField
+            label="Selected work slide kicker"
+            value={content.aboutSelectedWorkKicker}
+            onChange={(value) =>
+              updateContent("aboutSelectedWorkKicker", value)
+            }
+          />
+          <AdminField
+            label="Selected work slide title"
+            value={content.aboutSelectedWorkTitle}
+            onChange={(value) => updateContent("aboutSelectedWorkTitle", value)}
+          />
+        </div>
+      </AdminPanel>
 
+      <AdminPanel
+        defaultOpen
+        icon={<BookOpenCheck className="h-5 w-5" />}
+        eyebrow="Content"
+        title="Project cards"
+      >
+        <div className="mt-6 space-y-4">
+          {content.projects.map((project, index) => (
+            <div
+              className="rounded-3xl border border-white/10 bg-black/20 p-4"
+              key={project.title}
+            >
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-100/70">
+                    Project {String(index + 1).padStart(2, "0")}
+                  </p>
+                  <p className="mt-1 text-sm font-bold text-white/70">
+                    {project.title}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    aria-label={`Move ${project.title} up`}
+                    className="icon-button disabled:cursor-not-allowed disabled:opacity-35"
+                    disabled={index === 0}
+                    type="button"
+                    onClick={() => moveProject(index, -1)}
+                  >
+                    <ChevronUp className="h-4 w-4" />
+                  </button>
+                  <button
+                    aria-label={`Move ${project.title} down`}
+                    className="icon-button disabled:cursor-not-allowed disabled:opacity-35"
+                    disabled={index === content.projects.length - 1}
+                    type="button"
+                    onClick={() => moveProject(index, 1)}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+              <AdminField
+                label="Title"
+                value={project.title}
+                onChange={(value) =>
+                  updateProject(index, { ...project, title: value })
+                }
+              />
+              <AdminTextArea
+                label="Summary"
+                value={project.summary}
+                onChange={(value) =>
+                  updateProject(index, { ...project, summary: value })
+                }
+              />
+              <AdminTextArea
+                label="Result"
+                value={project.result}
+                onChange={(value) =>
+                  updateProject(index, { ...project, result: value })
+                }
+              />
+              <AdminField
+                label="Project link URL"
+                value={project.url ?? ""}
+                onChange={(value) =>
+                  updateProject(index, { ...project, url: value })
+                }
+              />
+              <AdminField
+                label="Preview image/GIF URL"
+                value={project.image ?? ""}
+                onChange={(value) =>
+                  updateProject(index, { ...project, image: value })
+                }
+              />
+              <input
+                className="mt-3 block w-full text-sm text-white/[0.70]"
+                type="file"
+                accept="image/*,.svg"
+                onChange={(event) =>
+                  handleProjectImageUpload(index, event.target.files?.[0])
+                }
+              />
+              <p className="mt-2 text-xs font-semibold text-white/[0.48]">
+                Uploads preview only in this browser draft. For the public
+                portfolio, use a committed asset path or a hosted image URL.
+              </p>
+              <button
+                className="admin-button mt-3 px-4 py-2"
+                type="button"
+                onClick={() => updateProject(index, { ...project, image: "" })}
+              >
+                Remove project image
+              </button>
+              <AdminField
+                label="Internal tags, comma separated (not shown publicly)"
+                value={project.tags.join(", ")}
+                onChange={(value) =>
+                  updateProject(index, {
+                    ...project,
+                    tags: value
+                      .split(",")
+                      .map((tag) => tag.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+            </div>
+          ))}
+        </div>
+      </AdminPanel>
+
+      {exported ? (
         <AdminPanel
           defaultOpen
-          icon={<BookOpenCheck className="h-5 w-5" />}
-          eyebrow="Content"
-          title="Project cards"
+          icon={<Save className="h-5 w-5" />}
+          eyebrow="Backup"
+          title="Exported draft"
         >
-          <div className="mt-6 space-y-4">
-            {content.projects.map((project, index) => (
-              <div
-                className="rounded-3xl border border-white/10 bg-black/20 p-4"
-                key={project.title}
-              >
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-100/70">
-                      Project {String(index + 1).padStart(2, "0")}
-                    </p>
-                    <p className="mt-1 text-sm font-bold text-white/70">
-                      {project.title}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      aria-label={`Move ${project.title} up`}
-                      className="icon-button disabled:cursor-not-allowed disabled:opacity-35"
-                      disabled={index === 0}
-                      type="button"
-                      onClick={() => moveProject(index, -1)}
-                    >
-                      <ChevronUp className="h-4 w-4" />
-                    </button>
-                    <button
-                      aria-label={`Move ${project.title} down`}
-                      className="icon-button disabled:cursor-not-allowed disabled:opacity-35"
-                      disabled={index === content.projects.length - 1}
-                      type="button"
-                      onClick={() => moveProject(index, 1)}
-                    >
-                      <ChevronDown className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-                <AdminField
-                  label="Title"
-                  value={project.title}
-                  onChange={(value) =>
-                    updateProject(index, { ...project, title: value })
-                  }
-                />
-                <AdminTextArea
-                  label="Summary"
-                  value={project.summary}
-                  onChange={(value) =>
-                    updateProject(index, { ...project, summary: value })
-                  }
-                />
-                <AdminTextArea
-                  label="Result"
-                  value={project.result}
-                  onChange={(value) =>
-                    updateProject(index, { ...project, result: value })
-                  }
-                />
-                <AdminField
-                  label="Project link URL"
-                  value={project.url ?? ""}
-                  onChange={(value) =>
-                    updateProject(index, { ...project, url: value })
-                  }
-                />
-                <AdminField
-                  label="Preview image/GIF URL"
-                  value={project.image ?? ""}
-                  onChange={(value) =>
-                    updateProject(index, { ...project, image: value })
-                  }
-                />
-                <input
-                  className="mt-3 block w-full text-sm text-white/[0.70]"
-                  type="file"
-                  accept="image/*,.svg"
-                  onChange={(event) =>
-                    handleProjectImageUpload(index, event.target.files?.[0])
-                  }
-                />
-                <p className="mt-2 text-xs font-semibold text-white/[0.48]">
-                  Uploads preview only in this browser draft. For the public
-                  portfolio, use a committed asset path or a hosted image URL.
-                </p>
-                <button
-                  className="admin-button mt-3 px-4 py-2"
-                  type="button"
-                  onClick={() =>
-                    updateProject(index, { ...project, image: "" })
-                  }
-                >
-                  Remove project image
-                </button>
-                <AdminField
-                  label="Internal tags, comma separated (not shown publicly)"
-                  value={project.tags.join(", ")}
-                  onChange={(value) =>
-                    updateProject(index, {
-                      ...project,
-                      tags: value
-                        .split(",")
-                        .map((tag) => tag.trim())
-                        .filter(Boolean),
-                    })
-                  }
-                />
-              </div>
-            ))}
+          <div className="mb-3 flex items-center gap-2 font-bold text-white">
+            <Save className="h-5 w-5" />
+            Exported draft
           </div>
+          <textarea
+            className="admin-textarea min-h-[18rem] font-mono text-xs"
+            value={exported}
+            readOnly
+          />
         </AdminPanel>
-
-        {exported ? (
-          <AdminPanel
-            defaultOpen
-            icon={<Save className="h-5 w-5" />}
-            eyebrow="Backup"
-            title="Exported draft"
-          >
-            <div className="mb-3 flex items-center gap-2 font-bold text-white">
-              <Save className="h-5 w-5" />
-              Exported draft
-            </div>
-            <textarea
-              className="admin-textarea min-h-[18rem] font-mono text-xs"
-              value={exported}
-              readOnly
-            />
-          </AdminPanel>
-        ) : null}
+      ) : null}
     </section>
   );
 }
@@ -1703,7 +1839,10 @@ function AdminPanel({
   title: string;
 }) {
   return (
-    <details className="admin-panel glass-panel group overflow-hidden" open={defaultOpen}>
+    <details
+      className="admin-panel glass-panel group overflow-hidden"
+      open={defaultOpen}
+    >
       <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-6">
         <div className="flex items-center gap-3">
           <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">

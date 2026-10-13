@@ -260,6 +260,45 @@
     @apply rounded-full border border-white/10 px-4 py-2.5 text-xs font-bold text-cyan-100/80 transition hover:border-cyan-100/35 hover:bg-white/[0.08] hover:text-white;
   }
 
+  .project-detail-page {
+    margin-block: clamp(0.5rem, 2vw, 1.5rem) clamp(3rem, 7vw, 5rem);
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+  }
+
+  .project-detail-media {
+    @apply overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/25 shadow-2xl shadow-black/25;
+  }
+
+  .project-detail-media img {
+    @apply h-full w-full object-cover;
+    aspect-ratio: 16 / 9;
+  }
+
+  .project-detail-copy {
+    @apply text-white;
+  }
+
+  .project-detail-copy h1 {
+    max-width: 42rem;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 950;
+    letter-spacing: -0.06em;
+    line-height: 0.96;
+    text-wrap: balance;
+  }
+
+  .project-detail-summary {
+    @apply mt-5 max-w-3xl text-lg leading-8 text-white/[0.72];
+  }
+
+  .project-detail-result {
+    @apply mt-6 max-w-3xl rounded-2xl bg-black/[0.24] p-5 text-base leading-7 text-white/[0.78];
+  }
+
+  .project-detail-actions {
+    @apply mt-7 flex flex-wrap items-center gap-3;
+  }
+
   @media (min-width: 900px) {
     .hero-section {
       grid-template-columns: minmax(0, 1.04fr) minmax(20rem, 0.96fr);
@@ -369,10 +408,29 @@
 
   .about-modal-backdrop {
     @apply fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-slate-950/75 p-4 backdrop-blur-md;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    color: inherit;
   }
 
   .project-modal-backdrop {
     @apply fixed inset-0 z-50 grid place-items-center overflow-hidden bg-slate-950/75 p-4 backdrop-blur-md;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    color: inherit;
+  }
+
+  .about-modal-backdrop::backdrop,
+  .project-modal-backdrop::backdrop {
+    background: transparent;
   }
 
   .about-tv-shell {

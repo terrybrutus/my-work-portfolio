@@ -40,4 +40,20 @@ describe("App default route", () => {
       screen.getByText("Edit the About Me TV carousel"),
     ).toBeInTheDocument();
   });
+
+  it("renders the first-party ADDIE project page", () => {
+    window.history.pushState({}, "", "/work/addie-model-from-start-to-finish");
+    render(<App />);
+    expect(
+      screen.getByRole("heading", { name: "ADDIE Model From Start to Finish" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /A full instructional design process example for CON 7020/i,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "View CON 7020 course context" }),
+    ).toHaveAttribute("href", "https://icatalog.waru.edu/CourseDetail/12795");
+  });
 });
