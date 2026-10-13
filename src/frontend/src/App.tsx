@@ -100,6 +100,8 @@ const legacyAboutCopy = [
   "My work lives between learning strategy, customer adoption, technical enablement, and operational workflow design. I help teams move from scattered stakeholder requests to structured learning systems that can be delivered, measured, maintained, and trusted.",
   "Across federal, enterprise, municipal, SaaS, healthcare, sales, and technical environments, I focus on the part that matters most: making complex work easier for real people to perform without burying them in generic training.",
 ];
+const previousPersonalAboutCopy =
+  "Outside the work, I am drawn to systems, stories, games, music, visual design, and the way people learn when something finally clicks. That curiosity is a big part of my portfolio: I like building experiences that feel useful, human, and a little more alive than a standard resume.";
 
 const legacyProjectTitles = [
   "Defense Workforce Learning Architecture",
@@ -275,7 +277,7 @@ const defaultContent: PortfolioContent = {
   ],
   about: [
     "I help teams turn messy adoption, training, and workflow problems into learning systems people can actually use. My path has moved through defense, enterprise, municipal, SaaS, healthcare, sales, and technical environments, which taught me to design for real constraints instead of ideal conditions.",
-    "Outside the work, I am drawn to systems, stories, games, music, visual design, and the way people learn when something finally clicks. That curiosity is a big part of my portfolio: I like building experiences that feel useful, human, and a little more alive than a standard resume.",
+    "Before this work, basketball shaped a lot of how I think: prepare seriously, read the room quickly, and keep moving when the play changes. I still bring that athlete's mix of discipline, curiosity, and competitiveness into the systems I build.",
   ],
   capabilities: [
     "Translate stakeholder goals and operational priorities into scalable learning strategies",
@@ -415,6 +417,15 @@ function normalizeProjects(projects: Project[]) {
   return projects.map(normalizeProject);
 }
 
+function normalizeAbout(about: string[]) {
+  const nextAbout = [...about];
+  if (nextAbout[1] === previousPersonalAboutCopy) {
+    nextAbout[1] = defaultContent.about[1];
+  }
+
+  return nextAbout;
+}
+
 function isExternalHref(href: string) {
   return /^https?:\/\//i.test(href) || href.startsWith("mailto:");
 }
@@ -533,7 +544,7 @@ function getInitialContent(): PortfolioContent {
           : (parsed.aboutPersonalKicker ?? defaultContent.aboutPersonalKicker),
       about: shouldUpgradeAbout
         ? defaultContent.about
-        : (parsed.about ?? defaultContent.about),
+        : normalizeAbout(parsed.about ?? defaultContent.about),
       projects: shouldUpgradeProjects
         ? normalizeProjects(defaultContent.projects)
         : normalizeProjects(parsed.projects ?? defaultContent.projects),
@@ -901,6 +912,8 @@ function AboutTvModal({
       kicker: content.aboutPersonalKicker,
       title: content.aboutPersonalTitle,
       copy: personalStory,
+      image: "/assets/ole-miss-basketball.png",
+      imageAlt: "Terry Brutus playing basketball for Ole Miss",
     },
     {
       kicker: content.aboutSelectedWorkKicker,
@@ -970,6 +983,14 @@ function AboutTvModal({
             <span className="retro-tv-title" id="about-modal-title">
               {activeTvSlide.title}
             </span>
+            {"image" in activeTvSlide && activeTvSlide.image ? (
+              <span className="retro-tv-slide-image-frame">
+                <img
+                  alt={activeTvSlide.imageAlt ?? ""}
+                  src={activeTvSlide.image}
+                />
+              </span>
+            ) : null}
             <span className="retro-tv-copy">{activeTvSlide.copy}</span>
             <span className="retro-tv-hint">
               {activeSlide + 1} / {slides.length}
