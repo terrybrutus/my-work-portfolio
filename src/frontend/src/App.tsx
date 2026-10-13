@@ -90,6 +90,10 @@ type Template = {
 
 const STORAGE_KEY = "terry-lxd-portfolio-draft-v4";
 
+function saveLocalDraft(content: PortfolioContent) {
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+}
+
 const legacyAboutCopy = [
   "My work lives between learning strategy, customer adoption, technical enablement, and operational workflow design. I help teams move from scattered stakeholder requests to structured learning systems that can be delivered, measured, maintained, and trusted.",
   "Across federal, enterprise, municipal, SaaS, healthcare, sales, and technical environments, I focus on the part that matters most: making complex work easier for real people to perform without burying them in generic training.",
@@ -444,7 +448,11 @@ export default function App() {
     window.location.pathname.startsWith("/admin");
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+    try {
+      saveLocalDraft(content);
+    } catch (error) {
+      console.warn("Unable to save portfolio draft locally.", error);
+    }
   }, [content]);
 
   const template = useMemo(
@@ -1207,15 +1215,20 @@ function AdminStudio({
   const handleImageUpload = (file: File | undefined) => {
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => updateContent("profileImage", String(reader.result));
+    reader.onload = () => {
+      updateContent("profileImage", String(reader.result));
+      setSaveStatus("Profile image added to this browser draft.");
+    };
     reader.readAsDataURL(file);
   };
 
   const handleBrandLogoUpload = (file: File | undefined) => {
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () =>
+    reader.onload = () => {
       updateContent("brandLogoImage", String(reader.result));
+      setSaveStatus("Logo image added to this browser draft.");
+    };
     reader.readAsDataURL(file);
   };
 
@@ -1225,13 +1238,22 @@ function AdminStudio({
     reader.onload = () => {
       const project = content.projects[index];
       updateProject(index, { ...project, image: String(reader.result) });
+      setSaveStatus(
+        "Project image added to this browser draft. Download a backup before switching devices.",
+      );
     };
     reader.readAsDataURL(file);
   };
 
   const saveDraft = () => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
-    setSaveStatus(`Saved locally at ${new Date().toLocaleTimeString()}.`);
+    try {
+      saveLocalDraft(content);
+      setSaveStatus(`Saved locally at ${new Date().toLocaleTimeString()}.`);
+    } catch {
+      setSaveStatus(
+        "Could not save locally. The uploaded image may be too large for browser storage. Use Download backup before leaving this page.",
+      );
+    }
   };
 
   const downloadBackup = () => {
@@ -1251,7 +1273,7 @@ function AdminStudio({
     <section className="space-y-6 pb-20">
       <AdminPanel
         defaultOpen
-        description="Local draft editor now. Auth/publish next."
+        description="Edits save to this browser only. Use Preview local draft to review here; deploying requires committing these changes to the site."
         eyebrow="Admin"
         icon={<Lock className="h-5 w-5" />}
         title="Portfolio Admin Studio"
@@ -1361,6 +1383,11 @@ function AdminStudio({
             accept="image/*"
             onChange={(event) => handleImageUpload(event.target.files?.[0])}
           />
+          <p className="mt-2 text-xs font-semibold text-white/[0.48]">
+            Uploaded files are stored in this browser draft. They are not
+            deployed to the public site until we add them to the project and
+            publish.
+          </p>
           <AdminField
             label="Image position"
             value={content.profileImagePosition}
@@ -1394,7 +1421,7 @@ function AdminStudio({
             <Wand2 className="h-4 w-4" /> Reset
           </button>
           <a className="admin-button" href="/">
-            <Eye className="h-4 w-4" /> Preview
+            <Eye className="h-4 w-4" /> Preview local draft
           </a>
         </div>
         <p className="mt-3 text-xs font-semibold text-white/[0.50]">
@@ -1607,6 +1634,10 @@ function AdminStudio({
                     handleProjectImageUpload(index, event.target.files?.[0])
                   }
                 />
+                <p className="mt-2 text-xs font-semibold text-white/[0.48]">
+                  Uploads preview only in this browser draft. For the public
+                  portfolio, use a committed asset path or a hosted image URL.
+                </p>
                 <button
                   className="admin-button mt-3 px-4 py-2"
                   type="button"
