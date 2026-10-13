@@ -87,6 +87,7 @@ type PortfolioContent = {
   aboutPersonalTitle: string;
   proofPoints: string[];
   about: string[];
+  aboutImages: string[];
   capabilities: string[];
   projects: Project[];
   sections: PortfolioSection[];
@@ -292,6 +293,7 @@ const defaultContent: PortfolioContent = {
     "I was a student-athlete at Ole Miss, and that still shapes how I work: study the film, understand the assignment, adjust fast, and keep moving when the play changes.",
     "I am curious about games, music, visual design, technology, and how hard ideas finally click. I like building work that feels useful, clear, and more alive than a standard document.",
   ],
+  aboutImages: ["", "/assets/ole-miss-basketball.png", ""],
   capabilities: [
     "Translate stakeholder goals and operational priorities into scalable learning strategies",
     "Design role-based onboarding, compliance, and customer enablement journeys",
@@ -523,6 +525,10 @@ function normalizeAbout(about: string[]) {
   return nextAbout;
 }
 
+function normalizeAboutImages(aboutImages: string[]) {
+  return defaultContent.about.map((_, index) => aboutImages[index] ?? "");
+}
+
 function isExternalHref(href: string) {
   return /^https?:\/\//i.test(href) || href.startsWith("mailto:");
 }
@@ -642,6 +648,9 @@ function getInitialContent(): PortfolioContent {
       about: shouldUpgradeAbout
         ? defaultContent.about
         : normalizeAbout(parsed.about ?? defaultContent.about),
+      aboutImages: normalizeAboutImages(
+        parsed.aboutImages ?? defaultContent.aboutImages,
+      ),
       projects: shouldUpgradeProjects
         ? normalizeProjects(defaultContent.projects)
         : normalizeProjects(parsed.projects ?? defaultContent.projects),
@@ -1034,18 +1043,22 @@ function AboutTvModal({
       kicker: content.aboutWorkKicker,
       title: content.aboutWorkTitle,
       copy: workStory,
+      image: content.aboutImages[0],
+      imageAlt: "About Terry Brutus work story",
     },
     {
       kicker: content.aboutPersonalKicker,
       title: content.aboutPersonalTitle,
       copy: personalStory,
-      image: "/assets/ole-miss-basketball.png",
+      image: content.aboutImages[1],
       imageAlt: "Terry Brutus playing basketball for Ole Miss",
     },
     {
       kicker: "Outside the title",
       title: "What I Pay Attention To",
       copy: curiosityStory,
+      image: content.aboutImages[2],
+      imageAlt: "About Terry Brutus personal interests",
     },
   ];
   const activeTvSlide = slides[activeSlide] ?? slides[0];
@@ -1105,10 +1118,10 @@ function AboutTvModal({
             <span className="retro-tv-title" id="about-modal-title">
               {activeTvSlide.title}
             </span>
-            {"image" in activeTvSlide && activeTvSlide.image ? (
+            {activeTvSlide.image ? (
               <span className="retro-tv-slide-image-frame">
                 <img
-                  alt={activeTvSlide.imageAlt ?? ""}
+                  alt={activeTvSlide.imageAlt}
                   src={activeTvSlide.image}
                 />
               </span>
@@ -1497,6 +1510,12 @@ function AdminStudio({
     updateContent("about", about);
   };
 
+  const updateAboutImage = (index: number, value: string) => {
+    const aboutImages = [...content.aboutImages];
+    aboutImages[index] = value;
+    updateContent("aboutImages", aboutImages);
+  };
+
   const handleImageUpload = (file: File | undefined) => {
     if (!file) return;
     const reader = new FileReader();
@@ -1529,6 +1548,18 @@ function AdminStudio({
       updateProject(index, { ...project, image: String(reader.result) });
       setSaveStatus(
         `${project.title} image received in this browser draft. Use Save browser draft to persist locally; public deployment needs a committed asset path.`,
+      );
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleAboutImageUpload = (index: number, file: File | undefined) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      updateAboutImage(index, String(reader.result));
+      setSaveStatus(
+        `About slide ${index + 1} image received in this browser draft. Use Save browser draft to persist locally; public deployment needs a committed asset path.`,
       );
     };
     reader.readAsDataURL(file);
@@ -1806,7 +1837,32 @@ function AdminStudio({
             value={content.about[0] ?? ""}
             onChange={(value) => updateAbout(0, value)}
           />
-          <div />
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-4">
+            <div className="mb-3 flex items-center gap-2 text-sm font-bold text-white">
+              <ImagePlus className="h-4 w-4" />
+              Work slide image
+            </div>
+            <AdminField
+              label="Image URL or browser-uploaded image"
+              value={content.aboutImages[0] ?? ""}
+              onChange={(value) => updateAboutImage(0, value)}
+            />
+            <input
+              className="mt-3 block w-full text-sm text-white/[0.70]"
+              type="file"
+              accept="image/*,.svg"
+              onChange={(event) =>
+                handleAboutImageUpload(0, event.target.files?.[0])
+              }
+            />
+            <button
+              className="admin-button mt-3 px-4 py-2"
+              type="button"
+              onClick={() => updateAboutImage(0, "")}
+            >
+              Remove slide image
+            </button>
+          </div>
           <AdminField
             label="Personal slide kicker"
             value={content.aboutPersonalKicker}
@@ -1822,12 +1878,63 @@ function AdminStudio({
             value={content.about[1] ?? ""}
             onChange={(value) => updateAbout(1, value)}
           />
-          <div />
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-4">
+            <div className="mb-3 flex items-center gap-2 text-sm font-bold text-white">
+              <ImagePlus className="h-4 w-4" />
+              Personal slide image
+            </div>
+            <AdminField
+              label="Image URL or browser-uploaded image"
+              value={content.aboutImages[1] ?? ""}
+              onChange={(value) => updateAboutImage(1, value)}
+            />
+            <input
+              className="mt-3 block w-full text-sm text-white/[0.70]"
+              type="file"
+              accept="image/*,.svg"
+              onChange={(event) =>
+                handleAboutImageUpload(1, event.target.files?.[0])
+              }
+            />
+            <button
+              className="admin-button mt-3 px-4 py-2"
+              type="button"
+              onClick={() => updateAboutImage(1, "")}
+            >
+              Remove slide image
+            </button>
+          </div>
           <AdminTextArea
             label="Third about slide copy"
             value={content.about[2] ?? ""}
             onChange={(value) => updateAbout(2, value)}
           />
+          <div className="rounded-3xl border border-white/10 bg-black/20 p-4">
+            <div className="mb-3 flex items-center gap-2 text-sm font-bold text-white">
+              <ImagePlus className="h-4 w-4" />
+              Third slide image
+            </div>
+            <AdminField
+              label="Image URL or browser-uploaded image"
+              value={content.aboutImages[2] ?? ""}
+              onChange={(value) => updateAboutImage(2, value)}
+            />
+            <input
+              className="mt-3 block w-full text-sm text-white/[0.70]"
+              type="file"
+              accept="image/*,.svg"
+              onChange={(event) =>
+                handleAboutImageUpload(2, event.target.files?.[0])
+              }
+            />
+            <button
+              className="admin-button mt-3 px-4 py-2"
+              type="button"
+              onClick={() => updateAboutImage(2, "")}
+            >
+              Remove slide image
+            </button>
+          </div>
         </div>
       </AdminPanel>
 
