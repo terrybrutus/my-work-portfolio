@@ -1342,14 +1342,20 @@ function ProjectShowcaseModal({
             </div>
           )}
         </div>
-        <div className="project-modal-content">
+        <div className="project-modal-content" key={activeIndex}>
           <p className="retro-tv-kicker">
             Work {String(activeIndex + 1).padStart(2, "0")} /{" "}
             {String(projects.length).padStart(2, "0")}
           </p>
-          <h2 id="project-modal-title">{activeProject.title}</h2>
-          <p className="project-modal-summary">{activeProject.summary}</p>
-          <div className="project-modal-result">{activeProject.result}</div>
+          <h2 id="project-modal-title" tabIndex={0}>
+            {activeProject.title}
+          </h2>
+          <p className="project-modal-summary" tabIndex={0} aria-label="Project summary">
+            {activeProject.summary}
+          </p>
+          <div className="project-modal-result" tabIndex={0} aria-label="Project outcome">
+            {activeProject.result}
+          </div>
           <div className="project-modal-actions">
             {activeProject.url ? (
               <ProjectLink className="primary-cta" href={activeProject.url}>
