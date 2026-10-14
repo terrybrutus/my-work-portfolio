@@ -27,6 +27,7 @@ type Project = {
   result: string;
   tags: string[];
   image?: string;
+  carouselImage?: string;
   url?: string;
   slug?: string;
   contextUrl?: string;
@@ -490,7 +491,7 @@ function normalizeProject(project: Project): Project {
   const upgradedProject = defaultProject
     ? {
         ...nextProject,
-        image: nextProject.image || defaultProject.image,
+        image: nextProject.image ?? defaultProject.image,
         slug: nextProject.slug ?? defaultProject.slug,
         url: nextProject.url ?? defaultProject.url,
         contextUrl: nextProject.contextUrl ?? defaultProject.contextUrl,
@@ -501,10 +502,6 @@ function normalizeProject(project: Project): Project {
         detailLinks: nextProject.detailLinks ?? defaultProject.detailLinks,
       }
     : nextProject;
-
-  if (upgradedProject.title.toLowerCase().includes("enablement quest")) {
-    return { ...upgradedProject, image: "/assets/projects/enablement-quest.gif" };
-  }
 
   return upgradedProject;
 }
@@ -912,7 +909,7 @@ function ProjectDetailPage({
             <div className="project-detail-result">{project.result}</div>
           )}
           <div className="project-detail-actions">
-            <a className="secondary-cta" href="/#work">
+            <a className="secondary-cta" href={`/?work=${encodeURIComponent(getProjectSlug(project))}#work`}>
               Back to selected work
             </a>
             {project.contextUrl ? (
@@ -1197,8 +1194,22 @@ function CapabilitiesSection({ content }: { content: PortfolioContent }) {
 
 function ProjectSection({ content }: { content: PortfolioContent }) {
   const [activeProjectIndex, setActiveProjectIndex] = useState<number | null>(
-    null,
+    () => {
+      const returnProject = new URLSearchParams(window.location.search).get("work");
+      const index = content.projects.findIndex(
+        (project) => getProjectSlug(project) === returnProject,
+      );
+      return index < 0 ? null : index;
+    },
   );
+  const closeCarousel = () => {
+    setActiveProjectIndex(null);
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("work")) {
+      url.searchParams.delete("work");
+      window.history.replaceState(window.history.state, "", url);
+    }
+  };
   const featuredProjects = content.projects.slice(0, 3);
   const activeProject =
     activeProjectIndex === null ? null : content.projects[activeProjectIndex];
@@ -1262,7 +1273,7 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
       <ProjectShowcaseModal
         activeIndex={activeProjectIndex ?? 0}
         isOpen={Boolean(activeProject)}
-        onClose={() => setActiveProjectIndex(null)}
+        onClose={closeCarousel}
         onSelect={setActiveProjectIndex}
         projects={content.projects}
       />
@@ -1285,6 +1296,7 @@ function ProjectShowcaseModal({
 }) {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const activeProject = projects[activeIndex] ?? projects[0];
+  const carouselImage = activeProject?.carouselImage ?? activeProject?.image;
   const goToProject = useCallback(
     (direction: -1 | 1) => {
       onSelect((activeIndex + direction + projects.length) % projects.length);
@@ -1333,7 +1345,7 @@ function ProjectShowcaseModal({
     const observer = new ResizeObserver(fitTitle);
     observer.observe(title);
     let disposed = false;
-    void document.fonts.ready.then(() => {
+    void document.fonts?.ready.then(() => {
       if (!disposed) fitTitle();
     });
     return () => {
@@ -1361,8 +1373,8 @@ function ProjectShowcaseModal({
           Close
         </button>
         <div className="project-modal-media">
-          {activeProject.image ? (
-            <img alt="" src={activeProject.image} />
+          {carouselImage ? (
+            <img alt="" src={carouselImage} />
           ) : (
             <div className="project-modal-placeholder">
               {activeProject.title}
@@ -1577,12 +1589,16 @@ function AdminStudio({
     reader.readAsDataURL(file);
   };
 
-  const handleProjectImageUpload = (index: number, file: File | undefined) => {
+  const handleProjectImageUpload = (
+    index: number,
+    file: File | undefined,
+    field: "image" | "carouselImage" = "image",
+  ) => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       const project = content.projects[index];
-      updateProject(index, { ...project, image: String(reader.result) });
+      updateProject(index, { ...project, [field]: String(reader.result) });
       setSaveStatus(
         `${project.title} image received in this browser draft. Use Save browser draft to persist locally; public deployment needs a committed asset path.`,
       );
@@ -2046,13 +2062,14 @@ function AdminStudio({
                 }
               />
               <AdminField
-                label="Preview image/GIF URL"
+                label="Project page / card image URL"
                 value={project.image ?? ""}
                 onChange={(value) =>
                   updateProject(index, { ...project, image: value })
                 }
               />
               <input
+                aria-label={`Upload project page image for ${project.title}`}
                 className="mt-3 block w-full text-sm text-white/[0.70]"
                 type="file"
                 accept="image/*,.svg"
@@ -2071,6 +2088,52 @@ function AdminStudio({
               >
                 Remove project image
               </button>
+              <div className="mt-5 rounded-2xl border border-white/10 p-4">
+                <AdminField
+                  label="Carousel image URL (independent of project page)"
+                  value={project.carouselImage ?? ""}
+                  onChange={(value) =>
+                    updateProject(index, { ...project, carouselImage: value })
+                  }
+                />
+                <input
+                  aria-label={`Upload carousel image for ${project.title}`}
+                  className="mt-3 block w-full text-sm text-white/[0.70]"
+                  type="file"
+                  accept="image/*,.svg"
+                  onChange={(event) =>
+                    handleProjectImageUpload(index, event.target.files?.[0], "carouselImage")
+                  }
+                />
+                {(project.carouselImage ?? project.image) ? (
+                  <img
+                    alt={`Carousel preview for ${project.title}`}
+                    className="mt-3 max-h-40 w-full rounded-xl object-contain"
+                    src={project.carouselImage ?? project.image}
+                  />
+                ) : null}
+                <p className="mt-2 text-xs text-white/60">
+                  {project.carouselImage === undefined
+                    ? "Currently using the project image. Upload a different image to change only the carousel."
+                    : "This image setting applies only to the work carousel."}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    className="admin-button px-4 py-2"
+                    type="button"
+                    onClick={() => updateProject(index, { ...project, carouselImage: undefined })}
+                  >
+                    Use project image
+                  </button>
+                  <button
+                    className="admin-button px-4 py-2"
+                    type="button"
+                    onClick={() => updateProject(index, { ...project, carouselImage: "" })}
+                  >
+                    Remove carousel image
+                  </button>
+                </div>
+              </div>
               <AdminField
                 label="Internal tags, comma separated (not shown publicly)"
                 value={project.tags.join(", ")}
