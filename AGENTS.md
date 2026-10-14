@@ -35,4 +35,6 @@ When editing `index.html` (e.g. changing the title or favicon):
 
 ## Learnings
 
-[No learnings yet]
+- The portfolio's established local origin is `http://127.0.0.1:44120`. Keep this port stable because existing browser drafts are tied to it.
+- Local admin's **Save to project** uses the development-only `/__portfolio/save` endpoint in `src/frontend/scripts/portfolio-save.mjs`. It writes content to `src/frontend/src/content/portfolio.json` and uploaded images to `src/frontend/public/assets/uploads/`. These files are build inputs and must be included when committing/publishing user edits. Do not reset them to defaults.
+- Browser draft saving is a temporary fallback. It is not equivalent to a confirmed project-file save or public deployment. Existing portfolio tabs synchronize browser draft changes through storage events.

@@ -20,6 +20,7 @@ import type React from "react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useCallerUserRole } from "./hooks/useQueries";
+import savedPortfolio from "./content/portfolio.json";
 
 type Project = {
   title: string;
@@ -104,6 +105,11 @@ type Template = {
 };
 
 const STORAGE_KEY = "terry-lxd-portfolio-draft-v4";
+const SAVED_REVISION_KEY = `${STORAGE_KEY}-written-revision`;
+const writtenPortfolio = savedPortfolio as {
+  savedAt?: string;
+  content?: PortfolioContent;
+};
 
 function saveLocalDraft(content: PortfolioContent) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
@@ -580,10 +586,12 @@ function ProjectLink({
 
 function getInitialContent(): PortfolioContent {
   if (typeof window === "undefined") return defaultContent;
-  const saved = window.localStorage.getItem(STORAGE_KEY);
-  if (!saved) return defaultContent;
   try {
-    const parsed = JSON.parse(saved) as Partial<PortfolioContent>;
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    const sourceIsNewer = writtenPortfolio.content &&
+      window.localStorage.getItem(SAVED_REVISION_KEY) !== writtenPortfolio.savedAt;
+    const parsed = (sourceIsNewer ? writtenPortfolio.content : saved ? JSON.parse(saved) : writtenPortfolio.content) as Partial<PortfolioContent> | undefined;
+    if (!parsed) return defaultContent;
     const shouldUpgradeAbout =
       parsed.about?.[0] === legacyAboutCopy[0] &&
       parsed.about?.[1] === legacyAboutCopy[1];
@@ -653,7 +661,7 @@ function getInitialContent(): PortfolioContent {
         : normalizeProjects(parsed.projects ?? defaultContent.projects),
     };
   } catch {
-    return defaultContent;
+    return writtenPortfolio.content ?? defaultContent;
   }
 }
 
@@ -676,11 +684,33 @@ export default function App() {
 
   useEffect(() => {
     try {
+      if (writtenPortfolio.savedAt) window.localStorage.setItem(SAVED_REVISION_KEY, writtenPortfolio.savedAt);
+    } catch {
+      // Written portfolio content remains available without browser storage.
+    }
+  }, [writtenPortfolio.savedAt]);
+
+  useEffect(() => {
+    try {
       saveLocalDraft(content);
     } catch (error) {
       console.warn("Unable to save portfolio draft locally.", error);
     }
   }, [content]);
+
+  useEffect(() => {
+    const syncDraft = (event: StorageEvent) => {
+      if (event.key !== STORAGE_KEY || !event.newValue) return;
+      try {
+        const next = JSON.parse(event.newValue) as PortfolioContent;
+        if (Array.isArray(next.projects) && Array.isArray(next.aboutImages)) setContent(next);
+      } catch {
+        // Ignore incomplete drafts from another tab.
+      }
+    };
+    window.addEventListener("storage", syncDraft);
+    return () => window.removeEventListener("storage", syncDraft);
+  }, []);
 
   const template = useMemo(
     () =>
@@ -1534,9 +1564,44 @@ function AdminStudio({
   setContent: React.Dispatch<React.SetStateAction<PortfolioContent>>;
 }) {
   const [exported, setExported] = useState("");
+  const [isSavingProject, setIsSavingProject] = useState(false);
+  const [pendingUploads, setPendingUploads] = useState(0);
   const [saveStatus, setSaveStatus] = useState(
-    "Browser draft ready. Public site changes still need committed source updates.",
+    "Use Save to project to write your changes and images to the portfolio files.",
   );
+
+  const saveToProject = async () => {
+    if (pendingUploads) {
+      setSaveStatus("Please wait for the image to finish loading, then save.");
+      return;
+    }
+    setIsSavingProject(true);
+    setSaveStatus("Writing your changes and images...");
+    try {
+      const response = await fetch("/__portfolio/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(content),
+      });
+      if (!response.headers.get("content-type")?.includes("application/json")) {
+        throw new Error("Saving to project files is available in the local portfolio at http://127.0.0.1:44120/admin.");
+      }
+      const saved = await response.json();
+      if (!response.ok) throw new Error(saved.error ?? "Could not save the portfolio files.");
+      setContent(saved.content);
+      try {
+        window.localStorage.setItem(SAVED_REVISION_KEY, saved.savedAt);
+        saveLocalDraft(saved.content);
+      } catch {
+        // The confirmed disk save remains valid when browser storage is unavailable.
+      }
+      setSaveStatus(`Saved to project files at ${new Date(saved.savedAt).toLocaleTimeString()}. Images and content are ready in your portfolio. Publishing is a separate step.`);
+    } catch (error) {
+      setSaveStatus(`Save failed: ${error instanceof Error ? error.message : "Could not write the portfolio files."} Your changes are still in this editor.`);
+    } finally {
+      setIsSavingProject(false);
+    }
+  };
 
   const updateProject = (index: number, project: Project) => {
     const projects = [...content.projects];
@@ -1565,28 +1630,33 @@ function AdminStudio({
     updateContent("aboutImages", aboutImages);
   };
 
+  const readUpload = (file: File, onRead: (value: string) => void) => {
+    setPendingUploads((count) => count + 1);
+    const reader = new FileReader();
+    reader.onload = () => onRead(String(reader.result));
+    reader.onerror = () => setSaveStatus(`Could not read ${file.name}. Please select the image again.`);
+    reader.onloadend = () => setPendingUploads((count) => count - 1);
+    reader.readAsDataURL(file);
+  };
+
   const handleImageUpload = (file: File | undefined) => {
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      updateContent("profileImage", String(reader.result));
+    readUpload(file, (image) => {
+      updateContent("profileImage", image);
       setSaveStatus(
-        "Profile image received in this browser draft. Use Save browser draft to keep it here; it is not public until committed.",
+        "Profile image loaded. Click Save to project to write it into the portfolio.",
       );
-    };
-    reader.readAsDataURL(file);
+    });
   };
 
   const handleBrandLogoUpload = (file: File | undefined) => {
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      updateContent("brandLogoImage", String(reader.result));
+    readUpload(file, (image) => {
+      updateContent("brandLogoImage", image);
       setSaveStatus(
-        "Logo image received in this browser draft. Use Save browser draft to keep it here; it is not public until committed.",
+        "Logo image loaded. Click Save to project to write it into the portfolio.",
       );
-    };
-    reader.readAsDataURL(file);
+    });
   };
 
   const handleProjectImageUpload = (
@@ -1595,27 +1665,23 @@ function AdminStudio({
     field: "image" | "carouselImage" = "image",
   ) => {
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
+    readUpload(file, (image) => {
       const project = content.projects[index];
-      updateProject(index, { ...project, [field]: String(reader.result) });
+      setContent((current) => ({ ...current, projects: current.projects.map((item, itemIndex) => itemIndex === index ? { ...item, [field]: image } : item) }));
       setSaveStatus(
-        `${project.title} image received in this browser draft. Use Save browser draft to persist locally; public deployment needs a committed asset path.`,
+        `${project.title} image loaded. Click Save to project to write it into the portfolio.`,
       );
-    };
-    reader.readAsDataURL(file);
+    });
   };
 
   const handleAboutImageUpload = (index: number, file: File | undefined) => {
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      updateAboutImage(index, String(reader.result));
+    readUpload(file, (image) => {
+      setContent((current) => ({ ...current, aboutImages: current.aboutImages.map((item, itemIndex) => itemIndex === index ? image : item) }));
       setSaveStatus(
-        `About slide ${index + 1} image received in this browser draft. Use Save browser draft to persist locally; public deployment needs a committed asset path.`,
+        `About slide ${index + 1} image loaded. Click Save to project to write it into the portfolio.`,
       );
-    };
-    reader.readAsDataURL(file);
+    });
   };
 
   const saveDraft = () => {
@@ -1648,7 +1714,7 @@ function AdminStudio({
     <section className="space-y-6 pb-20">
       <AdminPanel
         defaultOpen
-        description="Edits save to this browser only. Use Preview local draft to review here; deploying requires committing these changes to the site."
+        description="Save to project writes your content and uploaded images into the local portfolio files. Your saved changes survive a browser restart and are included in the next build."
         eyebrow="Admin"
         icon={<Lock className="h-5 w-5" />}
         title="Portfolio Admin Studio"
@@ -1759,9 +1825,7 @@ function AdminStudio({
             onChange={(event) => handleImageUpload(event.target.files?.[0])}
           />
           <p className="mt-2 text-xs font-semibold text-white/[0.48]">
-            Uploaded files are stored in this browser draft. They are not
-            deployed to the public site until we add them to the project and
-            publish.
+            Click Save to project to store the uploaded image as a portfolio file.
           </p>
           <AdminField
             label="Image position"
@@ -1771,6 +1835,9 @@ function AdminStudio({
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
+          <button className="admin-button" type="button" onClick={saveToProject} disabled={isSavingProject}>
+            <Save className="h-4 w-4" /> {isSavingProject ? "Saving..." : "Save to project"}
+          </button>
           <button className="admin-button" type="button" onClick={saveDraft}>
             <Save className="h-4 w-4" /> Save browser draft
           </button>
@@ -1799,7 +1866,7 @@ function AdminStudio({
             <Eye className="h-4 w-4" /> Preview local draft
           </a>
         </div>
-        <p className="mt-3 text-xs font-semibold text-white/[0.50]">
+        <p role="status" className="mt-3 text-sm font-semibold text-white/80">
           {saveStatus}
         </p>
       </AdminPanel>
@@ -1874,6 +1941,10 @@ function AdminStudio({
         eyebrow="About Modal"
         title="Edit the About Me TV carousel"
       >
+        <button className="admin-button" type="button" onClick={saveToProject} disabled={isSavingProject}>
+          <Save className="h-4 w-4" /> {isSavingProject ? "Saving..." : "Save About images and text"}
+        </button>
+        <p role="status" className="mt-3 text-sm text-white/80">{saveStatus}</p>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <AdminField
             label="Work slide kicker"
@@ -2078,8 +2149,7 @@ function AdminStudio({
                 }
               />
               <p className="mt-2 text-xs font-semibold text-white/[0.48]">
-                Uploads preview only in this browser draft. For the public
-                portfolio, use a committed asset path or a hosted image URL.
+                Click Save to project to write uploaded images into your portfolio files.
               </p>
               <button
                 className="admin-button mt-3 px-4 py-2"
@@ -2121,6 +2191,14 @@ function AdminStudio({
                   <button
                     className="admin-button px-4 py-2"
                     type="button"
+                    disabled={isSavingProject}
+                    onClick={saveToProject}
+                  >
+                    <Save className="h-4 w-4" /> {isSavingProject ? "Saving..." : "Save carousel image"}
+                  </button>
+                  <button
+                    className="admin-button px-4 py-2"
+                    type="button"
                     onClick={() => updateProject(index, { ...project, carouselImage: undefined })}
                   >
                     Use project image
@@ -2133,6 +2211,10 @@ function AdminStudio({
                     Remove carousel image
                   </button>
                 </div>
+                <p role="status" className="mt-3 text-sm text-white/80">{saveStatus}</p>
+                <a className="admin-button mt-3 px-4 py-2" href={`/?work=${encodeURIComponent(getProjectSlug(project))}#work`}>
+                  <Eye className="h-4 w-4" /> Preview this modal
+                </a>
               </div>
               <AdminField
                 label="Internal tags, comma separated (not shown publicly)"

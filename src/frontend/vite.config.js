@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from "url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import environment from "vite-plugin-environment";
+import { portfolioSavePlugin } from "./scripts/portfolio-save.mjs";
 
 const ii_url =
   process.env.DFX_NETWORK === "local"
@@ -36,6 +37,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    portfolioSavePlugin(),
     environment("all", { prefix: "CANISTER_" }),
     environment("all", { prefix: "DFX_" }),
     environment(["II_URL"]),

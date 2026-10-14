@@ -1,0 +1,332 @@
+{
+  "savedAt": "2026-10-14T19:14:17.705Z",
+  "content": {
+    "brandLabel": "",
+    "brandLogoText": "",
+    "brandLogoImage": "",
+    "navWorkLabel": "See My Work",
+    "navApproachLabel": "",
+    "navContactLabel": "Contact",
+    "navAdminLabel": "Admin",
+    "navPreviewLabel": "Preview",
+    "primaryCtaLabel": "About me",
+    "primaryCtaHref": "#about",
+    "secondaryCtaLabel": "Start a conversation",
+    "secondaryCtaHref": "mailto:terrbrutus@gmail.com",
+    "contactHeading": "Let's connect",
+    "contactText": "If you are looking for someone who can translate complex work into clear learning, enablement, or performance-support systems, I would be glad to talk.",
+    "name": "Terry Brutus",
+    "eyebrow": "Learning Experience Design | Enablement Systems | Performance Support",
+    "headline": "I turn complex work into learning experiences people can actually use.",
+    "subheadline": "I connect instructional design, enablement strategy, accessibility, and workflow thinking to help teams learn faster, adopt tools with less friction, and perform with more confidence.",
+    "location": "Leland, North Carolina",
+    "email": "terrbrutus@gmail.com",
+    "profileImage": "/assets/legacy/legacy-profile.png",
+    "profileImagePosition": "50% 42%",
+    "heroCardEyebrow": "Portfolio snapshot",
+    "heroCardFocusText": "My work sits at the intersection of learning design, performance consulting, content systems, and practical adoption. I care about whether people can use what I build when the work gets messy.",
+    "workSectionHeading": "Selected work across learning, enablement, and systems design",
+    "proofSectionHeading": "Proof points from the work",
+    "capabilitiesSectionHeading": "Core strengths pulled from the work, not buzzwords",
+    "templateSectionHeading": "A living portfolio that can keep evolving",
+    "aboutWorkKicker": "Work snapshot",
+    "aboutWorkTitle": "How I Got Here",
+    "aboutPersonalKicker": "Personal snapshot",
+    "aboutPersonalTitle": "Beyond The Work",
+    "proofPoints": [
+      "8+ years in learning architecture and technical enablement",
+      "158K+ defense learners supported through scalable training systems",
+      "122+ enterprise learning assets governed for Section 508/WCAG",
+      "AI-assisted workflows reducing review time by up to 90%"
+    ],
+    "about": [
+      "I help teams turn messy adoption, training, and workflow problems into learning systems people can actually use. My path has moved through defense, enterprise, municipal, SaaS, healthcare, sales, and technical environments, which taught me to design for real constraints instead of ideal conditions.",
+      "Before this work, basketball shaped a lot of how I think: prepare seriously, read the room quickly, and keep moving when the play changes. I still bring that athlete's mix of discipline, curiosity, and competitiveness into the systems I build.",
+      "I am curious about games, music, visual design, technology, and how hard ideas finally click. I like building work that feels useful, clear, and more alive than a standard document."
+    ],
+    "aboutImages": [
+      "",
+      "/assets/ole-miss-basketball.png",
+      ""
+    ],
+    "capabilities": [
+      "Translate stakeholder goals and operational priorities into scalable learning strategies",
+      "Design role-based onboarding, compliance, and customer enablement journeys",
+      "Build AI-assisted QA, content analysis, and skills-alignment workflows",
+      "Govern accessible learning assets using Section 508 and WCAG standards",
+      "Create scenario-based, simulation-based, and self-paced technical training",
+      "Use analytics and support data to identify adoption blockers and reduce escalations"
+    ],
+    "projects": [
+      {
+        "title": "Enablement Quest: The Learning Systems Lab",
+        "summary": "A browser-based RPG-style learning simulation where players investigate workplace performance problems, inspect evidence, talk to stakeholders, and decide whether training is really the right answer.",
+        "result": "Demonstrates performance consulting judgment through two playable cases: new-hire ramp and stalled sales demo conversion, with earned business-impact canvases and reviewer-facing evidence boundaries.",
+        "tags": [
+          "Performance consulting",
+          "Sales enablement",
+          "RPG learning simulation"
+        ],
+        "image": "/assets/projects/enablement-quest.gif",
+        "url": ""
+      },
+      {
+        "title": "AI & The Future of Work",
+        "summary": "A RISE 360 microlearning course about how AI is changing work, framed for learners who may be curious, skeptical, or worried about what the technology means for their role.",
+        "result": "Turns a broad technology topic into a short, approachable learning experience that helps people understand the shift without fear-first messaging.",
+        "tags": [
+          "RISE 360",
+          "AI literacy",
+          "Microlearning"
+        ],
+        "image": "/assets/projects/ai-future-of-work.gif",
+        "url": "https://terrybrutus-aiandthefuture-sample.netlify.app/"
+      },
+      {
+        "title": "Why Blockchain Actually Matters",
+        "summary": "A RISE 360 microlearning course that explains blockchain basics and why the technology matters beyond hype or legacy-banking arguments.",
+        "result": "Makes a complex technical topic easier to understand by connecting blockchain to practical uses, transaction speed, security, and operational efficiency.",
+        "tags": [
+          "RISE 360",
+          "Blockchain",
+          "Technical explainer"
+        ],
+        "image": "/assets/projects/blockchain-matters.gif",
+        "url": "https://whyblockchainmatters-by-terrybrutus.netlify.app/"
+      },
+      {
+        "title": "Don't Get Hooked: A Course on Phishing",
+        "summary": "A Storyline 360 microlearning course created from a real phishing attempt, designed to make cybersecurity awareness feel immediate and practical.",
+        "result": "Uses a real-world trigger to help learners recognize phishing behavior and connect security guidance to decisions they actually make.",
+        "tags": [
+          "Storyline 360",
+          "Cybersecurity",
+          "Scenario learning"
+        ],
+        "image": "/assets/projects/phishing-course.png",
+        "url": "https://phishingcourse-by-terrybrutus.netlify.app/story.html",
+        "carouselImage": "/assets/uploads/9e93f7580fbb327786f8206231887b978e5f8bc1101216e9c15120c0cb3ee874.gif"
+      },
+      {
+        "title": "ADDIE Model From Start to Finish",
+        "summary": "A full instructional design process example for CON 7020, translating technical contracting documentation into a structured online learning experience.",
+        "result": "Shows analysis, learning-objective mapping, storyboard design, interactive scenario planning, development, and implementation thinking across the full ADDIE process.",
+        "tags": [
+          "ADDIE",
+          "Government training",
+          "Course architecture"
+        ],
+        "image": "/assets/con-7020-thumbnail.png",
+        "url": "/work/addie-model-from-start-to-finish",
+        "slug": "addie-model-from-start-to-finish",
+        "contextUrl": "https://icatalog.waru.edu/CourseDetail/12795",
+        "contextLabel": "View CON 7020 course context",
+        "detailIntro": "CON 7020 is a Defense Acquisition University course focused on Overhead Should Cost Review. The portfolio value here is not the old course link itself; it is the instructional design trail: how dense contracting material became objectives, structure, screens, interactions, checks, and implementation decisions.",
+        "detailSections": [
+          {
+            "title": "What This Project Shows",
+            "body": "A complete ADDIE workflow: analysis of source content, audience needs, learning-objective mapping, storyboard planning, interaction design, development thinking, review cycles, and implementation considerations."
+          },
+          {
+            "title": "Why It Matters",
+            "body": "A recruiter who is not familiar with government contracting can still see the core skill: taking complex technical material and turning it into a learnable experience with structure, sequencing, practice, and clear learner support."
+          },
+          {
+            "title": "Artifact Note",
+            "body": "The previously implemented public course link is no longer available, but the course context remains available through the course catalog link."
+          }
+        ]
+      },
+      {
+        "title": "Quality Assurance Review System",
+        "summary": "A QA commentary workflow for a 50+ screen government eLearning course, documenting structural, instructional, formatting, and compliance issues for the production team.",
+        "result": "Highlights a systematic review practice across instructional quality, user experience, Section 508/WCAG expectations, and contractual standards.",
+        "tags": [
+          "QA",
+          "Accessibility",
+          "Learning operations"
+        ],
+        "image": "/assets/projects/qa-review-system.png",
+        "url": "/work/quality-assurance-review-system",
+        "slug": "quality-assurance-review-system",
+        "detailIntro": "This project shows quality assurance as a learning-operations practice, not a last-minute spelling check. The work involved reviewing a large eLearning lesson and documenting issues in a way the production team could act on.",
+        "detailSections": [
+          {
+            "title": "What Was Reviewed",
+            "body": "Course structure, slide flow, learner instructions, interface consistency, visual formatting, feedback clarity, accessibility considerations, and alignment with the expected review standards."
+          },
+          {
+            "title": "What It Demonstrates",
+            "body": "The ability to inspect learning assets like a system: find friction, explain the impact, preserve the instructional intent, and give production-ready notes that make revision easier."
+          },
+          {
+            "title": "Why It Belongs Here",
+            "body": "QA work is often invisible, but it is one of the places where polished learning experiences are made. This artifact makes that review judgment visible."
+          }
+        ]
+      },
+      {
+        "title": "Job Aid Template System",
+        "summary": "Performance-support templates created to turn dense regulatory and technical content into clearer job aids for DOD acquisition professionals.",
+        "result": "Demonstrates information architecture, visual hierarchy, essential-resource curation, and reusable template thinking for on-the-job support.",
+        "tags": [
+          "Job aids",
+          "Performance support",
+          "Template design"
+        ],
+        "image": "/assets/projects/job-aid-template-system.png",
+        "url": "/work/job-aid-template-system",
+        "slug": "job-aid-template-system",
+        "detailIntro": "This project focuses on the part of learning that happens after a course: quick-reference support people can use while doing the job.",
+        "detailSections": [
+          {
+            "title": "Design Problem",
+            "body": "Dense acquisition and regulatory content needed to become a reusable support format that helped people find the right information faster without reopening an entire course."
+          },
+          {
+            "title": "What It Demonstrates",
+            "body": "Information architecture, template design, visual hierarchy, plain-language reduction, and performance-support thinking for technical audiences."
+          },
+          {
+            "title": "Portfolio Signal",
+            "body": "It shows that the work is not limited to courses. It also includes tools, references, and systems that support performance in the flow of work."
+          }
+        ]
+      },
+      {
+        "title": "Facilitator Guide Adaptation",
+        "summary": "A facilitator guide that adapted asynchronous online training into a synchronous instructor-led session using Gagne's Nine Events of Instruction.",
+        "result": "Shows how the same content can be redesigned across modalities while preserving instructional intent, timing, materials, and facilitation strategy.",
+        "tags": [
+          "Facilitator guide",
+          "ILT",
+          "Modality conversion"
+        ],
+        "image": "/assets/projects/facilitator-guide-adaptation.png",
+        "url": "/work/facilitator-guide-adaptation",
+        "slug": "facilitator-guide-adaptation",
+        "detailIntro": "This project shows a modality shift: taking training content built for one delivery format and adapting it into an instructor-led facilitation plan.",
+        "detailSections": [
+          {
+            "title": "What Changed",
+            "body": "The experience needed timing, materials, facilitator notes, learner activities, room/setup considerations, and a sequence an instructor could actually run."
+          },
+          {
+            "title": "Instructional Lens",
+            "body": "The guide uses Gagne's Nine Events as a planning structure while keeping the facilitator focused on pacing, learner attention, practice, and transition points."
+          },
+          {
+            "title": "Why It Matters",
+            "body": "It demonstrates that the same learning goal can be rebuilt for a different environment without losing instructional logic."
+          }
+        ]
+      }
+    ],
+    "sections": [
+      {
+        "id": "proof",
+        "label": "Proof Points",
+        "visible": false
+      },
+      {
+        "id": "about",
+        "label": "Approach",
+        "visible": false
+      },
+      {
+        "id": "capabilities",
+        "label": "Capabilities",
+        "visible": false
+      },
+      {
+        "id": "projects",
+        "label": "Selected Work",
+        "visible": true
+      },
+      {
+        "id": "templates",
+        "label": "Template System",
+        "visible": false
+      }
+    ],
+    "selectedTemplate": "signal-room",
+    "aboutSelectedWorkKicker": "Selected work",
+    "aboutSelectedWorkTitle": "What I Build",
+    "tvScreens": {
+      "work": {
+        "left": 37.4,
+        "top": 15.1,
+        "width": 30.5,
+        "height": 25.1,
+        "rotate": -0.9,
+        "points": [
+          {
+            "x": 43.5,
+            "y": -4.8
+          },
+          {
+            "x": 77.5,
+            "y": -3.9
+          },
+          {
+            "x": 96.7,
+            "y": 0.6
+          },
+          {
+            "x": 85.8,
+            "y": 90.4
+          },
+          {
+            "x": 2.3,
+            "y": 93.1
+          },
+          {
+            "x": 4.5,
+            "y": 60.5
+          },
+          {
+            "x": 10.5,
+            "y": 32.3
+          },
+          {
+            "x": 17.1,
+            "y": 7
+          }
+        ]
+      },
+      "about": {
+        "left": 29.1,
+        "top": 56.9,
+        "width": 32.8,
+        "height": 27.2,
+        "rotate": -1.1,
+        "points": [
+          {
+            "x": 47.8,
+            "y": 2.5
+          },
+          {
+            "x": 88.2,
+            "y": 10.9
+          },
+          {
+            "x": 74.4,
+            "y": 101.3
+          },
+          {
+            "x": 0,
+            "y": 94
+          },
+          {
+            "x": 1.9,
+            "y": 62.8
+          },
+          {
+            "x": 13.1,
+            "y": 8.4
+          }
+        ]
+      }
+    }
+  }
+}
