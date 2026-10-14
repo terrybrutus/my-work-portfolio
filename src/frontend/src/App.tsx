@@ -17,7 +17,7 @@ import {
   Wand2,
 } from "lucide-react";
 import type React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useCallerUserRole } from "./hooks/useQueries";
 
@@ -1283,6 +1283,7 @@ function ProjectShowcaseModal({
   onSelect: (index: number) => void;
   projects: Project[];
 }) {
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const activeProject = projects[activeIndex] ?? projects[0];
   const goToProject = useCallback(
     (direction: -1 | 1) => {
@@ -1314,6 +1315,32 @@ function ProjectShowcaseModal({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [goToProject, isOpen, onClose]);
+
+  useLayoutEffect(() => {
+    const title = titleRef.current;
+    if (!isOpen || !title) return;
+
+    // Fit the complete title inside the shared row without moving other regions.
+    const fitTitle = () => {
+      title.style.fontSize = "";
+      let size = Number.parseFloat(window.getComputedStyle(title).fontSize);
+      while (title.scrollHeight > title.clientHeight + 1 && size > 16) {
+        size = Math.max(16, size - 0.5);
+        title.style.fontSize = `${size}px`;
+      }
+    };
+    fitTitle();
+    const observer = new ResizeObserver(fitTitle);
+    observer.observe(title);
+    let disposed = false;
+    void document.fonts.ready.then(() => {
+      if (!disposed) fitTitle();
+    });
+    return () => {
+      disposed = true;
+      observer.disconnect();
+    };
+  }, [isOpen, activeIndex, activeProject?.title]);
 
   if (!isOpen || !activeProject) return null;
 
@@ -1347,7 +1374,7 @@ function ProjectShowcaseModal({
             Work {String(activeIndex + 1).padStart(2, "0")} /{" "}
             {String(projects.length).padStart(2, "0")}
           </p>
-          <h2 id="project-modal-title" tabIndex={0}>
+          <h2 id="project-modal-title" ref={titleRef} tabIndex={0}>
             {activeProject.title}
           </h2>
           <p className="project-modal-summary" tabIndex={0} aria-label="Project summary">
