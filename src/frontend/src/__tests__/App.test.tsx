@@ -68,6 +68,14 @@ describe("App default route", () => {
     ).toHaveAttribute("href", "https://icatalog.waru.edu/CourseDetail/12795");
   });
 
+  it.each(["job-aid-template-system", "facilitator-guide-adaptation", "quality-assurance-review-system"])("embeds the real document on %s", (slug) => {
+    window.history.pushState({}, "", `/work/${slug}`);
+    render(<App />);
+    expect(screen.getByRole("link", {name: "Open original PDF"})).toHaveAttribute("href", expect.stringMatching(/^\/assets\/documents\/.+\.pdf$/));
+    expect(screen.getByRole("img", {name: /page 1/})).toHaveAttribute("src", expect.stringMatching(/^\/assets\/documents\/.+-page-1\.png$/));
+    expect(screen.getByRole("link", {name: "Back to selected work"})).toHaveAttribute("href", `/?work=${slug}#work`);
+  });
+
   it("returns to the matching carousel slide and keeps its image separate from the project page", () => {
     window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({
       projects: [

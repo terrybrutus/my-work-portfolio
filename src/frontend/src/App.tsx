@@ -21,6 +21,8 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { createPortal } from "react-dom";
 import { useCallerUserRole } from "./hooks/useQueries";
 import savedPortfolio from "./content/portfolio.json";
+import { projectSamples } from "./content/project-samples";
+import { ProjectDocumentViewer } from "./components/ProjectDocumentViewer";
 
 type Project = {
   title: string;
@@ -386,7 +388,7 @@ const defaultContent: PortfolioContent = {
     {
       title: "Quality Assurance Review System",
       summary:
-        "A QA commentary workflow for a 50+ screen government eLearning course, documenting structural, instructional, formatting, and compliance issues for the production team.",
+        "A two-page sample of my course review notes, showing the issue, the requested change, and directions for the production team.",
       result:
         "Highlights a systematic review practice across instructional quality, user experience, Section 508/WCAG expectations, and contractual standards.",
       tags: ["QA", "Accessibility", "Learning operations"],
@@ -413,7 +415,7 @@ const defaultContent: PortfolioContent = {
     {
       title: "Job Aid Template System",
       summary:
-        "Performance-support templates created to turn dense regulatory and technical content into clearer job aids for DOD acquisition professionals.",
+        "Quick-reference templates that organize technical software-purchasing guidance into definitions, requirements, and useful reference links.",
       result:
         "Demonstrates information architecture, visual hierarchy, essential-resource curation, and reusable template thinking for on-the-job support.",
       tags: ["Job aids", "Performance support", "Template design"],
@@ -440,7 +442,7 @@ const defaultContent: PortfolioContent = {
     {
       title: "Facilitator Guide Adaptation",
       summary:
-        "A facilitator guide that adapted asynchronous online training into a synchronous instructor-led session using Gagne's Nine Events of Instruction.",
+        "A five-page instructor guide showing how I planned a live training session, with preparation steps, timed activities, teaching prompts, and learner practice.",
       result:
         "Shows how the same content can be redesigned across modalities while preserving instructional intent, timing, materials, and facilitation strategy.",
       tags: ["Facilitator guide", "ILT", "Modality conversion"],
@@ -908,13 +910,14 @@ function ProjectDetailPage({
   project: Project;
   projectIndex: number;
 }) {
+  const sample = projectSamples[getProjectSlug(project)];
   const detailSections =
-    project.detailSections?.length
+    sample?.sections ?? (project.detailSections?.length
       ? project.detailSections
       : [
           { title: "Project Overview", body: project.summary },
           { title: "Portfolio Signal", body: project.result },
-        ];
+        ]);
 
   return (
     <section className="glass-panel project-detail-page">
@@ -933,8 +936,8 @@ function ProjectDetailPage({
           </p>
           <h1>{project.title}</h1>
           <p className="project-detail-summary">{project.summary}</p>
-          {project.detailIntro ? (
-            <div className="project-detail-result">{project.detailIntro}</div>
+          {sample?.introduction || project.detailIntro ? (
+            <div className="project-detail-result">{sample?.introduction ?? project.detailIntro}</div>
           ) : (
             <div className="project-detail-result">{project.result}</div>
           )}
@@ -953,6 +956,7 @@ function ProjectDetailPage({
           </div>
         </div>
       </div>
+      {sample ? <ProjectDocumentViewer key={getProjectSlug(project)} sample={sample} /> : null}
       <div className="project-detail-section-grid">
         {detailSections.map((section) => (
           <article className="project-detail-section-card" key={section.title}>

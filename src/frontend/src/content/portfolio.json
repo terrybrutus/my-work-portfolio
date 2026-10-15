@@ -1,5 +1,5 @@
 {
-  "savedAt": "2026-10-14T19:14:17.705Z",
+  "savedAt": "2026-10-15T18:05:21.000Z",
   "content": {
     "brandLabel": "",
     "brandLogoText": "",
@@ -139,7 +139,7 @@
       },
       {
         "title": "Quality Assurance Review System",
-        "summary": "A QA commentary workflow for a 50+ screen government eLearning course, documenting structural, instructional, formatting, and compliance issues for the production team.",
+        "summary": "A two-page sample of my course review notes, showing the issue, the requested change, and directions for the production team.",
         "result": "Highlights a systematic review practice across instructional quality, user experience, Section 508/WCAG expectations, and contractual standards.",
         "tags": [
           "QA",
@@ -167,7 +167,7 @@
       },
       {
         "title": "Job Aid Template System",
-        "summary": "Performance-support templates created to turn dense regulatory and technical content into clearer job aids for DOD acquisition professionals.",
+        "summary": "Quick-reference templates that organize technical software-purchasing guidance into definitions, requirements, and useful reference links.",
         "result": "Demonstrates information architecture, visual hierarchy, essential-resource curation, and reusable template thinking for on-the-job support.",
         "tags": [
           "Job aids",
@@ -195,7 +195,7 @@
       },
       {
         "title": "Facilitator Guide Adaptation",
-        "summary": "A facilitator guide that adapted asynchronous online training into a synchronous instructor-led session using Gagne's Nine Events of Instruction.",
+        "summary": "A five-page instructor guide showing how I planned a live training session, with preparation steps, timed activities, teaching prompts, and learner practice.",
         "result": "Shows how the same content can be redesigned across modalities while preserving instructional intent, timing, materials, and facilitation strategy.",
         "tags": [
           "Facilitator guide",
