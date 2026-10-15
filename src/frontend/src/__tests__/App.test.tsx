@@ -109,16 +109,26 @@ describe("App default route", () => {
       projects: [{title: "Upload sample", summary: "Summary", result: "Outcome", tags: [], image: "/page-image.png"}],
     }));
     window.history.pushState({}, "", "/admin");
-    render(<App />);
+    const saveRequest = vi.fn(async (_url, options) => {
+      const content = JSON.parse(options.body);
+      expect(content.projects[0].carouselImage).toMatch(/^data:image\/gif;base64,/);
+      content.projects[0].carouselImage = "/assets/uploads/automatic.gif";
+      return {ok: true, headers: {get: () => "application/json"}, json: async () => ({savedAt: "2026-10-15T20:00:00Z", content})};
+    });
+    vi.stubGlobal("fetch", saveRequest);
+    const editor = render(<App />);
     fireEvent.change(screen.getByLabelText("Upload carousel image for Upload sample"), {
       target: { files: [new File(["GIF89a"], "carousel.gif", { type: "image/gif" })] },
     });
     await waitFor(() => {
       const saved = JSON.parse(window.localStorage.getItem("terry-lxd-portfolio-draft-v4")!);
-      expect(saved.projects[0].carouselImage).toMatch(/^data:image\/gif;base64,/);
+      expect(saved.projects[0].carouselImage).toBe("/assets/uploads/automatic.gif");
       expect(saved.projects[0].image).toBe("/page-image.png");
     });
-    expect(screen.getByAltText("Carousel preview for Upload sample")).toHaveAttribute("src", expect.stringMatching(/^data:image\/gif;base64,/));
+    expect(saveRequest).toHaveBeenCalledTimes(1);
+    editor.unmount();
+    render(<App />);
+    expect(screen.getByAltText("Carousel preview for Upload sample")).toHaveAttribute("src", "/assets/uploads/automatic.gif");
   });
 
   it("confirms a project-file save and replaces the temporary image with the returned asset path", async () => {
@@ -141,12 +151,68 @@ describe("App default route", () => {
   });
 
   it("updates an already-open portfolio when another tab saves a carousel image", () => {
-    render(<App />);
+    window.history.pushState({}, "", "/admin");
+    const editor = render(<App />);
     const content = JSON.parse(window.localStorage.getItem("terry-lxd-portfolio-draft-v4")!);
+    editor.unmount();
+    window.history.pushState({}, "", "/");
+    render(<App />);
     content.projects[0].carouselImage = "/assets/uploads/new-image.png";
     fireEvent(window, new StorageEvent("storage", {key: "terry-lxd-portfolio-draft-v4", newValue: JSON.stringify(content)}));
     fireEvent.click(screen.getAllByRole("button", {name: "View details"})[0]);
     expect(document.querySelector(".project-modal-media img")).toHaveAttribute("src", "/assets/uploads/new-image.png");
+  });
+
+  it("does not let a stale tab overwrite an uploaded image in the editor", () => {
+    const key = "terry-lxd-portfolio-draft-v4";
+    window.localStorage.setItem(key, JSON.stringify({projects: [{title: "Keep image", summary: "Summary", result: "Result", tags: [], carouselImage: "/my-image.gif"}]}));
+    window.history.pushState({}, "", "/admin");
+    render(<App />);
+    fireEvent(window, new StorageEvent("storage", {key, newValue: JSON.stringify({aboutImages: [], projects: [{title: "Keep image", tags: [], carouselImage: ""}]})}));
+    expect(screen.getByAltText("Carousel preview for Keep image")).toHaveAttribute("src", "/my-image.gif");
+  });
+
+  it("never writes public-page state back over the admin draft", () => {
+    const setItem = vi.spyOn(Storage.prototype, "setItem");
+    render(<App />);
+    expect(setItem.mock.calls.filter(([key]) => key === "terry-lxd-portfolio-draft-v4")).toHaveLength(0);
+    setItem.mockRestore();
+  });
+
+  it("retains an uploaded file when automatic saving fails so it can be retried", async () => {
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [{title: "Retry upload", summary: "Summary", result: "Result", tags: []}]}));
+    vi.stubGlobal("fetch", vi.fn(async () => {throw new Error("Connection interrupted");}));
+    window.history.pushState({}, "", "/admin");
+    render(<App />);
+    fireEvent.change(screen.getByLabelText("Upload carousel image for Retry upload"), {target: {files: [new File(["GIF89a"], "keep.gif", {type: "image/gif"})]}});
+    await waitFor(() => expect(screen.getByAltText("Carousel preview for Retry upload")).toHaveAttribute("src", expect.stringMatching(/^data:image\/gif;base64,/)));
+    await waitFor(() => expect(screen.getAllByRole("status").some((status) => status.textContent?.includes("retry without selecting it again"))).toBe(true));
+    expect(screen.getByRole("button", {name: "Save carousel image"})).toBeEnabled();
+  });
+
+  it("writes the uploaded image to disk even when the browser draft exceeds its quota", async () => {
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [{title: "Large upload", summary: "Summary", result: "Result", tags: []}]}));
+    window.history.pushState({}, "", "/admin");
+    render(<App />);
+    const original = Storage.prototype.setItem;
+    const storage = vi.spyOn(Storage.prototype, "setItem").mockImplementation(function (this: Storage, key, value) {
+      if (value.includes("data:image/")) throw new DOMException("Quota exceeded", "QuotaExceededError");
+      return original.call(this, key, value);
+    });
+    const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.stubGlobal("fetch", vi.fn(async (_url, options) => {
+      const content = JSON.parse(options.body);
+      content.projects[0].carouselImage = "/assets/uploads/large.gif";
+      return {ok: true, headers: {get: () => "application/json"}, json: async () => ({savedAt: "2026-10-15T20:00:00Z", content})};
+    }));
+    try {
+      fireEvent.change(screen.getByLabelText("Upload carousel image for Large upload"), {target: {files: [new File(["GIF89a"], "large.gif", {type: "image/gif"})]}});
+      await waitFor(() => expect(screen.getByAltText("Carousel preview for Large upload")).toHaveAttribute("src", "/assets/uploads/large.gif"));
+      expect(JSON.parse(window.localStorage.getItem("terry-lxd-portfolio-draft-v4")!).projects[0].carouselImage).toBe("/assets/uploads/large.gif");
+    } finally {
+      storage.mockRestore();
+      warning.mockRestore();
+    }
   });
 
   it("shows a write failure and keeps the uploaded image available to retry", async () => {

@@ -685,23 +685,26 @@ export default function App() {
     window.location.pathname.startsWith("/admin");
 
   useEffect(() => {
+    if (!isAdmin) return;
     try {
       if (writtenPortfolio.savedAt) window.localStorage.setItem(SAVED_REVISION_KEY, writtenPortfolio.savedAt);
     } catch {
       // Written portfolio content remains available without browser storage.
     }
-  }, [writtenPortfolio.savedAt]);
+  }, [writtenPortfolio.savedAt, isAdmin]);
 
   useEffect(() => {
+    if (!isAdmin) return;
     try {
       saveLocalDraft(content);
     } catch (error) {
       console.warn("Unable to save portfolio draft locally.", error);
     }
-  }, [content]);
+  }, [content, isAdmin]);
 
   useEffect(() => {
     const syncDraft = (event: StorageEvent) => {
+      if (isAdmin) return;
       if (event.key !== STORAGE_KEY || !event.newValue) return;
       try {
         const next = JSON.parse(event.newValue) as PortfolioContent;
@@ -712,7 +715,7 @@ export default function App() {
     };
     window.addEventListener("storage", syncDraft);
     return () => window.removeEventListener("storage", syncDraft);
-  }, []);
+  }, [isAdmin]);
 
   const template = useMemo(
     () =>
@@ -1570,41 +1573,62 @@ function AdminStudio({
   const [exported, setExported] = useState("");
   const [isSavingProject, setIsSavingProject] = useState(false);
   const [pendingUploads, setPendingUploads] = useState(0);
+  const contentRef = useRef(content);
+  contentRef.current = content;
   const [saveStatus, setSaveStatus] = useState(
     "Use Save to project to write your changes and images to the portfolio files.",
   );
 
-  const saveToProject = async () => {
-    if (pendingUploads) {
-      setSaveStatus("Please wait for the image to finish loading, then save.");
-      return;
-    }
+  const persistToProject = async (snapshot: PortfolioContent) => {
     setIsSavingProject(true);
     setSaveStatus("Writing your changes and images...");
     try {
       const response = await fetch("/__portfolio/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(content),
+        body: JSON.stringify(snapshot),
       });
       if (!response.headers.get("content-type")?.includes("application/json")) {
         throw new Error("Saving to project files is available in the local portfolio at http://127.0.0.1:44120/admin.");
       }
       const saved = await response.json();
       if (!response.ok) throw new Error(saved.error ?? "Could not save the portfolio files.");
-      setContent(saved.content);
+      // Keep edits made while the request was running; replace only submitted images.
+      const current = contentRef.current;
+      const next = current === snapshot ? saved.content : {
+        ...current,
+        projects: current.projects.map((project) => {
+          const index = snapshot.projects.findIndex((item) => getProjectSlug(item) === getProjectSlug(project));
+          if (index < 0) return project;
+          const result = { ...project };
+          for (const field of ["image", "carouselImage"] as const) {
+            if (project[field] === snapshot.projects[index][field]) result[field] = saved.content.projects[index][field];
+          }
+          return result;
+        }),
+      };
+      contentRef.current = next;
+      setContent(next);
       try {
         window.localStorage.setItem(SAVED_REVISION_KEY, saved.savedAt);
-        saveLocalDraft(saved.content);
+        saveLocalDraft(next);
       } catch {
         // The confirmed disk save remains valid when browser storage is unavailable.
       }
       setSaveStatus(`Saved to project files at ${new Date(saved.savedAt).toLocaleTimeString()}. Images and content are ready in your portfolio. Publishing is a separate step.`);
     } catch (error) {
-      setSaveStatus(`Save failed: ${error instanceof Error ? error.message : "Could not write the portfolio files."} Your changes are still in this editor.`);
+      setSaveStatus(`Save failed: ${error instanceof Error ? error.message : "Could not write the portfolio files."} Your image is still in this editor. Click Save carousel image to retry without selecting it again.`);
     } finally {
       setIsSavingProject(false);
     }
+  };
+
+  const saveToProject = () => {
+    if (pendingUploads) {
+      setSaveStatus("Please wait for the image to finish loading, then save.");
+      return;
+    }
+    return persistToProject(contentRef.current);
   };
 
   const updateProject = (index: number, project: Project) => {
@@ -1636,6 +1660,7 @@ function AdminStudio({
 
   const readUpload = (file: File, onRead: (value: string) => void) => {
     setPendingUploads((count) => count + 1);
+    setSaveStatus(`Loading ${file.name}. Keep this editor open while the image is saved.`);
     const reader = new FileReader();
     reader.onload = () => onRead(String(reader.result));
     reader.onerror = () => setSaveStatus(`Could not read ${file.name}. Please select the image again.`);
@@ -1669,12 +1694,13 @@ function AdminStudio({
     field: "image" | "carouselImage" = "image",
   ) => {
     if (!file) return;
+    const targetSlug = getProjectSlug(content.projects[index]);
     readUpload(file, (image) => {
-      const project = content.projects[index];
-      setContent((current) => ({ ...current, projects: current.projects.map((item, itemIndex) => itemIndex === index ? { ...item, [field]: image } : item) }));
-      setSaveStatus(
-        `${project.title} image loaded. Click Save to project to write it into the portfolio.`,
-      );
+      const current = contentRef.current;
+      const next = { ...current, projects: current.projects.map((item) => getProjectSlug(item) === targetSlug ? { ...item, [field]: image } : item) };
+      contentRef.current = next;
+      setContent(next);
+      void persistToProject(next);
     });
   };
 
@@ -2145,6 +2171,7 @@ function AdminStudio({
               />
               <input
                 aria-label={`Upload project page image for ${project.title}`}
+                disabled={isSavingProject || pendingUploads > 0}
                 className="mt-3 block w-full text-sm text-white/[0.70]"
                 type="file"
                 accept="image/*,.svg"
@@ -2153,7 +2180,7 @@ function AdminStudio({
                 }
               />
               <p className="mt-2 text-xs font-semibold text-white/[0.48]">
-                Click Save to project to write uploaded images into your portfolio files.
+                Uploaded project images save to your portfolio files automatically. Wait for the saved confirmation.
               </p>
               <button
                 className="admin-button mt-3 px-4 py-2"
@@ -2172,6 +2199,7 @@ function AdminStudio({
                 />
                 <input
                   aria-label={`Upload carousel image for ${project.title}`}
+                  disabled={isSavingProject || pendingUploads > 0}
                   className="mt-3 block w-full text-sm text-white/[0.70]"
                   type="file"
                   accept="image/*,.svg"

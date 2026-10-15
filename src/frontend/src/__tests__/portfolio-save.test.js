@@ -22,7 +22,8 @@ describe("writing portfolio files", () => {
     try {
       await server.listen();
       const origin = `http://127.0.0.1:${server.httpServer.address().port}`;
-      const image = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
+      // Larger than a typical browser localStorage quota; the server stores the file directly.
+      const image = Buffer.concat([Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64"), Buffer.alloc(6 * 1024 * 1024)]);
       const response = await fetch(`${origin}/__portfolio/save`, {
         method: "POST", headers: {"Content-Type": "application/json", Origin: origin},
         body: JSON.stringify({ aboutImages: [], projects: [{image: "/page.png", carouselImage: `data:image/gif;base64,${image.toString("base64")}`}] }),
@@ -31,7 +32,7 @@ describe("writing portfolio files", () => {
       const saved = await response.json();
       const actualImage = await fetch(`${origin}${saved.content.projects[0].carouselImage}`);
       expect(actualImage.status).toBe(200);
-      expect(Buffer.from(await actualImage.arrayBuffer())).toEqual(image);
+      expect(Buffer.from(await actualImage.arrayBuffer()).equals(image)).toBe(true);
       expect(JSON.parse(await readFile(path.join(root, "src/content/portfolio.json"), "utf8"))).toEqual(saved);
     } finally {
       await server.close();
