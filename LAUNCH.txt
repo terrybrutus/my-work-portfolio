@@ -31,10 +31,10 @@ The provider has removed the original implemented course.
 
 Domain audit:
   terrylxd.com currently serves the previous ICP/Caffeine site.
-  Authoritative nameservers: lara.ns.cloudflare.com, hassan.ns.cloudflare.com.
-  Namecheap is the registrar; changing non-authoritative Namecheap DNS records
-  will not connect this site. Configure the verified Netlify site for both
-  terrylxd.com and www.terrylxd.com, then update web records in Cloudflare using
+  The registrar account confirms Namecheap BasicDNS. The earlier Cloudflare
+  lookup followed the old ICP target's DNS rather than the domain delegation.
+  Configure the verified Netlify site for both
+  terrylxd.com and www.terrylxd.com, then update web records in Namecheap using
   Netlify's displayed targets. Preserve mail, verification, and unrelated records.
   Verify HTTPS for both names before announcing the launch.
 

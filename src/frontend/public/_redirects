@@ -1,0 +1,5 @@
+/admin / 302
+/admin/* / 302
+/__portfolio/* / 404
+/enablement /enablement/ 301
+/* /index.html 200
