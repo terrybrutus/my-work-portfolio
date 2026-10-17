@@ -2,7 +2,20 @@ import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const extensions = { "image/png": "png", "image/jpeg": "jpg", "image/gif": "gif", "image/webp": "webp", "image/avif": "avif", "image/svg+xml": "svg" };
+const extensions = { "image/png": "png", "image/jpeg": "jpg", "image/gif": "gif", "image/webp": "webp", "image/avif": "avif", "image/svg+xml": "svg", "image/bmp": "bmp", "image/x-icon": "ico" };
+const maximumImageSize = 256 * 1024 * 1024;
+
+export function detectImageType(bytes) {
+  if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return "image/png";
+  if (bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255) return "image/jpeg";
+  if (["GIF87a", "GIF89a"].includes(bytes.toString("ascii", 0, 6))) return "image/gif";
+  if (bytes.toString("ascii", 0, 4) === "RIFF" && bytes.toString("ascii", 8, 12) === "WEBP") return "image/webp";
+  if (bytes.toString("ascii", 4, 8) === "ftyp" && /avif|avis/.test(bytes.toString("ascii", 8, 64))) return "image/avif";
+  if (bytes.toString("ascii", 0, 2) === "BM") return "image/bmp";
+  if (bytes.subarray(0, 4).equals(Buffer.from([0, 0, 1, 0]))) return "image/x-icon";
+  if (/^\s*(?:<\?xml[\s\S]*?\?>\s*)?(?:<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(bytes.toString("utf8", 0, 4096).replace(/^\uFEFF/, ""))) return "image/svg+xml";
+  throw new Error("The file contents are not a supported browser image. Use PNG, JPEG, GIF, WebP, AVIF, SVG, BMP, or ICO.");
+}
 
 const portfolioPath = (root) => path.join(root, "src/content/portfolio.json");
 const projectSlug = (project) => project.slug || (project.url?.startsWith("/work/") ? project.url.slice(6) : project.title.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""));
@@ -14,7 +27,7 @@ export async function readPortfolio(root) {
 export async function writeImage(root, bytes, type) {
   if (!extensions[type]) throw new Error("Unsupported image. Use PNG, JPG, GIF, WebP, AVIF, or SVG.");
   if (!bytes.length) throw new Error("The image file is empty.");
-  if (bytes.length > 40 * 1024 * 1024) throw new Error("The image exceeds the 40 MB limit.");
+  if (bytes.length > maximumImageSize) throw new Error("The image exceeds the 256 MB limit.");
   const name = `${createHash("sha256").update(bytes).digest("hex")}.${extensions[type]}`;
   const directory = path.join(root, "public/assets/uploads");
   await mkdir(directory, { recursive: true });
@@ -113,16 +126,16 @@ export function portfolioSavePlugin() {
           const url = new URL(request.url, "http://localhost");
           const target = JSON.parse(url.searchParams.get("target") || "null");
           if (!target) throw new Error("Choose an image destination.");
-          const type = request.headers["content-type"]?.split(";")[0];
-          if (!extensions[type]) throw new Error("Unsupported image. Use PNG, JPG, GIF, WebP, AVIF, or SVG.");
           let size = 0;
           const chunks = [];
           for await (const chunk of request) {
             size += chunk.length;
-            if (size > 40 * 1024 * 1024) throw new Error("The image exceeds the 40 MB limit.");
+            if (size > maximumImageSize) throw new Error("The image exceeds the 256 MB limit.");
             chunks.push(chunk);
           }
-          const saved = await serializeWrite(() => attachImage(server.config.root, target, Buffer.concat(chunks), type));
+          const bytes = Buffer.concat(chunks);
+          const type = detectImageType(bytes);
+          const saved = await serializeWrite(() => attachImage(server.config.root, target, bytes, type));
           response.end(JSON.stringify(saved));
         } catch (error) {
           if (response.statusCode !== 403) response.statusCode = 400;
@@ -132,7 +145,7 @@ export function portfolioSavePlugin() {
       // Serve newly written assets immediately, before Vite's file watcher catches up.
       server.middlewares.use("/assets/uploads", async (request, response, next) => {
         const filename = new URL(request.url, "http://localhost").pathname.slice(1);
-        if (!["GET", "HEAD"].includes(request.method) || !/^[a-f0-9]{64}\.(png|jpg|gif|webp|avif|svg)$/.test(filename)) return next();
+        if (!["GET", "HEAD"].includes(request.method) || !/^[a-f0-9]{64}\.(png|jpg|gif|webp|avif|svg|bmp|ico)$/.test(filename)) return next();
         try {
           const bytes = await readFile(path.join(server.config.root, "public/assets/uploads", filename));
           const extension = filename.split(".").pop();

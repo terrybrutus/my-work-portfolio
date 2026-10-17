@@ -48,3 +48,33 @@ it("does not replace an image when the server rejects the file", async () => {
   expect(screen.getByRole("status")).toHaveTextContent("Your existing image is unchanged");
   expect(saved).not.toHaveBeenCalled();
 });
+
+it.each(["image/x-png", "image/jpg", "application/octet-stream", "", "image/bmp"])("does not reject an image because Windows labels it %s", async (type) => {
+  const file = new File(["image bytes"], "my-image.png", {type});
+  const send = vi.fn(async () => ({ok: true, headers: {get: () => "application/json"}, json: async () => ({image: "/assets/uploads/accepted.png", savedAt: "confirmed"})}));
+  const saved = vi.fn();
+  vi.stubGlobal("fetch", send);
+  render(<ImageUpload label="Upload image" target={{kind: "profile"}} onSaved={saved} onPendingChange={() => {}} />);
+  fireEvent.change(screen.getByLabelText("Upload image"), {target: {files: [file]}});
+  await waitFor(() => expect(saved).toHaveBeenCalled());
+  const request = (send.mock.calls[0] as unknown as [string, RequestInit])[1];
+  expect(request.headers).toEqual({"Content-Type": "application/octet-stream"});
+});
+
+it("allows a GIF larger than the former 40 MB limit", async () => {
+  const file = new File(["GIF89a", new Uint8Array(41 * 1024 * 1024)], "large.gif", {type: "image/gif"});
+  const saved = vi.fn();
+  vi.stubGlobal("fetch", vi.fn(async () => ({ok: true, headers: {get: () => "application/json"}, json: async () => ({image: "/assets/uploads/large.gif", savedAt: "confirmed"})})));
+  render(<ImageUpload label="Upload image" target={{kind: "profile"}} onSaved={saved} onPendingChange={() => {}} />);
+  fireEvent.change(screen.getByLabelText("Upload image"), {target: {files: [file]}});
+  await waitFor(() => expect(saved).toHaveBeenCalled());
+});
+
+it("reports a zero-byte cloud placeholder accurately to the parent save status", () => {
+  const status = vi.fn();
+  vi.stubGlobal("fetch", vi.fn());
+  render(<ImageUpload label="Upload image" target={{kind: "profile"}} onSaved={() => {}} onPendingChange={() => {}} onUploadStatus={status} />);
+  fireEvent.change(screen.getByLabelText("Upload image"), {target: {files: [new File([], "not-downloaded.png", {type: "image/png"})]}});
+  expect(status).toHaveBeenCalledWith("failed", expect.stringContaining("contains 0 bytes"));
+  expect(fetch).not.toHaveBeenCalled();
+});

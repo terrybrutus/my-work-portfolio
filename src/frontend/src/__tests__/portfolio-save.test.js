@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { createServer } from "vite";
-import { portfolioSavePlugin, writePortfolio, readPortfolio } from "../../scripts/portfolio-save.mjs";
+import { portfolioSavePlugin, writePortfolio, readPortfolio, detectImageType } from "../../scripts/portfolio-save.mjs";
 
 let root;
 afterEach(async () => {
@@ -13,6 +13,32 @@ afterEach(async () => {
 });
 
 describe("writing portfolio files", () => {
+  it("identifies image contents without relying on file extensions or OS MIME labels", () => {
+    expect(detectImageType(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))).toBe("image/png");
+    expect(detectImageType(Buffer.from([255, 216, 255, 224]))).toBe("image/jpeg");
+    expect(detectImageType(Buffer.from("GIF89a"))).toBe("image/gif");
+    expect(detectImageType(Buffer.from("BM-bitmap"))).toBe("image/bmp");
+    expect(() => detectImageType(Buffer.from("not an image"))).toThrow("file contents");
+  });
+
+  it("accepts a binary GIF larger than 40 MB and retains its exact bytes", async () => {
+    root = await mkdtemp(path.join(tmpdir(), "portfolio-save-"));
+    await writePortfolio(root, {aboutImages: [], projects: [{slug: "large", title: "Large", image: "/keep.png"}]});
+    const server = await createServer({configFile: false, root, plugins: [portfolioSavePlugin()], server: {host: "127.0.0.1", port: 0, watch: null}, logLevel: "silent"});
+    try {
+      await server.listen();
+      const origin = `http://127.0.0.1:${server.httpServer.address().port}`;
+      const image = Buffer.concat([Buffer.from("GIF89a"), Buffer.alloc(41 * 1024 * 1024)]);
+      const target = encodeURIComponent(JSON.stringify({kind: "project", project: "large", field: "carouselImage"}));
+      const response = await fetch(`${origin}/__portfolio/image?target=${target}`, {method: "POST", headers: {"Content-Type": "application/octet-stream", Origin: origin}, body: image});
+      expect(response.status).toBe(200);
+      const saved = await response.json();
+      expect((await readFile(path.join(root, "public", saved.image))).equals(image)).toBe(true);
+      expect((await readPortfolio(root)).content.projects[0].carouselImage).toBe(saved.image);
+      expect(saved.content.projects[0].image).toBe("/keep.png");
+    } finally { await server.close(); }
+  }, 20000);
+
   it("persists every project graphic and every other image destination, rejecting stale full saves", async () => {
     root = await mkdtemp(path.join(tmpdir(), "portfolio-save-"));
     const original = await writePortfolio(root, {brandLogoText: "", selectedTemplate: "signal-room", aboutImages: ["/a.png", "/b.png", "/c.png"], projects: Array.from({length: 8}, (_, index) => ({title: `Project ${index}`, slug: `project-${index}`, image: `/page-${index}.png`, summary: "Keep my text"}))});

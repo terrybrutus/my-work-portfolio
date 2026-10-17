@@ -5,14 +5,13 @@ export type ImageTarget =
   | { kind: "about"; index: number }
   | { kind: "profile" | "logo" };
 
-const imageTypes: Record<string, string> = {png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif", webp: "image/webp", avif: "image/avif", svg: "image/svg+xml"};
-
-export function ImageUpload({ label, target, currentImage, onSaved, onPendingChange }: {
+export function ImageUpload({ label, target, currentImage, onSaved, onPendingChange, onUploadStatus }: {
   label: string;
   target: ImageTarget;
   currentImage?: string;
   onSaved: (image: string, savedAt: string, content?: unknown) => void;
   onPendingChange: (change: number) => void;
+  onUploadStatus?: (state: "saving" | "saved" | "failed", message: string) => void;
 }) {
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
@@ -24,10 +23,11 @@ export function ImageUpload({ label, target, currentImage, onSaved, onPendingCha
   const upload = async (file: File) => {
     if (uploading.current) return;
     retainedFile.current = file;
-    const type = file.type || imageTypes[file.name.split(".").pop()?.toLowerCase() ?? ""];
-    if (!Object.values(imageTypes).includes(type) || !file.size || file.size > 40 * 1024 * 1024) {
-      setStatus("Choose a nonempty PNG, JPG, GIF, WebP, AVIF, or SVG image up to 40 MB. Your existing image has not changed.");
-      setFailed(false);
+    if (!file.size || file.size > 256 * 1024 * 1024) {
+      const message = !file.size ? `${file.name} contains 0 bytes. Please check that the file has finished downloading.` : `${file.name} is ${(file.size / 1024 / 1024).toFixed(1)} MB. The upload limit is 256 MB.`;
+      setStatus(message);
+      setFailed(true);
+      onUploadStatus?.("failed", message);
       return;
     }
     uploading.current = true;
@@ -35,11 +35,12 @@ export function ImageUpload({ label, target, currentImage, onSaved, onPendingCha
     setFailed(false);
     onPendingChange(1);
     setStatus(`Saving ${file.name} to project files...`);
+    onUploadStatus?.("saving", `Uploading ${file.name}...`);
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 60000);
     try {
       const response = await fetch(`/__portfolio/image?target=${encodeURIComponent(JSON.stringify(target))}`, {
-        method: "POST", headers: {"Content-Type": type}, body: file, signal: controller.signal,
+        method: "POST", headers: {"Content-Type": "application/octet-stream"}, body: file, signal: controller.signal,
       });
       if (!response.headers.get("content-type")?.includes("application/json")) throw new Error("Image saving is available in the local admin at http://127.0.0.1:44120/admin.");
       const result = await response.json();
@@ -47,10 +48,13 @@ export function ImageUpload({ label, target, currentImage, onSaved, onPendingCha
       if (!result.image?.startsWith("/assets/uploads/") || !result.savedAt) throw new Error("The server did not confirm an image file.");
       onSaved(result.image, result.savedAt, result.content);
       setStatus(`Saved ${file.name} to project files. You can preview it or reload this page.`);
+      onUploadStatus?.("saved", `${file.name} saved. It is now available in your local portfolio.`);
       retainedFile.current = null;
     } catch (error) {
       setFailed(true);
-      setStatus(`Upload failed: ${error instanceof Error ? error.message : "Connection interrupted."} Your existing image is unchanged. Retry uses the same selected file.`);
+      const message = `Could not upload ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB): ${error instanceof Error ? error.message : "Connection interrupted."} Your existing image is unchanged. Retry uses the same selected file.`;
+      setStatus(message);
+      onUploadStatus?.("failed", message);
     } finally {
       window.clearTimeout(timeout);
       uploading.current = false;
@@ -60,7 +64,7 @@ export function ImageUpload({ label, target, currentImage, onSaved, onPendingCha
   };
 
   return <div className="mt-3">
-    <input ref={inputRef} aria-label={label} className="sr-only" type="file" accept="image/png,image/jpeg,image/gif,image/webp,image/avif,image/svg+xml,.svg" disabled={busy} onChange={(event) => {
+    <input ref={inputRef} aria-label={label} className="sr-only" type="file" accept="image/*,.svg,.gif,.png,.jpg,.jpeg,.webp,.avif,.bmp,.ico" disabled={busy} onChange={(event) => {
       const file = event.target.files?.[0];
       if (file) void upload(file);
       event.target.value = "";

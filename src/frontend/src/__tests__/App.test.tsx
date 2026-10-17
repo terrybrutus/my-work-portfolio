@@ -145,7 +145,7 @@ describe("App default route", () => {
     fireEvent.click(screen.getByRole("button", {name: "Save carousel image"}));
     await waitFor(() => expect(screen.getByAltText("Carousel preview for Save sample")).toHaveAttribute("src", "/assets/uploads/saved.gif"));
     expect(saveRequest).toHaveBeenCalledWith("/__portfolio/save", expect.objectContaining({method: "POST"}));
-    expect(screen.getAllByRole("status").some((status) => status.textContent?.includes("Saved to project files"))).toBe(true);
+    expect(screen.getAllByRole("status").some((status) => status.textContent?.includes("Text and settings saved"))).toBe(true);
     expect(JSON.parse(window.localStorage.getItem("terry-lxd-portfolio-draft-v4")!).projects[0].image).toBe("/page.png");
   });
 
@@ -198,6 +198,19 @@ describe("App default route", () => {
     fireEvent.change(screen.getByLabelText("Upload carousel image for Retry upload"), {target: {files: [new File(["GIF89a"], "keep.gif", {type: "image/gif"})]}});
     await waitFor(() => expect(screen.getByRole("button", {name: "Retry upload"})).toBeEnabled());
     expect(screen.getByAltText("Carousel preview for Retry upload")).toHaveAttribute("src", "/keep-existing.gif");
+  });
+
+  it("does not claim success when Save is clicked after an image was rejected", () => {
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [{title: "Rejected", summary: "Summary", result: "Result", tags: [], carouselImage: "/keep.gif"}]}));
+    const request = vi.fn(async (_url: string) => ({ok: false}));
+    vi.stubGlobal("fetch", request);
+    window.history.pushState({}, "", "/admin");
+    render(<App />);
+    fireEvent.change(screen.getByLabelText("Upload carousel image for Rejected"), {target: {files: [new File([], "empty.gif", {type: "image/gif"})]}});
+    fireEvent.click(screen.getByRole("button", {name: "Save carousel image"}));
+    expect(screen.getAllByRole("status").some(status => status.textContent?.includes("An image has not uploaded"))).toBe(true);
+    expect(request.mock.calls.filter(([url]) => url === "/__portfolio/save")).toHaveLength(0);
+    expect(screen.getByAltText("Carousel preview for Rejected")).toHaveAttribute("src", "/keep.gif");
   });
 
   it("writes the uploaded image to disk even when the browser draft exceeds its quota", async () => {

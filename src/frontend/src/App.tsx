@@ -1598,6 +1598,7 @@ function AdminStudio({
   const [exported, setExported] = useState("");
   const [isSavingProject, setIsSavingProject] = useState(false);
   const [pendingUploads, setPendingUploads] = useState(0);
+  const failedUploads = useRef(new Set<string>());
   const contentRef = useRef(content);
   contentRef.current = content;
   const revisionRef = useRef(writtenPortfolio.savedAt ?? "");
@@ -1655,7 +1656,7 @@ function AdminStudio({
       } catch {
         // The confirmed disk save remains valid when browser storage is unavailable.
       }
-      setSaveStatus(`Saved to project files at ${new Date(saved.savedAt).toLocaleTimeString()}. Images and content are ready in your portfolio. Publishing is a separate step.`);
+      setSaveStatus(`Text and settings saved at ${new Date(saved.savedAt).toLocaleTimeString()}. Each image upload has its own confirmation next to Choose image.`);
     } catch (error) {
       setSaveStatus(`Save failed: ${error instanceof Error ? error.message : "Could not write the portfolio files."} Your current edits are still in this editor. Retry with Save to project.`);
     } finally {
@@ -1664,6 +1665,10 @@ function AdminStudio({
   };
 
   const saveToProject = () => {
+    if (failedUploads.current.size) {
+      setSaveStatus("An image has not uploaded. Use Retry upload or choose another file at the image with the error. Nothing has been saved by this button.");
+      return;
+    }
     if (pendingUploads) {
       setSaveStatus("Please wait for the image to finish loading, then save.");
       return;
@@ -1703,6 +1708,11 @@ function AdminStudio({
     target={target}
     currentImage={target.kind === "project" ? content.projects.find(project => getProjectSlug(project) === target.project)?.[target.field] : target.kind === "about" ? content.aboutImages[target.index] : content[target.kind === "profile" ? "profileImage" : "brandLogoImage"]}
     onPendingChange={(change) => setPendingUploads((count) => count + change)}
+    onUploadStatus={(state, message) => {
+      if (state === "failed") failedUploads.current.add(label);
+      if (state === "saved") failedUploads.current.delete(label);
+      setSaveStatus(message);
+    }}
     onSaved={(image, savedAt, diskContent) => {
       const disk = diskContent as PortfolioContent | undefined;
       const baseline = baselineRef.current;
