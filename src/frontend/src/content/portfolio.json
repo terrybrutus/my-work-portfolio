@@ -1,5 +1,5 @@
 {
-  "savedAt": "2026-10-17T20:18:49.455Z",
+  "savedAt": "2026-10-17T20:48:58.000Z",
   "content": {
     "brandLabel": "",
     "brandLogoText": "",
@@ -68,7 +68,7 @@
           "RPG learning simulation"
         ],
         "image": "/assets/projects/enablement-quest.gif",
-        "url": ""
+        "url": "/enablement/"
       },
       {
         "title": "AI & The Future of Work",
@@ -222,7 +222,8 @@
             "title": "Why It Matters",
             "body": "It demonstrates that the same learning goal can be rebuilt for a different environment without losing instructional logic."
           }
-        ]
+        ],
+        "carouselImage": "/assets/uploads/58787fe855044b05089edac6b2cad00e1dc27097392a908881f180cb7584a6ed.gif"
       }
     ],
     "sections": [

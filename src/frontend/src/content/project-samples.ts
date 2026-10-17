@@ -3,11 +3,31 @@ export type ProjectSample = {
   introduction: string;
   note?: string;
   file: string;
+  resources?: { label: string; href: string }[];
   pages: { image: string; caption: string }[];
   sections: { title: string; body: string }[];
 };
 
 export const projectSamples: Record<string, ProjectSample> = {
+  "addie-model-from-start-to-finish": {
+    title: "ADDIE planning and storyboard samples",
+    introduction: "These samples follow the planning and screen-design work behind CON 7020, a Defense Acquisition University course about reviewing a contractor's overhead costs. ADDIE stands for Analysis, Design, Development, Implementation, and Evaluation. Start with the analysis and design document, then explore the lesson storyboard below and the separate Conducting the Review sample.",
+    note: "These are the redacted portfolio copies previously published on my Google Sites portfolio. Blacked-out text protects course-specific information. The storyboard is a design artifact, not a playable course. The original implemented course has been removed by its provider; the available samples preserve the planning and design work.",
+    file: "/assets/documents/addie-storyboard.pdf",
+    resources: [
+      { label: "Analysis and design document (Word)", href: "/assets/documents/addie-analysis-and-design.docx" },
+      { label: "Conducting the Review sample (32-page PDF)", href: "/assets/documents/addie-conducting-review.pdf" },
+    ],
+    pages: Array.from({ length: 31 }, (_, index) => ({
+      image: `/assets/documents/addie-storyboard-page-${String(index + 1).padStart(2, "0")}.jpg`,
+      caption: "Lesson 1 storyboard, preserved from the published redacted portfolio sample.",
+    })),
+    sections: [
+      { title: "Analysis and Design", body: "The planning document shows how source material was organized into a learning plan. Review it alongside the storyboard to follow the move from course planning to individual screens." },
+      { title: "Screen-Level Design", body: "The 31-page storyboard makes the proposed learner experience visible. The separate Conducting the Review PDF provides another 32-page lesson sample." },
+      { title: "What Is Available", body: "These documents show planning and design decisions. They are historical, redacted samples; the implemented course is no longer publicly available." },
+    ],
+  },
   "job-aid-template-system": {
     title: "Job aid template samples",
     introduction: "A job aid is a quick reference someone can use while doing a task. These examples organize software-purchasing guidance into definitions, requirements, and reference links so acquisition staff can find what they need. Acquisition means purchasing goods and services for an organization.",

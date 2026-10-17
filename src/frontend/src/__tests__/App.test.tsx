@@ -17,6 +17,7 @@ afterEach(() => {
   cleanup();
   window.history.pushState({}, "", "/");
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
 });
 
 vi.mock("../hooks/useQueries", () => ({
@@ -26,6 +27,41 @@ vi.mock("../hooks/useQueries", () => ({
 vi.mock("../content/portfolio.json", () => ({ default: {} }));
 
 describe("App default route", () => {
+  it("makes Contact open email when the contact section is hidden", () => {
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({sections: [{id: "work", visible: true, label: "Work"}]}));
+    render(<App />);
+    expect(screen.getByRole("link", {name: "Contact"})).toHaveAttribute("href", "mailto:terrbrutus@gmail.com");
+  });
+
+  it("opens the bundled playable project in a separate tab", () => {
+    render(<App />);
+    const game = screen.getAllByRole("link", {name: "Open project"}).find(link => link.getAttribute("href") === "/enablement/");
+    expect(game).toHaveAttribute("target", "_blank");
+  });
+
+  it("does not expose the local admin or browser drafts in production", () => {
+    vi.stubEnv("DEV", false);
+    window.history.pushState({}, "", "/admin");
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({headline: "Browser-only changes"}));
+    render(<App />);
+    expect(screen.queryByText("Portfolio Admin Studio")).not.toBeInTheDocument();
+    expect(screen.queryByText("Browser-only changes")).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", {level: 1})).toHaveTextContent("I turn complex work");
+    fireEvent(window, new StorageEvent("storage", {key: "terry-lxd-portfolio-draft-v4", newValue: JSON.stringify({headline: "Unsaved replacement", projects: [], aboutImages: []})}));
+    expect(screen.getByRole("heading", {level: 1})).toHaveTextContent("I turn complex work");
+  });
+  it("keeps About outside transformed page containers and exposes the complete story", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("link", {name: "About me"}));
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.parentElement).toBe(document.body);
+    expect(document.body.style.overflow).toBe("hidden");
+    fireEvent.click(within(dialog).getByRole("button", {name: "Show Beyond The Work"}));
+    expect(dialog.querySelector(".about-slide-transcript p")?.textContent).toContain("Ole Miss");
+    fireEvent.click(within(dialog).getByRole("button", {name: /^Close$/}));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(document.body.style.overflow).not.toBe("hidden");
+  });
   it("renders the TerryLXD portfolio instead of a blank screen", () => {
     render(<App />);
     expect(

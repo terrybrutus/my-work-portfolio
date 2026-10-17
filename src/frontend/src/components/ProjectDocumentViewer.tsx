@@ -27,6 +27,15 @@ export function ProjectDocumentViewer({ sample }: { sample: ProjectSample }) {
         </a>
       </div>
       {sample.note ? <p className="project-document-note">{sample.note}</p> : null}
+      {sample.resources?.length ? (
+        <div className="project-detail-resource-row" aria-label="Additional project documents">
+          {sample.resources.map((resource) => (
+            <a className="project-live-link" href={resource.href} key={resource.href} target="_blank" rel="noreferrer">
+              {resource.label}
+            </a>
+          ))}
+        </div>
+      ) : null}
       <div className="project-document-toolbar" role="group" aria-label="Document controls">
         <button className="admin-button" type="button" disabled={pageIndex === 0} onClick={() => goToPage(pageIndex - 1)}>
           Previous page

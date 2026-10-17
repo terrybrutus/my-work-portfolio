@@ -1,0 +1,47 @@
+Portfolio Launch Notes - 2026-10-17
+
+Working local site: http://127.0.0.1:44120/
+Local editor: http://127.0.0.1:44120/admin
+
+Saved content: src/frontend/src/content/portfolio.json
+Uploaded graphics: src/frontend/public/assets/uploads/
+An accepted image upload automatically writes the image and its assignment to
+these project files. The Save button writes other content changes. A successful
+local save does not update a deployed site until that saved version is deployed.
+Never reset these files or substitute browser drafts for the written content.
+
+Production checks:
+  corepack pnpm --dir src/frontend test
+  corepack pnpm --dir src/frontend typecheck
+  corepack pnpm --dir src/frontend build
+
+Netlify uses netlify.toml. Publish src/frontend/dist after the checks pass.
+Public production pages use the saved build content, not browser drafts.
+The editing interface and write endpoints are development-only.
+
+Enablement Quest is bundled at /enablement/ with isolated game assets.
+To refresh it, build the current game source into a separate output directory,
+then run node scripts/package-enablement.mjs <game-build-directory> and rebuild
+the portfolio. This packaging step does not alter the separate game repository.
+
+ADDIE includes the previously published redacted analysis/design Word document,
+the full 31-page storyboard with in-page navigation, and a separate 32-page
+Conducting the Review PDF. These are historical artifacts, not a playable course.
+The provider has removed the original implemented course.
+
+Domain audit:
+  terrylxd.com currently serves the previous ICP/Caffeine site.
+  Authoritative nameservers: lara.ns.cloudflare.com, hassan.ns.cloudflare.com.
+  Namecheap is the registrar; changing non-authoritative Namecheap DNS records
+  will not connect this site. Configure the verified Netlify site for both
+  terrylxd.com and www.terrylxd.com, then update web records in Cloudflare using
+  Netlify's displayed targets. Preserve mail, verification, and unrelated records.
+  Verify HTTPS for both names before announcing the launch.
+
+Deployment status at this audit: NOT DEPLOYED. Netlify sign-in approval is needed.
+No DNS records have been changed. Keep the existing site live until the new
+Netlify preview, direct project URLs, game assets, and HTTPS have been verified.
+
+Performance follow-up: original uploaded GIFs are preserved exactly. The largest
+is about 55 MB; it can load slowly on mobile connections. A smaller video preview
+can be added later without deleting or replacing the original file.

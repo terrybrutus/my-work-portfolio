@@ -7,6 +7,14 @@ import { projectSamples } from "../content/project-samples";
 afterEach(cleanup);
 
 describe("portfolio document samples", () => {
+  it("includes ADDIE source documents and every storyboard page", () => {
+    render(<ProjectDocumentViewer sample={projectSamples["addie-model-from-start-to-finish"]} />);
+    expect(screen.getByRole("link", {name: "Analysis and design document (Word)"})).toHaveAttribute("href", "/assets/documents/addie-analysis-and-design.docx");
+    expect(screen.getByRole("link", {name: "Conducting the Review sample (32-page PDF)"})).toHaveAttribute("href", "/assets/documents/addie-conducting-review.pdf");
+    fireEvent.change(screen.getByLabelText("Document page"), {target: {value: "30"}});
+    expect(screen.getByRole("img")).toHaveAttribute("src", "/assets/documents/addie-storyboard-page-31.jpg");
+    expect(screen.getByRole("button", {name: "Next page"})).toBeDisabled();
+  });
   it("shows both QA pages with working page navigation and zoom", () => {
     render(<ProjectDocumentViewer sample={projectSamples["quality-assurance-review-system"]} />);
     expect(screen.getByRole("img")).toHaveAttribute("src", "/assets/documents/qa-review-sample-page-1.png");

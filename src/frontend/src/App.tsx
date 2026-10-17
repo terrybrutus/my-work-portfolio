@@ -19,7 +19,6 @@ import {
 import type React from "react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useCallerUserRole } from "./hooks/useQueries";
 import savedPortfolio from "./content/portfolio.json";
 import { projectSamples } from "./content/project-samples";
 import { ProjectDocumentViewer } from "./components/ProjectDocumentViewer";
@@ -325,7 +324,7 @@ const defaultContent: PortfolioContent = {
         "RPG learning simulation",
       ],
       image: "/assets/projects/enablement-quest.gif",
-      url: "",
+      url: "/enablement/",
     },
     {
       title: "AI & The Future of Work",
@@ -573,7 +572,7 @@ function ProjectLink({
   className: string;
   href: string;
 }) {
-  const external = isExternalHref(href);
+  const external = isExternalHref(href) || href.startsWith("/enablement/");
 
   return (
     <a
@@ -590,9 +589,9 @@ function ProjectLink({
 function getInitialContent(): PortfolioContent {
   if (typeof window === "undefined") return defaultContent;
   try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
+    const saved = import.meta.env.DEV ? window.localStorage.getItem(STORAGE_KEY) : null;
     const sourceIsNewer = writtenPortfolio.content &&
-      window.localStorage.getItem(SAVED_REVISION_KEY) !== writtenPortfolio.savedAt;
+      (!import.meta.env.DEV || window.localStorage.getItem(SAVED_REVISION_KEY) !== writtenPortfolio.savedAt);
     const parsed = (sourceIsNewer ? writtenPortfolio.content : saved ? JSON.parse(saved) : writtenPortfolio.content) as Partial<PortfolioContent> | undefined;
     if (!parsed) return defaultContent;
     const shouldUpgradeAbout =
@@ -678,11 +677,11 @@ function getSectionLabel(content: PortfolioContent, sectionId: string) {
 }
 
 export default function App() {
-  useCallerUserRole();
   const [content, setContent] = useState<PortfolioContent>(getInitialContent);
   const initialContentRef = useRef(content);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const isAdmin =
+    import.meta.env.DEV &&
     typeof window !== "undefined" &&
     window.location.pathname.startsWith("/admin");
 
@@ -705,6 +704,7 @@ export default function App() {
   }, [content, isAdmin]);
 
   useEffect(() => {
+    if (!import.meta.env.DEV) return;
     const syncDraft = (event: StorageEvent) => {
       if (isAdmin) return;
       if (event.key !== STORAGE_KEY || !event.newValue) return;
@@ -720,6 +720,7 @@ export default function App() {
   }, [isAdmin]);
 
   useEffect(() => {
+    if (!import.meta.env.DEV) return;
     let active = true;
     const refreshWrittenContent = async () => {
       try {
@@ -803,14 +804,14 @@ function TopNav({
   const navItems = [
     { href: "#about", label: content.navApproachLabel, onClick: onOpenAbout },
     { href: "/#work", label: content.navWorkLabel },
-    { href: "/#contact", label: content.navContactLabel },
+    { href: content.sections.some(section => section.id === "contact" && section.visible) ? "/#contact" : `mailto:${content.email}`, label: content.navContactLabel },
   ]
     .map((item) => ({ ...item, label: item.label.trim() }))
     .filter((item) => item.label.length > 0);
 
   return (
     <nav className="site-nav flex items-center justify-between rounded-full border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/[0.80] shadow-2xl shadow-black/20 backdrop-blur-xl">
-      <a href="/" className="flex items-center gap-2 font-semibold text-white">
+      <a href="/" aria-label={`${content.name} home`} className="flex items-center gap-2 font-semibold text-white">
         {hasLogo ? (
           <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-white text-slate-950">
             {content.brandLogoImage ? (
@@ -1094,6 +1095,12 @@ function AboutTvModal({
   onClose: () => void;
 }) {
   const [activeSlide, setActiveSlide] = useState(0);
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [isOpen]);
   const workStory = content.about[0] ?? "";
   const personalStory = content.about[1] ?? content.about[0] ?? "";
   const curiosityStory = content.about[2] ?? "";
@@ -1149,7 +1156,7 @@ function AboutTvModal({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <dialog
       aria-labelledby="about-modal-title"
       className="about-modal-backdrop"
@@ -1161,6 +1168,7 @@ function AboutTvModal({
         onClick={onClose}
         type="button"
       />
+      <div className="about-modal-panel">
       <div className="retro-tv-photo-shell">
         <img
           alt="Vintage television used as an interactive portfolio screen"
@@ -1223,12 +1231,14 @@ function AboutTvModal({
           ))}
         </div>
 
-        <div className="sr-only">
+      </div>
+        <div className="about-slide-transcript" aria-live="polite">
           <h2>{activeTvSlide.title}</h2>
           <p>{activeTvSlide.copy}</p>
         </div>
       </div>
-    </dialog>
+    </dialog>,
+    document.body,
   );
 }
 function CapabilitiesSection({ content }: { content: PortfolioContent }) {
