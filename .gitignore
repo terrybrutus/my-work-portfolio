@@ -6,3 +6,6 @@ dist/
 .pnpm-store/
 .cache/
 .icp/
+
+# Local Netlify folder
+.netlify

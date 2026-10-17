@@ -58,6 +58,9 @@ The incomplete initial upload was canceled to prevent a later accidental publish
 
 This is a manual deployment. The GitHub integration currently has access to the
 game repository only; repository auto-deploy is not enabled for this portfolio.
+Netlify CLI authorization is now confirmed and this local folder is linked to
+project 04df08cb-094e-4920-8dce-e344b4a8efee. Future deployments can use the CLI
+against this existing project. The local .netlify link is excluded from Git.
 To publish future edits, build, optimize, then upload the contents of dist as a
 ZIP to this SAME project's Deploys page. Do not create a second Netlify project.
 The local editor's save success means project files are saved, not deployed.
