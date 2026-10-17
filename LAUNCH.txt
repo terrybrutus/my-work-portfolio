@@ -44,6 +44,13 @@ Project ID: 04df08cb-094e-4920-8dce-e344b4a8efee
 Published deploy: 6ad3edde8dd0b0c6050cd919
 Fallback URL: https://chipper-squirrel-701fbc.netlify.app/
 Both terrylxd.com and www.terrylxd.com are assigned to this project.
+HTTPS verified live for BOTH names on 2026-10-17. Netlify issued a Let's Encrypt
+certificate covering terrylxd.com and www.terrylxd.com, with automatic renewal.
+HTTP redirects to HTTPS. HTTPS www redirects to https://terrylxd.com/.
+All four URL forms were checked with normal TLS verification and finish at
+HTTP 200 on the new portfolio. The browser also confirmed the www redirect.
+The hosted /enablement/ game starts, direct /work/ pages load, and the ADDIE PDF
+returns application/pdf on the custom domain.
 Namecheap web records now use A @ 75.2.60.5 and CNAME www
 chipper-squirrel-701fbc.netlify.app. Email and play records remain unchanged.
 Netlify's Powered by Netlify overlay is disabled for this project.
