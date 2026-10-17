@@ -23,6 +23,7 @@ import { useCallerUserRole } from "./hooks/useQueries";
 import savedPortfolio from "./content/portfolio.json";
 import { projectSamples } from "./content/project-samples";
 import { ProjectDocumentViewer } from "./components/ProjectDocumentViewer";
+import { ImageUpload, type ImageTarget } from "./components/ImageUpload";
 
 type Project = {
   title: string;
@@ -679,6 +680,7 @@ function getSectionLabel(content: PortfolioContent, sectionId: string) {
 export default function App() {
   useCallerUserRole();
   const [content, setContent] = useState<PortfolioContent>(getInitialContent);
+  const initialContentRef = useRef(content);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const isAdmin =
     typeof window !== "undefined" &&
@@ -715,6 +717,29 @@ export default function App() {
     };
     window.addEventListener("storage", syncDraft);
     return () => window.removeEventListener("storage", syncDraft);
+  }, [isAdmin]);
+
+  useEffect(() => {
+    let active = true;
+    const refreshWrittenContent = async () => {
+      try {
+        const response = await fetch("/__portfolio/content", {cache: "no-store"});
+        if (!response.ok || !response.headers.get("content-type")?.includes("application/json")) return;
+        const saved = await response.json();
+        if (!active || !saved.content?.projects || !saved.savedAt) return;
+        // Public previews read the actual file, even before Vite refreshes its JSON import.
+        if (!isAdmin) setContent(saved.content);
+        else if (saved.savedAt !== writtenPortfolio.savedAt) {
+          setContent((current) => current === initialContentRef.current ? saved.content : current);
+        }
+        window.dispatchEvent(new CustomEvent("portfolio:revision", {detail: saved}));
+      } catch {
+        // A static deployment continues to use its bundled portfolio content.
+      }
+    };
+    void refreshWrittenContent();
+    if (!isAdmin) window.addEventListener("focus", refreshWrittenContent);
+    return () => { active = false; window.removeEventListener("focus", refreshWrittenContent); };
   }, [isAdmin]);
 
   const template = useMemo(
@@ -1575,6 +1600,19 @@ function AdminStudio({
   const [pendingUploads, setPendingUploads] = useState(0);
   const contentRef = useRef(content);
   contentRef.current = content;
+  const revisionRef = useRef(writtenPortfolio.savedAt ?? "");
+  const baselineRef = useRef(writtenPortfolio.content);
+  useEffect(() => {
+    const updateRevision = (event: Event) => {
+      const saved = (event as CustomEvent<{savedAt: string; content: PortfolioContent}>).detail;
+      if (saved.savedAt >= revisionRef.current) {
+        revisionRef.current = saved.savedAt;
+        baselineRef.current = saved.content;
+      }
+    };
+    window.addEventListener("portfolio:revision", updateRevision);
+    return () => window.removeEventListener("portfolio:revision", updateRevision);
+  }, []);
   const [saveStatus, setSaveStatus] = useState(
     "Use Save to project to write your changes and images to the portfolio files.",
   );
@@ -1585,7 +1623,7 @@ function AdminStudio({
     try {
       const response = await fetch("/__portfolio/save", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-Portfolio-Revision": revisionRef.current },
         body: JSON.stringify(snapshot),
       });
       if (!response.headers.get("content-type")?.includes("application/json")) {
@@ -1593,6 +1631,8 @@ function AdminStudio({
       }
       const saved = await response.json();
       if (!response.ok) throw new Error(saved.error ?? "Could not save the portfolio files.");
+      revisionRef.current = saved.savedAt;
+      baselineRef.current = saved.content;
       // Keep edits made while the request was running; replace only submitted images.
       const current = contentRef.current;
       const next = current === snapshot ? saved.content : {
@@ -1617,7 +1657,7 @@ function AdminStudio({
       }
       setSaveStatus(`Saved to project files at ${new Date(saved.savedAt).toLocaleTimeString()}. Images and content are ready in your portfolio. Publishing is a separate step.`);
     } catch (error) {
-      setSaveStatus(`Save failed: ${error instanceof Error ? error.message : "Could not write the portfolio files."} Your image is still in this editor. Click Save carousel image to retry without selecting it again.`);
+      setSaveStatus(`Save failed: ${error instanceof Error ? error.message : "Could not write the portfolio files."} Your current edits are still in this editor. Retry with Save to project.`);
     } finally {
       setIsSavingProject(false);
     }
@@ -1658,61 +1698,43 @@ function AdminStudio({
     updateContent("aboutImages", aboutImages);
   };
 
-  const readUpload = (file: File, onRead: (value: string) => void) => {
-    setPendingUploads((count) => count + 1);
-    setSaveStatus(`Loading ${file.name}. Keep this editor open while the image is saved.`);
-    const reader = new FileReader();
-    reader.onload = () => onRead(String(reader.result));
-    reader.onerror = () => setSaveStatus(`Could not read ${file.name}. Please select the image again.`);
-    reader.onloadend = () => setPendingUploads((count) => count - 1);
-    reader.readAsDataURL(file);
-  };
-
-  const handleImageUpload = (file: File | undefined) => {
-    if (!file) return;
-    readUpload(file, (image) => {
-      updateContent("profileImage", image);
-      setSaveStatus(
-        "Profile image loaded. Click Save to project to write it into the portfolio.",
-      );
-    });
-  };
-
-  const handleBrandLogoUpload = (file: File | undefined) => {
-    if (!file) return;
-    readUpload(file, (image) => {
-      updateContent("brandLogoImage", image);
-      setSaveStatus(
-        "Logo image loaded. Click Save to project to write it into the portfolio.",
-      );
-    });
-  };
-
-  const handleProjectImageUpload = (
-    index: number,
-    file: File | undefined,
-    field: "image" | "carouselImage" = "image",
-  ) => {
-    if (!file) return;
-    const targetSlug = getProjectSlug(content.projects[index]);
-    readUpload(file, (image) => {
-      const current = contentRef.current;
-      const next = { ...current, projects: current.projects.map((item) => getProjectSlug(item) === targetSlug ? { ...item, [field]: image } : item) };
-      contentRef.current = next;
-      setContent(next);
-      void persistToProject(next);
-    });
-  };
-
-  const handleAboutImageUpload = (index: number, file: File | undefined) => {
-    if (!file) return;
-    readUpload(file, (image) => {
-      setContent((current) => ({ ...current, aboutImages: current.aboutImages.map((item, itemIndex) => itemIndex === index ? image : item) }));
-      setSaveStatus(
-        `About slide ${index + 1} image loaded. Click Save to project to write it into the portfolio.`,
-      );
-    });
-  };
+  const uploadControl = (label: string, target: ImageTarget) => <ImageUpload
+    label={label}
+    target={target}
+    currentImage={target.kind === "project" ? content.projects.find(project => getProjectSlug(project) === target.project)?.[target.field] : target.kind === "about" ? content.aboutImages[target.index] : content[target.kind === "profile" ? "profileImage" : "brandLogoImage"]}
+    onPendingChange={(change) => setPendingUploads((count) => count + change)}
+    onSaved={(image, savedAt, diskContent) => {
+      const disk = diskContent as PortfolioContent | undefined;
+      const baseline = baselineRef.current;
+      const isLatest = savedAt >= revisionRef.current;
+      if (isLatest) {
+        revisionRef.current = savedAt;
+        if (disk) baselineRef.current = disk;
+      }
+      setContent((current) => {
+        const merged = disk && isLatest ? {
+          ...current,
+          profileImage: current.profileImage === baseline?.profileImage ? disk.profileImage : current.profileImage,
+          brandLogoImage: current.brandLogoImage === baseline?.brandLogoImage ? disk.brandLogoImage : current.brandLogoImage,
+          aboutImages: current.aboutImages.map((value, index) => value === baseline?.aboutImages[index] ? disk.aboutImages[index] : value),
+          projects: current.projects.map((project) => {
+            const before = baseline?.projects.find(item => getProjectSlug(item) === getProjectSlug(project));
+            const after = disk.projects.find(item => getProjectSlug(item) === getProjectSlug(project));
+            return after ? {...project, ...Object.fromEntries((["image", "carouselImage"] as const).filter(field => project[field] === before?.[field]).map(field => [field, after[field]]))} : project;
+          }),
+        } : current;
+        const next = target.kind === "project"
+          ? {...merged, projects: merged.projects.map((project) => getProjectSlug(project) === target.project ? {...project, [target.field]: image} : project)}
+          : target.kind === "about"
+            ? {...merged, aboutImages: merged.aboutImages.map((value, index) => index === target.index ? image : value)}
+            : {...merged, [target.kind === "profile" ? "profileImage" : "brandLogoImage"]: image};
+        contentRef.current = next;
+        return next;
+      });
+      try { window.localStorage.setItem(SAVED_REVISION_KEY, revisionRef.current); } catch { /* The image is already on disk. */ }
+      setSaveStatus("Image saved to project files. Other text edits still use Save to project.");
+    }}
+  />;
 
   const saveDraft = () => {
     try {
@@ -1809,12 +1831,7 @@ function AdminStudio({
               onChange={(value) => updateContent("navContactLabel", value)}
             />
           </div>
-          <input
-            className="mt-3 block w-full text-sm text-white/[0.70]"
-            type="file"
-            accept="image/*,.svg"
-            onChange={(event) => handleBrandLogoUpload(event.target.files?.[0])}
-          />
+          {uploadControl("Upload logo image", {kind: "logo"})}
           <div className="mt-3 flex flex-wrap gap-2">
             <button
               className="admin-button px-4 py-2"
@@ -1848,14 +1865,9 @@ function AdminStudio({
               updateContent("profileImage", event.target.value)
             }
           />
-          <input
-            className="mt-3 block w-full text-sm text-white/[0.70]"
-            type="file"
-            accept="image/*"
-            onChange={(event) => handleImageUpload(event.target.files?.[0])}
-          />
+          {uploadControl("Upload profile image", {kind: "profile"})}
           <p className="mt-2 text-xs font-semibold text-white/[0.48]">
-            Click Save to project to store the uploaded image as a portfolio file.
+            Uploaded images save directly to your portfolio files.
           </p>
           <AdminField
             label="Image position"
@@ -2001,14 +2013,7 @@ function AdminStudio({
               value={content.aboutImages[0] ?? ""}
               onChange={(value) => updateAboutImage(0, value)}
             />
-            <input
-              className="mt-3 block w-full text-sm text-white/[0.70]"
-              type="file"
-              accept="image/*,.svg"
-              onChange={(event) =>
-                handleAboutImageUpload(0, event.target.files?.[0])
-              }
-            />
+            {uploadControl("Upload About slide 1 image", {kind: "about", index: 0})}
             <button
               className="admin-button mt-3 px-4 py-2"
               type="button"
@@ -2042,14 +2047,7 @@ function AdminStudio({
               value={content.aboutImages[1] ?? ""}
               onChange={(value) => updateAboutImage(1, value)}
             />
-            <input
-              className="mt-3 block w-full text-sm text-white/[0.70]"
-              type="file"
-              accept="image/*,.svg"
-              onChange={(event) =>
-                handleAboutImageUpload(1, event.target.files?.[0])
-              }
-            />
+            {uploadControl("Upload About slide 2 image", {kind: "about", index: 1})}
             <button
               className="admin-button mt-3 px-4 py-2"
               type="button"
@@ -2073,14 +2071,7 @@ function AdminStudio({
               value={content.aboutImages[2] ?? ""}
               onChange={(value) => updateAboutImage(2, value)}
             />
-            <input
-              className="mt-3 block w-full text-sm text-white/[0.70]"
-              type="file"
-              accept="image/*,.svg"
-              onChange={(event) =>
-                handleAboutImageUpload(2, event.target.files?.[0])
-              }
-            />
+            {uploadControl("Upload About slide 3 image", {kind: "about", index: 2})}
             <button
               className="admin-button mt-3 px-4 py-2"
               type="button"
@@ -2169,16 +2160,7 @@ function AdminStudio({
                   updateProject(index, { ...project, image: value })
                 }
               />
-              <input
-                aria-label={`Upload project page image for ${project.title}`}
-                disabled={isSavingProject || pendingUploads > 0}
-                className="mt-3 block w-full text-sm text-white/[0.70]"
-                type="file"
-                accept="image/*,.svg"
-                onChange={(event) =>
-                  handleProjectImageUpload(index, event.target.files?.[0])
-                }
-              />
+              {uploadControl(`Upload project page image for ${project.title}`, {kind: "project", project: getProjectSlug(project), field: "image"})}
               <p className="mt-2 text-xs font-semibold text-white/[0.48]">
                 Uploaded project images save to your portfolio files automatically. Wait for the saved confirmation.
               </p>
@@ -2197,16 +2179,7 @@ function AdminStudio({
                     updateProject(index, { ...project, carouselImage: value })
                   }
                 />
-                <input
-                  aria-label={`Upload carousel image for ${project.title}`}
-                  disabled={isSavingProject || pendingUploads > 0}
-                  className="mt-3 block w-full text-sm text-white/[0.70]"
-                  type="file"
-                  accept="image/*,.svg"
-                  onChange={(event) =>
-                    handleProjectImageUpload(index, event.target.files?.[0], "carouselImage")
-                  }
-                />
+                {uploadControl(`Upload carousel image for ${project.title}`, {kind: "project", project: getProjectSlug(project), field: "carouselImage"})}
                 {(project.carouselImage ?? project.image) ? (
                   <img
                     alt={`Carousel preview for ${project.title}`}

@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { createServer } from "vite";
-import { portfolioSavePlugin, writePortfolio } from "../../scripts/portfolio-save.mjs";
+import { portfolioSavePlugin, writePortfolio, readPortfolio } from "../../scripts/portfolio-save.mjs";
 
 let root;
 afterEach(async () => {
@@ -13,6 +13,45 @@ afterEach(async () => {
 });
 
 describe("writing portfolio files", () => {
+  it("persists every project graphic and every other image destination, rejecting stale full saves", async () => {
+    root = await mkdtemp(path.join(tmpdir(), "portfolio-save-"));
+    const original = await writePortfolio(root, {brandLogoText: "", selectedTemplate: "signal-room", aboutImages: ["/a.png", "/b.png", "/c.png"], projects: Array.from({length: 8}, (_, index) => ({title: `Project ${index}`, slug: `project-${index}`, image: `/page-${index}.png`, summary: "Keep my text"}))});
+    const server = await createServer({configFile: false, root, plugins: [portfolioSavePlugin()], server: {host: "127.0.0.1", port: 0, watch: null}, logLevel: "silent"});
+    try {
+      await server.listen();
+      const origin = `http://127.0.0.1:${server.httpServer.address().port}`;
+      const targets = original.content.projects.flatMap(project => [
+        {kind: "project", project: project.slug, field: "image"},
+        {kind: "project", project: project.slug, field: "carouselImage"},
+      ]).concat([{kind: "profile"}, {kind: "logo"}, ...[0, 1, 2].map(index => ({kind: "about", index}))]);
+      const expected = new Map();
+      await Promise.all(targets.map(async (target, index) => {
+        const bytes = Buffer.from(`GIF89a-sample-${index}`);
+        const response = await fetch(`${origin}/__portfolio/image?target=${encodeURIComponent(JSON.stringify(target))}`, {method: "POST", headers: {"Content-Type": "image/gif", Origin: origin}, body: bytes});
+        expect(response.status).toBe(200);
+        const saved = await response.json();
+        expected.set(JSON.stringify(target), saved.image);
+        expect((await readFile(path.join(root, "public", saved.image))).equals(bytes)).toBe(true);
+      }));
+      const disk = await readPortfolio(root);
+      for (const target of targets) {
+        const actual = target.kind === "project" ? disk.content.projects.find(project => project.slug === target.project)[target.field] : target.kind === "about" ? disk.content.aboutImages[target.index] : disk.content[target.kind === "profile" ? "profileImage" : "brandLogoImage"];
+        expect(actual).toBe(expected.get(JSON.stringify(target)));
+      }
+      expect(disk.content.projects.map(project => project.summary)).toEqual(Array(8).fill("Keep my text"));
+      expect(disk.content.brandLogoText).toBe("");
+      expect(disk.content.selectedTemplate).toBe("signal-room");
+      const reopened = await fetch(`${origin}/__portfolio/content`);
+      expect(await reopened.json()).toEqual(disk);
+      const stale = await fetch(`${origin}/__portfolio/save`, {method: "POST", headers: {"Content-Type": "application/json", "X-Portfolio-Revision": original.savedAt, Origin: origin}, body: JSON.stringify(original.content)});
+      expect(stale.status).toBe(409);
+      expect(await readPortfolio(root)).toEqual(disk);
+      const invalid = await fetch(`${origin}/__portfolio/image?target=${encodeURIComponent(JSON.stringify({kind: "project", project: "missing", field: "carouselImage"}))}`, {method: "POST", headers: {"Content-Type": "image/gif", Origin: origin}, body: "GIF89a"});
+      expect(invalid.status).toBe(400);
+      expect(await readPortfolio(root)).toEqual(disk);
+    } finally { await server.close(); }
+  });
+
   it("saves through the real HTTP endpoint and serves the resulting image file", async () => {
     root = await mkdtemp(path.join(tmpdir(), "portfolio-save-"));
     const server = await createServer({

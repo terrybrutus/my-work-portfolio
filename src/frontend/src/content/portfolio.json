@@ -1,5 +1,5 @@
 {
-  "savedAt": "2026-10-15T18:05:21.000Z",
+  "savedAt": "2026-10-17T19:32:21.242Z",
   "content": {
     "brandLabel": "",
     "brandLogoText": "",
@@ -135,11 +135,12 @@
             "title": "Artifact Note",
             "body": "The previously implemented public course link is no longer available, but the course context remains available through the course catalog link."
           }
-        ]
+        ],
+        "carouselImage": "/assets/uploads/38cdcfd82b2f11feee23c2faf1e2023bff05aadff5c299561e38b7f368e85f2e.gif"
       },
       {
         "title": "Quality Assurance Review System",
-        "summary": "A two-page sample of my course review notes, showing the issue, the requested change, and directions for the production team.",
+        "summary": "A QA commentary workflow for a 50+ screen government eLearning course, documenting structural, instructional, formatting, and compliance issues for the production team.",
         "result": "Highlights a systematic review practice across instructional quality, user experience, Section 508/WCAG expectations, and contractual standards.",
         "tags": [
           "QA",
@@ -163,11 +164,12 @@
             "title": "Why It Belongs Here",
             "body": "QA work is often invisible, but it is one of the places where polished learning experiences are made. This artifact makes that review judgment visible."
           }
-        ]
+        ],
+        "carouselImage": "/assets/uploads/6689a86e5706a1af070305b25eb799ca1bc51a667eb747f943e20499e429e4f0.gif"
       },
       {
         "title": "Job Aid Template System",
-        "summary": "Quick-reference templates that organize technical software-purchasing guidance into definitions, requirements, and useful reference links.",
+        "summary": "Performance-support templates created to turn dense regulatory and technical content into clearer job aids for DOD acquisition professionals.",
         "result": "Demonstrates information architecture, visual hierarchy, essential-resource curation, and reusable template thinking for on-the-job support.",
         "tags": [
           "Job aids",
@@ -191,11 +193,12 @@
             "title": "Portfolio Signal",
             "body": "It shows that the work is not limited to courses. It also includes tools, references, and systems that support performance in the flow of work."
           }
-        ]
+        ],
+        "carouselImage": ""
       },
       {
         "title": "Facilitator Guide Adaptation",
-        "summary": "A five-page instructor guide showing how I planned a live training session, with preparation steps, timed activities, teaching prompts, and learner practice.",
+        "summary": "A facilitator guide that adapted asynchronous online training into a synchronous instructor-led session using Gagne's Nine Events of Instruction.",
         "result": "Shows how the same content can be redesigned across modalities while preserving instructional intent, timing, materials, and facilitation strategy.",
         "tags": [
           "Facilitator guide",

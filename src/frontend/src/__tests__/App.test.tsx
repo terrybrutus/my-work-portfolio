@@ -110,10 +110,9 @@ describe("App default route", () => {
     }));
     window.history.pushState({}, "", "/admin");
     const saveRequest = vi.fn(async (_url, options) => {
-      const content = JSON.parse(options.body);
-      expect(content.projects[0].carouselImage).toMatch(/^data:image\/gif;base64,/);
-      content.projects[0].carouselImage = "/assets/uploads/automatic.gif";
-      return {ok: true, headers: {get: () => "application/json"}, json: async () => ({savedAt: "2026-10-15T20:00:00Z", content})};
+      if (options?.method !== "POST") return {ok: false};
+      expect(options.body).toBeInstanceOf(File);
+      return {ok: true, headers: {get: () => "application/json"}, json: async () => ({savedAt: "2026-10-15T20:00:00Z", image: "/assets/uploads/automatic.gif"})};
     });
     vi.stubGlobal("fetch", saveRequest);
     const editor = render(<App />);
@@ -125,7 +124,7 @@ describe("App default route", () => {
       expect(saved.projects[0].carouselImage).toBe("/assets/uploads/automatic.gif");
       expect(saved.projects[0].image).toBe("/page-image.png");
     });
-    expect(saveRequest).toHaveBeenCalledTimes(1);
+    expect(saveRequest.mock.calls.filter(([, options]) => options?.method === "POST")).toHaveLength(1);
     editor.unmount();
     render(<App />);
     expect(screen.getByAltText("Carousel preview for Upload sample")).toHaveAttribute("src", "/assets/uploads/automatic.gif");
@@ -179,15 +178,26 @@ describe("App default route", () => {
     setItem.mockRestore();
   });
 
+  it("opens the modal with the disk image when a browser draft or imported bundle is stale", async () => {
+    window.history.pushState({}, "", "/admin");
+    const editor = render(<App />);
+    const disk = JSON.parse(window.localStorage.getItem("terry-lxd-portfolio-draft-v4")!);
+    editor.unmount();
+    disk.projects[0].carouselImage = "/assets/uploads/from-disk.gif";
+    vi.stubGlobal("fetch", vi.fn(async () => ({ok: true, headers: {get: () => "application/json"}, json: async () => ({savedAt: "2026-10-17T20:00:00Z", content: disk})})));
+    window.history.pushState({}, "", "/?work=enablement-quest-the-learning-systems-lab#work");
+    render(<App />);
+    await waitFor(() => expect(document.querySelector(".project-modal-media img")).toHaveAttribute("src", "/assets/uploads/from-disk.gif"));
+  });
+
   it("retains an uploaded file when automatic saving fails so it can be retried", async () => {
-    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [{title: "Retry upload", summary: "Summary", result: "Result", tags: []}]}));
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [{title: "Retry upload", summary: "Summary", result: "Result", tags: [], carouselImage: "/keep-existing.gif"}]}));
     vi.stubGlobal("fetch", vi.fn(async () => {throw new Error("Connection interrupted");}));
     window.history.pushState({}, "", "/admin");
     render(<App />);
     fireEvent.change(screen.getByLabelText("Upload carousel image for Retry upload"), {target: {files: [new File(["GIF89a"], "keep.gif", {type: "image/gif"})]}});
-    await waitFor(() => expect(screen.getByAltText("Carousel preview for Retry upload")).toHaveAttribute("src", expect.stringMatching(/^data:image\/gif;base64,/)));
-    await waitFor(() => expect(screen.getAllByRole("status").some((status) => status.textContent?.includes("retry without selecting it again"))).toBe(true));
-    expect(screen.getByRole("button", {name: "Save carousel image"})).toBeEnabled();
+    await waitFor(() => expect(screen.getByRole("button", {name: "Retry upload"})).toBeEnabled());
+    expect(screen.getByAltText("Carousel preview for Retry upload")).toHaveAttribute("src", "/keep-existing.gif");
   });
 
   it("writes the uploaded image to disk even when the browser draft exceeds its quota", async () => {
@@ -201,9 +211,9 @@ describe("App default route", () => {
     });
     const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.stubGlobal("fetch", vi.fn(async (_url, options) => {
-      const content = JSON.parse(options.body);
-      content.projects[0].carouselImage = "/assets/uploads/large.gif";
-      return {ok: true, headers: {get: () => "application/json"}, json: async () => ({savedAt: "2026-10-15T20:00:00Z", content})};
+      if (options?.method !== "POST") return {ok: false};
+      expect(options.body).toBeInstanceOf(File);
+      return {ok: true, headers: {get: () => "application/json"}, json: async () => ({savedAt: "2026-10-15T20:00:00Z", image: "/assets/uploads/large.gif"})};
     }));
     try {
       fireEvent.change(screen.getByLabelText("Upload carousel image for Large upload"), {target: {files: [new File(["GIF89a"], "large.gif", {type: "image/gif"})]}});
