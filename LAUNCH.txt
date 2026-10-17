@@ -14,6 +14,7 @@ Production checks:
   corepack pnpm --dir src/frontend test
   corepack pnpm --dir src/frontend typecheck
   corepack pnpm --dir src/frontend build
+  node scripts/optimize-deployment.mjs
 
 Netlify uses netlify.toml. Publish src/frontend/dist after the checks pass.
 Public production pages use the saved build content, not browser drafts.
@@ -38,10 +39,23 @@ Domain audit:
   Netlify's displayed targets. Preserve mail, verification, and unrelated records.
   Verify HTTPS for both names before announcing the launch.
 
-Deployment status at this audit: NOT DEPLOYED. Netlify sign-in approval is needed.
-No DNS records have been changed. Keep the existing site live until the new
-Netlify preview, direct project URLs, game assets, and HTTPS have been verified.
+Deployed Netlify project: chipper-squirrel-701fbc
+Project ID: 04df08cb-094e-4920-8dce-e344b4a8efee
+Published deploy: 6ad3edde8dd0b0c6050cd919
+Fallback URL: https://chipper-squirrel-701fbc.netlify.app/
+Both terrylxd.com and www.terrylxd.com are assigned to this project.
+Namecheap web records now use A @ 75.2.60.5 and CNAME www
+chipper-squirrel-701fbc.netlify.app. Email and play records remain unchanged.
+Netlify's Powered by Netlify overlay is disabled for this project.
+The incomplete initial upload was canceled to prevent a later accidental publish.
 
-Performance follow-up: original uploaded GIFs are preserved exactly. The largest
-is about 55 MB; it can load slowly on mobile connections. A smaller video preview
-can be added later without deleting or replacing the original file.
+This is a manual deployment. The GitHub integration currently has access to the
+game repository only; repository auto-deploy is not enabled for this portfolio.
+To publish future edits, build, optimize, then upload the contents of dist as a
+ZIP to this SAME project's Deploys page. Do not create a second Netlify project.
+The local editor's save success means project files are saved, not deployed.
+
+Original uploaded GIFs are preserved exactly. scripts/optimize-deployment.mjs
+optimizes only generated dist copies, checks frame count, looping, and delays,
+and reduces the largest preview from about 55 MB to 2.3 MB. Never run it against
+the public source directory. netlify.toml also runs it after repository builds.
