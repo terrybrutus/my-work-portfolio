@@ -22,6 +22,7 @@ import { createPortal } from "react-dom";
 import savedPortfolio from "./content/portfolio.json";
 import { projectSamples } from "./content/project-samples";
 import { ProjectDocumentViewer } from "./components/ProjectDocumentViewer";
+import { usePageScrollLock } from "./hooks/usePageScrollLock";
 import { ImageUpload, type ImageTarget } from "./components/ImageUpload";
 
 type Project = {
@@ -1095,12 +1096,11 @@ function AboutTvModal({
   onClose: () => void;
 }) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  usePageScrollLock(isOpen);
   useEffect(() => {
-    if (!isOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = previousOverflow; };
-  }, [isOpen]);
+    if (contentRef.current) contentRef.current.scrollTop = 0;
+  }, [activeSlide]);
   const workStory = content.about[0] ?? "";
   const personalStory = content.about[1] ?? content.about[0] ?? "";
   const curiosityStory = content.about[2] ?? "";
@@ -1169,16 +1169,17 @@ function AboutTvModal({
         type="button"
       />
       <div className="about-modal-panel">
+        <div className="about-modal-header">
+          <p>About Terry <span>{activeSlide + 1} of {slides.length}</span></p>
+          <button className="retro-tv-close" onClick={onClose} type="button">Close</button>
+        </div>
+        <div className="about-modal-content" ref={contentRef}>
       <div className="retro-tv-photo-shell">
         <img
           alt="Vintage television used as an interactive portfolio screen"
           className="retro-tv-photo"
           src="/assets/legacy/single-retro-tv.jpg"
         />
-        <button className="retro-tv-close" onClick={onClose} type="button">
-          Close
-        </button>
-
         <div className="retro-tv-screen" aria-live="polite">
           <span
             className={`retro-tv-screen-inner ${
@@ -1186,7 +1187,7 @@ function AboutTvModal({
             }`}
           >
             <span className="retro-tv-kicker">{activeTvSlide.kicker}</span>
-            <span className="retro-tv-title" id="about-modal-title">
+            <span className="retro-tv-title">
               {activeTvSlide.title}
             </span>
             {activeTvSlide.image ? (
@@ -1203,7 +1204,14 @@ function AboutTvModal({
             </span>
           </span>
         </div>
-
+      </div>
+          {activeTvSlide.image ? <div className="about-mobile-media"><img src={activeTvSlide.image} alt={activeTvSlide.imageAlt} /></div> : null}
+          <div className="about-slide-transcript" aria-live="polite">
+            <h2 id="about-modal-title">{activeTvSlide.title}</h2>
+            <p>{activeTvSlide.copy}</p>
+          </div>
+        </div>
+        <div className="about-modal-navigation" aria-label="About navigation">
         <button
           className="retro-tv-nav retro-tv-nav-prev"
           onClick={() => goToSlide(-1)}
@@ -1232,10 +1240,6 @@ function AboutTvModal({
         </div>
 
       </div>
-        <div className="about-slide-transcript" aria-live="polite">
-          <h2>{activeTvSlide.title}</h2>
-          <p>{activeTvSlide.copy}</p>
-        </div>
       </div>
     </dialog>,
     document.body,
@@ -1376,16 +1380,7 @@ function ProjectShowcaseModal({
     [activeIndex, onSelect, projects.length],
   );
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isOpen]);
+  usePageScrollLock(isOpen);
 
   useEffect(() => {
     if (!isOpen) return;

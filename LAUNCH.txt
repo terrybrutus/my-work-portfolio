@@ -41,7 +41,7 @@ Domain audit:
 
 Deployed Netlify project: chipper-squirrel-701fbc
 Project ID: 04df08cb-094e-4920-8dce-e344b4a8efee
-Published deploy: 6ad3edde8dd0b0c6050cd919
+Published deploy: 6ad4068561d8213761f5c132
 Fallback URL: https://chipper-squirrel-701fbc.netlify.app/
 Both terrylxd.com and www.terrylxd.com are assigned to this project.
 HTTPS verified live for BOTH names on 2026-10-17. Netlify issued a Let's Encrypt
@@ -64,6 +64,13 @@ against this existing project. The local .netlify link is excluded from Git.
 To publish future edits, build, optimize, then upload the contents of dist as a
 ZIP to this SAME project's Deploys page. Do not create a second Netlify project.
 The local editor's save success means project files are saved, not deployed.
+
+Mobile regression update: About now has a persistent header/navigation footer,
+full-size mobile photos and readable text. Desktop retains the TV presentation.
+Both modals share a fixed-body scroll lock that restores the original page
+position. Horizontal page overflow is contained globally. All three About
+slides were checked at phone, tablet, landscape, and desktop sizes; 53 tests,
+typecheck, and production build passed before publishing through Netlify CLI.
 
 Original uploaded GIFs are preserved exactly. scripts/optimize-deployment.mjs
 optimizes only generated dist copies, checks frame count, looping, and delays,

@@ -7,6 +7,7 @@ configure({ testIdAttribute: "data-ocid" });
 
 beforeEach(() => {
   window.localStorage.clear();
+  vi.stubGlobal("scrollTo", vi.fn());
   vi.stubGlobal("ResizeObserver", class {
     observe() {}
     disconnect() {}
@@ -61,6 +62,19 @@ describe("App default route", () => {
     fireEvent.click(within(dialog).getByRole("button", {name: /^Close$/}));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(document.body.style.overflow).not.toBe("hidden");
+  });
+  it("keeps About navigation outside the scrollable content and cycles through every item", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("link", {name: "About me"}));
+    const dialog = screen.getByRole("dialog");
+    const footer = dialog.querySelector(".about-modal-navigation")!;
+    expect(dialog.querySelector(".about-modal-content")?.contains(footer)).toBe(false);
+    expect(document.body.style.position).toBe("fixed");
+    const titles = ["How I Got Here", "Beyond The Work", "What I Pay Attention To", "How I Got Here"];
+    for (const title of titles) {
+      expect(within(dialog).getByRole("heading", {name: title})).toBeInTheDocument();
+      fireEvent.click(within(dialog).getByRole("button", {name: "Next"}));
+    }
   });
   it("renders the TerryLXD portfolio instead of a blank screen", () => {
     render(<App />);
