@@ -41,7 +41,7 @@ Domain audit:
 
 Deployed Netlify project: chipper-squirrel-701fbc
 Project ID: 04df08cb-094e-4920-8dce-e344b4a8efee
-Published deploy: 6ad4068561d8213761f5c132
+Published deploy: 6ad41afe9e85c4479b28b8b2
 Fallback URL: https://chipper-squirrel-701fbc.netlify.app/
 Both terrylxd.com and www.terrylxd.com are assigned to this project.
 HTTPS verified live for BOTH names on 2026-10-17. Netlify issued a Let's Encrypt
@@ -71,6 +71,9 @@ Both modals share a fixed-body scroll lock that restores the original page
 position. Horizontal page overflow is contained globally. All three About
 slides were checked at phone, tablet, landscape, and desktop sizes; 53 tests,
 typecheck, and production build passed before publishing through Netlify CLI.
+About also supports single-finger swipes: left advances, right goes back, with
+wrapping at each end. Vertical scrolling, pinching, small movements, and canceled
+gestures do not navigate. Swipe regression coverage brings the suite to 56 tests.
 
 Original uploaded GIFs are preserved exactly. scripts/optimize-deployment.mjs
 optimizes only generated dist copies, checks frame count, looping, and delays,

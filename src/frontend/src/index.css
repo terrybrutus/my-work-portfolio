@@ -778,6 +778,7 @@
   .about-modal-content {
     min-width: 0;
     min-height: 0;
+    touch-action: pan-y pinch-zoom;
   }
 
     .about-modal-backdrop {

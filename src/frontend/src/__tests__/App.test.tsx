@@ -76,6 +76,55 @@ describe("App default route", () => {
       fireEvent.click(within(dialog).getByRole("button", {name: "Next"}));
     }
   });
+  it("swipes About left and right and wraps at both ends", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("link", {name: "About me"}));
+    const dialog = screen.getByRole("dialog");
+    const content = dialog.querySelector(".about-modal-content")!;
+    const swipe = (from: number, to: number) => {
+      fireEvent.touchStart(content, {touches: [{identifier: 1, clientX: from, clientY: 200}]});
+      fireEvent.touchEnd(content, {touches: [], changedTouches: [{identifier: 1, clientX: to, clientY: 205}]});
+    };
+    swipe(280, 80);
+    expect(within(dialog).getByRole("heading", {name: "Beyond The Work"})).toBeInTheDocument();
+    swipe(80, 280);
+    expect(within(dialog).getByRole("heading", {name: "How I Got Here"})).toBeInTheDocument();
+    swipe(80, 280);
+    expect(within(dialog).getByRole("heading", {name: "What I Pay Attention To"})).toBeInTheDocument();
+    swipe(280, 80);
+    expect(within(dialog).getByRole("heading", {name: "How I Got Here"})).toBeInTheDocument();
+  });
+
+  it("does not change About slides during a vertical scroll or a small touch movement", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("link", {name: "About me"}));
+    const dialog = screen.getByRole("dialog");
+    const content = dialog.querySelector(".about-modal-content")!;
+    fireEvent.touchStart(content, {touches: [{identifier: 1, clientX: 200, clientY: 200}]});
+    fireEvent.touchMove(content, {touches: [{identifier: 1, clientX: 195, clientY: 150}]});
+    fireEvent.touchEnd(content, {touches: [], changedTouches: [{identifier: 1, clientX: 80, clientY: 190}]});
+    expect(within(dialog).getByRole("heading", {name: "How I Got Here"})).toBeInTheDocument();
+    fireEvent.touchStart(content, {touches: [{identifier: 1, clientX: 200, clientY: 200}]});
+    fireEvent.touchEnd(content, {touches: [], changedTouches: [{identifier: 1, clientX: 180, clientY: 200}]});
+    expect(within(dialog).getByRole("heading", {name: "How I Got Here"})).toBeInTheDocument();
+  });
+
+  it("ignores pinching and canceled About gestures", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("link", {name: "About me"}));
+    const dialog = screen.getByRole("dialog");
+    const content = dialog.querySelector(".about-modal-content")!;
+    const finger = {identifier: 1, clientX: 280, clientY: 200};
+    fireEvent.touchStart(content, {touches: [finger]});
+    fireEvent.touchMove(content, {touches: [finger, {identifier: 2, clientX: 100, clientY: 200}]});
+    fireEvent.touchEnd(content, {touches: [], changedTouches: [{...finger, clientX: 80}]});
+    expect(within(dialog).getByRole("heading", {name: "How I Got Here"})).toBeInTheDocument();
+    fireEvent.touchStart(content, {touches: [finger]});
+    fireEvent.touchCancel(content);
+    fireEvent.touchEnd(content, {touches: [], changedTouches: [{...finger, clientX: 80}]});
+    expect(within(dialog).getByRole("heading", {name: "How I Got Here"})).toBeInTheDocument();
+  });
+
   it("renders the TerryLXD portfolio instead of a blank screen", () => {
     render(<App />);
     expect(

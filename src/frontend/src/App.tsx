@@ -1097,6 +1097,7 @@ function AboutTvModal({
 }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
+  const swipeStart = useRef<{id: number; x: number; y: number} | null>(null);
   usePageScrollLock(isOpen);
   useEffect(() => {
     if (contentRef.current) contentRef.current.scrollTop = 0;
@@ -1173,7 +1174,40 @@ function AboutTvModal({
           <p>About Terry <span>{activeSlide + 1} of {slides.length}</span></p>
           <button className="retro-tv-close" onClick={onClose} type="button">Close</button>
         </div>
-        <div className="about-modal-content" ref={contentRef}>
+        <div
+          className="about-modal-content"
+          ref={contentRef}
+          onTouchStart={(event) => {
+            const touch = event.touches[0];
+            swipeStart.current = event.touches.length === 1
+              ? {id: touch.identifier, x: touch.clientX, y: touch.clientY}
+              : null;
+          }}
+          onTouchMove={(event) => {
+            const start = swipeStart.current;
+            const touch = event.touches[0];
+            if (!start) return;
+            if (event.touches.length !== 1 || touch.identifier !== start.id) {
+              swipeStart.current = null;
+              return;
+            }
+            const dx = Math.abs(touch.clientX - start.x);
+            const dy = Math.abs(touch.clientY - start.y);
+            if (dy > 12 && dy > dx) swipeStart.current = null;
+          }}
+          onTouchEnd={(event) => {
+            const start = swipeStart.current;
+            swipeStart.current = null;
+            const touch = Array.from(event.changedTouches).find(touch => touch.identifier === start?.id);
+            if (!start || !touch || event.touches.length !== 0) return;
+            const dx = touch.clientX - start.x;
+            const dy = touch.clientY - start.y;
+            if (Math.abs(dx) >= 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+              goToSlide(dx < 0 ? 1 : -1);
+            }
+          }}
+          onTouchCancel={() => { swipeStart.current = null; }}
+        >
       <div className="retro-tv-photo-shell">
         <img
           alt="Vintage television used as an interactive portfolio screen"
