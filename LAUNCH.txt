@@ -14,7 +14,7 @@ Production checks:
   corepack pnpm --dir src/frontend test
   corepack pnpm --dir src/frontend typecheck
   corepack pnpm --dir src/frontend build
-  node scripts/optimize-deployment.mjs
+  node scripts/verify-gif-assets.mjs
 
 Netlify uses netlify.toml. Publish src/frontend/dist after the checks pass.
 Public production pages use the saved build content, not browser drafts.
@@ -41,7 +41,7 @@ Domain audit:
 
 Deployed Netlify project: chipper-squirrel-701fbc
 Project ID: 04df08cb-094e-4920-8dce-e344b4a8efee
-Published deploy: 6ad621c6aad088fce6eada03
+Published deploy: 6ad622ce889b0e1f8be21b31
 Fallback URL: https://chipper-squirrel-701fbc.netlify.app/
 Both terrylxd.com and www.terrylxd.com are assigned to this project.
 HTTPS verified live for BOTH names on 2026-10-17. Netlify issued a Let's Encrypt
@@ -61,7 +61,7 @@ game repository only; repository auto-deploy is not enabled for this portfolio.
 Netlify CLI authorization is now confirmed and this local folder is linked to
 project 04df08cb-094e-4920-8dce-e344b4a8efee. Future deployments can use the CLI
 against this existing project. The local .netlify link is excluded from Git.
-To publish future edits, build, optimize, then upload the contents of dist as a
+To publish future edits, build, verify, then upload the contents of dist as a
 ZIP to this SAME project's Deploys page. Do not create a second Netlify project.
 The local editor's save success means project files are saved, not deployed.
 
@@ -75,14 +75,15 @@ About also supports single-finger swipes: left advances, right goes back, with
 wrapping at each end. Vertical scrolling, pinching, small movements, and canceled
 gestures do not navigate. Swipe regression coverage brings the suite to 56 tests.
 
-Original uploaded GIFs are preserved exactly. scripts/optimize-deployment.mjs
-optimizes only generated dist copies, checks frame count, looping, and delays,
-and reduces the largest preview from about 55 MB to 2.3 MB. Never run it against
-the public source directory. netlify.toml also runs it after repository builds.
+All uploaded GIFs must be served unchanged, including resolution, colors, and
+animation. scripts/verify-gif-assets.mjs checks every generated GIF against its
+public source byte-for-byte and fails deployment preparation on any difference.
+Do not resize or re-encode GIFs during deployment. The earlier lossy optimization
+was removed after visual quality proved unacceptable.
 
 Startup performance update (2026-10-19): production minification reduces the
-main JavaScript from 609,813 to 253,100 bytes. Featured GIF deployment copies
-total 1,726,053 bytes instead of 6,724,137, with original uploads unchanged.
+main JavaScript from 609,813 to 253,100 bytes. The GIF compression introduced
+in this update has been reverted; all GIFs now retain original uploaded quality.
 Featured previews load only within 200px of the viewport. Fonts load without
 blocking initial rendering. A lightweight inline startup indicator clears at
 the first React commit, without waiting for images or adding a forced delay.
@@ -92,3 +93,9 @@ All 60 tests, typecheck, and production build passed. Desktop/mobile browser
 checks confirmed deferred images, font activation, no mobile horizontal
 overflow, and a functioning About modal. Live bundle and GIF sizes and cache
 headers were verified after publishing to the existing Netlify project.
+
+GIF quality restoration (2026-10-19): all nine live GIFs were downloaded and
+compared byte-for-byte with public source files after republishing. Every file
+matched, including the uploaded 57 MB GIF. Lossy optimization is removed from
+the build pipeline. The new verification guard rejects altered or missing GIFs;
+62 tests pass. Lazy loading, minified JavaScript, and startup feedback remain.
