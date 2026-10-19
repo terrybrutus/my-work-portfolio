@@ -21,8 +21,49 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://caffeine.ai/imgs/share-logo.jpeg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link id="portfolio-fonts" rel="stylesheet" media="print" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" />
+    <style>
+      #portfolio-startup { position: fixed; inset: 0; z-index: 9999; display: grid; place-content: center; gap: 12px; padding: 24px; background: #090f1e; color: #fff; font: 15px/1.5 system-ui, sans-serif; text-align: center; }
+      #portfolio-startup strong { font-size: 24px; letter-spacing: -0.03em; }
+      #portfolio-startup p { margin: 0; color: #aab8ca; }
+      #portfolio-startup .startup-line { width: 160px; height: 3px; margin: 6px auto; overflow: hidden; background: #253448; border-radius: 3px; }
+      #portfolio-startup .startup-line::after { content: ""; display: block; width: 50%; height: 100%; background: #7dd3fc; animation: startup-pulse 1.2s ease-in-out infinite alternate; }
+      #portfolio-startup a { display: inline-block; margin: 8px; color: #bcecff; }
+      @keyframes startup-pulse { to { transform: translateX(100%); } }
+      @media (prefers-reduced-motion: reduce) { #portfolio-startup .startup-line::after { animation: none; width: 100%; } }
+    </style>
   </head>
   <body>
+    <div id="portfolio-startup" role="status" aria-live="polite">
+      <strong>Terry Brutus</strong>
+      <p id="portfolio-startup-message">Loading portfolio</p>
+      <div class="startup-line" aria-hidden="true"></div>
+      <div id="portfolio-startup-recovery" hidden>
+        <a href="/">Reload portfolio</a>
+        <a href="mailto:terrbrutus@gmail.com">Email Terry</a>
+      </div>
+    </div>
+    <script>
+      (() => {
+        const fonts = document.getElementById("portfolio-fonts");
+        const enableFonts = () => { fonts.media = "all"; };
+        if (fonts.sheet) enableFonts();
+        else fonts.addEventListener("load", enableFonts, {once: true});
+        const recover = () => {
+          if (!document.getElementById("portfolio-startup")) return;
+          document.getElementById("portfolio-startup-message").textContent = "Taking longer than expected. Please reload or get in touch.";
+          document.getElementById("portfolio-startup-recovery").hidden = false;
+        };
+        window.setTimeout(recover, 10000);
+        window.addEventListener("error", recover, {once: true});
+      })();
+    </script>
+    <noscript>
+      <style>#portfolio-startup { display: none; }</style>
+      <p>Please enable JavaScript to view this portfolio, or <a href="mailto:terrbrutus@gmail.com">email Terry</a>.</p>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="./src/main.tsx"></script>
   </body>

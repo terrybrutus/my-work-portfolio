@@ -16,7 +16,8 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
     sourcemap: false,
-    minify: false,
+    minify: "esbuild",
+    cssMinify: true,
   },
   css: {
     postcss: "./postcss.config.js",

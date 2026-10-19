@@ -28,6 +28,14 @@ vi.mock("../hooks/useQueries", () => ({
 vi.mock("../content/portfolio.json", () => ({ default: {} }));
 
 describe("App default route", () => {
+  it("removes the startup indicator as soon as the app mounts without waiting for images", () => {
+    const startup = document.createElement("div");
+    startup.id = "portfolio-startup";
+    document.body.append(startup);
+    render(<App />);
+    expect(startup.isConnected).toBe(false);
+    expect(screen.getByRole("heading", {level: 1})).toBeInTheDocument();
+  });
   it("makes Contact open email when the contact section is hidden", () => {
     window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({sections: [{id: "work", visible: true, label: "Work"}]}));
     render(<App />);

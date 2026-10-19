@@ -7,7 +7,7 @@ async function optimize(directory) {
   for (const entry of await readdir(directory, {withFileTypes: true})) {
     const file = path.join(directory, entry.name);
     if (entry.isDirectory()) { await optimize(file); continue; }
-    if (!entry.name.endsWith(".gif") || (await stat(file)).size < 4_000_000) continue;
+    if (!entry.name.endsWith(".gif") || (await stat(file)).size < 1_000_000) continue;
     const source = await readFile(file);
     const before = await sharp(source, {animated: true, limitInputPixels: false}).metadata();
     let result = await sharp(source, {animated: true, limitInputPixels: false})

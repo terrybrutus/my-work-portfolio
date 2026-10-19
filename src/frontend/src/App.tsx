@@ -22,6 +22,7 @@ import { createPortal } from "react-dom";
 import savedPortfolio from "./content/portfolio.json";
 import { projectSamples } from "./content/project-samples";
 import { ProjectDocumentViewer } from "./components/ProjectDocumentViewer";
+import { DeferredImage } from "./components/DeferredImage";
 import { usePageScrollLock } from "./hooks/usePageScrollLock";
 import { ImageUpload, type ImageTarget } from "./components/ImageUpload";
 
@@ -678,6 +679,9 @@ function getSectionLabel(content: PortfolioContent, sectionId: string) {
 }
 
 export default function App() {
+  useLayoutEffect(() => {
+    document.getElementById("portfolio-startup")?.remove();
+  }, []);
   const [content, setContent] = useState<PortfolioContent>(getInitialContent);
   const initialContentRef = useRef(content);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -1336,7 +1340,7 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
           <article className="project-card group" key={project.title}>
             {project.image ? (
               <div className="project-card-media">
-                <img
+                <DeferredImage
                   alt=""
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   src={project.image}

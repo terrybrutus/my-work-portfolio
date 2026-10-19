@@ -41,7 +41,7 @@ Domain audit:
 
 Deployed Netlify project: chipper-squirrel-701fbc
 Project ID: 04df08cb-094e-4920-8dce-e344b4a8efee
-Published deploy: 6ad41afe9e85c4479b28b8b2
+Published deploy: 6ad621c6aad088fce6eada03
 Fallback URL: https://chipper-squirrel-701fbc.netlify.app/
 Both terrylxd.com and www.terrylxd.com are assigned to this project.
 HTTPS verified live for BOTH names on 2026-10-17. Netlify issued a Let's Encrypt
@@ -79,3 +79,16 @@ Original uploaded GIFs are preserved exactly. scripts/optimize-deployment.mjs
 optimizes only generated dist copies, checks frame count, looping, and delays,
 and reduces the largest preview from about 55 MB to 2.3 MB. Never run it against
 the public source directory. netlify.toml also runs it after repository builds.
+
+Startup performance update (2026-10-19): production minification reduces the
+main JavaScript from 609,813 to 253,100 bytes. Featured GIF deployment copies
+total 1,726,053 bytes instead of 6,724,137, with original uploads unchanged.
+Featured previews load only within 200px of the viewport. Fonts load without
+blocking initial rendering. A lightweight inline startup indicator clears at
+the first React commit, without waiting for images or adding a forced delay.
+Startup failure exposes reload/email recovery after ten seconds or a script
+error. Fingerprinted JS/CSS receive immutable caching; editable assets do not.
+All 60 tests, typecheck, and production build passed. Desktop/mobile browser
+checks confirmed deferred images, font activation, no mobile horizontal
+overflow, and a functioning About modal. Live bundle and GIF sizes and cache
+headers were verified after publishing to the existing Netlify project.
