@@ -1,5 +1,5 @@
 {
-  "savedAt": "2026-10-17T20:48:58.000Z",
+  "savedAt": "2026-10-20T18:56:33.066Z",
   "content": {
     "brandLabel": "",
     "brandLogoText": "",
@@ -80,7 +80,8 @@
           "Microlearning"
         ],
         "image": "/assets/projects/ai-future-of-work.gif",
-        "url": "/ai-future-of-work/"
+        "url": "/ai-future-of-work/",
+        "carouselImage": "/assets/uploads/612567ef8b46ff03494cc11faa4bc811f1f96c86a81eff33a30142f564be0afe.gif"
       },
       {
         "title": "Why Blockchain Actually Matters",
