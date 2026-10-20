@@ -48,6 +48,21 @@ describe("App default route", () => {
     expect(game).toHaveAttribute("target", "_blank");
   });
 
+  it("uses branded course URLs in the work carousel, including older saved Netlify links", () => {
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [
+      {title: "AI & The Future of Work", summary: "AI course", result: "AI result", tags: [], url: "https://terrybrutus-aiandthefuture-sample.netlify.app/"},
+      {title: "Why Blockchain Actually Matters", summary: "Blockchain course", result: "Blockchain result", tags: [], url: "https://whyblockchainmatters-by-terrybrutus.netlify.app/"},
+      {title: "Don't Get Hooked: A Course on Phishing", summary: "Phishing course", result: "Phishing result", tags: [], url: "https://phishingcourse-by-terrybrutus.netlify.app/story.html"},
+    ]}));
+    render(<App />);
+    fireEvent.click(screen.getAllByRole("button", {name: "View details"})[0]);
+    const dialog = screen.getByRole("dialog");
+    for (const href of ["/ai-future-of-work/", "/blockchain/", "/phishing/"]) {
+      expect(within(dialog).getByRole("link", {name: "Open project"})).toHaveAttribute("href", href);
+      fireEvent.click(within(dialog).getByRole("button", {name: "Next"}));
+    }
+  });
+
   it("does not expose the local admin or browser drafts in production", () => {
     vi.stubEnv("DEV", false);
     window.history.pushState({}, "", "/admin");

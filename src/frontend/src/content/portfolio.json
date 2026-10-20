@@ -80,7 +80,7 @@
           "Microlearning"
         ],
         "image": "/assets/projects/ai-future-of-work.gif",
-        "url": "https://terrybrutus-aiandthefuture-sample.netlify.app/"
+        "url": "/ai-future-of-work/"
       },
       {
         "title": "Why Blockchain Actually Matters",
@@ -92,7 +92,7 @@
           "Technical explainer"
         ],
         "image": "/assets/projects/blockchain-matters.gif",
-        "url": "https://whyblockchainmatters-by-terrybrutus.netlify.app/"
+        "url": "/blockchain/"
       },
       {
         "title": "Don't Get Hooked: A Course on Phishing",
@@ -104,7 +104,7 @@
           "Scenario learning"
         ],
         "image": "/assets/projects/phishing-course.png",
-        "url": "https://phishingcourse-by-terrybrutus.netlify.app/story.html",
+        "url": "/phishing/",
         "carouselImage": "/assets/uploads/9e93f7580fbb327786f8206231887b978e5f8bc1101216e9c15120c0cb3ee874.gif"
       },
       {

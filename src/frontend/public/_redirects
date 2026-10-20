@@ -2,4 +2,8 @@
 /admin/* / 302
 /__portfolio/* / 404
 /enablement /enablement/ 301
+/ai-future-of-work/* https://terrybrutus-aiandthefuture-sample.netlify.app/:splat 200
+/blockchain/* https://whyblockchainmatters-by-terrybrutus.netlify.app/:splat 200
+/phishing/ https://phishingcourse-by-terrybrutus.netlify.app/story.html 200
+/phishing/* https://phishingcourse-by-terrybrutus.netlify.app/:splat 200
 /* /index.html 200

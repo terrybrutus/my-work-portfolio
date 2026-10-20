@@ -21,6 +21,9 @@ it("offers recovery if startup stalls and loads fonts without blocking the page"
     expect(document.querySelector("#portfolio-startup-recovery").hidden).toBe(true);
     expect(document.querySelector("#portfolio-startup-message").textContent).toBe("Loading portfolio");
     const fonts = document.querySelector("#portfolio-fonts");
+    expect(fonts.getAttribute("href")).toMatch(/^\/assets\/fonts\/fonts-[a-f0-9]+\.css$/);
+    expect(html).not.toContain("fonts.googleapis.com");
+    expect(html).not.toContain("fonts.gstatic.com");
     expect(fonts.media).toBe("print");
     fonts.dispatchEvent(new dom.window.Event("load"));
     expect(fonts.media).toBe("all");

@@ -11,6 +11,24 @@ const ii_url =
 
 process.env.II_URL = process.env.II_URL || ii_url;
 
+const courseProxy = {
+  "/ai-future-of-work": {
+    target: "https://terrybrutus-aiandthefuture-sample.netlify.app",
+    changeOrigin: true,
+    rewrite: (url) => url.replace(/^\/ai-future-of-work/, "") || "/",
+  },
+  "/blockchain": {
+    target: "https://whyblockchainmatters-by-terrybrutus.netlify.app",
+    changeOrigin: true,
+    rewrite: (url) => url.replace(/^\/blockchain/, "") || "/",
+  },
+  "/phishing": {
+    target: "https://phishingcourse-by-terrybrutus.netlify.app",
+    changeOrigin: true,
+    rewrite: (url) => url.replace(/^\/phishing/, "").replace(/^\/(?=\?|$)/, "/story.html") || "/story.html",
+  },
+};
+
 export default defineConfig({
   logLevel: "error",
   build: {
@@ -31,12 +49,14 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      ...courseProxy,
       "/api": {
         target: "http://127.0.0.1:4943",
         changeOrigin: true,
       },
     },
   },
+  preview: {proxy: courseProxy},
   plugins: [
     portfolioSavePlugin(),
     environment("all", { prefix: "CANISTER_" }),

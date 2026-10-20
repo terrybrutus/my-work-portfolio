@@ -21,6 +21,26 @@
   status = 301
 
 [[redirects]]
+  from = "/ai-future-of-work/*"
+  to = "https://terrybrutus-aiandthefuture-sample.netlify.app/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/blockchain/*"
+  to = "https://whyblockchainmatters-by-terrybrutus.netlify.app/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/phishing/"
+  to = "https://phishingcourse-by-terrybrutus.netlify.app/story.html"
+  status = 200
+
+[[redirects]]
+  from = "/phishing/*"
+  to = "https://phishingcourse-by-terrybrutus.netlify.app/:splat"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
@@ -34,5 +54,15 @@
 
 [[headers]]
   for = "/assets/index-*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/uploads/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"

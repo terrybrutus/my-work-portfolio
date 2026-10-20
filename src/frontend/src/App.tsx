@@ -161,6 +161,9 @@ const legacyContactTextV2 =
 const legacyAddieProjectTitle = "ADDIE in Action: CON 7020";
 
 const firstPartyProjectPages: Record<string, Partial<Project>> = {
+  "https://terrybrutus-aiandthefuture-sample.netlify.app/": {url: "/ai-future-of-work/"},
+  "https://whyblockchainmatters-by-terrybrutus.netlify.app/": {url: "/blockchain/"},
+  "https://phishingcourse-by-terrybrutus.netlify.app/story.html": {url: "/phishing/"},
   "https://sites.google.com/view/instructionaldesignbyterry/projects/addie-in-action":
     {
       title: "ADDIE Model From Start to Finish",
@@ -336,7 +339,7 @@ const defaultContent: PortfolioContent = {
         "Turns a broad technology topic into a short, approachable learning experience that helps people understand the shift without fear-first messaging.",
       tags: ["RISE 360", "AI literacy", "Microlearning"],
       image: "/assets/projects/ai-future-of-work.gif",
-      url: "https://terrybrutus-aiandthefuture-sample.netlify.app/",
+      url: "/ai-future-of-work/",
     },
     {
       title: "Don't Get Hooked: A Course on Phishing",
@@ -346,7 +349,7 @@ const defaultContent: PortfolioContent = {
         "Uses a real-world trigger to help learners recognize phishing behavior and connect security guidance to decisions they actually make.",
       tags: ["Storyline 360", "Cybersecurity", "Scenario learning"],
       image: "/assets/projects/phishing-course.png",
-      url: "https://phishingcourse-by-terrybrutus.netlify.app/story.html",
+      url: "/phishing/",
     },
     {
       title: "Why Blockchain Actually Matters",
@@ -356,7 +359,7 @@ const defaultContent: PortfolioContent = {
         "Makes a complex technical topic easier to understand by connecting blockchain to practical uses, transaction speed, security, and operational efficiency.",
       tags: ["RISE 360", "Blockchain", "Technical explainer"],
       image: "/assets/projects/blockchain-matters.gif",
-      url: "https://whyblockchainmatters-by-terrybrutus.netlify.app/",
+      url: "/blockchain/",
     },
     {
       title: "ADDIE Model From Start to Finish",

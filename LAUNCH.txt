@@ -41,7 +41,7 @@ Domain audit:
 
 Deployed Netlify project: chipper-squirrel-701fbc
 Project ID: 04df08cb-094e-4920-8dce-e344b4a8efee
-Published deploy: 6ad622ce889b0e1f8be21b31
+Published deploy: 6ad79da1b0ef4ca882aacc08
 Fallback URL: https://chipper-squirrel-701fbc.netlify.app/
 Both terrylxd.com and www.terrylxd.com are assigned to this project.
 HTTPS verified live for BOTH names on 2026-10-17. Netlify issued a Let's Encrypt
@@ -99,3 +99,40 @@ compared byte-for-byte with public source files after republishing. Every file
 matched, including the uploaded 57 MB GIF. Lossy optimization is removed from
 the build pipeline. The new verification guard rejects altered or missing GIFs;
 62 tests pass. Lazy loading, minified JavaScript, and startup feedback remain.
+
+Branded course URLs and lossless performance update (2026-10-20):
+  /ai-future-of-work/ -> AI & The Future of Work
+  /blockchain/ -> Why Blockchain Actually Matters
+  /phishing/ -> Don't Get Hooked
+The original course entry HTML is stored under public/<course>/index.html.
+Supporting course assets are proxied through the matching prefix to each
+existing Netlify course site. Keep those origin sites online. When republishing
+a course export, refresh its local entry HTML as well as its origin assets.
+Static entry directories make slashless URLs redirect correctly without a
+loop. Never add a /course -> /course/ redirect rule: Netlify matches both forms.
+All eight Open Project destinations stay on the portfolio hostname. Existing
+saved Netlify URLs are normalized to the branded routes in the local editor.
+
+Inter and JetBrains Mono now load from fingerprinted local WOFF2 files; their
+open font licenses are included in public/assets/fonts. Only the required
+language subsets download. The Inter Latin subset is preloaded. Content-hashed
+uploads and fonts receive immutable caching; editable, non-hashed media retain
+normal revalidation. No GIFs were converted or resized. 65 tests, typecheck,
+production build, and exact-copy GIF verification passed. Course start/lesson
+controls, all eight carousel link destinations, and cache headers were checked
+on a separate preview before production publication.
+
+Current hosting responsibilities:
+  Namecheap: domain registration and DNS.
+  Netlify: public portfolio/game/course hosting, HTTPS, and branded routing.
+  GitHub: versioned source and backup; it is not the host for /enablement/.
+  Local admin: development-only editing, saved to project files.
+  Caffeine/ICP: historical source/backend remains in the repository but the
+    current main.tsx/App.tsx does not initialize or call that backend, login,
+    object storage, or role-checking hooks. It provides no live authentication
+    or data-security layer for the Netlify portfolio. The old Caffeine publish
+    controls operate its separate old site, not this Netlify deployment.
+The remaining Caffeine share-preview logo in index.html is historical metadata,
+preserved per AGENTS.md. No Caffeine account, old deployment, or service was
+deleted or canceled during this work. Public samples remain public; private
+accounts/database features would require a separately designed implementation.
