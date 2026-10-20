@@ -1,5 +1,5 @@
 [build]
-  command = "corepack pnpm --dir src/frontend build && node scripts/verify-gif-assets.mjs"
+  command = "corepack pnpm --dir src/frontend test && corepack pnpm --dir src/frontend typecheck && corepack pnpm --dir src/frontend build && node scripts/verify-gif-assets.mjs"
   publish = "src/frontend/dist"
 
 [build.environment]

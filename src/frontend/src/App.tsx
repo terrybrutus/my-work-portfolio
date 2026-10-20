@@ -1822,7 +1822,7 @@ function AdminStudio({
     <section className="space-y-6 pb-20">
       <AdminPanel
         defaultOpen
-        description="Save to project writes your content and uploaded images into the local portfolio files. Your saved changes survive a browser restart and are included in the next build."
+        description="Save to project writes your content and uploaded images into the local portfolio files. Push the saved files to GitHub's main branch and Netlify will test and publish them automatically. Saving alone does not change the live site."
         eyebrow="Admin"
         icon={<Lock className="h-5 w-5" />}
         title="Portfolio Admin Studio"

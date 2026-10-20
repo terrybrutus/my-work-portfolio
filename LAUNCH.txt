@@ -41,7 +41,8 @@ Domain audit:
 
 Deployed Netlify project: chipper-squirrel-701fbc
 Project ID: 04df08cb-094e-4920-8dce-e344b4a8efee
-Published deploy: 6ad7a0edaf93d55b37e97211
+Last manual deploy: 6ad7a0edaf93d55b37e97211
+Current publishing mode: automatic GitHub main-branch deployment
 Fallback URL: https://chipper-squirrel-701fbc.netlify.app/
 Both terrylxd.com and www.terrylxd.com are assigned to this project.
 HTTPS verified live for BOTH names on 2026-10-17. Netlify issued a Let's Encrypt
@@ -56,14 +57,16 @@ chipper-squirrel-701fbc.netlify.app. Email and play records remain unchanged.
 Netlify's Powered by Netlify overlay is disabled for this project.
 The incomplete initial upload was canceled to prevent a later accidental publish.
 
-This is a manual deployment. The GitHub integration currently has access to the
-game repository only; repository auto-deploy is not enabled for this portfolio.
-Netlify CLI authorization is now confirmed and this local folder is linked to
-project 04df08cb-094e-4920-8dce-e344b4a8efee. Future deployments can use the CLI
-against this existing project. The local .netlify link is excluded from Git.
-To publish future edits, build, verify, then upload the contents of dist as a
-ZIP to this SAME project's Deploys page. Do not create a second Netlify project.
-The local editor's save success means project files are saved, not deployed.
+The portfolio is now connected to terrybrutus/my-work-portfolio on main.
+Push saved source/content/uploads to main to publish automatically; no separate
+Netlify upload is required. Netlify runs tests, typecheck, build, and exact GIF
+verification before replacing the live site. A failed build preserves the last
+successful deployment. The connection uses a repository-scoped read-only deploy
+key and a push webhook, not an account-wide GitHub token stored at Netlify.
+The existing site ID remains 04df08cb-094e-4920-8dce-e344b4a8efee. The local
+.netlify link is excluded from Git. CLI manual deploy remains an emergency
+option, not the routine publishing workflow. Do not create a second project.
+Local Save writes project files; it does not automatically commit or push them.
 
 Mobile regression update: About now has a persistent header/navigation footer,
 full-size mobile photos and readable text. Desktop retains the TV presentation.
@@ -144,7 +147,22 @@ beside it; regenerate with node scripts/generate-share-image.mjs. Update the
 versioned URL for future redesigns. Existing social posts may retain cached
 previews until their platform re-fetches the page. All 66 tests pass, including
 image dimensions and complete metadata validation. GIFs remain unchanged.
-The Netlify API audit confirmed no repository provider, URL, path, or branch
-is connected to this site. Local Save -> Git commit/push -> Netlify deployment
-remain separate steps. GitHub pushes alone do not publish the portfolio.
+The earlier API audit found no connected repository. This was superseded by
+the automatic GitHub publishing setup described above.
 The established local site/editor on port 44120 returned HTTP 200 during audit.
+
+Automatic publishing and canonical game update (2026-10-20):
+  Production repository: terrybrutus/my-work-portfolio, branch main.
+  GitHub webhook: active push events, HTTPS validation enabled.
+  Access: read-only Netlify deploy key scoped to this repository.
+  Package manager: pnpm 10.12.1, matching the tested local installation.
+  Local pre-push checks: 67 tests and TypeScript passed.
+The separate enablement-quest repo tracks a hostname-specific permanent redirect
+from https://play.terrylxd.com/* to https://terrylxd.com/enablement/. Its GitHub
+push 5d984a1 deployed as 6ad7b0c2bdc831abbced8e59. HTTP and HTTPS root URLs plus
+an old deep link were verified to finish at the canonical game with HTTP 200.
+No games hub was added. All ongoing local game source/audio edits were left
+untouched and excluded from that redirect-only commit. The bundled portfolio
+game still updates through scripts/package-enablement.mjs when its source is
+intentionally refreshed; the legacy hostname is no longer a second public
+game destination.

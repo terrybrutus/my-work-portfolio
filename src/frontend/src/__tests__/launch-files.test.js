@@ -5,6 +5,16 @@ import {expect, it} from "vitest";
 import {projectSamples} from "../content/project-samples";
 
 const root = path.resolve(import.meta.dirname, "../..");
+it("checks tests, types, and unchanged GIFs before automatic publication", async () => {
+  const repositoryRoot = path.resolve(root, "../..");
+  const config = await readFile(path.join(repositoryRoot, "netlify.toml"), "utf8");
+  expect(config).toContain("corepack pnpm --dir src/frontend test &&");
+  expect(config).toContain("corepack pnpm --dir src/frontend typecheck &&");
+  expect(config).toContain("corepack pnpm --dir src/frontend build && node scripts/verify-gif-assets.mjs");
+  const packageJson = JSON.parse(await readFile(path.join(repositoryRoot, "package.json"), "utf8"));
+  expect(packageJson.packageManager).toBe("pnpm@10.12.1");
+});
+
 it("keeps every saved Open Project link on the portfolio domain and routes courses before the SPA fallback", async () => {
   const {content} = JSON.parse(await readFile(path.join(root, "src/content/portfolio.json"), "utf8"));
   for (const project of content.projects) {
