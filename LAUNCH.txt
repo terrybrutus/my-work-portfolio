@@ -41,7 +41,7 @@ Domain audit:
 
 Deployed Netlify project: chipper-squirrel-701fbc
 Project ID: 04df08cb-094e-4920-8dce-e344b4a8efee
-Published deploy: 6ad79da1b0ef4ca882aacc08
+Published deploy: 6ad7a0edaf93d55b37e97211
 Fallback URL: https://chipper-squirrel-701fbc.netlify.app/
 Both terrylxd.com and www.terrylxd.com are assigned to this project.
 HTTPS verified live for BOTH names on 2026-10-17. Netlify issued a Let's Encrypt
@@ -132,7 +132,19 @@ Current hosting responsibilities:
     object storage, or role-checking hooks. It provides no live authentication
     or data-security layer for the Netlify portfolio. The old Caffeine publish
     controls operate its separate old site, not this Netlify deployment.
-The remaining Caffeine share-preview logo in index.html is historical metadata,
-preserved per AGENTS.md. No Caffeine account, old deployment, or service was
-deleted or canceled during this work. Public samples remain public; private
+The former Caffeine share-preview logo was replaced at the user's request by
+the portfolio-branded image described below. No Caffeine account, old deployment,
+or service was deleted or canceled during this work. Public samples remain public; private
 accounts/database features would require a separately designed implementation.
+
+Portfolio share-preview update (2026-10-20): Open Graph and Twitter reference
+https://terrylxd.com/assets/social/portfolio-share-v1.png, a 1200x630 PNG with
+Terry's name, current headline, and portfolio colors. The vector source lives
+beside it; regenerate with node scripts/generate-share-image.mjs. Update the
+versioned URL for future redesigns. Existing social posts may retain cached
+previews until their platform re-fetches the page. All 66 tests pass, including
+image dimensions and complete metadata validation. GIFs remain unchanged.
+The Netlify API audit confirmed no repository provider, URL, path, or branch
+is connected to this site. Local Save -> Git commit/push -> Netlify deployment
+remain separate steps. GitHub pushes alone do not publish the portfolio.
+The established local site/editor on port 44120 returned HTTP 200 during audit.

@@ -35,6 +35,7 @@ When editing `index.html` (e.g. changing the title or favicon):
 
 ## Learnings
 
+- The user requested a portfolio-branded social preview. Preserve the custom `https://terrylxd.com/assets/social/portfolio-share-v1.png` metadata instead of restoring the old Caffeine logo. Its editable vector source is `public/assets/social/portfolio-share.svg`; regenerate the 1200x630 PNG with `node scripts/generate-share-image.mjs` from the repository root. Version the PNG URL when changing it so social crawlers can fetch a fresh asset.
 - The portfolio's established local origin is `http://127.0.0.1:44120`. Keep this port stable because existing browser drafts are tied to it.
 - Local admin's **Save to project** uses the development-only `/__portfolio/save` endpoint in `src/frontend/scripts/portfolio-save.mjs`. It writes content to `src/frontend/src/content/portfolio.json` and uploaded images to `src/frontend/public/assets/uploads/`. These files are build inputs and must be included when committing/publishing user edits. Do not reset them to defaults.
 - Browser draft saving is a temporary fallback. It is not equivalent to a confirmed project-file save or public deployment. Existing portfolio tabs synchronize browser draft changes through storage events.
