@@ -1,0 +1,18 @@
+Enablement Quest room music
+
+Sales Enablement Studio: "Town1 - Home Town"
+Onboarding Diagnostic Room: "Town2 - Where Time Stands Still"
+Composer: Juhani Junkala (SubspaceAudio)
+Collection: JRPG Pack 2 Towns
+Source: https://opengameart.org/content/jrpg-pack-2-towns
+Composer: https://juhanijunkala.com/
+License: CC0 1.0 Universal (public domain dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+Downloaded: 2026-10-21
+
+The pack's INFO.txt confirms these tracks are released under CC0.
+Converted from the original loop-ready Ogg files to MP3 with gapless metadata.
+Sales music reduced by 3 dB; Operations music reduced by 3.6 dB.
+
+Courtyard and Learning Systems Lab tracks were supplied separately by the
+project owner and are unchanged by this update.
