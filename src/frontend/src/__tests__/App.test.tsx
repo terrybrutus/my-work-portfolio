@@ -28,6 +28,24 @@ vi.mock("../hooks/useQueries", () => ({
 vi.mock("../content/portfolio.json", () => ({ default: {} }));
 
 describe("App default route", () => {
+  it("keeps coming-soon work unlinked and offers signup only on Worduel", () => {
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [
+      {title: "Released game", summary: "Play now", result: "A playable game", tags: [], url: "/common-thread/"},
+      {title: "Worduel", slug: "worduel", summary: "Vocabulary practice", result: "Prototype", tags: [], status: "coming-soon", launchSignup: true, url: "/should-not-open/"},
+    ]}));
+    render(<App />);
+    fireEvent.click(screen.getAllByRole("button", {name: "View details"})[0]);
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).queryByRole("button", {name: "Notify me when it launches"})).not.toBeInTheDocument();
+    fireEvent.click(within(dialog).getByRole("button", {name: "Next"}));
+    expect(within(dialog).queryByRole("link", {name: "Open project"})).not.toBeInTheDocument();
+    fireEvent.click(within(dialog).getByRole("button", {name: "Notify me when it launches"}));
+    expect(screen.getByRole("dialog", {name: "Try Worduel when it launches"})).toBeInTheDocument();
+    fireEvent.keyDown(window, {key: "ArrowRight"});
+    expect(within(dialog).getByRole("heading", {name: "Worduel"})).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", {name: "Close signup"}));
+    expect(within(dialog).getByRole("heading", {name: "Worduel"})).toBeInTheDocument();
+  });
   it("removes the startup indicator as soon as the app mounts without waiting for images", () => {
     const startup = document.createElement("div");
     startup.id = "portfolio-startup";

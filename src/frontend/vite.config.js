@@ -58,6 +58,18 @@ export default defineConfig({
   },
   preview: {proxy: courseProxy},
   plugins: [
+    {
+      name: "static-project-pages",
+      configureServer(server) {
+        server.middlewares.use((request, _response, next) => {
+          const url = new URL(request.url ?? "/", "http://localhost");
+          if (["/common-thread/", "/worduel-notify/"].includes(url.pathname)) {
+            request.url = `${url.pathname}index.html${url.search}`;
+          }
+          next();
+        });
+      },
+    },
     portfolioSavePlugin(),
     environment("all", { prefix: "CANISTER_" }),
     environment("all", { prefix: "DFX_" }),

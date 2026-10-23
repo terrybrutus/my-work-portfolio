@@ -23,6 +23,7 @@ import savedPortfolio from "./content/portfolio.json";
 import { projectSamples } from "./content/project-samples";
 import { ProjectDocumentViewer } from "./components/ProjectDocumentViewer";
 import { DeferredImage } from "./components/DeferredImage";
+import { WorduelLaunchSignup } from "./components/WorduelLaunchSignup";
 import { usePageScrollLock } from "./hooks/usePageScrollLock";
 import { ImageUpload, type ImageTarget } from "./components/ImageUpload";
 
@@ -33,6 +34,9 @@ type Project = {
   tags: string[];
   image?: string;
   carouselImage?: string;
+  imageFit?: "contain" | "cover";
+  status?: "coming-soon";
+  launchSignup?: boolean;
   url?: string;
   slug?: string;
   contextUrl?: string;
@@ -577,7 +581,7 @@ function ProjectLink({
   className: string;
   href: string;
 }) {
-  const external = isExternalHref(href) || href.startsWith("/enablement/");
+  const external = isExternalHref(href) || href.startsWith("/enablement/") || href.startsWith("/common-thread/");
 
   return (
     <a
@@ -1340,7 +1344,7 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
       />
       <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {featuredProjects.map((project, index) => (
-          <article className="project-card group" key={project.title}>
+          <article className={`project-card group${project.imageFit === "contain" ? " project-image-contain" : ""}`} key={project.title}>
             {project.image ? (
               <div className="project-card-media">
                 <DeferredImage
@@ -1367,7 +1371,7 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
               >
                 View details
               </button>
-              {project.url ? (
+              {project.status === "coming-soon" ? <span className="project-status">Coming soon</span> : project.url ? (
                 <ProjectLink className="project-live-link" href={project.url}>
                   Open project
                 </ProjectLink>
@@ -1427,6 +1431,7 @@ function ProjectShowcaseModal({
     if (!isOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (document.querySelector("[data-launch-signup]")) return;
       if (event.key === "Escape") onClose();
       if (event.key === "ArrowLeft") goToProject(-1);
       if (event.key === "ArrowRight") goToProject(1);
@@ -1476,7 +1481,7 @@ function ProjectShowcaseModal({
         onClick={onClose}
         type="button"
       />
-      <div className="project-modal-shell">
+      <div className={`project-modal-shell${activeProject.imageFit === "contain" ? " project-image-contain" : ""}`}>
         <button className="retro-tv-close" onClick={onClose} type="button">
           Close
         </button>
@@ -1493,6 +1498,7 @@ function ProjectShowcaseModal({
           <p className="retro-tv-kicker">
             Work {String(activeIndex + 1).padStart(2, "0")} /{" "}
             {String(projects.length).padStart(2, "0")}
+            {activeProject.status === "coming-soon" ? " · Coming soon" : ""}
           </p>
           <h2 id="project-modal-title" ref={titleRef} tabIndex={0}>
             {activeProject.title}
@@ -1504,7 +1510,9 @@ function ProjectShowcaseModal({
             {activeProject.result}
           </div>
           <div className="project-modal-actions">
-            {activeProject.url ? (
+            {activeProject.status === "coming-soon" ? (
+              activeProject.launchSignup ? <WorduelLaunchSignup key={getProjectSlug(activeProject)} /> : <span className="project-status">Coming soon</span>
+            ) : activeProject.url ? (
               <ProjectLink className="primary-cta" href={activeProject.url}>
                 Open project <ArrowRight className="h-4 w-4" />
               </ProjectLink>
@@ -2209,6 +2217,14 @@ function AdminStudio({
                   updateProject(index, { ...project, url: value })
                 }
               />
+              <label className="mt-4 flex items-center gap-2 text-sm text-white/80">
+                <input type="checkbox" checked={project.status === "coming-soon"} onChange={event => updateProject(index, {...project, status: event.target.checked ? "coming-soon" : undefined})} />
+                Coming soon (hide Open project)
+              </label>
+              {getProjectSlug(project) === "worduel" && <label className="mt-3 flex items-center gap-2 text-sm text-white/80">
+                <input type="checkbox" checked={Boolean(project.launchSignup)} onChange={event => updateProject(index, {...project, launchSignup: event.target.checked})} />
+                Offer Worduel launch email signup
+              </label>}
               <AdminField
                 label="Project page / card image URL"
                 value={project.image ?? ""}

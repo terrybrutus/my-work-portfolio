@@ -21,6 +21,11 @@
   status = 301
 
 [[redirects]]
+  from = "/common-thread"
+  to = "/common-thread/"
+  status = 301
+
+[[redirects]]
   from = "/ai-future-of-work/*"
   to = "https://terrybrutus-aiandthefuture-sample.netlify.app/:splat"
   status = 200

@@ -18,7 +18,8 @@ it("checks tests, types, and unchanged GIFs before automatic publication", async
 it("keeps every saved Open Project link on the portfolio domain and routes courses before the SPA fallback", async () => {
   const {content} = JSON.parse(await readFile(path.join(root, "src/content/portfolio.json"), "utf8"));
   for (const project of content.projects) {
-    expect(project.url).toMatch(/^\/(?!\/)/);
+    if (project.status === "coming-soon") expect(project.url).toBeUndefined();
+    else expect(project.url).toMatch(/^\/(?!\/)/);
   }
   const redirects = await readFile(path.join(root, "public/_redirects"), "utf8");
   for (const prefix of ["ai-future-of-work", "blockchain", "phishing"]) {
@@ -35,6 +36,23 @@ it("keeps every saved Open Project link on the portfolio domain and routes cours
   };
   collectUploads(content);
   for (const upload of uploads) expect(upload).toMatch(/^\/assets\/uploads\/[a-f0-9]{64}\.[a-z0-9]+$/);
+});
+
+it("features the requested projects and keeps Worduel last with no public play link", async () => {
+  const {content} = JSON.parse(await readFile(path.join(root, "src/content/portfolio.json"), "utf8"));
+  expect(content.projects.slice(0, 4).map(project => project.title)).toEqual([
+    "Enablement Quest: The Learning Systems Lab", "Common Thread", "Why Blockchain Actually Matters", "AI & The Future of Work",
+  ]);
+  const worduel = content.projects.at(-1);
+  expect(worduel).toMatchObject({title: "Worduel", status: "coming-soon", launchSignup: true});
+  expect(worduel.url).toBeUndefined();
+  expect(content.projects.filter(project => project.launchSignup).map(project => project.title)).toEqual(["Worduel"]);
+  const commonThread = await readFile(path.join(root, "public/common-thread/index.html"), "utf8");
+  expect(commonThread).toContain('title="Play Common Thread"');
+  expect(commonThread).toContain('/?work=common-thread#work');
+  const html = await readFile(path.join(root, "index.html"), "utf8");
+  expect(html).toContain('name="worduel-launch"');
+  expect(html).toContain('netlify-honeypot="bot-field"');
 });
 
 it("ships self-hosted fonts with content-fingerprinted filenames", async () => {

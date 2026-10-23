@@ -1,5 +1,5 @@
 {
-  "savedAt": "2026-10-20T18:56:33.066Z",
+  "savedAt": "2026-10-23T16:38:45.000Z",
   "content": {
     "brandLabel": "",
     "brandLogoText": "",
@@ -71,17 +71,19 @@
         "url": "/enablement/"
       },
       {
-        "title": "AI & The Future of Work",
-        "summary": "A RISE 360 microlearning course about how AI is changing work, framed for learners who may be curious, skeptical, or worried about what the technology means for their role.",
-        "result": "Turns a broad technology topic into a short, approachable learning experience that helps people understand the shift without fear-first messaging.",
+        "title": "Common Thread",
+        "slug": "common-thread",
+        "summary": "A word-connection game where you find four groups of related words. Play a daily puzzle, choose a subject you want to learn, or create a puzzle from your notes, a transcript, or personal memories.",
+        "result": "Explores learning through the relationships between ideas, with feedback explaining each connection. Custom AI-generated puzzles are in beta and require Google sign-in; daily puzzles are available without an account.",
         "tags": [
-          "RISE 360",
-          "AI literacy",
-          "Microlearning"
+          "Game-based learning",
+          "AI-assisted development",
+          "Word puzzles"
         ],
-        "image": "/assets/projects/ai-future-of-work.gif",
-        "url": "/ai-future-of-work/",
-        "carouselImage": "/assets/uploads/612567ef8b46ff03494cc11faa4bc811f1f96c86a81eff33a30142f564be0afe.gif"
+        "image": "/assets/projects/common-thread.gif",
+        "carouselImage": "/assets/projects/common-thread.gif",
+        "imageFit": "contain",
+        "url": "/common-thread/"
       },
       {
         "title": "Why Blockchain Actually Matters",
@@ -94,6 +96,19 @@
         ],
         "image": "/assets/projects/blockchain-matters.gif",
         "url": "/blockchain/"
+      },
+      {
+        "title": "AI & The Future of Work",
+        "summary": "A RISE 360 microlearning course about how AI is changing work, framed for learners who may be curious, skeptical, or worried about what the technology means for their role.",
+        "result": "Turns a broad technology topic into a short, approachable learning experience that helps people understand the shift without fear-first messaging.",
+        "tags": [
+          "RISE 360",
+          "AI literacy",
+          "Microlearning"
+        ],
+        "image": "/assets/projects/ai-future-of-work.gif",
+        "url": "/ai-future-of-work/",
+        "carouselImage": "/assets/uploads/612567ef8b46ff03494cc11faa4bc811f1f96c86a81eff33a30142f564be0afe.gif"
       },
       {
         "title": "Don't Get Hooked: A Course on Phishing",
@@ -225,6 +240,18 @@
           }
         ],
         "carouselImage": "/assets/uploads/58787fe855044b05089edac6b2cad00e1dc27097392a908881f180cb7584a6ed.gif"
+      },
+      {
+        "title": "Worduel",
+        "slug": "worduel",
+        "status": "coming-soon",
+        "launchSignup": true,
+        "summary": "A word game combining classic word guessing with vocabulary practice. Meaning Duel asks you to choose a word's definition from an example sentence, then review the answer and record how well you knew it.",
+        "result": "Coming soon. This preview shows the current solo vocabulary prototype. Multiplayer learning modes and custom word packs are still being developed; public play is not available from this portfolio yet.",
+        "tags": ["Vocabulary", "Game-based learning", "Prototype"],
+        "image": "/assets/projects/worduel.gif",
+        "carouselImage": "/assets/projects/worduel.gif",
+        "imageFit": "contain"
       }
     ],
     "sections": [
