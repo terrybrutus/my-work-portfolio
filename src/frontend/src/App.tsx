@@ -1416,6 +1416,7 @@ function ProjectShowcaseModal({
   projects: Project[];
 }) {
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const projectSwipe = useRef<{id: number; x: number; y: number} | null>(null);
   const activeProject = projects[activeIndex] ?? projects[0];
   const carouselImage = activeProject?.carouselImage ?? activeProject?.image;
   const goToProject = useCallback(
@@ -1481,7 +1482,38 @@ function ProjectShowcaseModal({
         onClick={onClose}
         type="button"
       />
-      <div className={`project-modal-shell${activeProject.imageFit === "contain" ? " project-image-contain" : ""}`}>
+      <div
+        className={`project-modal-shell${activeProject.imageFit === "contain" ? " project-image-contain" : ""}`}
+        onTouchStart={(event) => {
+          const touch = event.touches[0];
+          const interactive = (event.target as HTMLElement).closest("button, a, input, textarea, select");
+          projectSwipe.current = event.touches.length === 1 && !interactive
+            && touch.clientX >= 24 && touch.clientX <= window.innerWidth - 24
+            ? {id: touch.identifier, x: touch.clientX, y: touch.clientY} : null;
+        }}
+        onTouchMove={(event) => {
+          const start = projectSwipe.current;
+          const touch = event.touches[0];
+          if (!start) return;
+          if (event.touches.length !== 1 || touch.identifier !== start.id
+            || (Math.abs(touch.clientY - start.y) > 12
+              && Math.abs(touch.clientY - start.y) > Math.abs(touch.clientX - start.x))) {
+            projectSwipe.current = null;
+          }
+        }}
+        onTouchEnd={(event) => {
+          const start = projectSwipe.current;
+          projectSwipe.current = null;
+          const touch = Array.from(event.changedTouches).find(touch => touch.identifier === start?.id);
+          if (!start || !touch || event.touches.length) return;
+          const dx = touch.clientX - start.x;
+          const dy = touch.clientY - start.y;
+          if (Math.abs(dx) >= 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+            goToProject(dx < 0 ? 1 : -1);
+          }
+        }}
+        onTouchCancel={() => { projectSwipe.current = null; }}
+      >
         <button className="retro-tv-close" onClick={onClose} type="button">
           Close
         </button>
@@ -1548,6 +1580,9 @@ function ProjectShowcaseModal({
             />
           ))}
         </div>
+        <p className="project-carousel-count" aria-live="polite">
+          {activeIndex + 1} / {projects.length}
+        </p>
       </div>
     </dialog>,
     document.body,

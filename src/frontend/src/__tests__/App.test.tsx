@@ -28,6 +28,32 @@ vi.mock("../hooks/useQueries", () => ({
 vi.mock("../content/portfolio.json", () => ({ default: {} }));
 
 describe("App default route", () => {
+  it("supports project swipes while preserving buttons, vertical scroll, pinch and browser edges", () => {
+    render(<App />);
+    fireEvent.click(screen.getAllByRole("button", {name: "View details"})[0]);
+    const dialog = screen.getByRole("dialog");
+    const shell = dialog.querySelector(".project-modal-shell")!;
+    const firstTitle = within(dialog).getByRole("heading").textContent;
+    const touch = (x: number, y: number) => ({identifier: 1, clientX: x, clientY: y});
+    const swipe = (x: number, y: number, endX: number, endY: number) => {
+      fireEvent.touchStart(shell, {touches: [touch(x, y)]});
+      fireEvent.touchMove(shell, {touches: [touch(endX, endY)]});
+      fireEvent.touchEnd(shell, {touches: [], changedTouches: [touch(endX, endY)]});
+    };
+    swipe(200, 200, 100, 205);
+    expect(within(dialog).getByRole("heading").textContent).not.toBe(firstTitle);
+    swipe(100, 200, 200, 205);
+    expect(within(dialog).getByRole("heading")).toHaveTextContent(firstTitle!);
+    swipe(200, 200, 180, 300);
+    swipe(10, 200, 100, 200);
+    fireEvent.touchStart(shell, {touches: [touch(100, 200), {...touch(200, 200), identifier: 2}]});
+    fireEvent.touchEnd(shell, {touches: [], changedTouches: [touch(200, 200)]});
+    expect(within(dialog).getByRole("heading")).toHaveTextContent(firstTitle!);
+    fireEvent.click(within(dialog).getByRole("button", {name: "Next"}));
+    expect(within(dialog).getByRole("heading").textContent).not.toBe(firstTitle);
+    fireEvent.click(within(dialog).getByRole("button", {name: "Prev"}));
+    expect(within(dialog).getByRole("heading")).toHaveTextContent(firstTitle!);
+  });
   it("keeps coming-soon work unlinked and offers signup only on Worduel", () => {
     window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [
       {title: "Released game", summary: "Play now", result: "A playable game", tags: [], url: "/common-thread/"},

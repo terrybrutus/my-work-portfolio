@@ -610,7 +610,7 @@
     @apply fixed inset-0 z-50 grid place-items-center overflow-hidden bg-slate-950/75 p-4 backdrop-blur-md;
     width: 100%;
     max-width: none;
-    height: 100%;
+    height: 100dvh;
     max-height: none;
     margin: 0;
     border: 0;
@@ -1222,8 +1222,11 @@
     position: relative;
     display: grid;
     width: min(72rem, 94vw);
-    height: min(44rem, calc(100vh - 2rem));
-    max-height: calc(100vh - 2rem);
+    height: min(44rem, calc(100dvh - 2rem));
+    max-height: calc(100dvh - 2rem);
+    min-height: 0;
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior-x: none;
     grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
     gap: clamp(1rem, 2.4vw, 2rem);
     overflow: hidden;
@@ -1351,6 +1354,10 @@
     transform: translateX(-50%);
   }
 
+  .project-carousel-count {
+    display: none;
+  }
+
   .project-carousel-dots button {
     width: 0.48rem;
     height: 0.48rem;
@@ -1404,18 +1411,19 @@
 
   @media (max-width: 980px) {
     .project-modal-backdrop {
-      padding: 0.75rem;
+      padding: max(0.5rem, env(safe-area-inset-top)) max(0.5rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.5rem, env(safe-area-inset-left));
     }
 
     .project-modal-shell {
-      width: min(100%, calc(100vw - 1.5rem));
-      height: calc(100vh - 1.5rem);
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
       grid-template-columns: 1fr;
-      grid-template-rows: minmax(12rem, 36%) minmax(0, 1fr);
+      grid-template-rows: minmax(0, min(28dvh, 12rem)) minmax(0, 1fr);
       gap: 0.75rem;
       border-radius: 1.55rem;
       padding: 1rem;
-      padding-bottom: 3.65rem;
+      padding-bottom: 4.5rem;
     }
 
     .project-modal-media,
@@ -1428,9 +1436,27 @@
 
     .project-modal-content {
       min-height: 0;
-      grid-template-rows: 0.9rem minmax(0, 0.85fr) minmax(0, 1.05fr) minmax(0, 1.45fr) 3rem;
-      row-gap: 0.55rem;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      gap: 1rem;
       padding: 0.15rem 0.25rem 0.25rem;
+    }
+
+    .project-modal-content > * {
+      flex-shrink: 0;
+    }
+
+    .project-modal-content .retro-tv-kicker {
+      align-self: flex-start;
+    }
+
+    .project-modal-content h2,
+    .project-modal-summary,
+    .project-modal-result {
+      overflow: visible;
+      scrollbar-gutter: auto;
     }
 
     .project-modal-content h2 {
@@ -1460,7 +1486,23 @@
     }
 
     .project-carousel-dots {
-      bottom: 1.35rem;
+      display: none;
+    }
+
+    .project-carousel-count {
+      position: absolute;
+      display: block;
+      left: 50%;
+      bottom: 1.5rem;
+      transform: translateX(-50%);
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.8rem;
+    }
+
+    .project-modal-shell .retro-tv-nav {
+      min-height: 44px;
+      bottom: 0.75rem;
     }
 
     .retro-tv-nav {
@@ -1482,15 +1524,15 @@
     }
 
     .project-modal-shell {
-      height: calc(100vh - 1.5rem);
+      height: 100%;
       grid-template-columns: 1fr;
-      grid-template-rows: 12rem minmax(0, 1fr);
+      grid-template-rows: minmax(0, min(28dvh, 12rem)) minmax(0, 1fr);
     }
 
     .project-modal-media,
     .project-modal-media img,
     .project-modal-placeholder {
-      height: 12rem;
+      height: 100%;
       min-height: 0;
     }
 
