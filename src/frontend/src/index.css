@@ -514,6 +514,21 @@
     }
   }
 
+  @media (max-width: 767px) {
+    .project-card-title {
+      min-height: 0;
+    }
+
+    .project-card-summary,
+    .project-card-result {
+      display: block;
+      min-height: 0;
+      overflow: visible;
+      -webkit-line-clamp: unset;
+      -webkit-box-orient: initial;
+    }
+  }
+
   @media (max-width: 899px) {
     .hero-section {
       min-height: auto;

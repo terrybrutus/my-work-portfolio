@@ -2,7 +2,8 @@
 
 ## User Preferences
 
-[No preferences yet]
+- Mobile projects must stay horizontally fixed in portrait and landscape, with no document-level sideways overflow. Preserve normal vertical scrolling and pinch zoom. Isolate intentional game gestures from browser scrolling only on the actual control surface; never disable touch across a whole page. Test narrow phones, landscape, tablets, long text, dialogs, keyboard-sized heights, browser chrome changes, and safe-area insets. Emulated layout checks are not proof of physical iPhone gesture behavior; report that limit honestly. Apply this requirement to future portfolio and game work.
+- On single-column mobile project cards, show the full summary and outcome with natural height. Do not use line clamps that leave a clipped last line or text outside the outcome box. Keep the multi-column desktop alignment behavior.
 
 ## Verified Commands
 

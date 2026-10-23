@@ -55,6 +55,20 @@ it("features the requested projects and keeps Worduel last with no public play l
   expect(html).toContain('netlify-honeypot="bot-field"');
 });
 
+it("shows complete single-column mobile card text and bounds the embedded game viewport", async () => {
+  const css = await readFile(path.join(root, "src/index.css"), "utf8");
+  const mobileRules = css.slice(css.indexOf("@media (max-width: 767px)"), css.indexOf("@media (max-width: 899px)"));
+  expect(mobileRules).toContain(".project-card-summary,");
+  expect(mobileRules).toContain(".project-card-result");
+  expect(mobileRules).toContain("-webkit-line-clamp: unset");
+  expect(mobileRules).toContain("overflow: visible");
+  const commonThread = await readFile(path.join(root, "public/common-thread/index.html"), "utf8");
+  expect(commonThread).toContain("height:100dvh");
+  expect(commonThread).toContain("overscroll-behavior-x:none");
+  expect(commonThread).toContain("touch-action:pan-y pinch-zoom");
+  expect(commonThread).toContain("safe-area-inset-bottom");
+});
+
 it("ships self-hosted fonts with content-fingerprinted filenames", async () => {
   const html = await readFile(path.join(root, "index.html"), "utf8");
   const stylesheet = html.match(/id="portfolio-fonts"[^>]+href="([^"]+)"/)[1];
