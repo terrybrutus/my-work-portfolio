@@ -10,7 +10,7 @@ args = parser.parse_args()
 args.output_dir.mkdir(parents=True, exist_ok=True)
 
 sequences = {
-    "common-thread": [("common-board", 2200), ("common-one", 700), ("common-selected", 1400), ("common-reveal", 3500)],
+    "common-thread": [("common-public-board", 2200), ("common-public-one", 700), ("common-public-selected", 1400), ("common-public-reveal", 3500)],
     "worduel": [("worduel-question", 2600), ("worduel-answer", 3000), ("worduel-saved", 2200), ("worduel-next", 2600)],
 }
 for name, sequence in sequences.items():
