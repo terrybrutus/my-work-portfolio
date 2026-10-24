@@ -92,6 +92,16 @@ describe("App default route", () => {
     expect(game).toHaveAttribute("target", "_blank");
   });
 
+  it("opens branded Common Thread links in the existing tab", () => {
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [
+      {title: "Common Thread", slug: "common-thread", summary: "A word game", result: "Learn through play", tags: [], url: "/common-thread/"},
+    ]}));
+    render(<App />);
+    expect(screen.getByRole("link", {name: "Open project"})).not.toHaveAttribute("target");
+    fireEvent.click(screen.getByRole("button", {name: "View details"}));
+    expect(within(screen.getByRole("dialog")).getByRole("link", {name: "Open project"})).not.toHaveAttribute("target");
+  });
+
   it("uses branded course URLs in the work carousel, including older saved Netlify links", () => {
     window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [
       {title: "AI & The Future of Work", summary: "AI course", result: "AI result", tags: [], url: "https://terrybrutus-aiandthefuture-sample.netlify.app/"},

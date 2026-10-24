@@ -52,6 +52,9 @@ it("features the requested projects and keeps Worduel last with no public play l
   expect(commonThread).toContain('/?work=common-thread#work');
   expect(commonThread).toContain('src="https://common-thread-8hq.caffeine.xyz/"');
   expect(commonThread).not.toContain("-draft.caffeine.xyz");
+  expect(commonThread).toContain('id="game-opening" role="status"');
+  expect(commonThread).toContain("Opening Common Thread");
+  expect(commonThread).toContain("Reload game");
   const html = await readFile(path.join(root, "index.html"), "utf8");
   expect(html).toContain('name="worduel-launch"');
   expect(html).toContain('netlify-honeypot="bot-field"');

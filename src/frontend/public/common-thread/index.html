@@ -12,6 +12,34 @@
 </head>
 <body>
   <header><a href="/?work=common-thread#work">Back to selected work</a><span>Common Thread · Custom puzzles require Google sign-in · AI puzzles are in beta</span></header>
+  <style>
+    .game-stage{position:relative;flex:1;min-height:0;min-width:0}
+    .game-stage iframe{height:100%}
+    #game-opening{position:absolute;inset:0;z-index:1;display:grid;place-content:center;gap:12px;padding:24px;text-align:center;background:#f9f8f3;color:#183c36}
+    #game-opening[hidden]{display:none}
+    #game-opening p{margin:0}
+    #game-opening button{min-height:44px;padding:10px 18px;border:1px solid #183c36;border-radius:8px;background:white;color:#183c36;font:inherit;cursor:pointer}
+  </style>
+  <main class="game-stage">
+  <div id="game-opening" role="status"><p>Opening Common Thread…</p><button id="game-retry" type="button" hidden>Reload game</button></div>
+  <script>
+    (() => {
+      const opening = document.getElementById("game-opening");
+      const retry = document.getElementById("game-retry");
+      const timer = window.setTimeout(() => {
+        opening.querySelector("p").textContent = "Common Thread is taking longer to open. You can reload and try again.";
+        retry.hidden = false;
+      }, 15000);
+      retry.addEventListener("click", () => window.location.reload());
+      document.addEventListener("load", (event) => {
+        if (event.target instanceof HTMLIFrameElement) {
+          window.clearTimeout(timer);
+          opening.hidden = true;
+        }
+      }, true);
+    })();
+  </script>
   <iframe title="Play Common Thread" src="https://common-thread-8hq.caffeine.xyz/" allow="fullscreen; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </main>
 </body>
 </html>
