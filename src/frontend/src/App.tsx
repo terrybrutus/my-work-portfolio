@@ -581,7 +581,7 @@ function ProjectLink({
   className: string;
   href: string;
 }) {
-  const external = isExternalHref(href) || href.startsWith("/enablement/");
+  const external = isExternalHref(href);
 
   return (
     <a

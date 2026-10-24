@@ -5,6 +5,16 @@ import {expect, it} from "vitest";
 import {projectSamples} from "../content/project-samples";
 
 const root = path.resolve(import.meta.dirname, "../..");
+it("preserves Enablement Quest's opening state when repackaging the game", async () => {
+  const repositoryRoot = path.resolve(root, "../..");
+  const startup = await readFile(path.join(repositoryRoot, "scripts/enablement-startup.html"), "utf8");
+  const html = await readFile(path.join(root, "public/enablement/index.html"), "utf8");
+  const packager = await readFile(path.join(repositoryRoot, "scripts/package-enablement.mjs"), "utf8");
+  expect(html.replaceAll("\r\n", "\n")).toContain(startup.replaceAll("\r\n", "\n").trimEnd());
+  expect(startup).toContain("Opening Enablement Quest");
+  expect(startup).toContain("Reload game");
+  expect(packager).toContain("enablement-startup.html");
+});
 it("checks tests, types, and unchanged GIFs before automatic publication", async () => {
   const repositoryRoot = path.resolve(root, "../..");
   const config = await readFile(path.join(repositoryRoot, "netlify.toml"), "utf8");

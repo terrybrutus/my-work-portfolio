@@ -86,10 +86,12 @@ describe("App default route", () => {
     expect(screen.getByRole("link", {name: "Contact"})).toHaveAttribute("href", "mailto:terrbrutus@gmail.com");
   });
 
-  it("opens the bundled playable project in a separate tab", () => {
+  it("opens the bundled playable project in the existing tab", () => {
     render(<App />);
     const game = screen.getAllByRole("link", {name: "Open project"}).find(link => link.getAttribute("href") === "/enablement/");
-    expect(game).toHaveAttribute("target", "_blank");
+    expect(game).not.toHaveAttribute("target");
+    fireEvent.click(screen.getAllByRole("button", {name: "View details"})[0]);
+    expect(within(screen.getByRole("dialog")).getByRole("link", {name: "Open project"})).not.toHaveAttribute("target");
   });
 
   it("opens branded Common Thread links in the existing tab", () => {

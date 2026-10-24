@@ -23,5 +23,6 @@ const copyAssets = async (directory, relative = "") => {
 await copyAssets(path.join(source, "assets"));
 await mkdir(path.join(publicRoot, "enablement"), {recursive: true});
 const html = await readFile(path.join(source, "index.html"), "utf8");
-await writeFile(path.join(publicRoot, "enablement/index.html"), html.replaceAll("/assets/", assetPrefix));
+const startup = await readFile(new URL("./enablement-startup.html", import.meta.url), "utf8");
+await writeFile(path.join(publicRoot, "enablement/index.html"), html.replaceAll("/assets/", assetPrefix).replace('<div id="root"></div>', `<div id="root"></div>\n${startup}`));
 console.log("Packaged Enablement Quest at /enablement/ with isolated assets.");
