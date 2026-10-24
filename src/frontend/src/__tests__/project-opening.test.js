@@ -15,10 +15,11 @@ it("paints immediately, offers stalled-load recovery, and clears when visible co
   expect(document.querySelector("#project-opening div").hidden).toBe(true);
   vi.advanceTimersByTime(15000);
   expect(document.querySelector("#project-opening div").hidden).toBe(false);
+  expect(document.querySelector("#project-opening").style.inset).toBe("auto 12px 12px");
   expect(document.querySelector("#project-opening a").getAttribute("href")).toBe("/#work");
   const start = document.createElement("a");
   start.href = "#/lesson";
-  start.textContent = "Start";
+  start.setAttribute("aria-label", "Start");
   start.getBoundingClientRect = () => ({width: 200, height: 40});
   document.querySelector("#app").append(start);
   vi.advanceTimersByTime(200);

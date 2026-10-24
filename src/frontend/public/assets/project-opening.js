@@ -27,6 +27,11 @@
   const recover = () => {
     if (!panel.isConnected) return;
     message.textContent = `${title} is taking longer to open. You can reload or return to the portfolio.`;
+    panel.style.inset = "auto 12px 12px";
+    panel.style.padding = "16px";
+    panel.style.borderRadius = "12px";
+    panel.style.maxHeight = "45dvh";
+    panel.style.overflow = "auto";
     controls.hidden = false;
   };
   const check = () => {
@@ -34,7 +39,8 @@
     const ready = [...document.querySelectorAll(selector)].some(element => {
       const bounds = element.getBoundingClientRect();
       return bounds.width > 0 && bounds.height > 0 &&
-        (element.tagName === "CANVAS" || element.textContent.trim().length > 0);
+        (element.tagName === "CANVAS" || element.textContent.trim().length > 0 ||
+          Boolean(element.getAttribute("aria-label")?.trim()));
     });
     if (!ready) return;
     panel.remove();
