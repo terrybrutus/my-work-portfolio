@@ -1,7 +1,7 @@
 (() => {
   const config = document.currentScript?.dataset ?? {};
   const title = config.title || "project";
-  const selector = config.ready || "#root canvas, #root h1, #app h1, #app button, #preso .slide";
+  const selector = config.ready || "#root canvas, #root h1, #app h1, #app button, #app a[href], #preso .slide";
   const style = document.createElement("style");
   style.textContent = `#project-opening{position:fixed;inset:0;z-index:2147483647;display:grid;place-content:center;gap:16px;padding:24px;background:#090f1e;color:#e5f6ff;text-align:center;font:16px/1.5 system-ui}#project-opening p{margin:0}#project-opening button,#project-opening a{min-height:44px;padding:10px 18px;border:1px solid #b6e6ef;border-radius:8px;background:#102837;color:white;font:inherit;cursor:pointer}#project-opening a{display:inline-block;text-decoration:none}`;
   document.head.append(style);
@@ -30,6 +30,7 @@
     controls.hidden = false;
   };
   const check = () => {
+    if (document.body && panel.parentElement !== document.body) document.body.append(panel);
     const ready = [...document.querySelectorAll(selector)].some(element => {
       const bounds = element.getBoundingClientRect();
       return bounds.width > 0 && bounds.height > 0 &&
