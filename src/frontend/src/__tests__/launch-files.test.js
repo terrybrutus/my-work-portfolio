@@ -50,6 +50,8 @@ it("features the requested projects and keeps Worduel last with no public play l
   const commonThread = await readFile(path.join(root, "public/common-thread/index.html"), "utf8");
   expect(commonThread).toContain('title="Play Common Thread"');
   expect(commonThread).toContain('/?work=common-thread#work');
+  expect(commonThread).toContain('src="https://common-thread-8hq.caffeine.xyz/"');
+  expect(commonThread).not.toContain("-draft.caffeine.xyz");
   const html = await readFile(path.join(root, "index.html"), "utf8");
   expect(html).toContain('name="worduel-launch"');
   expect(html).toContain('netlify-honeypot="bot-field"');
