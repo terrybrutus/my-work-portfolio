@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from "react";
+import {LoadingImage} from "./LoadingImage";
 
 export function DeferredImage({src, alt = "", className}: {src: string; alt?: string; className?: string}) {
   const imageRef = useRef<HTMLImageElement>(null);
@@ -20,5 +21,5 @@ export function DeferredImage({src, alt = "", className}: {src: string; alt?: st
     return () => observer.disconnect();
   }, [nearViewport]);
 
-  return <img ref={imageRef} src={nearViewport ? src : undefined} alt={alt} className={className} loading="lazy" decoding="async" />;
+  return <LoadingImage imageRef={imageRef} src={nearViewport ? src : undefined} alt={alt} className={className} loadingLabel="preview" loading="lazy" decoding="async" />;
 }

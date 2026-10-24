@@ -2,6 +2,8 @@
 
 ## User Preferences
 
+- Loading feedback is the default for all current and future portfolio work. Internal projects and document links open in the same tab. HTML entries must paint an opening message before heavy scripts, offer reload/return controls if loading stalls, and clear the message when content is available without artificial waits. Reuse public/assets/project-opening.js with an appropriate visible-content selector for new standalone players. Use LoadingImage/DeferredImage for project media and document pages so downloads and failures have visible feedback and retries. Preserve native vertical scrolling, keyboard access, reduced-motion preferences, and existing project routes; loading messages cannot prevent browser-controlled delays before HTML arrives or guarantee third-party uptime.
+
 - Mobile projects must stay horizontally fixed in portrait and landscape, with no document-level sideways overflow. Preserve normal vertical scrolling and pinch zoom. Isolate intentional game gestures from browser scrolling only on the actual control surface; never disable touch across a whole page. Test narrow phones, landscape, tablets, long text, dialogs, keyboard-sized heights, browser chrome changes, and safe-area insets. Emulated layout checks are not proof of physical iPhone gesture behavior; report that limit honestly. Apply this requirement to future portfolio and game work.
 - On single-column mobile project cards, show the full summary and outcome with natural height. Do not use line clamps that leave a clipped last line or text outside the outcome box. Keep the multi-column desktop alignment behavior.
 

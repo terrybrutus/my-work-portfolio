@@ -239,6 +239,38 @@
     @apply mb-5 aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black/25;
   }
 
+  .project-card-media,
+  .project-detail-media,
+  .project-modal-media,
+  .project-document-viewport,
+  .about-mobile-media,
+  .retro-tv-slide-image-frame {
+    position: relative;
+  }
+
+  .resource-feedback {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background: #101c2a;
+    color: #d4f2f6;
+    font: 14px/1.5 system-ui;
+    text-align: center;
+  }
+
+  .resource-feedback button {
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+  }
+
   .project-card-title {
     @apply min-h-[4.25rem] text-2xl font-black leading-[1.12] tracking-tight text-white;
   }

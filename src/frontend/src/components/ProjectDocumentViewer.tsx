@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import type { ProjectSample } from "../content/project-samples";
+import {LoadingImage} from "./LoadingImage";
 
 export function ProjectDocumentViewer({ sample }: { sample: ProjectSample }) {
   const [pageIndex, setPageIndex] = useState(0);
@@ -22,7 +23,7 @@ export function ProjectDocumentViewer({ sample }: { sample: ProjectSample }) {
           <p className="text-sm font-bold text-cyan-100/80">Read the sample</p>
           <h2 id="document-sample-title">{sample.title}</h2>
         </div>
-        <a className="project-live-link" href={sample.file} target="_blank" rel="noreferrer">
+        <a className="project-live-link" href={sample.file}>
           Open original PDF
         </a>
       </div>
@@ -30,7 +31,7 @@ export function ProjectDocumentViewer({ sample }: { sample: ProjectSample }) {
       {sample.resources?.length ? (
         <div className="project-detail-resource-row" aria-label="Additional project documents">
           {sample.resources.map((resource) => (
-            <a className="project-live-link" href={resource.href} key={resource.href} target="_blank" rel="noreferrer">
+            <a className="project-live-link" href={resource.href} key={resource.href} target={resource.href.startsWith("/") ? undefined : "_blank"} rel="noreferrer">
               {resource.label}
             </a>
           ))}
@@ -61,7 +62,7 @@ export function ProjectDocumentViewer({ sample }: { sample: ProjectSample }) {
       </div>
       <figure>
         <div className="project-document-viewport" ref={viewportRef} tabIndex={0} role="region" aria-label="Sample document page; scroll to read the full page">
-          <img src={page.image} alt={`${sample.title}, page ${pageIndex + 1}. ${page.caption}`} style={{ width: `${zoom * 100}%` }} loading="lazy" />
+          <LoadingImage src={page.image} alt={`${sample.title}, page ${pageIndex + 1}. ${page.caption}`} loadingLabel="document page" style={{ width: `${zoom * 100}%` }} loading="lazy" />
         </div>
         <figcaption aria-live="polite">Page {pageIndex + 1} of {sample.pages.length}: {page.caption}</figcaption>
       </figure>

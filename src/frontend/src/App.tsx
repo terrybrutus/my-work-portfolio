@@ -23,6 +23,7 @@ import savedPortfolio from "./content/portfolio.json";
 import { projectSamples } from "./content/project-samples";
 import { ProjectDocumentViewer } from "./components/ProjectDocumentViewer";
 import { DeferredImage } from "./components/DeferredImage";
+import { LoadingImage } from "./components/LoadingImage";
 import { WorduelLaunchSignup } from "./components/WorduelLaunchSignup";
 import { usePageScrollLock } from "./hooks/usePageScrollLock";
 import { ImageUpload, type ImageTarget } from "./components/ImageUpload";
@@ -965,7 +966,7 @@ function ProjectDetailPage({
       <div className="project-detail-hero-grid">
         <div className="project-detail-media">
           {project.image ? (
-            <img alt="" src={project.image} />
+            <LoadingImage alt="" src={project.image} loadingLabel="project preview" />
           ) : (
             <div className="project-modal-placeholder">{project.title}</div>
           )}
@@ -1237,7 +1238,7 @@ function AboutTvModal({
             </span>
             {activeTvSlide.image ? (
               <span className="retro-tv-slide-image-frame">
-                <img
+                <LoadingImage
                   alt={activeTvSlide.imageAlt}
                   src={activeTvSlide.image}
                 />
@@ -1250,7 +1251,7 @@ function AboutTvModal({
           </span>
         </div>
       </div>
-          {activeTvSlide.image ? <div className="about-mobile-media"><img src={activeTvSlide.image} alt={activeTvSlide.imageAlt} /></div> : null}
+          {activeTvSlide.image ? <div className="about-mobile-media"><LoadingImage src={activeTvSlide.image} alt={activeTvSlide.imageAlt} /></div> : null}
           <div className="about-slide-transcript" aria-live="polite">
             <h2 id="about-modal-title">{activeTvSlide.title}</h2>
             <p>{activeTvSlide.copy}</p>
@@ -1519,7 +1520,7 @@ function ProjectShowcaseModal({
         </button>
         <div className="project-modal-media">
           {carouselImage ? (
-            <img alt="" src={carouselImage} />
+            <LoadingImage alt="" src={carouselImage} loadingLabel="project preview" />
           ) : (
             <div className="project-modal-placeholder">
               {activeProject.title}

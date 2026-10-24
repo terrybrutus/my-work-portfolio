@@ -1,10 +1,19 @@
 // @vitest-environment node
-import {readFile, stat} from "node:fs/promises";
+import {readFile, readdir, stat} from "node:fs/promises";
 import path from "node:path";
 import {expect, it} from "vitest";
 import {projectSamples} from "../content/project-samples";
 
 const root = path.resolve(import.meta.dirname, "../..");
+it("requires a startup state for every standalone public project entry", async () => {
+  for (const entry of await readdir(path.join(root, "public"), {withFileTypes: true})) {
+    if (!entry.isDirectory() || entry.name.startsWith(".") || ["assets", "worduel-notify"].includes(entry.name)) continue;
+    let html;
+    try { html = await readFile(path.join(root, "public", entry.name, "index.html"), "utf8"); }
+    catch (error) { if (error.code === "ENOENT") continue; throw error; }
+    expect(html, `${entry.name} must include opening feedback`).toMatch(/project-opening\.js|id="game-opening"|id="enablement-opening"/);
+  }
+});
 it("preserves Enablement Quest's opening state when repackaging the game", async () => {
   const repositoryRoot = path.resolve(root, "../..");
   const startup = await readFile(path.join(repositoryRoot, "scripts/enablement-startup.html"), "utf8");
@@ -38,6 +47,7 @@ it("keeps every saved Open Project link on the portfolio domain and routes cours
     expect(redirects.indexOf(rule)).toBeLessThan(redirects.indexOf("/* /index.html 200"));
     const entry = await readFile(path.join(root, "public", prefix, "index.html"), "utf8");
     expect(entry).toContain(prefix === "phishing" ? "story_content/" : "__fetchCourse");
+    expect(entry).toContain('src="/assets/project-opening.js"');
   }
   const uploads = new Set();
   const collectUploads = value => {
