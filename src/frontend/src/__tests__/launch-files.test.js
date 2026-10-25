@@ -61,7 +61,7 @@ it("keeps every saved Open Project link on the portfolio domain and routes cours
 it("features the requested projects and keeps Worduel last with no public play link", async () => {
   const {content} = JSON.parse(await readFile(path.join(root, "src/content/portfolio.json"), "utf8"));
   expect(content.projects.slice(0, 6).map(project => project.title)).toEqual([
-    "Enablement Quest: The Learning Systems Lab", "Common Thread", "Why Blockchain Actually Matters", "Stylebook: Client and Booking Management", "AI-Assisted Course Review", "AI & The Future of Work",
+    "Enablement Quest: The Learning Systems Lab", "Common Thread", "Why Blockchain Actually Matters", "Stylebook: Client and Booking Management", "U.S. Space Force: AI-Assisted Course Review", "AI & The Future of Work",
   ]);
   const worduel = content.projects.at(-1);
   expect(worduel).toMatchObject({title: "Worduel", status: "coming-soon", launchSignup: true});
@@ -80,11 +80,27 @@ it("features the requested projects and keeps Worduel last with no public play l
   expect(html).toContain('netlify-honeypot="bot-field"');
 });
 
+it("leads the Space Force case with its bounded review impact and credits the team", async () => {
+  const {content} = JSON.parse(await readFile(path.join(root, "src/content/portfolio.json"), "utf8"));
+  const project = content.projects.find(project => project.slug === "ai-assisted-course-review");
+  expect(project.summary).toMatch(/^Up to 90% less review time/);
+  expect(project.title).toContain("U.S. Space Force");
+  expect(project.detailSections.find(section => section.title === "Impact").body).toContain("shared outcome");
+  expect(project.detailSections.find(section => section.title === "Impact").body).toContain("not the entire development schedule");
+});
+
 it("fills every thumbnail while preserving full-image modal views", async () => {
   const css = await readFile(path.join(root, "src/index.css"), "utf8");
   expect(css).toMatch(/\.project-card-media img\s*\{[^}]*object-fit: cover;[^}]*object-position: center;/);
   expect(css).not.toContain(".project-image-contain .project-card-media img");
   expect(css).toMatch(/\.project-image-contain \.project-modal-media img\s*\{[^}]*object-fit: contain;/);
+});
+
+it("fits expanded project frames to the complete image without cropping or fixed-height overrides", async () => {
+  const css = await readFile(path.join(root, "src/index.css"), "utf8");
+  expect(css).toMatch(/\.project-detail-media img\s*\{[^}]*width: 100%;[^}]*height: auto;[^}]*aspect-ratio: auto;/);
+  expect(css).toMatch(/\.project-modal-media img\s*\{[^}]*width: auto;[^}]*height: auto;[^}]*max-width: 100%;[^}]*max-height: 100%;[^}]*object-fit: contain;/);
+  expect(css).not.toContain(".project-modal-media img,");
 });
 
 it("shows complete single-column mobile card text and bounds the embedded game viewport", async () => {

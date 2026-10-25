@@ -3,6 +3,7 @@
 ## User Preferences
 
 - All project-card thumbnails fill their frames using centered object-fit: cover, regardless of the project's full-image fitting preference. Preserve contain behavior for full-image modal views where configured; do not alter or recompress source GIFs to fill a thumbnail.
+- Expanded carousel and project-page images must show the complete source without cropping text or controls. Their visible borders follow the image's own proportions, not a padded fixed-aspect box. Do not restore height:100% or forced 16:9 on expanded image elements, including in mobile overrides.
 
 - Stylebook's portfolio sample is an isolated copy in src/frontend/stylebook-demo. Never connect it to the active Stylebook2 app, import production records/backups/environment files, seed a Caffeine backend, or deploy changes to that app from portfolio work. Keep the fictional fixtures, namespaced browser-only storage, connect-src 'none' policy, and isolation tests. The frontend build rebuilds the sample into public/stylebook/demo. LinkedIn decks are research context only, not portfolio graphics or independent verification of numerical results.
 
