@@ -60,8 +60,8 @@ it("keeps every saved Open Project link on the portfolio domain and routes cours
 
 it("features the requested projects and keeps Worduel last with no public play link", async () => {
   const {content} = JSON.parse(await readFile(path.join(root, "src/content/portfolio.json"), "utf8"));
-  expect(content.projects.slice(0, 4).map(project => project.title)).toEqual([
-    "Enablement Quest: The Learning Systems Lab", "Common Thread", "Why Blockchain Actually Matters", "AI & The Future of Work",
+  expect(content.projects.slice(0, 6).map(project => project.title)).toEqual([
+    "Enablement Quest: The Learning Systems Lab", "Common Thread", "Why Blockchain Actually Matters", "Stylebook: Client and Booking Management", "AI-Assisted Course Review", "AI & The Future of Work",
   ]);
   const worduel = content.projects.at(-1);
   expect(worduel).toMatchObject({title: "Worduel", status: "coming-soon", launchSignup: true});

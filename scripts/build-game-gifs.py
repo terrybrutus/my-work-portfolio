@@ -11,6 +11,7 @@ args = parser.parse_args()
 args.output_dir.mkdir(parents=True, exist_ok=True)
 
 sequences = {
+    "stylebook-demo": [("stylebook-calendar", 2600), ("stylebook-clients", 1800), ("stylebook-profile", 2200), ("stylebook-services", 2200)],
     "common-thread-wide": [("board", 2200), ("selected", 1600), ("reveal", 3500)],
     "common-thread": [("common-public-board", 2200), ("common-public-one", 700), ("common-public-selected", 1400), ("common-public-reveal", 3500)],
     "worduel": [("worduel-question", 2600), ("worduel-answer", 3000), ("worduel-saved", 2200), ("worduel-next", 2600)],
@@ -18,7 +19,7 @@ sequences = {
 for name, sequence in sequences.items():
     if name not in args.only:
         continue
-    sources = [Image.open(args.capture_dir / f"{frame}.jpg").convert("RGB") for frame, _ in sequence]
+    sources = [Image.open(next(path for path in [args.capture_dir / f"{frame}.png", args.capture_dir / f"{frame}.jpg"] if path.exists())).convert("RGB") for frame, _ in sequence]
     width, height = max(image.width for image in sources), max(image.height for image in sources)
     frames = []
     for source in sources:

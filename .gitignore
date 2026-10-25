@@ -9,3 +9,6 @@ dist/
 
 # Local Netlify folder
 .netlify
+
+# Rebuilt from the isolated, fictional-data source during every frontend build.
+src/frontend/public/stylebook/demo/

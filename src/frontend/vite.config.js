@@ -63,6 +63,9 @@ export default defineConfig({
       configureServer(server) {
         server.middlewares.use((request, _response, next) => {
           const url = new URL(request.url ?? "/", "http://localhost");
+          if (url.pathname.startsWith("/stylebook/demo/") && !url.pathname.split("/").pop().includes(".")) {
+            request.url = "/stylebook/demo/index.html";
+          }
           if (["/common-thread/", "/worduel-notify/"].includes(url.pathname)) {
             request.url = `${url.pathname}index.html${url.search}`;
           }

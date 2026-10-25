@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Finding gaps in course content</title><desc id="desc">Match the learning goals to lesson materials, flag mismatches, and give the team specific fixes.</desc>
+<rect width="1600" height="900" rx="36" fill="#0c1726"/>
+<text x="100" y="125" fill="#8dd8ce" font-family="Arial,sans-serif" font-size="25" font-weight="700" letter-spacing="4">AI-ASSISTED COURSE REVIEW</text>
+<text x="100" y="255" fill="#fff" font-family="Arial,sans-serif" font-size="70" font-weight="700">Find the gaps.</text>
+<text x="100" y="340" fill="#fff" font-family="Arial,sans-serif" font-size="70" font-weight="700">Give the team clear fixes.</text>
+<g font-family="Arial,sans-serif">
+<rect x="100" y="435" width="430" height="290" rx="24" fill="#14283a" stroke="#345468"/>
+<text x="135" y="492" fill="#8dd8ce" font-size="24" font-weight="700">01 / COMPARE</text>
+<text x="135" y="555" fill="#fff" font-size="34" font-weight="700">Goals + lesson files</text>
+<text x="135" y="610" fill="#c2ced8" font-size="27">Does the material teach</text><text x="135" y="650" fill="#c2ced8" font-size="27">what the course requires?</text>
+<rect x="585" y="435" width="430" height="290" rx="24" fill="#14283a" stroke="#345468"/>
+<text x="620" y="492" fill="#8dd8ce" font-size="24" font-weight="700">02 / INVESTIGATE</text>
+<text x="620" y="555" fill="#fff" font-size="34" font-weight="700">Check the mismatch</text>
+<text x="620" y="610" fill="#c2ced8" font-size="27">Find the source and</text><text x="620" y="650" fill="#c2ced8" font-size="27">verify what is missing.</text>
+<rect x="1070" y="435" width="430" height="290" rx="24" fill="#16372f" stroke="#548d7c"/>
+<text x="1105" y="492" fill="#8dd8ce" font-size="24" font-weight="700">03 / RESOLVE</text>
+<text x="1105" y="555" fill="#fff" font-size="34" font-weight="700">A specific next step</text>
+<text x="1105" y="610" fill="#c2ded6" font-size="27">Explain what to fix</text><text x="1105" y="650" fill="#c2ded6" font-size="27">and why it matters.</text>
+<text x="100" y="820" fill="#9aafbe" font-size="26">Process developed and led by Terry Brutus · Human review throughout</text>
+</g></svg>

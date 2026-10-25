@@ -1,5 +1,5 @@
 {
-  "savedAt": "2026-10-23T16:38:45.000Z",
+  "savedAt": "2026-10-25T16:35:00.000Z",
   "content": {
     "brandLabel": "",
     "brandLogoText": "",
@@ -96,6 +96,39 @@
         ],
         "image": "/assets/projects/blockchain-matters.gif",
         "url": "/blockchain/"
+      },
+      {
+        "title": "Stylebook: Client and Booking Management",
+        "slug": "stylebook-client-management",
+        "summary": "A custom app I built for a studio to organize client follow-ups, services, and appointments while its owner was away.",
+        "result": "Replaced scattered notes with a searchable client list and calendar. The portfolio demo uses fictional clients and is separate from the studio's active booking system.",
+        "tags": ["Workflow improvement", "App development", "AI-assisted development"],
+        "image": "/assets/projects/stylebook-demo.gif",
+        "imageFit": "contain",
+        "url": "/stylebook/demo/",
+        "detailIntro": "The studio needed a reliable way to keep track of who needed a follow-up, what service they wanted, and when they were booked. I translated those needs into an app, then refined it around the owner's day-to-day scheduling work.",
+        "detailSections": [
+          {"title": "What I built", "body": "Client search, appointment scheduling, service definitions, and calendar views, with editing and undo controls. I used AI coding tools to develop and refine the app around the business's workflow."},
+          {"title": "Why it mattered", "body": "The owner needed to keep client information and follow-ups organized during an extended leave. Bringing those tasks into one place made the next action easier to find and reduced repeated manual tracking."},
+          {"title": "Try it safely", "body": "The sample below uses the app's interface with made-up clients and appointments. Changes stay in your browser tab. It has no connection to the active studio, its booking system, or its client records."}
+        ],
+        "detailLinks": [{"label": "Try the fictional-data demo", "href": "/stylebook/demo/"}]
+      },
+      {
+        "title": "AI-Assisted Course Review",
+        "slug": "ai-assisted-course-review",
+        "summary": "I developed an AI-assisted process to check whether course materials covered the required learning goals, find missing or mismatched content, and give the team clear corrections.",
+        "result": "Helped the team focus its review on specific problems instead of repeatedly searching through lesson files. I led the content validation and investigated conflicting sources.",
+        "tags": ["Learning operations", "NotebookLM", "Process improvement"],
+        "image": "/assets/projects/course-review-workflow.svg",
+        "imageFit": "contain",
+        "url": "/work/ai-assisted-course-review",
+        "detailIntro": "For a federal training project, the team received inconsistent lesson files and a plan linking learning goals to specific slides. I developed a NotebookLM-based process to check those links, investigate gaps, and explain what needed to be corrected. A crosswalk is simply that map between a learning goal and the material intended to teach it.",
+        "detailSections": [
+          {"title": "The problem", "body": "Some lesson files did not match the plan. References could point to missing slides, the wrong lesson, or material that did not cover the stated goal. Those conflicts needed to be resolved before production could move forward."},
+          {"title": "My contribution", "body": "I developed and refined the NotebookLM analysis and validation process, investigated source discrepancies, and guided how the team applied the review rules. I became the lead for this validation work and continued the instructional work in the lesson materials."},
+          {"title": "How the team used it", "body": "I turned findings into specific questions and corrections for the team to resolve. Colleagues contributed automation, graphics, project management, and client coordination. Human review remained part of checking the sources and deciding how to address each issue."}
+        ]
       },
       {
         "title": "AI & The Future of Work",
