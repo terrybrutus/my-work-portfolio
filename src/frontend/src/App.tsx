@@ -1347,7 +1347,7 @@ function ProjectSection({ content }: { content: PortfolioContent }) {
       />
       <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {featuredProjects.map((project, index) => (
-          <article className={`project-card group${project.imageFit === "contain" ? " project-image-contain" : ""}`} key={project.title}>
+          <article className="project-card group" key={project.title}>
             {project.image ? (
               <div className="project-card-media">
                 <DeferredImage

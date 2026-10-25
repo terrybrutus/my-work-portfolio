@@ -80,6 +80,13 @@ it("features the requested projects and keeps Worduel last with no public play l
   expect(html).toContain('netlify-honeypot="bot-field"');
 });
 
+it("fills every thumbnail while preserving full-image modal views", async () => {
+  const css = await readFile(path.join(root, "src/index.css"), "utf8");
+  expect(css).toMatch(/\.project-card-media img\s*\{[^}]*object-fit: cover;[^}]*object-position: center;/);
+  expect(css).not.toContain(".project-image-contain .project-card-media img");
+  expect(css).toMatch(/\.project-image-contain \.project-modal-media img\s*\{[^}]*object-fit: contain;/);
+});
+
 it("shows complete single-column mobile card text and bounds the embedded game viewport", async () => {
   const css = await readFile(path.join(root, "src/index.css"), "utf8");
   const mobileRules = css.slice(css.indexOf("@media (max-width: 767px)"), css.indexOf("@media (max-width: 899px)"));

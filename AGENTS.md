@@ -2,6 +2,8 @@
 
 ## User Preferences
 
+- All project-card thumbnails fill their frames using centered object-fit: cover, regardless of the project's full-image fitting preference. Preserve contain behavior for full-image modal views where configured; do not alter or recompress source GIFs to fill a thumbnail.
+
 - Stylebook's portfolio sample is an isolated copy in src/frontend/stylebook-demo. Never connect it to the active Stylebook2 app, import production records/backups/environment files, seed a Caffeine backend, or deploy changes to that app from portfolio work. Keep the fictional fixtures, namespaced browser-only storage, connect-src 'none' policy, and isolation tests. The frontend build rebuilds the sample into public/stylebook/demo. LinkedIn decks are research context only, not portfolio graphics or independent verification of numerical results.
 
 - Loading feedback is the default for all current and future portfolio work. Internal projects and document links open in the same tab. HTML entries must paint an opening message before heavy scripts, offer reload/return controls if loading stalls, and clear the message when content is available without artificial waits. Reuse public/assets/project-opening.js with an appropriate visible-content selector for new standalone players. Use LoadingImage/DeferredImage for project media and document pages so downloads and failures have visible feedback and retries. Preserve native vertical scrolling, keyboard access, reduced-motion preferences, and existing project routes; loading messages cannot prevent browser-controlled delays before HTML arrives or guarantee third-party uptime.

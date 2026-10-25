@@ -313,7 +313,11 @@
     @apply rounded-full border border-white/10 px-4 py-2.5 text-xs font-bold text-cyan-100/80 transition hover:border-cyan-100/35 hover:bg-white/[0.08] hover:text-white;
   }
 
-  .project-image-contain .project-card-media img,
+  .project-card-media img {
+    object-fit: cover;
+    object-position: center;
+  }
+
   .project-image-contain .project-modal-media img {
     object-fit: contain;
     transform: none;
