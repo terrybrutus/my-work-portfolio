@@ -117,18 +117,16 @@
       {
         "title": "U.S. Space Force: AI-Assisted Course Review",
         "slug": "ai-assisted-course-review",
-        "summary": "Up to 90% less review time on a U.S. Space Force training project. I developed and led an AI-assisted process to find missing or mismatched course content and give the team clear corrections.",
-        "result": "My validation work helped the team deliver the project and secure an extension. I led the review process, investigated conflicting sources, and guided how the team applied the findings.",
+        "summary": "Up to 90% less course-review time on a U.S. Space Force training project.",
+        "result": "I developed and led a NotebookLM-based process to check learning goals against lesson materials, investigate gaps, and identify corrections for the team.",
         "tags": ["Learning operations", "NotebookLM", "Process improvement"],
         "image": "/assets/projects/course-review-impact.svg",
         "imageFit": "contain",
         "url": "/work/ai-assisted-course-review",
-        "detailIntro": "I helped reduce course-review time by up to 90% on a U.S. Space Force training project. I developed and led a NotebookLM-based process to check whether lesson materials covered the required learning goals, investigate conflicting sources, and identify specific corrections. This work contributed to the team's delivery and extension.",
+        "detailIntro": "The team needed to confirm that the supplied lesson files covered the required learning goals. Some references pointed to missing slides, the wrong lesson, or content that did not teach the stated goal. Finding and resolving those discrepancies was slowing the review.",
         "detailSections": [
-          {"title": "The problem", "body": "Some lesson files did not match the plan. References could point to missing slides, the wrong lesson, or material that did not cover the stated goal. Those conflicts needed to be resolved before production could move forward."},
-          {"title": "My contribution", "body": "I developed and refined the NotebookLM analysis and validation process, investigated source discrepancies, and guided how the team applied the review rules. I led this validation work and continued the instructional work in the lesson materials. The process checked the crosswalk: the map between each learning goal and the slides intended to teach it."},
-          {"title": "Impact", "body": "Review time was reduced by up to 90%. That figure describes the review step, not the entire development schedule or a guaranteed result for every course. My contribution helped the team deliver the work and secure an extension; it was a shared outcome alongside colleagues' automation, graphics, project management, and client coordination."},
-          {"title": "How the team used it", "body": "I turned findings into specific questions and corrections for the team to resolve. Colleagues contributed automation, graphics, project management, and client coordination. Human review remained part of checking the sources and deciding how to address each issue."}
+          {"title": "My role", "body": "I developed and refined the NotebookLM review process and led its use across the lesson materials. I checked the AI findings against the source documents, investigated conflicting references, and gave the team specific corrections to resolve before production continued."},
+          {"title": "Team outcome", "body": "My contribution helped the team deliver the work and secure an extension. Colleagues also contributed automation, graphics, project management, and client coordination. The time saving applies to course review, not the full development schedule."}
         ]
       },
       {

@@ -2,6 +2,7 @@
 
 ## User Preferences
 
+- The Space Force case must describe Terry's actual contribution, not fictional training examples or simulated client artifacts. Keep the result, project context, personal role, and team outcome distinct; do not repeat the same claims across every paragraph or add a mock interactive exercise as proof.
 - All project-card thumbnails fill their frames using centered object-fit: cover, regardless of the project's full-image fitting preference. Preserve contain behavior for full-image modal views where configured; do not alter or recompress source GIFs to fill a thumbnail.
 - Expanded carousel and project-page images must show the complete source without cropping text or controls. Their visible borders follow the image's own proportions, not a padded fixed-aspect box. Do not restore height:100% or forced 16:9 on expanded image elements, including in mobile overrides.
 

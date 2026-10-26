@@ -22,7 +22,6 @@ import { createPortal } from "react-dom";
 import savedPortfolio from "./content/portfolio.json";
 import { projectSamples } from "./content/project-samples";
 import { ProjectDocumentViewer } from "./components/ProjectDocumentViewer";
-import { CourseReviewExample } from "./components/CourseReviewExample";
 import { DeferredImage } from "./components/DeferredImage";
 import { LoadingImage } from "./components/LoadingImage";
 import { WorduelLaunchSignup } from "./components/WorduelLaunchSignup";
@@ -1000,7 +999,6 @@ function ProjectDetailPage({
         </div>
       </div>
       {sample ? <ProjectDocumentViewer key={getProjectSlug(project)} sample={sample} /> : null}
-      {getProjectSlug(project) === "ai-assisted-course-review" ? <CourseReviewExample /> : null}
       <div className="project-detail-section-grid">
         {detailSections.map((section) => (
           <article className="project-detail-section-card" key={section.title}>

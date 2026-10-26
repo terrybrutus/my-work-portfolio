@@ -2,6 +2,7 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup, configure, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "../App";
+import { readFileSync } from "node:fs";
 
 configure({ testIdAttribute: "data-ocid" });
 
@@ -28,6 +29,19 @@ vi.mock("../hooks/useQueries", () => ({
 vi.mock("../content/portfolio.json", () => ({ default: {} }));
 
 describe("App default route", () => {
+  it("shows the actual Space Force case without fictional exercises or repeated impact paragraphs", () => {
+    const saved = JSON.parse(readFileSync("src/content/portfolio.json", "utf8"));
+    const project = saved.content.projects.find((item: {slug?: string}) => item.slug === "ai-assisted-course-review");
+    window.localStorage.setItem("terry-lxd-portfolio-draft-v4", JSON.stringify({projects: [project]}));
+    window.history.pushState({}, "", "/work/ai-assisted-course-review");
+    render(<App />);
+    expect(screen.getByRole("heading", {level: 1})).toHaveTextContent("U.S. Space Force");
+    expect(screen.getByRole("heading", {name: "My role"})).toBeInTheDocument();
+    expect(screen.getByRole("heading", {name: "Team outcome"})).toBeInTheDocument();
+    expect(screen.getAllByText(/90%/)).toHaveLength(1);
+    expect(screen.queryByText(/fictional workplace training|reporting a safety issue|See how it works|From a content mismatch/i)).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "1. Compare"})).not.toBeInTheDocument();
+  });
   it("supports project swipes while preserving buttons, vertical scroll, pinch and browser edges", () => {
     render(<App />);
     fireEvent.click(screen.getAllByRole("button", {name: "View details"})[0]);

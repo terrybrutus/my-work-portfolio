@@ -83,10 +83,12 @@ it("features the requested projects and keeps Worduel last with no public play l
 it("leads the Space Force case with its bounded review impact and credits the team", async () => {
   const {content} = JSON.parse(await readFile(path.join(root, "src/content/portfolio.json"), "utf8"));
   const project = content.projects.find(project => project.slug === "ai-assisted-course-review");
-  expect(project.summary).toMatch(/^Up to 90% less review time/);
+  expect(project.summary).toMatch(/^Up to 90% less course-review time/);
   expect(project.title).toContain("U.S. Space Force");
-  expect(project.detailSections.find(section => section.title === "Impact").body).toContain("shared outcome");
-  expect(project.detailSections.find(section => section.title === "Impact").body).toContain("not the entire development schedule");
+  expect(project.detailSections.find(section => section.title === "Team outcome").body).toContain("Colleagues also contributed");
+  expect(project.detailSections.find(section => section.title === "Team outcome").body).toContain("not the full development schedule");
+  expect(project.detailIntro).not.toContain("90%");
+  expect(project.detailSections).toHaveLength(2);
 });
 
 it("fills every thumbnail while preserving full-image modal views", async () => {
