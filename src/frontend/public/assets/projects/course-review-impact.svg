@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">U.S. Space Force: up to 90% less course-review time</title>
+  <desc id="desc">AI-assisted course validation developed and led by Terry Brutus. A document-review illustration represents comparing source materials and resolving gaps; no client records are shown.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1"><stop stop-color="#111e33"/><stop offset="1" stop-color="#060e1c"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#326976" stop-opacity=".32"/><stop offset="1" stop-color="#326976" stop-opacity="0"/></radialGradient>
+    <linearGradient id="paper" x2="0" y2="1"><stop stop-color="#24394e"/><stop offset="1" stop-color="#152637"/></linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#background)"/>
+  <ellipse cx="1250" cy="420" rx="560" ry="500" fill="url(#glow)"/>
+  <g fill="none" stroke="#9bc9da" stroke-opacity=".08">
+    <ellipse cx="1200" cy="420" rx="460" ry="310" transform="rotate(-30 1200 420)"/>
+    <ellipse cx="1200" cy="420" rx="530" ry="365" transform="rotate(-30 1200 420)"/>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="88" y="90" width="8" height="52" rx="4" fill="#9ce5d1"/>
+    <text x="120" y="130" fill="#e6eff5" font-size="43" font-weight="700" letter-spacing="3">U.S. SPACE FORCE</text>
+    <text x="90" y="235" fill="#a8bacc" font-size="34">AI-assisted course review</text>
+    <text x="90" y="340" fill="#9ce5d1" font-size="30" font-weight="700" letter-spacing="5">UP TO</text>
+    <text x="75" y="568" fill="#ffffff" font-size="250" font-weight="700" letter-spacing="-12">90%</text>
+    <text x="90" y="650" fill="#e6eff5" font-size="56" font-weight="700">less review time</text>
+    <path d="M90 730H710" stroke="#365065"/>
+    <text x="90" y="792" fill="#a8bacc" font-size="29">Process developed and led by Terry Brutus</text>
+    <g transform="translate(835 235)">
+      <rect x="0" y="0" width="345" height="425" rx="24" fill="#102032" stroke="#3b5368" stroke-width="2" transform="rotate(-8 172 212)"/>
+      <g transform="translate(0 0) rotate(-8 172 212)">
+        <text x="34" y="59" fill="#afc1d0" font-size="25" font-weight="700">SOURCE MATERIAL</text>
+        <path d="M35 104H300 M35 133H270 M35 162H289 M35 276H300 M35 305H270 M35 334H285" stroke="#647b8e" stroke-width="10" stroke-linecap="round" opacity=".6"/>
+        <rect x="26" y="195" width="292" height="48" rx="9" fill="#e3b977" fill-opacity=".1" stroke="#d4ae70" stroke-width="2"/>
+        <path d="M43 219H225" stroke="#d4ae70" stroke-width="9" stroke-linecap="round"/>
+        <circle cx="285" cy="219" r="13" fill="#d4ae70"/>
+        <path d="M285 212V220 M285 225V226" stroke="#102032" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <rect x="217" y="108" width="365" height="425" rx="24" fill="#050d18" opacity=".4"/>
+      <rect x="197" y="86" width="365" height="425" rx="24" fill="url(#paper)" stroke="#628b96" stroke-width="2"/>
+      <text x="231" y="146" fill="#dcece9" font-size="26" font-weight="700">REVIEW FINDINGS</text>
+      <path d="M232 174H527" stroke="#4a6578"/>
+      <g fill="none" stroke="#9ce5d1" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M234 220l9 9 17-20 M234 309l9 9 17-20 M234 398l9 9 17-20"/>
+      </g>
+      <g fill="#e6eff5" font-size="27" font-weight="700">
+        <text x="282" y="231">Compare goals</text>
+        <text x="282" y="320">Check gaps</text>
+        <text x="282" y="409">Resolve issues</text>
+      </g>
+      <path d="M284 253H495 M284 342H475 M284 431H505" stroke="#6d8799" stroke-width="8" stroke-linecap="round" opacity=".6"/>
+      <text x="223" y="580" fill="#8da9b9" font-size="23">Illustrative workflow / no client records</text>
+    </g>
+  </g>
+</svg>
